@@ -1,0 +1,121 @@
+# Base settings
+install
+cdrom
+keyboard us
+lang en_AU.UTF-8
+logging --level=debug
+timezone --utc  UTC
+bootloader --timeout=1 --extlinux
+network --bootproto=dhcp --device=eth0 --onboot=on
+
+zerombr
+clearpart --all --initlabel
+
+# Disk partitioning information
+part / --size=1024 --grow --fstype ext4 --asprimary
+
+auth --useshadow --enablemd5
+
+firewall --disabled
+firstboot --disable
+
+rootpw --plain b4dP4ssw0Rd
+
+selinux --disabled
+
+services --enabled=acpid,ntpd,sshd,fail2ban,tuned
+services --disabled=iptables,ip6tables,avahi-daemon
+
+# Reboot to continue Packer build
+reboot
+
+# Use network installation
+url --url=http://ftp.swin.edu.au/centos/6/os/x86_64/
+repo --name=Updates --baseurl=http://ftp.swin.edu.au/centos/6/updates/x86_64/
+repo --name=EPEL    --baseurl=http://mirror.optus.net/epel/6/x86_64/
+repo --name=RDO --baseurl=https://repos.fedorapeople.org/repos/openstack/openstack-juno/epel-7/
+
+%packages --nobase
+@core
+grubby
+kernel
+
+syslinux-extlinux
+acpid
+openssh-server
+openssh-clients
+ntp
+wget
+telnet
+nano
+sudo
+fail2ban
+tuned
+heat-cfntools
+# cloud-init installed in packer post-install scripts
+-*-firmware
+-NetworkManager
+-sendmail
+%end
+
+%post
+
+echo "Removing linux-firmware package."
+yum -C -y remove linux-firmware --setopt="clean_requirements_on_remove=1"
+yum -C -y remove authconfig --setopt="clean_requirements_on_remove=1"
+
+# initscripts don't like this file to be missing.
+cat > /etc/sysconfig/network << EOF
+NETWORKING=yes
+NOZEROCONF=yes
+EOF
+
+# simple eth0 config, again not hard-coded to the build hardware
+cat > /etc/sysconfig/network-scripts/ifcfg-eth0 << EOF
+DEVICE="eth0"
+BOOTPROTO="dhcp"
+ONBOOT="yes"
+TYPE="Ethernet"
+EOF
+
+# generic localhost names
+cat > /etc/hosts << EOF
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+EOF
+
+# make sure firstboot doesn't start
+echo "RUN_FIRSTBOOT=NO" > /etc/sysconfig/firstboot
+
+# Set yum repos to us
+for i in CentOS-Base epel ; do
+      sed -i -e 's/^\(mirrorlist.*\)/#\1/g' /etc/yum.repos.d/$i.repo
+done
+sed -i -e 's/^#baseurl=.*$releasever\/os\/$basearch\//baseurl=http\:\/\/ftp.swin.edu.au/centos\/$releasever\/os\/$basearch\//g' /etc/yum.repos.d/CentOS-Base.repo
+sed -i -e 's/^#baseurl=.*$releasever\/updates\/$basearch\//baseurl=http\:\/\/ftp.swin.edu.au/centos\/$releasever\/updates\/$basearch\//g' /etc/yum.repos.d/CentOS-Base.repo
+sed -i -e 's/^#baseurl=.*$releasever\/addons\/$basearch\//baseurl=http\:\/\/ftp.swin.edu.au/centos\/$releasever\/addons\/$basearch\//g' /etc/yum.repos.d/CentOS-Base.repo
+sed -i -e 's/^#baseurl=.*$releasever\/extras\/$basearch\//baseurl=http\:\/\/ftp.swin.edu.au/centos\/$releasever\/extras\/$basearch\//g' /etc/yum.repos.d/CentOS-Base.repo
+sed -i -e 's/^#baseurl=.*$releasever\/centosplus\/$basearch\//baseurl=http\:\/\/ftp.swin.edu.au/centos\/$releasever\/centosplus\/$basearch\//g' /etc/yum.repos.d/CentOS-Base.repo
+sed -i -e 's/^#baseurl=.*$releasever\/contrib\/$basearch\//baseurl=http\:\/\/ftp.swin.edu.au/centos\/$releasever\/contrib\/$basearch\//g' /etc/yum.repos.d/CentOS-Base.repo
+
+# Upgrade anything that may have been missed
+yum -y upgrade
+
+# Really disable selinux
+cat > /etc/selinux/config << EOM
+SELINUX=disabled
+SELINUXTYPE=targeted
+EOM
+
+# Set the ec2-user
+/usr/sbin/useradd ec2-user
+/bin/echo -e 'ec2-user\tALL=(ALL)\tNOPASSWD: ALL' >> /etc/sudoers
+
+echo "KERNEL=="vd*", SUBSYSTEM=="block", RUN+="/bin/sh -c 'echo 4096 > /sys/block/%k/queue/max_sectors_kb'"" > /etc/udev/rules.d/80-max-sector.rules
+echo "net.ipv6.conf.all.use_tempaddr=0" >> /etc/sysctl.conf
+echo "net.ipv6.conf.default.use_tempaddr=0" >> /etc/sysctl.conf
+
+tuned-adm profile virtual-guest
+
+%end

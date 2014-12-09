@@ -1,0 +1,9 @@
+packer_cache
+output-*
+*.swp
+*.box
+*.tar.gz
+*.log
+virtualbox
+vmware
+iso

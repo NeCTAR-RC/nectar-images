@@ -1,0 +1,43 @@
+{
+  "builders": [
+    {
+      "type": "qemu",
+      "name": "debian-7-x86_64",
+      "vm_name": "debian-7-x86_64",
+      "accelerator": "kvm",
+      "disk_size": 2048,
+      "format": "qcow2",
+      "headless": false,
+      "http_directory": "http",
+      "iso_url": "http://mirror.internode.on.net/pub/debian-cd/7.7.0/amd64/iso-cd/debian-7.7.0-amd64-netinst.iso",
+      "iso_checksum": "0b31bccccb048d20b551f70830bb7ad0",
+      "iso_checksum_type": "md5",
+      "ssh_password": "b4dP4ssw0Rd",
+      "ssh_port": 22,
+      "ssh_username": "root",
+      "ssh_wait_timeout": "10000s",
+      "qemuargs": [ [ "-m", "1024" ] ],
+      "boot_wait": "5s",
+      "boot_command": [
+        "<esc> auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-7-x86_64-preseed.cfg keymap=us debian-installer/keymap=us<enter><wait>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "files/debian/cloud.cfg",
+      "destination": "/tmp/cloud.cfg"
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "scripts/banner.sh",
+        "scripts/security.sh",
+        "scripts/openstack-debian.sh",
+        "scripts/cleanup.sh",
+        "scripts/zerodisk.sh"
+      ]
+    }
+  ]
+}
