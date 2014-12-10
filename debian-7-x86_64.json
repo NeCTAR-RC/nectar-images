@@ -7,7 +7,7 @@
       "accelerator": "kvm",
       "disk_size": 2048,
       "format": "qcow2",
-      "headless": false,
+      "headless": true,
       "http_directory": "http",
       "iso_url": "http://mirror.internode.on.net/pub/debian-cd/7.7.0/amd64/iso-cd/debian-7.7.0-amd64-netinst.iso",
       "iso_checksum": "0b31bccccb048d20b551f70830bb7ad0",
