@@ -20,5 +20,6 @@ cat >> /etc/ssh/sshd_banner <<EOF
   Image details and information is available at                               
   http://support.rc.nectar.org.au/docs/image_catalog.html                    
 -----------------------------------------------------------
+
 EOF
-sed -i -e 's/^#Banner none.*/Banner \/\etc\/\ssh\/\sshd_banner/g' /etc/ssh/sshd_config
+sed -i -e 's/^#\?Banner .*$/Banner \/\etc\/\ssh\/\sshd_banner/g' /etc/ssh/sshd_config

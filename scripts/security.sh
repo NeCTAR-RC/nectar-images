@@ -15,5 +15,5 @@ if [ -f /etc/debian_version ]; then
 fi
 
 # SSH config
-sed -i -e 's/^PasswordAuthentication yes.*/PasswordAuthentication no/g' /etc/ssh/sshd_config
-sed -i -e 's/^PermitRootLogin yes.*/PermitRootLogin no/g' /etc/ssh/sshd_config
+sed -i -e 's/^#\?PasswordAuthentication .*/PasswordAuthentication no/g' /etc/ssh/sshd_config
+sed -i -e 's/^#\?PermitRootLogin .*/PermitRootLogin without-password/g' /etc/ssh/sshd_config
