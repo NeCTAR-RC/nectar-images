@@ -24,8 +24,7 @@ apt-get -qq -y install sudo rsync curl less
 
 # change GRUB so log tab and console tab in openstack work
 if [ -e /etc/default/grub ] ; then
-    sed -i -e 's/quiet/console=ttyS0,115200n8 console=tty0/' \
-        /etc/default/grub
+    sed -i -e 's/quiet/console=ttyS0,115200n8 console=tty0/' /etc/default/grub
     update-grub
 fi
 
