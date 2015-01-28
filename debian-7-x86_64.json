@@ -19,7 +19,7 @@
       "qemuargs": [ [ "-m", "1024" ] ],
       "boot_wait": "5s",
       "boot_command": [
-        "<esc> auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-7-x86_64-preseed.cfg keymap=us debian-installer/keymap=us<enter><wait>"
+        "<esc><wait> auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-7-x86_64-preseed.cfg keymap=us debian-installer/keymap=us<enter><wait>"
       ]
     }
   ],
