@@ -37,7 +37,7 @@
     {
       "type": "file",
       "source": "files/centos/hostsdeny.conf",
-      "destination": "/etc/fail2ban/actions.d/hostsdeny.conf"
+      "destination": "/etc/fail2ban/action.d/hostsdeny.conf"
     },
     {
       "type": "shell",
