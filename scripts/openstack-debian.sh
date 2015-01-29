@@ -14,6 +14,17 @@ fi
 apt-get -qq -y update
 apt-get -qq -y install cloud-utils cloud-init cloud-initramfs-growroot bash-completion
 
+# Install heat cfntools
+if [ "$ID" == "ubuntu" ] && [ "$VERSION_ID" == "14.04" ]; then
+    # Package is broken on Trusty. Pull in the utopic version instead
+    wget http://mirror.optus.net/ubuntu/pool/universe/h/heat-cfntools/heat-cfntools_1.2.7-1_all.deb -O /tmp/heat-cfntools_1.2.7-1_all.deb
+    dpkg -i /tmp/heat-cfntools_1.2.7-1_all.deb
+    apt-get -qq -y install -f
+    rm /tmp/heat-cfntools_1.2.7-1_all.deb
+else
+    apt-get -qq -y install heat-cfntools
+fi
+
 # use our specific config
 mv -f /tmp/cloud.cfg /etc/cloud/cloud.cfg
 # remove distro installed package to ensure Ec2 is only enabled
