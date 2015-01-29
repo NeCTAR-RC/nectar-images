@@ -2,11 +2,9 @@
 set -x
 
 # Clean up udev rules to prevent incrementing network card IDs
-echo "cleaning up udev rules"
 rm /etc/udev/rules.d/7*-persistent-net*.rules
 mkdir /etc/udev/rules.d/70-persistent-net.rules
 rm -rf /dev/.udev/
-ln -s /dev/null /etc/udev/rules.d/80-net-name-slot.rules
 
 # Remove log files from the VM
 find /var/log -type f -exec rm -f {} \;

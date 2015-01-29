@@ -6,7 +6,7 @@ if [ -f /etc/os-release ]; then
     source /etc/os-release
 fi
 
-# Debian Wheeze required backports for cloud-init
+# Debian Wheezy required backports for cloud-init
 if [ "$ID" == "debian" ] && [ "$VERSION_ID" == "7" ]; then
     echo 'deb http://ftp.debian.org/debian wheezy-backports main' >> /etc/apt/sources.list
 fi
@@ -35,7 +35,7 @@ apt-get -qq -y install sudo rsync curl less
 
 # change GRUB so log tab and console tab in openstack work
 if [ -e /etc/default/grub ] ; then
-    sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=.*$\"/GRUB_CMDLINE_LINUX_DEFAULT="elevator=noop console=ttyS0,115200n8 console=tty0 consoleblank=0"/g' /etc/default/grub
+    sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=.*$\"/GRUB_CMDLINE_LINUX_DEFAULT="elevator=noop console=ttyS0,115200n8 console=tty0 consoleblank=0 net.ifnames=0 biosdevname=0"/g' /etc/default/grub
     update-grub
 fi
 

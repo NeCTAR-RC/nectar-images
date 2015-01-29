@@ -51,9 +51,12 @@ yum -q -y install cloud-init cloud-utils cloud-utils-growpart dracut-modules-gro
 
 dracut -f
 
+# Common kernel args
+KERNEL_ARGS="elevator=noop console=ttyS0,115200n8 console=tty0 consoleblank=0 net.ifnames=0 biosdevname=0"
+
 # Add our Grub kernel args for OpenStack
 grubby --update-kernel=ALL --remove-args="rhgb quiet"
-grubby --update-kernel=ALL --args="elevator=noop biosdevname=0 console=ttyS0,115200n8 console=tty0 consoleblank=0"
+grubby --update-kernel=ALL --args="$KERNEL_ARGS"
 
 # Make sure sudo works properly with openstack
 sed -i "s/^.*requiretty$/Defaults !requiretty/" /etc/sudoers
