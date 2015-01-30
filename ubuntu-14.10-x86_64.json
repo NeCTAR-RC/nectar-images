@@ -7,7 +7,7 @@
       "accelerator": "kvm",
       "disk_size": 2048,
       "format": "qcow2",
-      "headless": false,
+      "headless": true,
       "http_directory": "http",
       "iso_url": "http://admin.mgmt.melbourne.rc.nectar.org.au/packer-iso/ubuntu-14.10-x86_64-mini.iso",
       "iso_checksum": "4f783f3917ed4c663c9a983f4ee046fc",

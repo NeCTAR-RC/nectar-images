@@ -7,7 +7,7 @@
       "accelerator": "kvm",
       "disk_size": 2048,
       "format": "qcow2",
-      "headless": false,
+      "headless": true,
       "http_directory": "http",
       "iso_url": "http://admin.mgmt.melbourne.rc.nectar.org.au/packer-iso/CentOS-6.6-x86_64-minimal.iso",
       "iso_checksum": "eb3c8be6ab668e6d83a118323a789e6c",
