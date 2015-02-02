@@ -1,0 +1,50 @@
+{
+  "builders": [
+    {
+      "type": "qemu",
+      "name": "opensuse-13.2-x86_64",
+      "vm_name": "opensuse-13.2-x86_64",
+      "accelerator": "kvm",
+      "disk_size": 2048,
+      "format": "qcow2",
+      "headless": true,
+      "http_directory": "http",
+      "iso_url": "http://admin.mgmt.melbourne.rc.nectar.org.au/packer-iso/",
+      "iso_checksum": "f2f0ecc6b1939d3725f22221baed237f",
+      "iso_checksum_type": "md5",
+      "ssh_password": "b4dP4ssw0Rd",
+      "ssh_port": 22,
+      "ssh_username": "root",
+      "ssh_wait_timeout": "10000s",
+      "qemuargs": [
+        [ "-m", "4096M" ],
+        [ "-cpu", "host" ],
+        [ "-smp", "4" ]
+      ],
+      "boot_wait": "5s",
+      "boot_command": [
+        "<esc><enter><wait>linux netdevice=eth0 netsetup=dhcp ",
+        "install=http://mirror.internode.on.net/pub/opensuse/distribution/13.2/repo/oss/ insecure=1 ",
+        "lang=en_AU autoyast=http://{{ .HTTPIP }}:{{ .HTTPPort }}/opensuse-13.2-x86_64-autoyast.xml ",
+        "textmode=1<enter><wait>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "files/opensuse/13.2/cloud.cfg",
+      "destination": "/tmp/cloud.cfg"
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "scripts/banner.sh",
+        "scripts/security.sh",
+        "scripts/openstack-suse.sh",
+        "scripts/cleanup.sh",
+        "scripts/zerodisk.sh"
+      ]
+    }
+  ]
+}
