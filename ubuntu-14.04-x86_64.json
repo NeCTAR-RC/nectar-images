@@ -16,7 +16,11 @@
       "ssh_port": 22,
       "ssh_username": "root",
       "ssh_wait_timeout": "10000s",
-      "qemuargs": [ [ "-m", "1024" ] ],
+      "qemuargs": [
+        [ "-m", "4096M" ],
+        [ "-cpu", "host" ],
+        [ "-smp", "4" ]
+      ],
       "boot_wait": "5s",
       "boot_command": [
         "<esc><wait> linux vga=788 fb=false ",
