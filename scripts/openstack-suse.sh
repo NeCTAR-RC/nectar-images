@@ -1,16 +1,16 @@
 #!/bin/bash
 set -x
 
-# Move our cloud config into place
-[ -f /tmp/cloud.cfg ] && mv /tmp/cloud.cfg /etc/cloud/cloud.cfg
-
-# Install heat-cfntools
+# Install our cloud-init and heat-cfn tools
 zypper addrepo -f obs://Cloud:OpenStack:Juno/openSUSE_13.2 Juno
 zypper -n --no-gpg-checks install cloud-init python-heat-cfntools
 
 for SERVICE in cloud-config cloud-final cloud-init cloud-init-local; do
     systemctl enable $SERVICE
 done
+
+# Move our cloud config into place
+[ -f /tmp/cloud.cfg ] && mv /tmp/cloud.cfg /etc/cloud/cloud.cfg
 
 # Common kernel args
 KERNEL_ARGS=" splash=slient showopts elevator=noop console=ttyS0,115200n8 console=tty0 consoleblank=0"
