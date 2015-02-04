@@ -3,7 +3,7 @@ set -x
 
 # Install our cloud-init and heat-cfn tools
 zypper addrepo -f obs://Cloud:OpenStack:Juno/openSUSE_13.2 Juno
-zypper -n --no-gpg-checks install cloud-init python-heat-cfntools
+zypper -n --no-gpg-checks install cloud-init python-heat-cfntools e2fsprogs
 
 for SERVICE in cloud-config cloud-final cloud-init cloud-init-local; do
     systemctl enable $SERVICE
