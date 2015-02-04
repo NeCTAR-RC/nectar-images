@@ -42,6 +42,7 @@ EOF
 enabled = true
 EOF
 
+    # Enable service
     systemctl enable fail2ban
 
     # CentOS 6
@@ -60,9 +61,11 @@ filter      = sshd
 action      = hostsdeny[daemon_list=sshd]
 logpath     = /var/log/secure
 EOF
-    fi
 
+    # Enable service
     chkconfig --add fail2ban
+
+    fi
 
 #
 # Debian 7
@@ -111,6 +114,8 @@ EOF
 elif [ "$ID" == "opensuse" ]; then
     # Install fail2ban package
     zypper -n --no-gpg-checks install fail2ban
+
+    # Enable service
     systemctl enable fail2ban
     
     # Make our jail.d directory if doesn't exist
