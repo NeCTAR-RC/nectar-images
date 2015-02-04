@@ -39,6 +39,7 @@
         "scripts/banner.sh",
         "scripts/security.sh",
         "scripts/openstack-redhat.sh",
+        "scripts/fail2ban.sh",
         "scripts/cleanup.sh",
         "scripts/zerodisk.sh"
       ]

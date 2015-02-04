@@ -153,14 +153,11 @@
       <package>yast2-trans-en_US</package>
       <package>wget</package>
       <package>curl</package>
+      <package>rsyslog</package>
     </packages>
     <patterns config:type="list">
       <pattern>minimal_base</pattern>
     </patterns>
-    <remove-packages config:type="list">
-      <package>bash-completion</package>
-      <package>telnet</package>
-    </remove-packages>
   </software>
 
   <services-manager>
@@ -168,6 +165,7 @@
     <services>
       <disable config:type="list"/>
       <enable config:type="list">
+        <service>rsyslog</service>
         <service>sshd</service>
       </enable>
     </services>

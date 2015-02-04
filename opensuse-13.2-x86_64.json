@@ -42,6 +42,7 @@
         "scripts/banner.sh",
         "scripts/security.sh",
         "scripts/openstack-suse.sh",
+        "scripts/fail2ban.sh",
         "scripts/cleanup.sh",
         "scripts/zerodisk.sh"
       ]
