@@ -17,7 +17,7 @@
         <product_dir>/</product_dir>
       </listentry>
       <listentry>
-        <media_url><![CDATA[http://download.opensuse.org/debug/distribution/13.1/repo/oss/]]></media_url>
+        <media_url><![CDATA[http://download.opensuse.org/debug/distribution/13.2/repo/oss/]]></media_url>
         <product/>
         <product_dir>/</product_dir>
       </listentry>
@@ -27,12 +27,12 @@
         <product_dir>/</product_dir>
       </listentry>
       <listentry>
-        <media_url><![CDATA[http://download.opensuse.org/source/distribution/13.1/repo/oss/]]></media_url>
+        <media_url><![CDATA[http://download.opensuse.org/source/distribution/13.2/repo/oss/]]></media_url>
         <product/>
         <product_dir>/</product_dir>
       </listentry>
       <listentry>
-        <media_url><![CDATA[http://download.opensuse.org/debug/update/13.1/]]></media_url>
+        <media_url><![CDATA[http://download.opensuse.org/debug/update/13.2/]]></media_url>
         <product/>
         <product_dir>/</product_dir>
       </listentry>
