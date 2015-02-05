@@ -10,14 +10,17 @@
       "headless": true,
       "http_directory": "http",
       "iso_url": "http://admin.mgmt.melbourne.rc.nectar.org.au/packer-iso/CentOS-6.6-x86_64-minimal.iso",
-      "iso_url": "http://mirror.aarnet.edu.au/pub/scientific/6/x86_64/iso/SL-6-x86_64-2014-11-05-netinstall.iso",
       "iso_checksum": "cd0eea9f00058998a1a78db38e8e344a",
       "iso_checksum_type": "md5",
       "ssh_password": "b4dP4ssw0Rd",
       "ssh_port": 22,
       "ssh_username": "root",
       "ssh_wait_timeout": "10000s",
-      "qemuargs": [ [ "-m", "1024" ] ],
+      "qemuargs": [
+        [ "-m", "4096M" ],
+        [ "-cpu", "host" ],
+        [ "-smp", "4" ]
+      ],
       "boot_wait": "5s",
       "boot_command": [
         "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/scientific-6-x86_64-kickstart.cfg<enter><wait>"

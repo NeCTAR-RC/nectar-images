@@ -16,7 +16,7 @@ fi
 #
 # RedHat based distros
 #
-if [ "$ID" == "centos" ] || [ "$ID" == "fedora" ]; then
+if [ "$ID" == "centos" ] || [ "$ID" == "fedora" ] || [ "$ID" == "scientific linux" ]; then
     yum -q -yy install fail2ban
 
     # Make our jail.d directory if doesn't exist
