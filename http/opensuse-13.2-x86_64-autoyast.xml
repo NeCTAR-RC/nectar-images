@@ -7,12 +7,12 @@
   <add-on>
     <add_on_products config:type="list">
       <listentry>
-        <media_url><![CDATA[http://mirror.optus.net/opensuse/update/13.2-non-oss/]]></media_url>
+        <media_url><![CDATA[http://mirror.aarnet.edu.au/pub/opensuse/opensuse/update/13.2-non-oss/]]></media_url>
         <product/>
         <product_dir>/</product_dir>
       </listentry>
       <listentry>
-        <media_url><![CDATA[http://mirror.optus.net/opensuse/distribution/13.2/repo/non-oss/]]></media_url>
+        <media_url><![CDATA[http://mirror.aarnet.edu.au/pub/opensuse/opensuse/distribution/13.2/repo/non-oss/]]></media_url>
         <product/>
         <product_dir>/</product_dir>
       </listentry>
@@ -22,7 +22,7 @@
         <product_dir>/</product_dir>
       </listentry>
       <listentry>
-        <media_url><![CDATA[http://mirror.optus.net/opensuse/distribution/13.2/repo/oss/]]></media_url>
+        <media_url><![CDATA[http://mirror.aarnet.edu.au/pub/opensuse/opensuse/distribution/13.2/repo/oss/]]></media_url>
         <product/>
         <product_dir>/</product_dir>
       </listentry>
@@ -37,7 +37,7 @@
         <product_dir>/</product_dir>
       </listentry>
       <listentry>
-        <media_url><![CDATA[http://mirror.optus.net/opensuse/update/13.2/]]></media_url>
+        <media_url><![CDATA[http://mirror.aarnet.edu.au/pub/opensuse/opensuse/update/13.2/]]></media_url>
         <product/>
         <product_dir>/</product_dir>
       </listentry>
