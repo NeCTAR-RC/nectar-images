@@ -1,0 +1,48 @@
+{
+  "builders": [
+    {
+      "type": "qemu",
+      "name": "debian-8-x86_64",
+      "vm_name": "debian-8-x86_64",
+      "accelerator": "kvm",
+      "disk_size": 2048,
+      "format": "qcow2",
+      "headless": true,
+      "http_directory": "http",
+      "iso_url": "http://admin.mgmt.melbourne.rc.nectar.org.au/packer-iso/debian-8.0.0-amd64-netinst.iso",
+      "iso_checksum": "d9209f355449fe13db3963571b1f52d4",
+      "iso_checksum_type": "md5",
+      "ssh_password": "b4dP4ssw0Rd",
+      "ssh_port": 22,
+      "ssh_username": "root",
+      "ssh_wait_timeout": "10000s",
+      "qemuargs": [
+        [ "-m", "4096M" ],
+        [ "-cpu", "host" ],
+        [ "-smp", "4" ]
+      ],
+      "boot_wait": "5s",
+      "boot_command": [
+        "<esc><wait> auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-8-x86_64-preseed.cfg keymap=us debian-installer/keymap=us<enter><wait>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "files/debian/cloud.cfg",
+      "destination": "/tmp/cloud.cfg"
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "scripts/banner.sh",
+        "scripts/security.sh",
+        "scripts/openstack-debian.sh",
+        "scripts/fail2ban.sh",
+        "scripts/cleanup.sh",
+        "scripts/zerodisk.sh"
+      ]
+    }
+  ]
+}
