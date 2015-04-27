@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba1f61a0_485d5fe9",
+        "filename": "debian-8-x86_64.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2015-04-27T04:40:18Z",
+      "side": 1,
+      "message": "Uses a debian 7 iso?",
+      "range": {
+        "startLine": 12,
+        "startChar": 74,
+        "endLine": 12,
+        "endChar": 86
+      },
+      "revId": "34600378768d4d72d0a9b78a9222bd5f0d8c5035",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
