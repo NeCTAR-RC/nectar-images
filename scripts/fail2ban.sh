@@ -17,7 +17,7 @@ fi
 # RedHat based distros
 #
 if [ "$ID" == "centos" ] || [ "$ID" == "fedora" ] || [ "$ID" == "scientific linux" ]; then
-    yum -q -yy install fail2ban
+    yum -q -yy install fail2ban ed
 
     # Make our jail.d directory if doesn't exist
     [ -d /etc/fail2ban/jail.d ] || mkdir /etc/fail2ban/jail.d
@@ -137,7 +137,7 @@ fi
 
 # Some new distros don't ship the hostsdeny action
 if [ ! -e /etc/fail2ban/action.d/hostsdeny.conf ]; then
-    cat > /etc/fail2ban/action.d/hostsdeny.conf << EOF
+    cat > /etc/fail2ban/action.d/hostsdeny.conf << 'EOF'
 [Definition]
 actionstart = 
 actionstop = 
