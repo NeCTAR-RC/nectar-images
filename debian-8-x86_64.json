@@ -21,9 +21,10 @@
         [ "-cpu", "host" ],
         [ "-smp", "4" ]
       ],
-      "boot_wait": "30s",
+      "boot_wait": "10s",
       "boot_command": [
-        "<esc><wait> auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-8-x86_64-preseed.cfg keymap=us debian-installer/keymap=us<enter><wait>"
+        "<esc><wait5><tab>",
+        "auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-8-x86_64-preseed.cfg keymap=us debian-installer/keymap=us<enter><wait>"
       ]
     }
   ],
