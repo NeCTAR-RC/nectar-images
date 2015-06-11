@@ -22,7 +22,7 @@ if [ "$ID" == "ubuntu" ] && [ "$VERSION_ID" == "14.04" ]; then
     apt-get -qq -y install -f
     rm /tmp/heat-cfntools_1.2.7-1_all.deb
 else
-    apt-get -qq -y install heat-cfntools
+    apt-get -qq --no-install-recommends -y install heat-cfntools
 fi
 
 # use our specific config
