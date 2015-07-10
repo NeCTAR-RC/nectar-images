@@ -17,7 +17,7 @@ apt-get -qq -y install cloud-utils cloud-init cloud-initramfs-growroot bash-comp
 # Install heat cfntools
 if [ "$ID" == "ubuntu" ] && [ "$VERSION_ID" == "14.04" ]; then
     # Package is broken on Trusty. Pull in the utopic version instead
-    wget http://mirror.optus.net/ubuntu/pool/universe/h/heat-cfntools/heat-cfntools_1.2.7-1_all.deb -O /tmp/heat-cfntools_1.2.7-1_all.deb
+    wget http://mirror.aarnet.edu.au/ubuntu/pool/universe/h/heat-cfntools/heat-cfntools_1.2.7-1_all.deb -O /tmp/heat-cfntools_1.2.7-1_all.deb
     dpkg -i /tmp/heat-cfntools_1.2.7-1_all.deb
     apt-get -qq -y install -f
     rm /tmp/heat-cfntools_1.2.7-1_all.deb
