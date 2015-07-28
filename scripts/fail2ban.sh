@@ -93,6 +93,12 @@ EOF
 #
 elif [ "$ID" == "ubuntu" ]; then
 
+    if [ "$VERSION_ID" == "15.04" ]; then
+        SSH_JAILNAME="sshd"
+    else
+        SSH_JAILNAME="ssh"
+    fi
+
     # Install fail2ban package
     apt-get -qq -y install fail2ban
 
@@ -104,7 +110,7 @@ EOF
 
     cat > /etc/fail2ban/jail.d/01-ssh.conf << EOF
 # NeCTAR: enable SSH jail
-[ssh]
+[$SSH_JAILNAME]
 enabled = true
 EOF
 
