@@ -20,16 +20,6 @@ enabled=1
 gpgcheck=0
 EOM
 
-elif [ $RELEASEVER -eq 6 ]; then
-    # Icehouse repo is available for CentOS 6  
-    cat > /etc/yum.repos.d/rdo-release.repo << EOM
-[openstack-icehouse]
-name=OpenStack Icehouse Repository
-baseurl=http://repos.fedorapeople.org/repos/openstack/openstack-icehouse/${DIST}-${RELEASEVER}/
-enabled=1
-gpgcheck=0
-priority=98
-EOM
 fi
 
 # Install cloud packages
@@ -47,7 +37,7 @@ yum -q -y install cloud-init cloud-utils cloud-utils-growpart dracut-modules-gro
 [ -f /tmp/cloud.cfg ] && mv /tmp/cloud.cfg /etc/cloud/cloud.cfg
 
 # Install heat-cfntools if RDO is set up
-[ -f /etc/yum.repos.d/rdo-release.repo ] && yum -q -y install heat-cfntools
+yum -y install heat-cfntools
 
 dracut -f
 
