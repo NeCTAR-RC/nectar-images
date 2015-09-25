@@ -1,6 +1,42 @@
 #!/bin/bash
 set -x
 
+function heat-cfntools {
+    # Install heat cfntools
+    if [ "$ID" == "ubuntu" ] && [ "$VERSION_ID" == "14.04" ]; then
+        # Package is broken on Trusty. Pull in the utopic version instead
+        wget http://mirror.aarnet.edu.au/ubuntu/pool/universe/h/heat-cfntools/heat-cfntools_1.2.7-2_all.deb -O /tmp/heat-cfntools_1.2.7-2_all.deb
+        dpkg -i /tmp/heat-cfntools_1.2.7-2_all.deb
+        apt-get -qq -y install -f
+        rm /tmp/heat-cfntools_1.2.7-2_all.deb
+    else
+        apt-get -qq --no-install-recommends -y install heat-cfntools
+    fi
+}
+
+function os-config {
+    #install os-collect-config os-refresh-config os-apply-config for heat
+    #these packages should make it into debian 9+
+    if [ "$ID" == "ubuntu" ] && [ "$VERSION_ID" == "14.04" ]; then
+        #packages are not available for Ubuntu 14.04, but depdendencies are.
+        apt-get -qq --no-install-recommends -y install python-anyjson \
+            python-eventlet python-iso8601 python-keystoneclient python-lxml \
+            python-oslo.config python-pbr python-pystache python-requests \
+            python-six
+        wget http://mirror.internode.on.net/pub/ubuntu/ubuntu/pool/universe/p/python-os-collect-config/python-os-collect-config_0.1.15-1_all.deb
+        wget http://mirror.internode.on.net/pub/ubuntu/ubuntu/pool/universe/p/python-os-refresh-config/python-os-refresh-config_0.1.2-1_all.deb
+        wget http://mirror.internode.on.net/pub/ubuntu/ubuntu/pool/universe/p/python-os-apply-config/python-os-apply-config_0.1.14-1_all.deb
+        dpkg -i python-os-apply-config_0.1.14-1_all.deb \
+                python-os-refresh-config_0.1.2-1_all.deb \
+                python-os-collect-config_0.1.15-1_all.deb
+    elif [ "$ID" == "ubuntu" ]; then
+        apt-get -qq --no-install-recommends -y install \
+            python-os-collect-config python-os-refresh-config \
+            python-os-apply-config
+    fi
+
+}
+
 # Test OS
 if [ -f /etc/os-release ]; then
     source /etc/os-release
@@ -14,16 +50,9 @@ fi
 apt-get -qq -y update
 apt-get -qq -y install cloud-utils cloud-init cloud-initramfs-growroot bash-completion
 
-# Install heat cfntools
-if [ "$ID" == "ubuntu" ] && [ "$VERSION_ID" == "14.04" ]; then
-    # Package is broken on Trusty. Pull in the utopic version instead
-    wget http://mirror.aarnet.edu.au/ubuntu/pool/universe/h/heat-cfntools/heat-cfntools_1.2.7-2_all.deb -O /tmp/heat-cfntools_1.2.7-2_all.deb
-    dpkg -i /tmp/heat-cfntools_1.2.7-2_all.deb
-    apt-get -qq -y install -f
-    rm /tmp/heat-cfntools_1.2.7-2_all.deb
-else
-    apt-get -qq --no-install-recommends -y install heat-cfntools
-fi
+
+heat-cfntools
+os-config
 
 # use our specific config
 mv -f /tmp/cloud.cfg /etc/cloud/cloud.cfg
