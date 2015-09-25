@@ -10,7 +10,7 @@ if ! grep -qFi 'fedora' /etc/redhat-release; then
     DIST=epel # Should this be something else (maybe el)?
 fi
 
-if [ $RELEASEVER -eq 7 ] || [ $RELEASEVER -ge 20 ]; then 
+if [ $RELEASEVER -eq 7 ] || [ $RELEASEVER -ge 20 ]; then
     # Juno repo only available for CentOS 7 and Fedora 20+
     cat > /etc/yum.repos.d/rdo-release.repo << EOM
 [openstack-juno]
@@ -27,7 +27,7 @@ yum -q -y update
 yum -q -y install cloud-init cloud-utils cloud-utils-growpart dracut-modules-growroot
 
 # Only allow SSH service after cloud-init for systemd distros
-#if [ $RELEASEVER -eq 7 ] || [ $RELEASEVER -ge 20 ]; then 
+#if [ $RELEASEVER -eq 7 ] || [ $RELEASEVER -ge 20 ]; then
 #    FILE=/usr/lib/systemd/system/cloud-init.service
 #    sed -i '/^Wants/s/$/ sshd.service/' $FILE
 #    grep -q Before $FILE && sed -i '/Before/s/$/ sshd.service/' $FILE ||  sed -i '/[Unit]/aBefore=sshd.service' $FILE
@@ -38,6 +38,11 @@ yum -q -y install cloud-init cloud-utils cloud-utils-growpart dracut-modules-gro
 
 # Install heat-cfntools if RDO is set up
 yum -y install heat-cfntools
+
+#On fedora, Install the os-X-config tools for heat
+if [ "$DIST" == "fedora" ] ; then
+    yum -y install os-collect-config os-refresh-config os-apply-config
+fi
 
 dracut -f
 
