@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a245df4_1b238206",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2015-09-29T12:23:00Z",
+      "side": 1,
+      "message": "It\u0027s more general than just load balancing - it allows Heat services to reconfigure an instance based on external triggers etc.",
+      "range": {
+        "startLine": 9,
+        "startChar": 1,
+        "endLine": 9,
+        "endChar": 32
+      },
+      "revId": "a9062c4470945838af7c2ede6a377963f0c12bbd",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a245df4_db11eaad",
+        "filename": "scripts/openstack-debian.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2015-09-29T12:23:00Z",
+      "side": 1,
+      "message": "Is this something we\u0027re monitoring somehow, so we know when the workaround can be dropped?",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 73
+      },
+      "revId": "a9062c4470945838af7c2ede6a377963f0c12bbd",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a245df4_3b264617",
+        "filename": "scripts/openstack-debian.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2015-09-29T12:23:00Z",
+      "side": 1,
+      "message": "aarnet here but internode below...?",
+      "range": {
+        "startLine": 8,
+        "startChar": 20,
+        "endLine": 8,
+        "endChar": 40
+      },
+      "revId": "a9062c4470945838af7c2ede6a377963f0c12bbd",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
