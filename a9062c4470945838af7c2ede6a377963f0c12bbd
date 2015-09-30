@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "9a245df4_7b81de8e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000105
+      },
+      "writtenOn": "2015-09-30T04:14:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a245df4_7b771e03",
+      "range": {
+        "startLine": 9,
+        "startChar": 1,
+        "endLine": 9,
+        "endChar": 32
+      },
+      "revId": "a9062c4470945838af7c2ede6a377963f0c12bbd",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a245df4_db11eaad",
         "filename": "scripts/openstack-debian.sh",
         "patchSetId": 4
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "9a245df4_1b2262b9",
+        "filename": "scripts/openstack-debian.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000105
+      },
+      "writtenOn": "2015-09-30T04:14:25Z",
+      "side": 1,
+      "message": "Amended with the bug ID, which I am subscribed to. This could be dropped when a working version, \u003e 1.2.5-1 is released into trusty-updates.",
+      "parentUuid": "9a245df4_db11eaad",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 73
+      },
+      "revId": "a9062c4470945838af7c2ede6a377963f0c12bbd",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a245df4_3b264617",
         "filename": "scripts/openstack-debian.sh",
         "patchSetId": 4
@@ -83,6 +131,30 @@
       "writtenOn": "2015-09-29T12:23:00Z",
       "side": 1,
       "message": "aarnet here but internode below...?",
+      "range": {
+        "startLine": 8,
+        "startChar": 20,
+        "endLine": 8,
+        "endChar": 40
+      },
+      "revId": "a9062c4470945838af7c2ede6a377963f0c12bbd",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a245df4_bb187685",
+        "filename": "scripts/openstack-debian.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000105
+      },
+      "writtenOn": "2015-09-30T04:14:25Z",
+      "side": 1,
+      "message": "Changed to use internode everywhere in this file. I experienced further trouble with the aarnet mirror this morning.",
+      "parentUuid": "9a245df4_3b264617",
       "range": {
         "startLine": 8,
         "startChar": 20,
