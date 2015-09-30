@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a245df4_166519e1",
+        "filename": "scripts/openstack-debian.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2015-09-30T04:53:40Z",
+      "side": 1,
+      "message": "should wget \u003curl\u003e -O /tmp/file.deb and then rm -f /tmp/file.deb at the end",
+      "range": {
+        "startLine": 26,
+        "startChar": 1,
+        "endLine": 31,
+        "endChar": 57
+      },
+      "revId": "f40e3b47d61daae2e92d7e755e32610835386cad",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
