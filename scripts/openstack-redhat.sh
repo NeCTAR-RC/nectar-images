@@ -10,16 +10,30 @@ if ! grep -qFi 'fedora' /etc/redhat-release; then
     DIST=epel # Should this be something else (maybe el)?
 fi
 
-if [ $RELEASEVER -eq 7 ] || [ $RELEASEVER -ge 20 ]; then 
-    # Juno repo only available for CentOS 7 and Fedora 20+
-    cat > /etc/yum.repos.d/rdo-release.repo << EOM
-[openstack-juno]
-name=OpenStack Juno Repository
-baseurl=http://repos.fedorapeople.org/repos/openstack/openstack-juno/${DIST}-${RELEASEVER}/
+# Kilo repo only available for CentOS 7 and Fedora 20-21
+# This repo is now only required for heat-cfntools
+# Fedora 23 doesn't need an extra repo for heat-cfntools
+case ${RELEASEVER} in
+    7)
+        URL="http://repos.fedorapeople.org/repos/openstack/openstack-kilo/el7/"
+        ;;
+    2[1-2])
+        URL="http://repos.fedorapeople.org/repos/openstack/openstack-kilo/f${RELEASEVER}/"
+        ;;
+    *)
+        echo Not creating rdo-release repo
+        URL=""
+        ;;
+esac
+
+if [ ! -z "$URL"] ; then
+cat > /etc/yum.repos.d/rdo-release.repo << EOM
+[openstack-kilo]
+name=OpenStack Kilo Repository
+baseurl=${URL}
 enabled=1
 gpgcheck=0
 EOM
-
 fi
 
 # Install cloud packages
@@ -27,7 +41,7 @@ yum -q -y update
 yum -q -y install cloud-init cloud-utils cloud-utils-growpart dracut-modules-growroot
 
 # Only allow SSH service after cloud-init for systemd distros
-#if [ $RELEASEVER -eq 7 ] || [ $RELEASEVER -ge 20 ]; then 
+#if [ $RELEASEVER -eq 7 ] || [ $RELEASEVER -ge 20 ]; then
 #    FILE=/usr/lib/systemd/system/cloud-init.service
 #    sed -i '/^Wants/s/$/ sshd.service/' $FILE
 #    grep -q Before $FILE && sed -i '/Before/s/$/ sshd.service/' $FILE ||  sed -i '/[Unit]/aBefore=sshd.service' $FILE
