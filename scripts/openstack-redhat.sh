@@ -4,30 +4,39 @@ set -x
 # Install RDO
 # See https://repos.fedorapeople.org/repos/openstack/openstack-juno/ and
 # https://github.com/redhat-openstack/rdo-release/blob/master/rdo-release.spec
-DIST=fedora
+DIST=f
 RELEASEVER=$(sed -e 's/.*release \([0-9]\+\).*/\1/' /etc/redhat-release)
 if ! grep -qFi 'fedora' /etc/redhat-release; then
-    DIST=epel # Should this be something else (maybe el)?
+    DIST=el
 fi
 
-if [ $RELEASEVER -eq 7 ] || [ $RELEASEVER -ge 20 ]; then 
-    # Juno repo only available for CentOS 7 and Fedora 20+
-    cat > /etc/yum.repos.d/rdo-release.repo << EOM
-[openstack-juno]
-name=OpenStack Juno Repository
-baseurl=http://repos.fedorapeople.org/repos/openstack/openstack-juno/${DIST}-${RELEASEVER}/
+# Kilo repo only available for CentOS 7 and Fedora 20-21
+# This repo is now only required for heat-cfntools
+# Fedora 23 doesn't need an extra repo for heat-cfntools
+case ${RELEASEVER} in
+    7|21|22)
+
+        cat > /etc/yum.repos.d/rdo-release.repo << EOM
+[openstack-kilo]
+name=OpenStack Kilo Repository
+baseurl=http://repos.fedorapeople.org/repos/openstack/openstack-kilo/${DIST}${RELEASEVER}/
 enabled=1
 gpgcheck=0
 EOM
+        ;;
+    *)
+        echo Not creating rdo-release repo
+        ;;
+esac
 
-fi
+if [ ! -z "$URL"] ; then
 
 # Install cloud packages
 yum -q -y update
 yum -q -y install cloud-init cloud-utils cloud-utils-growpart dracut-modules-growroot
 
 # Only allow SSH service after cloud-init for systemd distros
-#if [ $RELEASEVER -eq 7 ] || [ $RELEASEVER -ge 20 ]; then 
+#if [ $RELEASEVER -eq 7 ] || [ $RELEASEVER -ge 20 ]; then
 #    FILE=/usr/lib/systemd/system/cloud-init.service
 #    sed -i '/^Wants/s/$/ sshd.service/' $FILE
 #    grep -q Before $FILE && sed -i '/Before/s/$/ sshd.service/' $FILE ||  sed -i '/[Unit]/aBefore=sshd.service' $FILE
