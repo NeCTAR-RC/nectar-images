@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a106d94_5811a9ab",
+        "filename": "http/ubuntu-14.04-x86_64-preseed.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2015-11-06T00:54:31Z",
+      "side": 1,
+      "message": "like blair said, should we try and use an on-net mirror?",
+      "range": {
+        "startLine": 19,
+        "startChar": 32,
+        "endLine": 19,
+        "endChar": 55
+      },
+      "revId": "c142a25ba834fe600ffbccdb12346485b1703e43",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a106d94_780c6595",
+        "filename": "http/ubuntu-14.04-x86_64-preseed.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2015-11-06T00:54:31Z",
+      "side": 1,
+      "message": "whitespace",
+      "range": {
+        "startLine": 76,
+        "startChar": 42,
+        "endLine": 76,
+        "endChar": 43
+      },
+      "revId": "c142a25ba834fe600ffbccdb12346485b1703e43",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
