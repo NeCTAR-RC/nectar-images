@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a106d94_6d000dab",
+        "filename": "http/debian-7-x86_64-preseed.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000105
+      },
+      "writtenOn": "2015-12-15T05:14:16Z",
+      "side": 1,
+      "message": "Do we want to change this as well, perhaps to\nhttp://ftp.au.debian.org/debian/dists/wheezy-backports/\n?",
+      "revId": "a957e77758b793df12062c8c46fef03337d2e62a",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a106d94_2d1d7510",
+        "filename": "http/debian-8-x86_64-preseed.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000105
+      },
+      "writtenOn": "2015-12-15T05:14:16Z",
+      "side": 1,
+      "message": "do http://ftp.au.debian.org/debian/dists/jessie-backports/ ?",
+      "revId": "a957e77758b793df12062c8c46fef03337d2e62a",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
