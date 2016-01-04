@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dacfb570_61a5b603",
+        "filename": "http/debian-7-x86_64-preseed.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000104
+      },
+      "writtenOn": "2016-01-04T07:30:03Z",
+      "side": 1,
+      "message": "Could you have used AU here instead?",
+      "range": {
+        "startLine": 13,
+        "startChar": 26,
+        "endLine": 13,
+        "endChar": 32
+      },
+      "revId": "b63c05cbb14f8a262a4525b280d55311eb9698de",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dacfb570_81739ab0",
+        "filename": "http/ubuntu-14.04-x86_64-preseed.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000104
+      },
+      "writtenOn": "2016-01-04T07:30:03Z",
+      "side": 1,
+      "message": "this is pointing to the same server\n\nau.archive.ubuntu.com.\t566\tIN\tCNAME\tmirror.aarnet.edu.au.\nmirror.aarnet.edu.au.\t45727\tIN\tA\t202.158.214.106",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 53
+      },
+      "revId": "b63c05cbb14f8a262a4525b280d55311eb9698de",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
