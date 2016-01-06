@@ -1,5 +1,6 @@
 #!/bin/bash
 set -x
+set -e
 
 add-apt-repository cloud-archive:liberty
 

@@ -1,5 +1,6 @@
 #!/bin/bash
 set -x
+set -e
 
 # Install RDO
 # See https://repos.fedorapeople.org/repos/openstack/openstack-juno/ and

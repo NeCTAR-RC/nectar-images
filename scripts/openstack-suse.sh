@@ -1,5 +1,6 @@
 #!/bin/bash
 set -x
+set -e
 
 # Install our cloud-init and heat-cfn tools
 zypper addrepo -f obs://Cloud:OpenStack:Juno/openSUSE_13.2 Juno

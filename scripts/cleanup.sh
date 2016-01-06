@@ -1,5 +1,6 @@
 #!/bin/bash
 set -x
+set -e
 
 # Clean up udev rules to prevent incrementing network card IDs
 if [ -f /etc/udev/rules.d/70-persistent-net.rules ]; then

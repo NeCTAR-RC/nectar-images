@@ -1,5 +1,6 @@
 #!/bin/bash
 set -x
+set -e
 
 # Delete password and lock account
 passwd -d root

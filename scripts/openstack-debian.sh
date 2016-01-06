@@ -1,5 +1,6 @@
 #!/bin/bash
 set -x
+set -e
 
 # Test OS
 if [ -f /etc/os-release ]; then

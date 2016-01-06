@@ -1,5 +1,6 @@
 #!/bin/bash
 set -x
+set -e
 
 # OS detection used in other scripts
 if [ -x /usr/bin/lsb_release ]; then

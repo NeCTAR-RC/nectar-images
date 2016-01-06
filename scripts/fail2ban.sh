@@ -1,5 +1,6 @@
 #!/bin/bash
 set -x
+set -e
 
 if [ -f /etc/os-release ]; then
     source /etc/os-release

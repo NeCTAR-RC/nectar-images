@@ -1,5 +1,6 @@
 #!/bin/bash
 set -x
+set -e
 
 RELEASEVER=$(sed -e 's/.*release \([0-9]\+\).*/\1/' /etc/redhat-release)
 # add epel repo
