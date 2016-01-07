@@ -1,0 +1,48 @@
+{
+  "builders": [
+    {
+      "type": "qemu",
+      "name": "fedora-23-x86_64",
+      "vm_name": "fedora-23-x86_64",
+      "accelerator": "kvm",
+      "disk_size": 4096,
+      "format": "qcow2",
+      "headless": true,
+      "http_directory": "http",
+      "iso_url": "http://admin.mgmt.melbourne.rc.nectar.org.au/packer-iso/Fedora-Server-netinst-x86_64-23.iso",
+      "iso_checksum": "32e0a15a1c71d0e2fd36a0af5b67a3b3af82976d2dfca0aefcb90d42f2ae6844",
+      "iso_checksum_type": "sha256",
+      "ssh_password": "b4dP4ssw0Rd",
+      "ssh_port": 22,
+      "ssh_username": "root",
+      "ssh_wait_timeout": "10000s",
+      "qemuargs": [
+        [ "-m", "4096M" ],
+        [ "-cpu", "host" ],
+        [ "-smp", "4" ]
+      ],
+      "boot_wait": "5s",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-23-x86_64-kickstart.cfg<enter><wait>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "files/fedora/cloud.cfg",
+      "destination": "/tmp/cloud.cfg"
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "scripts/banner.sh",
+        "scripts/security.sh",
+        "scripts/openstack-redhat.sh",
+        "scripts/fail2ban.sh",
+        "scripts/cleanup.sh",
+        "scripts/zerodisk.sh"
+      ]
+    }
+  ]
+}
