@@ -7,28 +7,30 @@ if [ -f /etc/os-release ]; then
     source /etc/os-release
 fi
 
-# Debian Wheezy required backports for cloud-init
+# Debian 7 requires some extra repos for OpenStack packages
 if [ "$ID" == "debian" ] && [ "$VERSION_ID" == "7" ]; then
-    echo 'deb http://ftp.debian.org/debian wheezy-backports main' >> /etc/apt/sources.list
+    wget -qO - http://archive.gplhost.com/debian/repository_key.asc | apt-key add -
+    echo 'deb http://mirror.aarnet.edu.au/debian/ wheezy-backports main' >> /etc/apt/sources.list
+    echo 'deb http://archive.gplhost.com/debian juno main' >> /etc/apt/sources.list
+    echo 'deb http://archive.gplhost.com/debian juno-backports main' >> /etc/apt/sources.list
 fi
 
 apt-get -qq -y update
-apt-get -qq -y install cloud-utils cloud-init cloud-initramfs-growroot bash-completion
+apt-get -qq -y install cloud-utils cloud-init cloud-initramfs-growroot bash-completion heat-cfntools
 
-# Install heat cfntools
+# Install heat cfntools for Debian 7
 if [ "$ID" == "ubuntu" ] && [ "$VERSION_ID" == "14.04" ]; then
+	# Install heat cfntools for Ubuntu Trusty
     # Package is broken on Trusty. Pull in the utopic version instead
     wget http://mirror.aarnet.edu.au/ubuntu/pool/universe/h/heat-cfntools/heat-cfntools_1.2.7-2_all.deb -O /tmp/heat-cfntools_1.2.7-2_all.deb
-    dpkg -i /tmp/heat-cfntools_1.2.7-2_all.deb
+    dpkg -i /tmp/heat-cfntools_1.2.7-2_all.deb || true # keep script running
     apt-get -qq -y install -f
     rm /tmp/heat-cfntools_1.2.7-2_all.deb
-else
-    apt-get -qq --no-install-recommends -y install heat-cfntools
 fi
 
-# use our specific config
+# Use our specific config for cloud init and remove distro
+# installed package to ensure Ec2 is only enabled
 mv -f /tmp/cloud.cfg /etc/cloud/cloud.cfg
-# remove distro installed package to ensure Ec2 is only enabled
 rm -f /etc/cloud/cloud.cfg.d/90_*
 
 # Setup utils
