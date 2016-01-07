@@ -33,6 +33,11 @@
   ],
   "provisioners": [
     {
+      "type": "file",
+      "source": "files/ubuntu/cloud.cfg",
+      "destination": "/tmp/cloud.cfg"
+    },
+    {
       "type": "shell",
       "scripts": [
         "scripts/security.sh",
