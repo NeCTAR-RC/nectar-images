@@ -30,7 +30,7 @@
   "provisioners": [
     {
       "type": "file",
-      "source": "files/fedora/21/cloud.cfg",
+      "source": "files/fedora/cloud.cfg",
       "destination": "/tmp/cloud.cfg"
     },
     {
