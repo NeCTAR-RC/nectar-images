@@ -81,7 +81,7 @@
 
   <timezone>
     <hwclock>UTC</hwclock>
-    <timezone>Australia/Melbourne</timezone>
+    <timezone>UTC</timezone>
   </timezone>
 
   <partitioning config:type="list">
