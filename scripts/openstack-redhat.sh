@@ -16,7 +16,6 @@ fi
 # Fedora 23 doesn't need an extra repo for heat-cfntools
 case ${RELEASEVER} in
     7|21|22)
-
         cat > /etc/yum.repos.d/rdo-release.repo << EOM
 [openstack-kilo]
 name=OpenStack Kilo Repository
@@ -32,20 +31,13 @@ esac
 
 # Install cloud packages
 yum -q -y update
-yum -q -y install cloud-init cloud-utils cloud-utils-growpart dracut-modules-growroot
+yum -y install cloud-init cloud-utils heat-cfntools
 
-# Only allow SSH service after cloud-init for systemd distros
-#if [ $RELEASEVER -eq 7 ] || [ $RELEASEVER -ge 20 ]; then
-#    FILE=/usr/lib/systemd/system/cloud-init.service
-#    sed -i '/^Wants/s/$/ sshd.service/' $FILE
-#    grep -q Before $FILE && sed -i '/Before/s/$/ sshd.service/' $FILE ||  sed -i '/[Unit]/aBefore=sshd.service' $FILE
-#fi
+# Try and install these, but don't die is they fail
+yum -y install dracut-modules-growroot cloud-initramfs-tools cloud-utils-growpart || true
 
 # Move our cloud config into place
 [ -f /tmp/cloud.cfg ] && mv /tmp/cloud.cfg /etc/cloud/cloud.cfg
-
-# Install heat-cfntools if RDO is set up
-yum -y install heat-cfntools
 
 dracut -f
 
