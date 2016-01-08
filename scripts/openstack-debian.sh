@@ -29,7 +29,7 @@ fi
 
 # Use our specific config for cloud init and remove distro
 # installed package to ensure Ec2 is only enabled
-mv -f /tmp/cloud.cfg /etc/cloud/cloud.cfg
+[ -f /tmp/cloud.cfg ] && mv -f /tmp/cloud.cfg /etc/cloud/cloud.cfg
 rm -f /etc/cloud/cloud.cfg.d/90_*
 
 # Setup utils
