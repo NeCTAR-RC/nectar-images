@@ -13,5 +13,8 @@ apt-get -qq -y autoclean
 apt-get -qq -y clean
 
 # Install packer
-wget https://releases.hashicorp.com/packer/0.8.6/packer_0.8.6_linux_amd64.zip -O /tmp/packer_0.8.6_linux_amd64.zip
-unzip /tmp/packer_0.8.6_linux_amd64.zip -d /usr/local/bin/
+PACKER_VER=0.8.6
+PACKER_FILE="packer_${PACKER_VER}_linux_amd64.zip"
+wget -q https://releases.hashicorp.com/packer/$PACKER_VER/$PACKER_FILE -O /tmp/$PACKER_FILE
+unzip /tmp/$PACKER_FILE -d /usr/local/bin/
+rm /tmp/$PACKER_FILE
