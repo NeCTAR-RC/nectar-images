@@ -12,3 +12,10 @@ apt-get -qq -y install python-hivemind python-hivemind-contrib
 apt-get -qq -y autoremove
 apt-get -qq -y autoclean
 apt-get -qq -y clean
+
+# Install packer
+wget https://releases.hashicorp.com/packer/0.8.6/packer_0.8.6_linux_amd64.zip -O /tmp/packer_0.8.6_linux_amd64.zip
+unzip /tmp/packer_0.8.6_linux_amd64.zip -d /usr/local/bin/
+
+# Unprivileged access to KVM for building
+chmod 666 /dev/kvm
