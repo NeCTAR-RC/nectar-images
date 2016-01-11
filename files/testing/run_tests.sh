@@ -4,8 +4,8 @@
 source $(dirname $0)/assert.sh
 
 ### Ephemeral disk checking
-assert_raises "grep -q '/dev/vdb.*ext4.*rw' /proc/mounts"
-assert_end "Check that ephemeral disk is ext4 and read-write mounted on vdb"
+#assert_raises "grep '/dev/vdb.*ext4.*rw' /proc/mounts"
+#assert_end "Check that ephemeral disk is ext4 and read-write mounted on vdb"
 
 ### Fail2ban
 assert_raises "pgrep fail2ban"
