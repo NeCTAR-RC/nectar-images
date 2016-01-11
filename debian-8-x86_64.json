@@ -37,7 +37,7 @@
     {
       "type": "file",
       "source": "files/testing",
-      "destination": "/tmp"
+      "destination": "/usr/nectar"
     },
     {
       "type": "shell",
