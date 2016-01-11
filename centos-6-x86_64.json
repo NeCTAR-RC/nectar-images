@@ -28,10 +28,15 @@
     }
   ],
   "provisioners": [
-    { 
+    {
       "type": "file",
       "source": "files/centos/6/cloud.cfg",
       "destination": "/tmp/cloud.cfg"
+    },
+    {
+      "type": "file",
+      "source": "files/testing",
+      "destination": "/tmp"
     },
     {
       "type": "shell",
