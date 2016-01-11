@@ -35,6 +35,11 @@
       "destination": "/tmp/cloud.cfg"
     },
     {
+      "type": "file",
+      "source": "files/testing",
+      "destination": "/tmp"
+    },
+    {
       "type": "shell",
       "scripts": [
         "scripts/banner.sh",
