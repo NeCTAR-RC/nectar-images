@@ -24,7 +24,7 @@
       "boot_wait": "1s",
       "boot_command": [
         "<esc><enter><wait>linux netdevice=eth0 netsetup=dhcp ",
-        "install=http://mirror.internode.on.net/pub/opensuse/distribution/13.2/repo/oss/ insecure=1 ",
+        "install=http://mirror.aarnet.edu.au/pub/opensuse/opensuse/distribution/13.2/repo/oss/ insecure=1 ",
         "lang=en_AU autoyast=http://{{ .HTTPIP }}:{{ .HTTPPort }}/opensuse-13.2-x86_64-autoyast.xml ",
         "textmode=1<enter><wait>"
       ]
