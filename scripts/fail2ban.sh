@@ -25,7 +25,7 @@ if [ "$ID" == "centos" ] || [ "$ID" == "fedora" ] || [ "$ID" == "scientific linu
 
     # On newer distros, remove the firewalld package and the fail2ban
     # empty meta-package too. We'll provide our own config
-    if rpm -q fail2ban-firewalld &>/dev/null; then 
+    if rpm -q fail2ban-firewalld &>/dev/null; then
         rpm -e fail2ban fail2ban-firewalld
     fi
 
@@ -43,8 +43,8 @@ EOF
 enabled = true
 EOF
 
-    # Enable service
-    systemctl enable fail2ban
+        # Enable service
+        systemctl enable fail2ban
 
     # CentOS 6
     elif [ $VERSION_ID -eq 6 ]; then
@@ -69,15 +69,16 @@ EOF
     fi
 
 #
-# Debian 7
+# Debian
 #
 elif [ "$ID" == "debian" ]; then
 
     # Install fail2ban package
     apt-get -qq -y install fail2ban
 
-    # Debian 7 doesn't support jail.d
-    cat > /etc/fail2ban/jail.local << EOF
+    if [ $VERSION_ID -eq 7 ]; then
+        # Debian 7 doesn't support jail.d
+        cat > /etc/fail2ban/jail.local << EOF
 [DEFAULT]
 banaction = hostsdeny
 
@@ -88,26 +89,47 @@ filter   = sshd
 logpath  = /var/log/auth.log
 maxretry = 6
 EOF
+    else
+        # Remove default debian config
+        [ -f /etc/fail2ban/jail.d/defaults-debian.conf ] && \
+            rm /etc/fail2ban/jail.d/defaults-debian.conf
+
+        cat > /etc/fail2ban/jail.d/00-hostsdeny.conf << EOF
+# NeCTAR: use hostsdeny by default
+[DEFAULT]
+banaction = hostsdeny
+EOF
+
+    cat > /etc/fail2ban/jail.d/01-ssh.conf << EOF
+# NeCTAR: enable SSH jail
+[ssh]
+enabled = true
+EOF
+    fi
 
 #
 # Ubuntu 14.04+
 #
 elif [ "$ID" == "ubuntu" ]; then
 
-    if [ "$VERSION_ID" == "15.04" ]; then
-        SSH_JAILNAME="sshd"
-    else
-        SSH_JAILNAME="ssh"
-    fi
-
-    # Install fail2ban package
+   # Install fail2ban package
     apt-get -qq -y install fail2ban
+
+    # Remove default debian config
+    [ -f /etc/fail2ban/jail.d/defaults-debian.conf ] && \
+        rm /etc/fail2ban/jail.d/defaults-debian.conf
 
     cat > /etc/fail2ban/jail.d/00-hostsdeny.conf << EOF
 # NeCTAR: use hostsdeny by default
 [DEFAULT]
 banaction = hostsdeny
 EOF
+
+    if [ ${VERSION_ID%%.*} -ge 15 ]; then
+        SSH_JAILNAME="sshd"
+    else
+        SSH_JAILNAME="ssh"
+    fi
 
     cat > /etc/fail2ban/jail.d/01-ssh.conf << EOF
 # NeCTAR: enable SSH jail
@@ -124,31 +146,30 @@ elif [ "$ID" == "opensuse" ]; then
 
     # Enable service
     systemctl enable fail2ban
-    
+
     # Make our jail.d directory if doesn't exist
     [ -d /etc/fail2ban/jail.d ] || mkdir /etc/fail2ban/jail.d
 
-    cat > /etc/fail2ban/jail.d/01-ssh-iptables.conf << EOF
-# NeCTAR doesn't use iptables by default
-[ssh-iptables]
-enabled = false
+    cat > /etc/fail2ban/jail.d/00-hostdeny.conf << EOF
+# NeCTAR: use hostsdeny by default
+[DEFAULT]
+banaction = hostsdeny
 EOF
 
-    cat > /etc/fail2ban/jail.d/02-ssh-tcpwrapper.conf << EOF
-# NeCTAR: use tcpwrapper SSH
-[ssh-tcpwrapper]
-enabled     = true
+    cat > /etc/fail2ban/jail.d/01-sshd.conf << EOF
+# NeCTAR: enable SSH jail
+[sshd]
+enabled = true
 EOF
 fi
-
 
 # Some new distros don't ship the hostsdeny action
 if [ ! -e /etc/fail2ban/action.d/hostsdeny.conf ]; then
     cat > /etc/fail2ban/action.d/hostsdeny.conf << 'EOF'
 [Definition]
-actionstart = 
-actionstop = 
-actioncheck = 
+actionstart =
+actionstop =
+actioncheck =
 actionban = IP=<ip> &&
             printf %%b "<daemon_list>: $IP\n" >> <file>
 actionunban = echo "/^<daemon_list>: <ip>$/<br>d<br>w<br>q" | ed <file>
