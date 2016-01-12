@@ -167,6 +167,7 @@
       <enable config:type="list">
         <service>rsyslog</service>
         <service>sshd</service>
+        <service>ntpd</service>
       </enable>
     </services>
   </services-manager>
