@@ -2,10 +2,24 @@
 set -x
 set -e
 
+. /etc/os-release
+
+case $VERSION_ID in
+    42.1)
+        zypper addrepo -f obs://Cloud:OpenStack:Liberty/openSUSE_Leap_42.1 Liberty
+        ;;
+    13.2)
+        zypper addrepo -f obs://Cloud:OpenStack:Kilo/openSUSE_13.2 Liberty
+        ;;
+    *)
+        echo "No OpenStack repository defines for openSUSE $VERSION"
+        ;;
+esac
+
 # Install our cloud-init and heat-cfn tools
-zypper addrepo -f obs://Cloud:OpenStack:Juno/openSUSE_13.2 Juno
 zypper -n --no-gpg-checks install cloud-init python-heat-cfntools e2fsprogs
 
+# Ensure cloud-init services are enabled on boot
 for SERVICE in cloud-config cloud-final cloud-init cloud-init-local; do
     systemctl enable $SERVICE
 done
