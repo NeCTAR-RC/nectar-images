@@ -19,16 +19,16 @@
       "qemuargs": [
         [ "-m", "4096M" ],
         [ "-cpu", "host" ],
-        [ "-smp", "4" ]
+        [ "-smp", "1" ]
       ],
-      "boot_wait": "5s",
+      "boot_wait": "1s",
       "boot_command": [
         "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/scientific-6-x86_64-kickstart.cfg<enter><wait>"
       ]
     }
   ],
   "provisioners": [
-    { 
+    {
       "type": "file",
       "source": "files/centos/6/cloud.cfg",
       "destination": "/tmp/cloud.cfg"

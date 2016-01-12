@@ -19,9 +19,9 @@
       "qemuargs": [
         [ "-m", "4096M" ],
         [ "-cpu", "host" ],
-        [ "-smp", "4" ]
+        [ "-smp", "1" ]
       ],
-      "boot_wait": "10s",
+      "boot_wait": "1s",
       "boot_command": [
         "<esc><wait5><tab>",
         "auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-8-x86_64-preseed.cfg keymap=us debian-installer/keymap=us<enter><wait>"

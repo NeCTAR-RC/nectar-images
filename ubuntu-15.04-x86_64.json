@@ -19,9 +19,9 @@
       "qemuargs": [
         [ "-m", "4096M" ],
         [ "-cpu", "host" ],
-        [ "-smp", "4" ]
+        [ "-smp", "1" ]
       ],
-      "boot_wait": "5s",
+      "boot_wait": "1s",
       "boot_command": [
         "<esc><wait>linux vga=788 fb=false hostname=ubuntu locale=en_AU ",
         "console-keymaps-at/keymap=us console-setup/ask_detect=false ",
