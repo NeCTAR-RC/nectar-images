@@ -14,7 +14,7 @@ fi
 # Kilo repo only available for CentOS 7 and Fedora 20-21
 # This repo is now only required for heat-cfntools
 # Fedora 23 doesn't need an extra repo for heat-cfntools
-case ${RELEASEVER} in
+case $RELEASEVER in
     7|21|22)
         cat > /etc/yum.repos.d/rdo-release.repo << EOM
 [openstack-kilo]
@@ -38,6 +38,13 @@ yum -y install dracut-modules-growroot cloud-initramfs-tools cloud-utils-growpar
 
 # Move our cloud config into place
 [ -f /tmp/cloud.cfg ] && mv /tmp/cloud.cfg /etc/cloud/cloud.cfg
+
+# Make sure cloud init is enabled for systemd
+if which systemctl >/dev/null 2>&1; then
+    for SERVICE in cloud-config cloud-final cloud-init cloud-init-local; do
+        systemctl enable $SERVICE
+    done
+fi
 
 dracut -f
 
