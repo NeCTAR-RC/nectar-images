@@ -19,9 +19,9 @@
       "qemuargs": [
         [ "-m", "4096M" ],
         [ "-cpu", "host" ],
-        [ "-smp", "4" ]
+        [ "-smp", "1" ]
       ],
-      "boot_wait": "5s",
+      "boot_wait": "1s",
       "boot_command": [
         "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-21-x86_64-kickstart.cfg<enter><wait>"
       ]
