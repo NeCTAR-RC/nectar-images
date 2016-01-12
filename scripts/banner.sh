@@ -14,13 +14,31 @@ else
     OSSTRING="$(uname -s) $(uname -r) $(uname -m)"
 fi
 
-# Add banner
-cat >> /etc/ssh/sshd_banner <<EOF
+# Ubuntu uses it's own MOTD solution
+if [ "$ID" == "ubuntu" ]; then
+cat > /etc/update-motd.d/00-header << EOF
+#!/bin/sh
+[ -r /etc/lsb-release ] && . /etc/lsb-release
+
+if [ -z "$DISTRIB_DESCRIPTION" ] && [ -x /usr/bin/lsb_release ]; then
+        # Fall back to using the very slow lsb_release utility
+        DISTRIB_DESCRIPTION=$(lsb_release -s -d)
+fi
+
+echo "-----------------------------------------------------------"
+echo "  $DISTRIB_DESCRIPTION $(uname -i)"
+echo "  Image details and information is available at            "
+echo "  http://support.rc.nectar.org.au/docs/image_catalog.html  "
+echo "-----------------------------------------------------------"
+EOF
+else
+    # Add motd
+    cat > /etc/motd << EOF
 -----------------------------------------------------------
-  $OSSTRING                                                           
-  Image details and information is available at                               
-  http://support.rc.nectar.org.au/docs/image_catalog.html                    
+  $OSSTRING
+  Image details and information is available at
+  http://support.rc.nectar.org.au/docs/image_catalog.html
 -----------------------------------------------------------
 
 EOF
-sed -i -e 's/^#\?Banner .*$/Banner \/\etc\/\ssh\/\sshd_banner/g' /etc/ssh/sshd_config
+fi
