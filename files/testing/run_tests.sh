@@ -4,8 +4,12 @@
 source $(dirname $0)/assert.sh
 
 ### Ephemeral disk checking
-#assert_raises "grep '/dev/vdb.*ext4.*rw' /proc/mounts"
-#assert_end "Check that ephemeral disk is ext4 and read-write mounted on vdb"
+assert_raises "grep '/dev/vdb.*ext4.*rw' /proc/mounts"
+assert_end "Check that ephemeral disk is ext4 and read-write mounted on vdb"
+
+### Root disk resized
+assert "test $(lsblk --output MOUNTPOINT,SIZE | sed -n -e 's/^\/\s\+\([0-9]\+\)G/\1/p') -gt 4"
+assert_end "Root filesystem resized"
 
 ### Fail2ban
 assert_raises "pgrep fail2ban"
