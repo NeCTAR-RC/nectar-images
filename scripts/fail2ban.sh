@@ -31,6 +31,12 @@ if [ "$ID" == "centos" ] || [ "$ID" == "fedora" ] || [ "$ID" == "scientific linu
 
     # CentOS 7, Fedora 20+
     if [ $VERSION_ID -eq 7 ] || [ $VERSION_ID -ge 20 ]; then
+
+        if [ "$ID" == "fedora" ]; then
+            # Fedora 20+ has SSH logs in systemd
+            yum -q -yy install fail2ban-systemd
+        fi
+
         cat > /etc/fail2ban/jail.d/00-hostdeny.conf << EOF
 # NeCTAR: use hostsdeny by default
 [DEFAULT]
