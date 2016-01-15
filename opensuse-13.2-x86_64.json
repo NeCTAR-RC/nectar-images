@@ -21,7 +21,7 @@
         [ "-cpu", "host" ],
         [ "-smp", "1" ]
       ],
-      "boot_wait": "1s",
+      "boot_wait": "10s",
       "boot_command": [
         "<esc><enter><wait>linux netdevice=eth0 netsetup=dhcp ",
         "install=http://mirror.aarnet.edu.au/pub/opensuse/opensuse/distribution/13.2/repo/oss/ insecure=1 ",
