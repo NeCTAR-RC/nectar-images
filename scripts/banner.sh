@@ -25,20 +25,20 @@ if [ -z "$DISTRIB_DESCRIPTION" ] && [ -x /usr/bin/lsb_release ]; then
         DISTRIB_DESCRIPTION=$(lsb_release -s -d)
 fi
 
-echo "-----------------------------------------------------------"
+echo "-------------------------------------------------------------------------------------"
 echo "  $DISTRIB_DESCRIPTION $(uname -i)"
-echo "  Image details and information is available at            "
-echo "  http://support.rc.nectar.org.au/docs/image_catalog.html  "
-echo "-----------------------------------------------------------"
+echo "  Image details and information is available at"
+echo "  https://support.nectar.org.au/support/solutions/articles/6000106269-image-catalog"
+echo "-------------------------------------------------------------------------------------"
 EOF
 else
     # Add motd
     cat > /etc/motd << EOF
------------------------------------------------------------
+-------------------------------------------------------------------------------------
   $OSSTRING
   Image details and information is available at
-  http://support.rc.nectar.org.au/docs/image_catalog.html
------------------------------------------------------------
+  https://support.nectar.org.au/support/solutions/articles/6000106269-image-catalog"
+-------------------------------------------------------------------------------------"
 
 EOF
 fi
