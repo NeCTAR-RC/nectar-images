@@ -3,6 +3,12 @@
 # Source testing framework
 source $(dirname $0)/assert.sh
 
+echo ""
+echo "================================================================================="
+echo "                                 Running Tests                                   "
+echo "================================================================================="
+echo ""
+
 ### Ephemeral disk checking
 assert_raises "grep '/dev/vdb.*ext4.*rw' /proc/mounts"
 assert_end "Check that ephemeral disk is ext4 and read-write mounted on vdb"
@@ -34,3 +40,28 @@ assert_end "Single SSH authorized key for root exists"
 ### SSH key for current user
 assert "wc -l ~/.ssh/authorized_keys | cut -d ' ' -f1" 1
 assert_end "Single SSH authorized key for current user exists"
+
+### Package repos
+if hash dnf 2>/dev/null; then
+    assert_raises "sudo dnf makecache"
+    assert_raises "sudo dnf clean all"
+    assert_end "Package repositories are OK"
+elif hash yum 2>/dev/null; then
+    assert_raises "sudo yum makecache"
+    assert_raises "sudo yum clean all"
+    assert_end "Package repositories are OK"
+elif hash apt-get 2>/dev/null; then
+    assert_raises "sudo apt-get update"
+    assert_raises "sudo apt-get -y clean all"
+    assert_end "Package repositories are OK"
+elif hash zypper 2>/dev/null; then
+    assert_raises "sudo zypper --gpg-auto-import-keys refresh"
+    assert_raises "sudo zypper clean"
+    assert_end "Package repositories are OK"
+fi
+
+echo ""
+echo "================================================================================="
+echo "                                Tests Complete                                   "
+echo "================================================================================="
+echo ""
