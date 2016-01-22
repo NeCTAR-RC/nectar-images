@@ -2,12 +2,11 @@
 set -x
 set -e
 
-# OS detection used in other scripts
-if [ -x /usr/bin/lsb_release ]; then
-    OSSTRING="$(lsb_release -s -d | sed -e 's/"//g') $(uname -m)"
-elif [ -f /etc/os-release ]; then
-    source /etc/os-release
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
     OSSTRING=$PRETTY_NAME
+elif [ -x /usr/bin/lsb_release ]; then
+    OSSTRING="$(lsb_release -s -d | sed -e 's/"//g') $(uname -m)"
 elif [ -f /etc/redhat-release ] ; then
     OSSTRING="$(cat /etc/redhat-release) $(uname -m)"
 else
@@ -37,8 +36,8 @@ else
 -------------------------------------------------------------------------------------
   NeCTAR $OSSTRING
   Image details and information is available at
-  https://support.nectar.org.au/support/solutions/articles/6000106269-image-catalog"
--------------------------------------------------------------------------------------"
+  https://support.nectar.org.au/support/solutions/articles/6000106269-image-catalog
+-------------------------------------------------------------------------------------
 
 EOF
 fi
