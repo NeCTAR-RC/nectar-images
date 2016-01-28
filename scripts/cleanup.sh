@@ -49,3 +49,6 @@ if [ -f /etc/redhat-release ]; then
     # Clean yum
     yum -y clean all
 fi
+
+# Remove cloud-init files
+rm -fr /var/lib/cloud/*
