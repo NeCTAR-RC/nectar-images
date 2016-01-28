@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bad4c104_6a94a837",
+        "filename": "scripts/cleanup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2016-01-28T21:54:41Z",
+      "side": 1,
+      "message": "Is this really necessary? Cloud init should be installed in the same session as these scripts, so shouldn\u0027t have been run yet?",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 23
+      },
+      "revId": "da334f41e83b0df5ab255c40abb73d88b97e01e3",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
