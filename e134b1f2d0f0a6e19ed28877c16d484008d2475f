@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bad4c104_0a76bc3e",
+        "filename": "build_local.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2016-01-28T21:52:19Z",
+      "side": 1,
+      "message": "I guess you\u0027d probably want this removed, and replaced with something more generic?",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 2
+      },
+      "revId": "e134b1f2d0f0a6e19ed28877c16d484008d2475f",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
