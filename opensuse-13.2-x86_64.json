@@ -39,7 +39,7 @@
     {
       "type": "file",
       "source": "files/testing",
-      "destination": "/usr/nectar"
+      "destination": "/var/lib/packer/build"
     },
     {
       "type": "shell",
