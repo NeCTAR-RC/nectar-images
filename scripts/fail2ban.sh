@@ -38,13 +38,13 @@ if [ "$ID" == "centos" ] || [ "$ID" == "fedora" ] || [ "$ID" == "scientific linu
         fi
 
         cat > /etc/fail2ban/jail.d/00-hostdeny.conf << EOF
-# NeCTAR: use hostsdeny by default
+# use hostsdeny by default
 [DEFAULT]
 banaction = hostsdeny
 EOF
 
         cat > /etc/fail2ban/jail.d/01-sshd.conf << EOF
-# NeCTAR: enable SSH jail
+# enable SSH jail
 [sshd]
 enabled = true
 EOF
@@ -55,13 +55,13 @@ EOF
     # CentOS 6
     elif [ $VERSION_ID -eq 6 ]; then
         cat > /etc/fail2ban/jail.d/01-ssh-iptables.conf << EOF
-# NeCTAR doesn't use iptables by default
+# don't use iptables by default
 [ssh-iptables]
 enabled = false
 EOF
 
         cat > /etc/fail2ban/jail.d/02-ssh-tcpwrapper.conf << EOF
-# NeCTAR: use tcpwrapper SSH
+# use tcpwrapper SSH
 [ssh-tcpwrapper]
 enabled     = true
 filter      = sshd
@@ -101,13 +101,13 @@ EOF
             rm /etc/fail2ban/jail.d/defaults-debian.conf
 
         cat > /etc/fail2ban/jail.d/00-hostsdeny.conf << EOF
-# NeCTAR: use hostsdeny by default
+# use hostsdeny by default
 [DEFAULT]
 banaction = hostsdeny
 EOF
 
     cat > /etc/fail2ban/jail.d/01-ssh.conf << EOF
-# NeCTAR: enable SSH jail
+# enable SSH jail
 [ssh]
 enabled = true
 EOF
@@ -126,7 +126,7 @@ elif [ "$ID" == "ubuntu" ]; then
         rm /etc/fail2ban/jail.d/defaults-debian.conf
 
     cat > /etc/fail2ban/jail.d/00-hostsdeny.conf << EOF
-# NeCTAR: use hostsdeny by default
+# use hostsdeny by default
 [DEFAULT]
 banaction = hostsdeny
 EOF
@@ -138,7 +138,7 @@ EOF
     fi
 
     cat > /etc/fail2ban/jail.d/01-ssh.conf << EOF
-# NeCTAR: enable SSH jail
+# enable SSH jail
 [$SSH_JAILNAME]
 enabled = true
 EOF
@@ -157,13 +157,13 @@ elif [ "$ID" == "opensuse" ]; then
     [ -d /etc/fail2ban/jail.d ] || mkdir /etc/fail2ban/jail.d
 
     cat > /etc/fail2ban/jail.d/00-hostdeny.conf << EOF
-# NeCTAR: use hostsdeny by default
+# use hostsdeny by default
 [DEFAULT]
 banaction = hostsdeny
 EOF
 
     cat > /etc/fail2ban/jail.d/01-sshd.conf << EOF
-# NeCTAR: enable SSH jail
+# enable SSH jail
 [sshd]
 enabled = true
 EOF
