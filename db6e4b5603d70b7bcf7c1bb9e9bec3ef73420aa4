@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bad4c104_caa2149a",
+        "filename": "scripts/security.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2016-01-28T21:57:28Z",
+      "side": 1,
+      "message": "no -q for the upgrade part?",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 2
+      },
+      "revId": "db6e4b5603d70b7bcf7c1bb9e9bec3ef73420aa4",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
