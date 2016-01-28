@@ -15,13 +15,13 @@ fi
 
 # Ubuntu uses it's own MOTD solution
 if [ "$ID" == "ubuntu" ]; then
-cat > /etc/update-motd.d/00-header << EOF
+    cat > /etc/update-motd.d/00-header << EOF
 #!/bin/sh
 [ -r /etc/lsb-release ] && . /etc/lsb-release
 
-if [ -z "$DISTRIB_DESCRIPTION" ] && [ -x /usr/bin/lsb_release ]; then
+if [ -z "\$DISTRIB_DESCRIPTION" ] && [ -x /usr/bin/lsb_release ]; then
         # Fall back to using the very slow lsb_release utility
-        DISTRIB_DESCRIPTION=$(lsb_release -s -d)
+        DISTRIB_DESCRIPTION=\$(lsb_release -s -d)
 fi
 
 echo "-------------------------------------------------------------------------------------"
