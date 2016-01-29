@@ -22,6 +22,30 @@
       "revId": "da334f41e83b0df5ab255c40abb73d88b97e01e3",
       "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bad4c104_0ae5dca7",
+        "filename": "scripts/cleanup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000147
+      },
+      "writtenOn": "2016-01-29T00:03:48Z",
+      "side": 1,
+      "message": "Not sure which distro, but we had an issue where the files in /var/lib/cloud were the cause.",
+      "parentUuid": "bad4c104_6a94a837",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 23
+      },
+      "revId": "da334f41e83b0df5ab255c40abb73d88b97e01e3",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
     }
   ]
 }
