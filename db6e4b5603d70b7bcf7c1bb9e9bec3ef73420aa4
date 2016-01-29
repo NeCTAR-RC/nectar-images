@@ -22,6 +22,30 @@
       "revId": "db6e4b5603d70b7bcf7c1bb9e9bec3ef73420aa4",
       "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bad4c104_cada14e9",
+        "filename": "scripts/security.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000147
+      },
+      "writtenOn": "2016-01-29T00:02:37Z",
+      "side": 1,
+      "message": "I can make it -q if you want? I prefer to see the output though. The output of the update doesn\u0027t matter as much, it\u0027ll output an error if it fails to connect.",
+      "parentUuid": "bad4c104_caa2149a",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 2
+      },
+      "revId": "db6e4b5603d70b7bcf7c1bb9e9bec3ef73420aa4",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
     }
   ]
 }
