@@ -11,6 +11,12 @@ if [ -z ${FILE} ]; then
     exit 1
 fi
 
+. "$(basename ${0} .sh).cfg"
+
+if [ -z "${PACKER_VARS}" ] ; then
+    PACKER_VARS=variables.json
+fi
+
 if [ "$OS_USERNAME" != "image-builder" ]; then
     echo "Please load image-builder credentials"
     exit 1
@@ -45,7 +51,7 @@ else
 fi
 
 echo "Building image ${NAME}..."
-${PACKER} build ${PACKER_FILE}
+${PACKER} build -var-file=${PACKER_VARS} ${PACKER_FILE}
 [ -f /tmp/temp-${NAME}.json ] && rm /tmp/temp-${NAME}.json
 
 echo "Shrinking image..."
