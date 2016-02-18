@@ -34,13 +34,9 @@
       "destination": "/tmp/cloud.cfg"
     },
     {
-      "type": "shell",
-      "inline": "/bin/mkdir -p /var/lib/packer/build"
-    },
-    {
       "type": "file",
       "source": "files/testing",
-      "destination": "/var/lib/packer/build"
+      "destination": "/usr/nectar"
     },
     {
       "type": "shell",
