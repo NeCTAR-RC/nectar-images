@@ -58,8 +58,12 @@ echo "Shrinking image..."
 qemu-img convert -c -o compat=0.10 -O qcow2 ${OUTPUT_DIR}/${NAME} ${OUTPUT_DIR}/${NAME}.qcow2
 rm ${OUTPUT_DIR}/${NAME}
 
+if [ "${BUILD_PROPERTY}" != "" ] ; then
+    GLANCE_ARGS="--property ${BUILD_PROPERTY}=${BUILD_NUMBER}"
+fi
+
 echo "Creating image \"${IMAGE_NAME}\"..."
-IMAGE_ID=$(openstack image create --os-image-api-version=1 -f value -c id --disk-format qcow2 --container-format bare --file ${OUTPUT_DIR}/${NAME}.qcow2 --property nectar_build=${BUILD_NUMBER} "NeCTAR ${NAME}")
+IMAGE_ID=$(openstack image create --os-image-api-version=1 -f value -c id --disk-format qcow2 --container-format bare --file ${OUTPUT_DIR}/${NAME}.qcow2 ${GLANCE_ARGS} "NeCTAR ${NAME}")
 echo "Image ID: ${IMAGE_ID}"
 
 echo "Removing image working directory..."
