@@ -70,9 +70,13 @@ fi
 echo "Removing image working directory..."
 rm -fr ${OUTPUT_DIR}
 
-echo "Creating instance \"test_${NAME}_$BUILD_NUMBER\"..."
-INSTANCE_ID=$(openstack server create -f value -c id --image $IMAGE_ID --flavor m1.small --key-name jenkins-image-testing "test_${NAME}_$BUILD_NUMBER")
-echo "Instance ID: $INSTANCE_ID"
+if [ ${RUN_TESTS} != "true" ] ; then
+    exit 0
+fi
+
+echo "Creating instance \"test_${NAME}_${BUILD_NUMBER}\"..."
+INSTANCE_ID=$(openstack server create -f value -c id --image ${IMAGE_ID} --flavor m1.small --key-name ${TEST_SSH_KEY} "test_${NAME}_${BUILD_NUMBER}")
+echo "Instance ID: ${INSTANCE_ID}"
 
 set +e
 
