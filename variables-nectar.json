@@ -10,7 +10,7 @@
   "debian-7_iso_url": "http://admin.mgmt.melbourne.rc.nectar.org.au/packer-iso/debian-7.9.0-amd64-netinst.iso",
   "debian-8_iso_checksum": "5d0a1f804d73aee73eee7efbb38456390558094fd19894a573f1514ca44347e0",
   "debian-8_iso_checksum_type": "sha256",
-  "debian_8_iso_url": "http://admin.mgmt.melbourne.rc.nectar.org.au/packer-iso/debian-8.1.0-amd64-netinst.iso",
+  "debian-8_iso_url": "http://admin.mgmt.melbourne.rc.nectar.org.au/packer-iso/debian-8.1.0-amd64-netinst.iso",
   "fedora-22_iso_checksum": "9f1f2f19f75cc3b97da41878b5c86188fa8d27ed446bd97d9df615c137c77cfc",
   "fedora-22_iso_checksum_type": "sha256",
   "fedora-22_iso_url": "http://admin.mgmt.melbourne.rc.nectar.org.au/packer-iso/Fedora-Server-netinst-x86_64-22.iso",
