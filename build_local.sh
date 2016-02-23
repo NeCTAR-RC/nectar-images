@@ -62,6 +62,10 @@ if [ "${BUILD_PROPERTY}" != "" ] ; then
     GLANCE_ARGS="--property ${BUILD_PROPERTY}=${BUILD_NUMBER}"
 fi
 
+if [ "${MAKE_PUBLIC}" == "true" ] ; then
+    GLANCE_ARGS="--public ${GLANCE_ARGS}"
+fi
+
 echo "Creating image \"NeCTAR ${NAME}\"..."
 IMAGE_ID=$(openstack image create --os-image-api-version=1 -f value -c id --disk-format qcow2 --container-format bare --file ${OUTPUT_DIR}/${NAME}.qcow2 ${GLANCE_ARGS} $EXTRA_ARGS "NeCTAR ${NAME}")
 echo "Image ID: ${IMAGE_ID}"
