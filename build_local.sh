@@ -17,8 +17,8 @@ if [ -z "${PACKER_VARS}" ] ; then
     PACKER_VARS=variables.json
 fi
 
-if [ "$OS_USERNAME" != "image-builder" ]; then
-    echo "Please load image-builder credentials"
+if [ "${OS_USERNAME}" != "${IMAGEBUILDER_USERNAME}" ]; then
+    echo "Please load the OpenStack credentials for ${IMAGEBUILDER_USERNAME}"
     exit 1
 fi
 
