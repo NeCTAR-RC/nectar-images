@@ -4,8 +4,12 @@ set -e
 
 add-apt-repository cloud-archive:liberty
 
+# For Freshdesk integration
+apt-key adv --keyserver keyserver.ubuntu.com --recv 68576280
+apt-add-repository "deb https://deb.nodesource.com/node_4.x $(lsb_release -sc) main"
+
 apt-get -qq -y update
-apt-get -qq -y install openjdk-7-jdk rake ruby-puppetlabs-spec-helper puppet-lint git bundler python-dev libssl-dev libxml2-dev libxslt-dev build-essential libmysqlclient-dev libfreetype6-dev libpng12-dev git-buildpackage debhelper dupload libffi-dev npm nodejs libpq-dev unzip qemu pkg-config libvirt-dev libsqlite3-dev libldap2-dev libsasl2-dev python-pip
+apt-get -qq -y install openjdk-7-jdk rake ruby-puppetlabs-spec-helper puppet-lint git bundler python-dev libssl-dev libxml2-dev libxslt-dev build-essential libmysqlclient-dev libfreetype6-dev libpng12-dev git-buildpackage debhelper dupload libffi-dev npm nodejs libkrb5-dev libpq-dev unzip qemu pkg-config libvirt-dev libsqlite3-dev libldap2-dev libsasl2-dev python-pip
 apt-get -qq -y install dh-systemd openstack-pkg-tools python-sphinx python3-setuptools libcurl3 python-ceilometerclient python-cinderclient python-designateclient python-glanceclient python-heatclient python-keystoneclient python-muranoclient python-neutronclient python-novaclient python-openstackclient python-swiftclient
 
 apt-get -qq -y autoremove
