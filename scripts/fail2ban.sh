@@ -69,8 +69,8 @@ action      = hostsdeny[daemon_list=sshd]
 logpath     = /var/log/secure
 EOF
 
-    # Enable service
-    chkconfig --add fail2ban
+        # Enable service
+        chkconfig --add fail2ban
 
     fi
 
@@ -118,7 +118,7 @@ EOF
 #
 elif [ "$ID" == "ubuntu" ]; then
 
-   # Install fail2ban package
+    # Install fail2ban package
     apt-get -qq -y install fail2ban
 
     # Remove default debian config
@@ -142,6 +142,9 @@ EOF
 [$SSH_JAILNAME]
 enabled = true
 EOF
+
+    # Enable service
+    [ -f /etc/init.d/fail2ban ] && update-rc.d fail2ban enable
 
 #
 # OpenSuSE 13.2
