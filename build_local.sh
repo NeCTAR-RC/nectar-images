@@ -58,9 +58,14 @@ echo "Shrinking image..."
 qemu-img convert -c -o compat=0.10 -O qcow2 ${OUTPUT_DIR}/${NAME} ${OUTPUT_DIR}/${NAME}.qcow2
 rm ${OUTPUT_DIR}/${NAME}
 
-echo "Creating image \"${IMAGE_NAME}\"..."
-IMAGE_ID=$(openstack image create --os-image-api-version=1 -f value -c id --disk-format qcow2 --container-format bare --file ${OUTPUT_DIR}/${NAME}.qcow2 --property nectar_build=${BUILD_NUMBER} "NeCTAR ${NAME}")
+echo "Creating image \"NeCTAR ${NAME}\"..."
+IMAGE_ID=$(openstack image create --os-image-api-version=1 -f value -c id --disk-format qcow2 --container-format bare --file ${OUTPUT_DIR}/${NAME}.qcow2 --property nectar_build=${BUILD_NUMBER} $EXTRA_ARGS "NeCTAR ${NAME}")
 echo "Image ID: ${IMAGE_ID}"
+
+# Any extra image build props - we use this for Murano
+if [ "$NAME" == "ubuntu-14.04-x86_64" ]; then
+    glance image-update --property murano_image_info="{\"title\": \"NeCTAR ${NAME}\", \"type\": \"linux\"}" ${IMAGE_ID}
+fi
 
 echo "Removing image working directory..."
 rm -fr ${OUTPUT_DIR}
@@ -103,6 +108,9 @@ while [ $ATTEMPT -le $ATTEMPTS ]; do
     ATTEMPT=$((ATTEMPT+1))
     sleep 10
 done
+
+# Sleep 60 seconds for instance boot to settle
+sleep 60
 
 echo "Running tests (ssh $USER_ACCOUNT@$IP_ADDRESS '/bin/bash /usr/nectar/run_tests.sh')..."
 ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $USER_ACCOUNT@$IP_ADDRESS '/bin/bash /usr/nectar/run_tests.sh'
