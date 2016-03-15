@@ -48,6 +48,7 @@
         "scripts/banner.sh",
         "scripts/security.sh",
         "scripts/openstack-debian.sh",
+        "scripts/murano-agent.sh",
         "scripts/fail2ban.sh",
         "scripts/cleanup.sh",
         "scripts/zerodisk.sh"
