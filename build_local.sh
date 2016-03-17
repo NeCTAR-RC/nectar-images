@@ -63,7 +63,7 @@ IMAGE_ID=$(openstack image create --os-image-api-version=1 -f value -c id --disk
 echo "Image ID: ${IMAGE_ID}"
 
 # Any extra image build props - we use this for Murano
-if [ "$NAME" == "ubuntu-14.04-x86_64" ]; then
+if [[ "$NAME" =~ "murano" ]]; then
     glance image-update --property murano_image_info="{\"title\": \"NeCTAR ${NAME}\", \"type\": \"linux\"}" ${IMAGE_ID}
 fi
 
