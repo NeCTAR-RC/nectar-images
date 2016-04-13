@@ -34,5 +34,9 @@
   "ubuntu-14.04_iso_url": "http://archive.ubuntu.com/ubuntu/dists/trusty-updates/main/installer-amd64/20101020ubuntu318.33/images/netboot/mini.iso",
   "ubuntu-15.10_iso_checksum": "0279a97b10a87197d548f23e2de069869e40ba4de3ce44326d23a386d7f700c8",
   "ubuntu-15.10_iso_checksum_type": "sha256",
-  "ubuntu-15.10_iso_url": "http://archive.ubuntu.com/ubuntu/dists/vivid-updates/main/installer-amd64/20101020ubuntu376.1/images/netboot/mini.iso"
+  "ubuntu-15.10_iso_url": "http://archive.ubuntu.com/ubuntu/dists/vivid-updates/main/installer-amd64/20101020ubuntu376.1/images/netboot/mini.iso",
+  "ubuntu-16.04_iso_checksum": "c9344076a57d786fceb24f5985f0a64f7808c4765f8bf8c4f093da9884ff1e8e",
+  "ubuntu-16.04_iso_checksum_type": "sha256",
+  "ubuntu-16.04_iso_url": "http://archive.ubuntu.com/ubuntu/dists/xenial/main/installer-amd64/20101020ubuntu446/images/netboot/mini.iso"
+}
 }
