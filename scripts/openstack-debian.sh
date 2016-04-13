@@ -35,9 +35,21 @@ rm -f /etc/cloud/cloud.cfg.d/90_*
 # Setup utils
 apt-get -qq -y install sudo rsync curl less
 
+# Don't need to mess with ifnames on newer Ubuntu (>=16.04)
+if [ $(echo $VERSION_ID | sed 's,\.,,g') -lt 1604 ]; then
+	GRUB_OPTS="console=ttyS0,115200n8 console=tty0 consoleblank=0"
+else
+	GRUB_OPTS="console=ttyS0,115200n8 console=tty0 consoleblank=0 net.ifnames=0 biosdevname=0"
+fi
+
+# Older kernels require elevator=noop I/O scheduler (Debian 7)
+if [ "$VERSION_ID" == "7" ]; then
+	GRUB_OPTS="$GRUB_OPTS elevator=noop"
+fi
+
 # change GRUB so log tab and console tab in openstack work
 if [ -e /etc/default/grub ] ; then
-    sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT=.*$/GRUB_CMDLINE_LINUX_DEFAULT="elevator=noop console=ttyS0,115200n8 console=tty0 consoleblank=0 net.ifnames=0 biosdevname=0"/g' /etc/default/grub
+    sed -i "s/^GRUB_CMDLINE_LINUX_DEFAULT=.*$/GRUB_CMDLINE_LINUX_DEFAULT=\"$GRUB_OPTS\"/g" /etc/default/grub
     update-grub
 fi
 
