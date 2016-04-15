@@ -35,26 +35,32 @@ rm -f /etc/cloud/cloud.cfg.d/90_*
 # Setup utils
 apt-get -qq -y install sudo rsync curl less
 
-# Don't need to mess with ifnames on newer Ubuntu (>=16.04)
-if [ $(echo $VERSION_ID | sed 's,\.,,g') -lt 1604 ]; then
-    GRUB_OPTS="console=ttyS0,115200n8 console=tty0 consoleblank=0 net.ifnames=0 biosdevname=0"
-else
-    GRUB_OPTS="console=ttyS0,115200n8 console=tty0 consoleblank=0"
+# Set serial console and use old-style network naming
+KERNEL_ARGS="console=tty0 console=ttyS0,115200n8 vga=788 consoleblank=0 net.ifnames=0 biosdevname=0"
+
+# Don't use colour on newer systemd distro logs
+if [ $(echo $VERSION_ID | sed 's,\.,,g') -ge 1604 ]; then
+    KERNEL_ARGS="$KERNEL_ARGS systemd.log_color=no"
 fi
 
 # Older kernels require elevator=noop I/O scheduler (Debian 7)
 if [ "$VERSION_ID" == "7" ]; then
-    GRUB_OPTS="$GRUB_OPTS elevator=noop"
+    KERNEL_ARGS="$KERNEL_ARGS elevator=noop"
 fi
 
 # change GRUB so log tab and console tab in openstack work
 if [ -e /etc/default/grub ] ; then
-    sed -i "s/^GRUB_CMDLINE_LINUX_DEFAULT=.*$/GRUB_CMDLINE_LINUX_DEFAULT=\"$GRUB_OPTS\"/g" /etc/default/grub
+    sed -i "s/^GRUB_CMDLINE_LINUX_DEFAULT=.*$/GRUB_CMDLINE_LINUX_DEFAULT=\"$KERNEL_ARGS\"/g" /etc/default/grub
     update-grub
 fi
 
 # Make sure sudo works properly with openstack
 sed -i 's/env_reset/env_reset\nDefaults\t\!requiretty/' /etc/sudoers
+
+# Fix interfaces file which hardcodes ens3 after we add kernel args for eth0
+if [ "$VERSION_ID" == "16.04" ]; then
+    sed -i 's/ ens[0-9]\+/ eth0/g' /etc/network/interfaces
+fi
 
 # Fix networking to auto bring up eth0 and work correctly with cloud-init
 sed -i 's/allow-hotplug eth0/auto eth0/' /etc/network/interfaces

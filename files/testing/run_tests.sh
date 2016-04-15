@@ -9,6 +9,10 @@ echo "                                 Running Tests                            
 echo "================================================================================="
 echo ""
 
+### I/O scheduler is none/noop
+assert_raises "test \"cat /sys/block/*/queue/scheduler | grep -qEv '(none|[noop])'\""
+assert_end "Check that none/noop I/O scheduler in use"
+
 ### Ephemeral disk checking
 skip_if "test ! -b /dev/vdb" # skip is doesn't exist
 assert_raises "grep '/dev/vdb.*ext4.*rw' /proc/mounts"
@@ -17,6 +21,14 @@ assert_end "Check that ephemeral disk is ext4 and read-write mounted on vdb"
 ### Root disk resized
 assert "test $(lsblk --output MOUNTPOINT,SIZE | sed -n -e 's/^\/\s\+\([0-9]\+\)G/\1/p') -gt 4"
 assert_end "Root filesystem resized"
+
+### Serial console set in right order
+assert_raises "grep 'console=tty0 console=ttyS0,115200n8' /boot/grub*/grub.c*f*"
+assert_end "Kernel console log configured correctly"
+
+### Default interface is eth0
+assert "/sbin/ip route | grep -E 'default via .* dev eth0'"
+assert_end "Default route via interface named eth0"
 
 ### Fail2ban
 assert_raises "pgrep fail2ban"
