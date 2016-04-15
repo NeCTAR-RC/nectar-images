@@ -28,7 +28,7 @@ done
 [ -f /tmp/cloud.cfg ] && mv /tmp/cloud.cfg /etc/cloud/cloud.cfg
 
 # Common kernel args
-KERNEL_ARGS=" splash=slient showopts elevator=noop console=ttyS0,115200n8 console=tty0 consoleblank=0"
+KERNEL_ARGS="splash=slient showopts console=tty0 console=ttyS0,115200n8 vga=788 consoleblank=0 net.ifnames=0 biosdevname=0"
 
 # change GRUB so log tab and console tab in openstack work
 if [ -e /etc/default/grub ] ; then

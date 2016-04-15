@@ -49,7 +49,17 @@ fi
 dracut -f
 
 # Common kernel args
-KERNEL_ARGS="elevator=noop console=ttyS0,115200n8 console=tty0 consoleblank=0 net.ifnames=0 biosdevname=0"
+KERNEL_ARGS="console=tty0 console=ttyS0,115200n8 vga=788 consoleblank=0 net.ifnames=0 biosdevname=0"
+
+if [ $RELEASEVER -lt 7 ]; then
+    # elevator=noop only required for older distros
+    KERNEL_ARGS="$KERNEL_ARGS elevator=noop"
+fi
+
+# Only works in very recent systemd
+if [ $RELEASEVER -gt 22 ]; then
+  KERNEL_ARGS="$KERNEL_ARGS systemd.log_color=no"
+fi
 
 # Add our Grub kernel args for OpenStack
 grubby --update-kernel=ALL --remove-args="rhgb quiet"
