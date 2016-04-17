@@ -23,7 +23,7 @@ assert "test $(lsblk --output MOUNTPOINT,SIZE | sed -n -e 's/^\/\s\+\([0-9]\+\)G
 assert_end "Root filesystem resized"
 
 ### Serial console set in right order
-assert_raises "sudo grep 'console=tty0 console=ttyS0,115200n8' /boot/grub*/grub.c*f*"
+assert_raises "grep 'console=tty0 console=ttyS0,115200n8' /proc/cmdline"
 assert_end "Kernel console log configured correctly"
 
 ### Default interface is eth0
