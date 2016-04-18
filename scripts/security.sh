@@ -16,8 +16,8 @@ if [ -f '/etc/debian_version' ] ; then
     apt-get -y dist-upgrade
 elif [ -f '/etc/redhat-release' ] ; then
     yum -y clean all
-    yum -q -y makecache
-    yum -y upgrade
+    yum -y makecache
+    yum -y upgrade || true  # Returns non-zero code on Fedora 23
 elif [ -f '/etc/SuSE-release' ] ; then
     zypper -q -n ref
     zypper -n dup

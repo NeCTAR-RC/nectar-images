@@ -30,7 +30,6 @@ EOM
 esac
 
 # Install cloud packages
-yum -q -y update
 yum -y install cloud-init cloud-utils heat-cfntools
 
 # Try and install these, but don't die is they fail
