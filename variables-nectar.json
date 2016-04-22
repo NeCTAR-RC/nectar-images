@@ -32,7 +32,7 @@
   "ubuntu-15.10_iso_checksum": "d1498749e073ef7fd09f84478f299bea",
   "ubuntu-15.10_iso_checksum_type": "md5",
   "ubuntu-15.10_iso_url": "http://admin.mgmt.melbourne.rc.nectar.org.au/packer-iso/ubuntu-15.10-x86_64-mini.iso",
-  "ubuntu-16.04_iso_checksum": "c9344076a57d786fceb24f5985f0a64f7808c4765f8bf8c4f093da9884ff1e8e",
+  "ubuntu-16.04_iso_checksum": "655d1ec0a7415b4d963e7f2c40e3d56bd135907dda2cedd0c75209ced3a63103",
   "ubuntu-16.04_iso_checksum_type": "sha256",
-  "ubuntu-16.04_iso_url": "http://admin.mgmt.melbourne.rc.nectar.org.au/packer-iso/ubuntu-16.04-beta-x86_64-mini.iso"
+  "ubuntu-16.04_iso_url": "http://admin.mgmt.melbourne.rc.nectar.org.au/packer-iso/ubuntu-16.04-x86_64-mini.iso"
 }
