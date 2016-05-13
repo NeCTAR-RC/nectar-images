@@ -26,7 +26,7 @@ apt-get -q -y install rake ruby-puppetlabs-spec-helper puppet-lint git bundler p
 apt-get -q -y install dh-systemd openstack-pkg-tools python-sphinx python3-setuptools libcurl3 python-ceilometerclient python-cinderclient python-designateclient python-glanceclient python-heatclient python-keystoneclient python-muranoclient python-neutronclient python-novaclient python-openstackclient python-swiftclient
 
 # For Freshdesk integration
-apt-get -q -y install nodejs nodejs-legacy libkrb5-dev
+apt-get -q -y install npm nodejs nodejs-legacy libkrb5-dev
 
 if [ "$VERSION_ID" == "16.04" ]; then
     apt-get -q -y install virtualenv tox
