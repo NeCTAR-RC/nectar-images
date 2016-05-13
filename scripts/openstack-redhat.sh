@@ -16,16 +16,16 @@ fi
 # Fedora 23 doesn't need an extra repo for heat-cfntools
 case $RELEASEVER in
     7|21|22)
-        cat > /etc/yum.repos.d/rdo-release.repo << EOM
-[openstack-kilo]
-name=OpenStack Kilo Repository
-baseurl=http://repos.fedorapeople.org/repos/openstack/openstack-kilo/${DIST}${RELEASEVER}/
-enabled=1
+        cat > /etc/yum.repos.d/CentOS-OpenStack-kilo.repo << EOM
+[centos-openstack-kilo]
+name=CentOS-\$releasever - OpenStack kilo
+baseurl=http://mirror.centos.org/centos/\$releasever/cloud/\$basearch/openstack-kilo/
 gpgcheck=0
+enabled=1
 EOM
         ;;
     *)
-        echo Not creating rdo-release repo
+        echo "OpenStack package repository not required for $RELEASEVER"
         ;;
 esac
 
