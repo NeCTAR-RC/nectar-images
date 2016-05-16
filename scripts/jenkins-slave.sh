@@ -29,7 +29,7 @@ apt-get -q -y install dh-systemd openstack-pkg-tools python-sphinx python3-setup
 apt-get -q -y install nodejs nodejs-legacy libkrb5-dev
 
 if [ "$VERSION_ID" == "16.04" ]; then
-    apt-get -q -y install virtualenv tox npm
+    apt-get -q -y install virtualenv tox npm ruby-puppet-syntax
 fi
 
 # Clean up
