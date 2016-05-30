@@ -15,6 +15,10 @@ if [ "$VERSION_ID" == "14.04" ]; then
     apt-key adv --keyserver keyserver.ubuntu.com --recv 68576280
     apt-add-repository "deb https://deb.nodesource.com/node_4.x $(lsb_release -sc) main"
 fi
+if [ "$VERSION_ID" == "16.04" ]; then
+    curl http://download.rc.nectar.org.au/nectar-archive-key-2016.gpg | apt-key add -
+    apt-add-repository "deb http://download.rc.nectar.org.au/nectar-ubuntu xenial main"
+fi
 
 apt-get -q -y update
 
