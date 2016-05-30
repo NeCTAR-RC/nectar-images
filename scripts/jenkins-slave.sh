@@ -25,6 +25,9 @@ apt-get -q -y install rake ruby-puppetlabs-spec-helper puppet-lint git bundler p
 
 apt-get -q -y install dh-systemd openstack-pkg-tools python-sphinx python3-setuptools libcurl3 python-ceilometerclient python-cinderclient python-designateclient python-glanceclient python-heatclient python-keystoneclient python-muranoclient python-neutronclient python-novaclient python-openstackclient python-swiftclient
 
+# For Package building
+apt-get -q -y install python-hivemind-contrib python-hivemind
+
 # For Freshdesk integration
 apt-get -q -y install nodejs nodejs-legacy libkrb5-dev
 
