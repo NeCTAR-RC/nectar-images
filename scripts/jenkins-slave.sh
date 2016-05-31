@@ -7,6 +7,10 @@ if [ -f /etc/os-release ]; then
     source /etc/os-release
 fi
 
+curl http://download.rc.nectar.org.au/nectar-archive-key-2016.gpg | apt-key add -
+curl http://download.rc.nectar.org.au/nectar-custom.gpg | apt-key add -
+
+
 if [ "$VERSION_ID" == "14.04" ]; then
     # Cloud archive for Trusty
     add-apt-repository cloud-archive:liberty
@@ -14,10 +18,14 @@ if [ "$VERSION_ID" == "14.04" ]; then
     # For Freshdesk integration
     apt-key adv --keyserver keyserver.ubuntu.com --recv 68576280
     apt-add-repository "deb https://deb.nodesource.com/node_4.x $(lsb_release -sc) main"
+    apt-add-repository "deb http://download.rc.nectar.org.au/nectar-ubuntu trusty main"
+    apt-add-repository "deb http://download.rc.nectar.org.au/nectar-ubuntu trusty-liberty main"
+    apt-add-repository "deb http://download.rc.nectar.org.au/nectar-ubuntu trusty-liberty-testing main"
 fi
 if [ "$VERSION_ID" == "16.04" ]; then
-    curl http://download.rc.nectar.org.au/nectar-archive-key-2016.gpg | apt-key add -
     apt-add-repository "deb http://download.rc.nectar.org.au/nectar-ubuntu xenial main"
+    apt-add-repository "deb http://download.rc.nectar.org.au/nectar-ubuntu xenial-mitaka main"
+    apt-add-repository "deb http://download.rc.nectar.org.au/nectar-ubuntu xenial-mitaka-testing main"
 fi
 
 apt-get -q -y update
