@@ -1,0 +1,58 @@
+{
+  "builders": [
+    {
+      "type": "qemu",
+      "name": "ubuntu-14.04-x86_64-murano-agent",
+      "vm_name": "ubuntu-14.04-x86_64-murano-agent",
+      "accelerator": "kvm",
+      "disk_size": 2048,
+      "format": "qcow2",
+      "headless": true,
+      "http_directory": "http",
+      "iso_url": "{{user `ubuntu-14.04_iso_url`}}",
+      "iso_checksum": "{{user `ubuntu-14.04_iso_checksum`}}",
+      "iso_checksum_type": "{{user `ubuntu-14.04_iso_checksum_type`}}",
+      "ssh_password": "b4dP4ssw0Rd",
+      "ssh_port": 22,
+      "ssh_username": "root",
+      "ssh_wait_timeout": "10000s",
+      "qemuargs": [
+        [ "-m", "4096M" ],
+        [ "-cpu", "host" ],
+        [ "-smp", "1" ]
+      ],
+      "boot_wait": "10s",
+      "boot_command": [
+        "<esc><wait> linux vga=788 fb=false ",
+        "locale=en_AU console-keymaps-at/keymap=us console-setup/ask_detect=false console-setup/layoutcode=us ",
+        "keyboard-configuration/layout=USA keyboard-configuration/variant=USA hostname=ubuntu ",
+        "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu-14.04-x86_64-preseed.cfg ",
+        "initrd=initrd.gz -- <enter><wait>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "files/ubuntu/cloud.cfg",
+      "destination": "/tmp/cloud.cfg"
+    },
+    {
+      "type": "file",
+      "source": "files/testing",
+      "destination": "/usr/nectar"
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "scripts/banner.sh",
+        "scripts/security.sh",
+        "scripts/openstack-debian.sh",
+        "scripts/murano-agent.sh",
+        "scripts/fail2ban.sh",
+        "scripts/cleanup.sh",
+        "scripts/zerodisk.sh"
+      ]
+    }
+  ]
+}

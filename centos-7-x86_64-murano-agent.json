@@ -1,0 +1,55 @@
+{
+  "builders": [
+    {
+      "type": "qemu",
+      "name": "centos-7-x86_64-murano-agent",
+      "vm_name": "centos-7-x86_64-murano-agent",
+      "accelerator": "kvm",
+      "disk_size": 4096,
+      "format": "qcow2",
+      "headless": true,
+      "http_directory": "http",
+      "iso_url": "{{user `centos-7_iso_url`}}",
+      "iso_checksum": "{{user `centos-7_iso_checksum`}}",
+      "iso_checksum_type": "{{user `centos-7_iso_checksum_type`}}",
+      "ssh_password": "b4dP4ssw0Rd",
+      "ssh_port": 22,
+      "ssh_username": "root",
+      "ssh_wait_timeout": "10000s",
+      "qemuargs": [
+        [ "-m", "4096M" ],
+        [ "-cpu", "host" ],
+        [ "-smp", "1" ]
+      ],
+      "boot_wait": "10s",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-7-x86_64-kickstart.cfg<enter><wait>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "files/centos/7/cloud.cfg",
+      "destination": "/tmp/cloud.cfg"
+    },
+    {
+      "type": "file",
+      "source": "files/testing",
+      "destination": "/usr/nectar"
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "scripts/banner.sh",
+        "scripts/security.sh",
+        "scripts/epel.sh",
+        "scripts/openstack-redhat.sh",
+        "scripts/murano-agent.sh",
+        "scripts/fail2ban.sh",
+        "scripts/cleanup.sh",
+        "scripts/zerodisk.sh"
+      ]
+    }
+  ]
+}
