@@ -29,11 +29,12 @@ EOM
         ;;
 esac
 
-# Install cloud packages
-yum -y install cloud-init cloud-utils heat-cfntools
+# Install cloud package
+yum -y install cloud-init
 
 # Try and install these, but don't die is they fail
-yum -y install dracut-modules-growroot cloud-initramfs-tools cloud-utils-growpart || true
+yum -y install dracut-modules-growroot cloud-initramfs-tools \
+       cloud-utils-growpart cloud-utils heat-cfntools || true
 
 # Move our cloud config into place
 [ -f /tmp/cloud.cfg ] && mv /tmp/cloud.cfg /etc/cloud/cloud.cfg
@@ -45,10 +46,19 @@ if which systemctl >/dev/null 2>&1; then
     done
 fi
 
-dracut -f
-
 # Common kernel args
-KERNEL_ARGS="console=tty0 console=ttyS0,115200n8 vga=788 consoleblank=0 net.ifnames=0 biosdevname=0"
+KERNEL_ARGS="console=tty0 console=ttyS0,115200n8 vga=788 consoleblank=0"
+
+if [ $RELEASEVER -eq 5 ]; then
+    # CentOS 5 cloud-init does not create initial user
+    /usr/sbin/useradd -G adm,wheel -m -d /home/ec2-user -s /bin/bash ec2-user
+    /bin/echo '# User rules for ec2-user' >> /etc/sudoers
+    /bin/echo 'ec2-user ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+else
+    # CentOS 6 and greater
+    dracut -f
+    KERNEL_ARGS="$KERNEL_ARGS net.ifnames=0 biosdevname=0"
+fi
 
 if [ $RELEASEVER -lt 7 ]; then
     # elevator=noop only required for older distros

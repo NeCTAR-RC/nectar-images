@@ -9,6 +9,17 @@ echo "                                 Running Tests                            
 echo "================================================================================="
 echo ""
 
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+elif [ -f /etc/redhat-release ]; then
+    NAME=$(sed -e 's/\(.*\)release\? \([0-9]\+\).*/\1/' /etc/redhat-release)
+    ID=$(echo $NAME | tr '[:upper:]' '[:lower:]')
+    VERSION_ID=$(sed -e 's/.*release\? \([0-9]\+\).*/\1/' /etc/redhat-release)
+else
+    echo "Disto ID check fail"
+    exit 1
+fi
+
 ### I/O scheduler is none/noop
 assert "grep -Ev '(none|\[noop\])' /sys/block/*/queue/scheduler" ''
 assert_end "Check that none/noop I/O scheduler in use"
@@ -19,7 +30,7 @@ assert_raises "grep '/dev/vdb.*ext4.*rw' /proc/mounts"
 assert_end "Check that ephemeral disk is ext4 and read-write mounted on vdb"
 
 ### Root disk resized
-assert "test $(lsblk --output MOUNTPOINT,SIZE | sed -n -e 's/^\/\s\+\([0-9]\+\)G/\1/p') -gt 4"
+assert "test $(df -P -BG / | sed -n -e 's/^\/\s\+\([0-9]\+\)G.*/\1/p') -gt 4"
 assert_end "Root filesystem resized"
 
 ### Serial console set in right order
@@ -34,9 +45,11 @@ assert_end "Default route via interface named eth0"
 assert_raises "pgrep fail2ban"
 assert_end "Fail2ban is running"
 
-### heat-cfntools
-assert_raises "which cfn-create-aws-symlinks cfn-get-metadata cfn-push-stats cfn-hup cfn-init cfn-signal"
-assert_end "heat-cfntools are installed"
+### heat-cfntools for everything except CentOS 5
+if [ "$ID" == "centos" ] && [ $VERSION_ID -eq 5 ]; then
+    assert_raises "which cfn-create-aws-symlinks cfn-get-metadata cfn-push-stats cfn-hup cfn-init cfn-signal"
+    assert_end "heat-cfntools are installed"
+fi
 
 ### No default passwords
 assert_raises "test \"$(sudo cut -d ':' -f 2 /etc/shadow | cut -d '$' -sf3)\" = ''"

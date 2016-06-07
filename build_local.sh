@@ -46,7 +46,7 @@ if [ -n "${SSH_CLIENT}" ] || [ -n "${SSH_TTY}" ]; then
     PACKER_FILE=${FILE}
 else
     # For local builds, we'll disable headless mode
-    sed 's/"headless": true/"headless": false/g' ${NAME}.json >/tmp/temp-${NAME}.json
+    sed -e 's/"headless": true/"headless": false/g' -e 's/console=ttyS0,115200n8//g' ${NAME}.json >/tmp/temp-${NAME}.json
     PACKER_FILE=/tmp/temp-${NAME}.json
 fi
 
