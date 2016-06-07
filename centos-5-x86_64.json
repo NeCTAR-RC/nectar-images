@@ -19,12 +19,11 @@
       "qemuargs": [
         [ "-m", "4096M" ],
         [ "-cpu", "host" ],
-        [ "-smp", "1" ],
-        [ "-serial", "file:serial.out" ]
+        [ "-smp", "1" ]
       ],
       "boot_wait": "1s",
       "boot_command": [
-        "<tab> text console=ttyS0,115200n8 ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-5-x86_64-kickstart.cfg<enter><wait>"
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-5-x86_64-kickstart.cfg<enter><wait>"
       ]
     }
   ],
