@@ -11,7 +11,7 @@ fi
 [ -d /dev/.udev ] && rm -rf /dev/.udev
 
 # Empty log files on the VM
-find /var/log -type f -execdir truncate -s0 {} \;
+find /var/log -type f -exec bash -c 'cat /dev/null > {}' \;
 
 # Remove SSH host keys
 rm -f /etc/ssh/*key*

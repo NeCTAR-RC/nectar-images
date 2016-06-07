@@ -1,4 +1,5 @@
 packer_cache
+serial.out
 output-*
 *.swp
 *.box

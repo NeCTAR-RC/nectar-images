@@ -1,4 +1,7 @@
 {
+  "centos-5_iso_checksum": "f2087f9af0d50df05144a1f0d1c5b404",
+  "centos-5_iso_checksum_type": "md5",
+  "centos-5_iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/CentOS-5.11-x86_64-netinstall.iso",
   "centos-6_iso_checksum": "9381a24b8bee2fed0c26896141a64b69",
   "centos-6_iso_checksum_type": "md5",
   "centos-6_iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/CentOS-6.7-x86_64-minimal.iso",
