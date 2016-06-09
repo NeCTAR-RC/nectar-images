@@ -10,6 +10,8 @@ fi
 curl http://download.rc.nectar.org.au/nectar-archive-key-2016.gpg | apt-key add -
 curl http://download.rc.nectar.org.au/nectar-custom.gpg | apt-key add -
 
+# Disable Unattended upgrades
+echo 'APT::Periodic::Unattended-Upgrade "0";' | tee /etc/apt/apt.conf.d/10periodic /etc/apt/apt.conf.d/20auto-upgrades
 
 if [ "$VERSION_ID" == "14.04" ]; then
     # Cloud archive for Trusty
