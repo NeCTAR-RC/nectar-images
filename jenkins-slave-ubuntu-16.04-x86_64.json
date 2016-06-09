@@ -21,7 +21,7 @@
         [ "-cpu", "host" ],
         [ "-smp", "1" ]
       ],
-      "boot_wait": "1s",
+      "boot_wait": "10s",
       "boot_command": [
         "<tab><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
         "fb=false hostname=ubuntu locale=en_AU ",
@@ -46,6 +46,7 @@
       "type": "shell",
       "scripts": [
         "scripts/security.sh",
+        "scripts/ubuntu.sh",
         "scripts/openstack-debian.sh",
         "scripts/jenkins-slave.sh",
         "scripts/cleanup.sh",
