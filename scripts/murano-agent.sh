@@ -60,6 +60,7 @@ if [ "$ID" == "ubuntu" ] && [ "$VERSION_ID" == "14.04" ]; then
 
     # Add liberty cloud-archive repo for deps
     add-apt-repository -y cloud-archive:liberty
+	apt-get -q -y update
 
     DEBIAN_FRONTEND=noninteractive apt-get -y install git-core wget make gcc \
                                               python-pip python-dev \
