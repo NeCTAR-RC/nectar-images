@@ -46,10 +46,9 @@ assert_raises "pgrep fail2ban"
 assert_end "Fail2ban is running"
 
 ### heat-cfntools for everything except CentOS 5
-if [ "$ID" == "centos" ] && [ $VERSION_ID -eq 5 ]; then
-    assert_raises "which cfn-create-aws-symlinks cfn-get-metadata cfn-push-stats cfn-hup cfn-init cfn-signal"
-    assert_end "heat-cfntools are installed"
-fi
+skip_if "test \"$ID\" = \"centos\" -a $VERSION_ID -lt 6"
+assert_raises "which cfn-create-aws-symlinks cfn-get-metadata cfn-push-stats cfn-hup cfn-init cfn-signal"
+assert_end "heat-cfntools are installed"
 
 ### No default passwords
 assert_raises "test \"$(sudo cut -d ':' -f 2 /etc/shadow | cut -d '$' -sf3)\" = ''"
