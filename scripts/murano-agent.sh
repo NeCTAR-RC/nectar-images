@@ -18,15 +18,15 @@ if [ "$ID" == "ubuntu" ] && [ "$VERSION_ID" == "16.04" ]; then
     # And the distro init script and murano service having different ideas on
     # where the config and log files are kept.
 
-	# Clean up bad distro scripts and directories
-	rm -fr /etc/init.d/murano-agent /etc/init/murano-agent.conf \
-           /etc/murano-agent /var/log/murano /var/log/murano-agent
+    # Clean up bad distro scripts and directories
+    rm -fr /etc/init.d/murano-agent /etc/init/murano-agent.conf \
+    /etc/murano-agent /var/log/murano /var/log/murano-agent
 
-	# Pre-create these directories to avoid errors
-	/bin/mkdir -p /etc/murano /var/murano/plans
+    # Pre-create these directories to avoid errors
+    /bin/mkdir -p /etc/murano /var/murano/plans
 
-	# Install standard agent package for Xenial
-	apt-get -y install murano-agent
+    # Install standard agent package for Xenial
+    apt-get -y install murano-agent
 
     # Install an actual working service config
     cat > /etc/systemd/system/murano-agent.service << EOF
@@ -43,8 +43,8 @@ WantedBy=multi-user.target
 EOF
     systemctl daemon-reload
 
-	# Yes, exit
-	exit 0
+    # Yes, exit
+    exit 0
 fi
 
 
@@ -60,6 +60,7 @@ if [ "$ID" == "ubuntu" ] && [ "$VERSION_ID" == "14.04" ]; then
 
     # Add liberty cloud-archive repo for deps
     add-apt-repository -y cloud-archive:liberty
+    apt-get -q -y update
 
     DEBIAN_FRONTEND=noninteractive apt-get -y install git-core wget make gcc \
                                               python-pip python-dev \
