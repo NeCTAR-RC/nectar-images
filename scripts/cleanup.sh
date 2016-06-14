@@ -30,7 +30,9 @@ if [ -f /etc/debian_version ]; then
         grep -v $(uname -r) | xargs -r apt-get -y remove
 
     # Clean apt
-    apt-get -y clean all
+    apt-get -q -y autoremove
+    apt-get -q -y autoclean
+    apt-get -q -y clean all
 fi
 
 # RedHat based distros

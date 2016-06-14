@@ -15,8 +15,9 @@ if [ "$ID" == "debian" ] && [ "$VERSION_ID" == "7" ]; then
     echo 'deb http://archive.gplhost.com/debian juno-backports main' >> /etc/apt/sources.list
 fi
 
-apt-get -qq -y update
-apt-get -qq -y install cloud-utils cloud-init cloud-initramfs-growroot bash-completion heat-cfntools
+export DEBIAN_FRONTEND=noninteractive
+apt-get -q -y update
+apt-get -q -y install cloud-utils cloud-init cloud-initramfs-growroot bash-completion heat-cfntools
 
 # Install heat cfntools for Debian 7
 if [ "$ID" == "ubuntu" ] && [ "$VERSION_ID" == "14.04" ]; then

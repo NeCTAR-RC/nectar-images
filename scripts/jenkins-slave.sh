@@ -13,6 +13,8 @@ curl http://download.rc.nectar.org.au/nectar-custom.gpg | apt-key add -
 # Disable Unattended upgrades
 echo 'APT::Periodic::Unattended-Upgrade "0";' | tee /etc/apt/apt.conf.d/10periodic /etc/apt/apt.conf.d/20auto-upgrades
 
+export DEBIAN_FRONTEND=noninteractive
+
 if [ "$VERSION_ID" == "14.04" ]; then
     # Cloud archive for Trusty
     add-apt-repository cloud-archive:liberty
@@ -49,11 +51,6 @@ if [ "$VERSION_ID" == "16.04" ]; then
     apt-get -q -y install virtualenv tox npm ruby-puppet-syntax
     systemctl disable apt-daily.timer
 fi
-
-# Clean up
-apt-get -q -y autoremove
-apt-get -q -y autoclean
-apt-get -q -y clean
 
 if [ "$VERSION_ID" == "14.04" ]; then
     # Needed to build Liberty on Trusty
