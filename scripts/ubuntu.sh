@@ -8,6 +8,7 @@ set -e
 # Disable apt-daily.timer from running at Boot
 # http://stackoverflow.com/questions/36896806/how-can-i-be-sure-a-freshly-started-vm-is-ready-for-provisioning
 if [ -f /lib/systemd/system/apt-daily.timer ]; then
+    mkdir -p /etc/systemd/system/apt-daily.timer.d
     cat > /etc/systemd/system/apt-daily.timer.d/apt-daily.timer.conf << EOF
 [Timer]
 Persistent=false
