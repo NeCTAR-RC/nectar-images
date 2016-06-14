@@ -45,11 +45,10 @@ apt-get -q -y install dh-systemd openstack-pkg-tools python-sphinx python3-setup
 apt-get -q -y install python-hivemind-contrib python-hivemind
 
 # For Freshdesk integration
-apt-get -q -y install nodejs nodejs-legacy libkrb5-dev
+apt-get -q -y install nodejs libkrb5-dev
 
 if [ "$VERSION_ID" == "16.04" ]; then
-    apt-get -q -y install virtualenv tox npm ruby-puppet-syntax
-    systemctl disable apt-daily.timer
+    apt-get -q -y install virtualenv tox npm ruby-puppet-syntax nodejs-legacy
 fi
 
 if [ "$VERSION_ID" == "14.04" ]; then
