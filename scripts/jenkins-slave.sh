@@ -47,6 +47,9 @@ apt-get -q -y install python-hivemind-contrib python-hivemind
 # For Freshdesk integration
 apt-get -q -y install nodejs libkrb5-dev
 
+# Puppet module testing deps
+apt-get -q -y install libaugeas-dev
+
 if [ "$VERSION_ID" == "16.04" ]; then
     apt-get -q -y install virtualenv tox npm ruby-puppet-syntax nodejs-legacy
 fi
@@ -57,8 +60,7 @@ if [ "$VERSION_ID" == "14.04" ]; then
 fi
 
 # Install packer
-PACKER_VER=0.8.6
-PACKER_FILE="packer_${PACKER_VER}_linux_amd64.zip"
-wget -q https://releases.hashicorp.com/packer/$PACKER_VER/$PACKER_FILE -O /tmp/$PACKER_FILE
+PACKER_FILE=packer_current_linux_amd64.zip
+wget -q http://mirrors.rc.nectar.org.au/$PACKER_FILE -O /tmp/$PACKER_FILE
 unzip /tmp/$PACKER_FILE -d /usr/local/bin/
 rm /tmp/$PACKER_FILE
