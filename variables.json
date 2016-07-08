@@ -29,14 +29,14 @@
   "scientific-6_iso_checksum": "7e7290de3c9e71622e34bc3291197a31f52cafd258ab200dbe856d8e1daf175c",
   "scientific-6_iso_checksum_type": "sha256",
   "scientific-6_iso_url": "http://ftp.scientificlinux.org/linux/scientific/6x/x86_64/iso/SL-6-x86_64-netinstall.iso",
-  "ubuntu-14.04_iso_checksum": "c32a78acf1e8c905bc3b436487920df065ebbff582045313ad83106586d90c34",
+  "ubuntu-14.04_iso_checksum": "0fd9bbdba7f97c0b740b942da83f4865ee4b43a6f590ed9e3d083f179b8f9702",
   "ubuntu-14.04_iso_checksum_type": "sha256",
-  "ubuntu-14.04_iso_url": "http://archive.ubuntu.com/ubuntu/dists/trusty-updates/main/installer-amd64/20101020ubuntu318.33/images/netboot/mini.iso",
+  "ubuntu-14.04_iso_url": "http://archive.ubuntu.com/ubuntu/dists/trusty-updates/main/installer-amd64/20101020ubuntu318.39/images/netboot/mini.iso",
   "ubuntu-15.10_iso_checksum": "0279a97b10a87197d548f23e2de069869e40ba4de3ce44326d23a386d7f700c8",
   "ubuntu-15.10_iso_checksum_type": "sha256",
   "ubuntu-15.10_iso_url": "http://archive.ubuntu.com/ubuntu/dists/vivid-updates/main/installer-amd64/20101020ubuntu376.1/images/netboot/mini.iso",
-  "ubuntu-16.04_iso_checksum": "c9344076a57d786fceb24f5985f0a64f7808c4765f8bf8c4f093da9884ff1e8e",
+  "ubuntu-16.04_iso_checksum": "655d1ec0a7415b4d963e7f2c40e3d56bd135907dda2cedd0c75209ced3a63103",
   "ubuntu-16.04_iso_checksum_type": "sha256",
-  "ubuntu-16.04_iso_url": "http://archive.ubuntu.com/ubuntu/dists/xenial/main/installer-amd64/20101020ubuntu446/images/netboot/mini.iso"
+  "ubuntu-16.04_iso_url": "http://archive.ubuntu.com/ubuntu/dists/xenial/main/installer-amd64/20101020ubuntu451/images/netboot/mini.iso"
 }
 }
