@@ -1,4 +1,7 @@
 {
+  "centos-5_iso_checksum": "9729c04a8a3ba57ed4e34ee5b96522879e6a3bcbf5582c3b6bcfd02bcfbacf8c",
+  "centos-5_iso_checksum_type": "sha256",
+  "centos-5_iso_url": "http://mirrors.kernel.org/centos/5.11/isos/x86_64/CentOS-5.11-x86_64-netinstall.iso",
   "centos-6_iso_checksum": "9d3fec5897be6b3fed4d3dda80b8fa7bb62c616bbfd4bdcd27295ca9b764f498",
   "centos-6_iso_checksum_type": "sha256",
   "centos-6_iso_url": "http://mirrors.kernel.org/centos/6/isos/x86_64/CentOS-6.7-x86_64-minimal.iso",
