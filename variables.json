@@ -39,4 +39,3 @@
   "ubuntu-16.04_iso_checksum_type": "sha256",
   "ubuntu-16.04_iso_url": "http://archive.ubuntu.com/ubuntu/dists/xenial/main/installer-amd64/20101020ubuntu446/images/netboot/mini.iso"
 }
-}
