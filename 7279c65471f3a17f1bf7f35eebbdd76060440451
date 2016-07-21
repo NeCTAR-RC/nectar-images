@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_81b9dceb",
+        "filename": "variables.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000104
+      },
+      "writtenOn": "2016-07-21T07:53:01Z",
+      "side": 1,
+      "message": "Can\u0027t get the checksum to match, can check if I am doing something wrong?\n\njake@threepio:~/temp$ wget http://archive.ubuntu.com/ubuntu/dists/trusty-updates/main/installer-amd64/20101020ubuntu318.38/images/netboot/mini.iso\n--2016-07-21 17:48:18--  http://archive.ubuntu.com/ubuntu/dists/trusty-updates/main/installer-amd64/20101020ubuntu318.38/images/netboot/mini.iso\nResolving archive.ubuntu.com (archive.ubuntu.com)... 91.189.88.161, 91.189.88.162, 91.189.88.149, ...\nConnecting to archive.ubuntu.com (archive.ubuntu.com)|91.189.88.161|:80... connected.\nHTTP request sent, awaiting response... 200 OK\nLength: 57671680 (55M) [application/x-iso9660-image]\nSaving to: \u0027mini.iso’\n\nmini.iso            100%[\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003e]  55.00M  2.57MB/s    in 24s     \n\n2016-07-21 17:48:43 (2.25 MB/s) - \u0027mini.iso’ saved [57671680/57671680]\njake@threepio:~/temp$ sha256sum mini.iso \n7215c1ce4af2ff023886a2bcbf0730470e5297340c42dd345d26c969a590e60c  mini.iso",
+      "range": {
+        "startLine": 32,
+        "startChar": 32,
+        "endLine": 32,
+        "endChar": 96
+      },
+      "revId": "7279c65471f3a17f1bf7f35eebbdd76060440451",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
