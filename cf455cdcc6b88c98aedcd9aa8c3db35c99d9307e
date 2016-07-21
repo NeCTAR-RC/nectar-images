@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_41bfd4d0",
+        "filename": "build_local.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000104
+      },
+      "writtenOn": "2016-07-21T07:47:09Z",
+      "side": 1,
+      "message": "I would prefer to call this something BUILD_KEY though, we might have multiple properties in the future!\n\nWhat do you think?",
+      "range": {
+        "startLine": 62,
+        "startChar": 30,
+        "endLine": 62,
+        "endChar": 44
+      },
+      "revId": "cf455cdcc6b88c98aedcd9aa8c3db35c99d9307e",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
