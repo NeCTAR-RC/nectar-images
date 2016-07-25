@@ -17,8 +17,8 @@ if [ -z "${PACKER_VARS}" ] ; then
     PACKER_VARS=variables.json
 fi
 
-if [ "$OS_USERNAME" != "image-builder" ]; then
-    echo "Please load image-builder credentials"
+if [ "${OS_USERNAME}" != "${IMAGEBUILDER_USERNAME}" ]; then
+    echo "Please load the OpenStack credentials for ${IMAGEBUILDER_USERNAME}"
     exit 1
 fi
 
@@ -58,8 +58,16 @@ echo "Shrinking image..."
 qemu-img convert -c -o compat=0.10 -O qcow2 ${OUTPUT_DIR}/${NAME} ${OUTPUT_DIR}/${NAME}.qcow2
 rm ${OUTPUT_DIR}/${NAME}
 
+if [ "${BUILD_PROPERTY}" != "" ] ; then
+    GLANCE_ARGS="--property ${BUILD_PROPERTY}=${BUILD_NUMBER}"
+fi
+
+if [ "${MAKE_PUBLIC}" == "true" ] ; then
+    GLANCE_ARGS="--public ${GLANCE_ARGS}"
+fi
+
 echo "Creating image \"NeCTAR ${NAME}\"..."
-IMAGE_ID=$(openstack image create --os-image-api-version=1 -f value -c id --disk-format qcow2 --container-format bare --file ${OUTPUT_DIR}/${NAME}.qcow2 --property nectar_build=${BUILD_NUMBER} $EXTRA_ARGS "NeCTAR ${NAME}")
+IMAGE_ID=$(openstack image create --os-image-api-version=1 -f value -c id --disk-format qcow2 --container-format bare --file ${OUTPUT_DIR}/${NAME}.qcow2 ${GLANCE_ARGS} $EXTRA_ARGS "NeCTAR ${NAME}")
 echo "Image ID: ${IMAGE_ID}"
 
 # Any extra image build props - we use this for Murano
