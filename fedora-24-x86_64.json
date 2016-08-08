@@ -1,0 +1,41 @@
+{
+  "variables": {
+    "fedora-24_image_id": "",
+    "fedora-24_flavor_name":""
+  },
+  "builders": [
+    {
+      "type": "openstack",
+      "flavor": "{{user `fedora-24_flavor_name`}}",
+      "identity_endpoint": "https://keystone.rc.nectar.org.au:5000/v3.0/",
+      "image_name": "fedora-24-x86_64",
+      "source_image": "{{user `fedora-24_image_id`}}",
+      "ssh_port": 22,
+      "ssh_username": "fedora"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "files/fedora/cloud.cfg",
+      "destination": "/tmp/cloud.cfg"
+    },
+    {
+      "type": "file",
+      "source": "files/testing",
+      "destination": "/usr/nectar"
+    },
+    {
+      "type": "shell",
+      "execute_command": "sudo -E /bin/bash '{{.Path}}'",
+      "scripts": [
+        "scripts/banner.sh",
+        "scripts/security.sh",
+        "scripts/openstack-redhat.sh",
+        "scripts/fail2ban.sh",
+        "scripts/cleanup.sh",
+        "scripts/zerodisk.sh"
+      ]
+    }
+  ]
+}
