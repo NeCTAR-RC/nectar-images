@@ -29,12 +29,22 @@ EOM
         ;;
 esac
 
-# Install cloud package
-yum -y install cloud-init
+if hash dnf 2>/dev/null; then
+    # Install cloud package
+    dnf -y install cloud-init
 
-# Try and install these, but don't die is they fail
-yum -y install dracut-modules-growroot cloud-initramfs-tools \
-       cloud-utils-growpart cloud-utils heat-cfntools || true
+    # Try and install these, but don't die is they fail
+    dnf -y install dracut-modules-growroot cloud-initramfs-tools \
+           cloud-utils-growpart cloud-utils heat-cfntools || true
+else
+    # Install cloud package
+    yum -y install cloud-init
+
+    # Try and install these, but don't die is they fail
+    yum -y install dracut-modules-growroot cloud-initramfs-tools \
+           cloud-utils-growpart cloud-utils heat-cfntools || true
+fi
+
 
 # Move our cloud config into place
 [ -f /tmp/cloud.cfg ] && mv /tmp/cloud.cfg /etc/cloud/cloud.cfg
