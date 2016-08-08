@@ -17,8 +17,15 @@ fi
 #
 # RedHat based distros
 #
+
+if hash dnf 2>/dev/null; then
+    RH_INSTALL=dnf
+else
+    RH_INSTALL=yum
+fi
+
 if [ "$ID" == "centos" ] || [ "$ID" == "fedora" ] || [ "$ID" == "scientific linux" ]; then
-    yum -q -yy install fail2ban ed
+    ${RH_INSTALL} -q -yy install fail2ban ed
 
     # Make our jail.d directory if doesn't exist
     [ -d /etc/fail2ban/jail.d ] || mkdir /etc/fail2ban/jail.d
@@ -34,7 +41,7 @@ if [ "$ID" == "centos" ] || [ "$ID" == "fedora" ] || [ "$ID" == "scientific linu
 
         if [ "$ID" == "fedora" ]; then
             # Fedora 20+ has SSH logs in systemd
-            yum -q -yy install fail2ban-systemd
+            "${RH_INSTALL}" -q -yy install fail2ban-systemd
         fi
 
         cat > /etc/fail2ban/jail.d/00-hostdeny.conf << EOF
