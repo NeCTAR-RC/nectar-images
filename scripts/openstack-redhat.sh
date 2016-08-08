@@ -29,15 +29,27 @@ EOM
         ;;
 esac
 
-# Install cloud package
-yum -y install cloud-init
+if hash dnf 2>/dev/null; then
+    # Install cloud package
+    dnf -y install cloud-init
 
-# Try and install these, but don't die is they fail
-yum -y install dracut-modules-growroot cloud-initramfs-tools \
-       cloud-utils-growpart cloud-utils heat-cfntools || true
+    # Try and install these, but don't die is they fail
+    dnf -y install dracut-modules-growroot cloud-initramfs-tools \
+           cloud-utils-growpart cloud-utils heat-cfntools || true
+else
+    # Install cloud package
+    yum -y install cloud-init
+
+    # Try and install these, but don't die is they fail
+    yum -y install dracut-modules-growroot cloud-initramfs-tools \
+           cloud-utils-growpart cloud-utils heat-cfntools || true
+fi
+
 
 # Move our cloud config into place
 [ -f /tmp/cloud.cfg ] && mv /tmp/cloud.cfg /etc/cloud/cloud.cfg
+# Move nectar testing directory into place
+[ -d /tmp/nectar ] && mv /tmp/nectar /usr/nectar
 
 # Make sure cloud init is enabled for systemd
 if which systemctl >/dev/null 2>&1; then
@@ -56,7 +68,6 @@ if [ $RELEASEVER -eq 5 ]; then
     /bin/echo 'ec2-user ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 else
     # CentOS 6 and greater
-    dracut -f
     KERNEL_ARGS="$KERNEL_ARGS net.ifnames=0 biosdevname=0"
 fi
 
@@ -70,9 +81,16 @@ if [ $RELEASEVER -gt 22 ]; then
   KERNEL_ARGS="$KERNEL_ARGS systemd.log_color=no"
 fi
 
+if [ $RELEASEVER -gt 23 ]; then
+  BOOTLOADER="--extlinux"
+else
+  BOOTLOADER=""
+fi
+
 # Add our Grub kernel args for OpenStack
-grubby --update-kernel=ALL --remove-args="rhgb quiet"
-grubby --update-kernel=ALL --args="$KERNEL_ARGS"
+
+grubby ${BOOTLOADER} --update-kernel=ALL --remove-args="rhgb quiet" \
+    --args="$KERNEL_ARGS"
 
 # Make sure sudo works properly with openstack
 sed -i "s/^.*requiretty$/Defaults !requiretty/" /etc/sudoers

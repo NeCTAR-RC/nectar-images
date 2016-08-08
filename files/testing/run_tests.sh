@@ -55,8 +55,8 @@ assert_raises "test \"$(sudo cut -d ':' -f 2 /etc/shadow | cut -d '$' -sf3)\" = 
 assert_end "No default passwords exist"
 
 ### NTP running
-assert_raises "pgrep ntp"
-assert_end "NTP service is running"
+assert_raises "pgrep 'ntp|chronyd'"
+assert_end "NTP or chrony service is running"
 
 ### SSH key for root
 assert "sudo wc -l /root/.ssh/authorized_keys | cut -d ' ' -f1" 1

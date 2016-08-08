@@ -15,6 +15,9 @@ find /var/log -type f -exec bash -c 'cat /dev/null > {}' \;
 
 # Remove SSH host keys
 rm -f /etc/ssh/*key*
+# Remove root's .ssh dir, to be recreated by cloud-init
+rm -rf /root/.ssh || true
+
 
 # Debian based distros
 if [ -f /etc/debian_version ]; then
@@ -48,9 +51,17 @@ if [ -f /etc/redhat-release ]; then
     rpm -qa | grep ^kernel-[0-9].* | sort | grep -v $(uname -r) | \
         xargs -r yum -y remove
 
-    # Clean yum
-    yum -y clean all
+    # Clean yum/dnf
+    if hash dnf 2>/dev/null; then
+        dnf -y clean all
+    else
+        yum -y clean all
+    fi
 fi
 
 # Remove cloud-init files
 rm -fr /var/lib/cloud/*
+
+#Remove ssh keys from current user The user's key should be injected by
+#cloud-init on boot.
+truncate -s0 ${HOME}/.ssh/authorized_keys
