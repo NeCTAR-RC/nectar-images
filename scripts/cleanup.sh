@@ -48,8 +48,12 @@ if [ -f /etc/redhat-release ]; then
     rpm -qa | grep ^kernel-[0-9].* | sort | grep -v $(uname -r) | \
         xargs -r yum -y remove
 
-    # Clean yum
-    yum -y clean all
+    # Clean yum/dnf
+    if hash dnf 2>/dev/null; then
+        dnf -y clean all
+    else
+        yum -y clean all
+    fi
 fi
 
 # Remove cloud-init files

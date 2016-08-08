@@ -20,6 +20,8 @@
   "fedora-23_iso_checksum": "32e0a15a1c71d0e2fd36a0af5b67a3b3af82976d2dfca0aefcb90d42f2ae6844",
   "fedora-23_iso_checksum_type": "sha256",
   "fedora-23_iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/Fedora-Server-netinst-x86_64-23.iso",
+  "fedora-24_image_id": "5fe99e2d-7d84-45b6-8c14-e23079c846d4",
+  "fedora-24_flavor_name": "m2.small",
   "opensuse-13.2_iso_checksum": "f2f0ecc6b1939d3725f22221baed237f",
   "opensuse-13.2_iso_checksum_type": "md5",
   "opensuse-13.2_iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/openSUSE-13.2-NET-x86_64.iso",
