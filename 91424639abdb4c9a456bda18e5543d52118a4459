@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_a85f9471",
+        "filename": "fedora-24-x86_64.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000105
+      },
+      "writtenOn": "2016-08-15T04:28:04Z",
+      "side": 1,
+      "message": "https://github.com/ChiperSoft/Packer-Vagrant-Example/blob/master/packer/ubuntu.json#L46\n\nie \"execute_command\": \"echo \u0027vagrant\u0027 | {{.Vars}} sudo -S -E bash \u0027{{.Path}}\u0027\",",
+      "revId": "91424639abdb4c9a456bda18e5543d52118a4459",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
