@@ -16,6 +16,121 @@
       "revId": "91424639abdb4c9a456bda18e5543d52118a4459",
       "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_084968d0",
+        "filename": "sudoscripts/cleanup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2016-08-16T05:07:25Z",
+      "side": 1,
+      "message": "sudo",
+      "range": {
+        "startLine": 33,
+        "startChar": 35,
+        "endLine": 33,
+        "endChar": 42
+      },
+      "revId": "91424639abdb4c9a456bda18e5543d52118a4459",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_88357848",
+        "filename": "sudoscripts/fail2ban.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2016-08-16T05:07:25Z",
+      "side": 1,
+      "message": "sudo tee",
+      "range": {
+        "startLine": 96,
+        "startChar": 8,
+        "endLine": 96,
+        "endChar": 14
+      },
+      "revId": "91424639abdb4c9a456bda18e5543d52118a4459",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_e83b5c36",
+        "filename": "sudoscripts/fail2ban.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2016-08-16T05:07:25Z",
+      "side": 1,
+      "message": "sudo",
+      "range": {
+        "startLine": 110,
+        "startChar": 12,
+        "endLine": 110,
+        "endChar": 14
+      },
+      "revId": "91424639abdb4c9a456bda18e5543d52118a4459",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_a83a3434",
+        "filename": "sudoscripts/fail2ban.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2016-08-16T05:07:25Z",
+      "side": 1,
+      "message": "sudo tee",
+      "range": {
+        "startLine": 112,
+        "startChar": 8,
+        "endLine": 112,
+        "endChar": 14
+      },
+      "revId": "91424639abdb4c9a456bda18e5543d52118a4459",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_c83ea029",
+        "filename": "sudoscripts/fail2ban.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2016-08-16T05:07:25Z",
+      "side": 1,
+      "message": "sudo tee",
+      "range": {
+        "startLine": 118,
+        "startChar": 4,
+        "endLine": 118,
+        "endChar": 10
+      },
+      "revId": "91424639abdb4c9a456bda18e5543d52118a4459",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
     }
   ]
 }
