@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "7adec928_bb2440c7",
+        "filename": "sudoscripts/cleanup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000105
+      },
+      "writtenOn": "2016-08-17T07:51:19Z",
+      "side": 1,
+      "message": "Not required any more because we are calling this script with sudo.",
+      "parentUuid": "7adec928_084968d0",
+      "range": {
+        "startLine": 33,
+        "startChar": 35,
+        "endLine": 33,
+        "endChar": 42
+      },
+      "revId": "91424639abdb4c9a456bda18e5543d52118a4459",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7adec928_88357848",
         "filename": "sudoscripts/fail2ban.sh",
         "patchSetId": 1
@@ -53,6 +77,30 @@
       "writtenOn": "2016-08-16T05:07:25Z",
       "side": 1,
       "message": "sudo tee",
+      "range": {
+        "startLine": 96,
+        "startChar": 8,
+        "endLine": 96,
+        "endChar": 14
+      },
+      "revId": "91424639abdb4c9a456bda18e5543d52118a4459",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_3b183084",
+        "filename": "sudoscripts/fail2ban.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000105
+      },
+      "writtenOn": "2016-08-17T07:51:19Z",
+      "side": 1,
+      "message": "We will call this script with sudo from ubuntuXXX.json",
+      "parentUuid": "7adec928_88357848",
       "range": {
         "startLine": 96,
         "startChar": 8,
@@ -88,6 +136,30 @@
     },
     {
       "key": {
+        "uuid": "7adec928_7b12b863",
+        "filename": "sudoscripts/fail2ban.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000105
+      },
+      "writtenOn": "2016-08-17T07:51:19Z",
+      "side": 1,
+      "message": "We will call this script with sudo from ubuntuXXX.json",
+      "parentUuid": "7adec928_e83b5c36",
+      "range": {
+        "startLine": 110,
+        "startChar": 12,
+        "endLine": 110,
+        "endChar": 14
+      },
+      "revId": "91424639abdb4c9a456bda18e5543d52118a4459",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7adec928_a83a3434",
         "filename": "sudoscripts/fail2ban.sh",
         "patchSetId": 1
@@ -111,6 +183,30 @@
     },
     {
       "key": {
+        "uuid": "7adec928_5b1dfc72",
+        "filename": "sudoscripts/fail2ban.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000105
+      },
+      "writtenOn": "2016-08-17T07:51:19Z",
+      "side": 1,
+      "message": "We will call this script with sudo from ubuntuXXX.json",
+      "parentUuid": "7adec928_a83a3434",
+      "range": {
+        "startLine": 112,
+        "startChar": 8,
+        "endLine": 112,
+        "endChar": 14
+      },
+      "revId": "91424639abdb4c9a456bda18e5543d52118a4459",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7adec928_c83ea029",
         "filename": "sudoscripts/fail2ban.sh",
         "patchSetId": 1
@@ -122,6 +218,30 @@
       "writtenOn": "2016-08-16T05:07:25Z",
       "side": 1,
       "message": "sudo tee",
+      "range": {
+        "startLine": 118,
+        "startChar": 4,
+        "endLine": 118,
+        "endChar": 10
+      },
+      "revId": "91424639abdb4c9a456bda18e5543d52118a4459",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_9b178451",
+        "filename": "sudoscripts/fail2ban.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000105
+      },
+      "writtenOn": "2016-08-17T07:51:19Z",
+      "side": 1,
+      "message": "We will call this script with sudo from ubuntuXXX.json",
+      "parentUuid": "7adec928_c83ea029",
       "range": {
         "startLine": 118,
         "startChar": 4,
