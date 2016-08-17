@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7adec928_1b55341d",
+        "filename": "scripts/openstack-redhat.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000105
+      },
+      "writtenOn": "2016-08-17T07:51:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7adec928_7ba55803",
+      "range": {
+        "startLine": 32,
+        "startChar": 1,
+        "endLine": 32,
+        "endChar": 29
+      },
+      "revId": "467473112353dd989f3c9dd1cf8b5a17de9ecc03",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7adec928_9baa24d3",
         "filename": "scripts/security.sh",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2016-08-16T05:07:25Z",
       "side": 1,
       "message": "package installer variable instead",
+      "range": {
+        "startLine": 19,
+        "startChar": 4,
+        "endLine": 19,
+        "endChar": 33
+      },
+      "revId": "467473112353dd989f3c9dd1cf8b5a17de9ecc03",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_fb57a824",
+        "filename": "scripts/security.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000105
+      },
+      "writtenOn": "2016-08-17T07:51:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7adec928_9baa24d3",
       "range": {
         "startLine": 19,
         "startChar": 4,
