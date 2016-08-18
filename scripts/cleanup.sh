@@ -21,6 +21,7 @@ rm -rf /root/.ssh || true
 
 # Debian based distros
 if [ -f /etc/debian_version ]; then
+
     # Removing leftover dhcp lease
     rm /var/lib/dhcp*/*
 
