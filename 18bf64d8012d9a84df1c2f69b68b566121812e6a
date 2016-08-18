@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_be398eda",
+        "filename": "scripts/openstack-redhat.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2016-08-18T00:10:48Z",
+      "side": 1,
+      "message": "I reckon in these cases of lots of packages, set the binary name to the variable. Smaller ones, don\u0027t bother",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 29
+      },
+      "revId": "18bf64d8012d9a84df1c2f69b68b566121812e6a",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
