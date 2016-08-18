@@ -18,6 +18,11 @@ rm -f /etc/ssh/*key*
 
 # Debian based distros
 if [ -f /etc/debian_version ]; then
+
+    # Fix for: Ignoring file '20auto-upgrades.ucf-dist' in directory
+    # '/etc/apt/apt.conf.d/' as it has an invalid filename extension
+    rm /etc/apt/apt.conf.d/*.ucf-dist
+
     # Removing leftover dhcp lease
     rm /var/lib/dhcp*/*
 
