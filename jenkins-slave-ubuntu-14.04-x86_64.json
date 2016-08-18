@@ -46,9 +46,9 @@
       "type": "shell",
       "scripts": [
         "scripts/security.sh",
-        "scripts/ubuntu.sh",
         "scripts/openstack-debian.sh",
         "scripts/jenkins-slave.sh",
+        "scripts/ubuntu.sh",
         "scripts/cleanup.sh",
         "scripts/zerodisk.sh"
       ]

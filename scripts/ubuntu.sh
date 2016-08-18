@@ -19,3 +19,7 @@ fi
 echo '# NeCTAR disable unattended upgrades, but refresh list
 APT::Periodic::Update-Package-Lists "1";
 APT::Periodic::Unattended-Upgrade "0";' | tee /etc/apt/apt.conf.d/10periodic /etc/apt/apt.conf.d/20auto-upgrades
+
+# Fix for: Ignoring file '20auto-upgrades.ucf-dist' in directory
+# '/etc/apt/apt.conf.d/' as it has an invalid filename extension
+rm -f /etc/apt/apt.conf.d/*.ucf-dist
