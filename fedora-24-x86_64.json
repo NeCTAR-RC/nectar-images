@@ -7,6 +7,7 @@
     {
       "type": "openstack",
       "flavor": "{{user `fedora-24_flavor_name`}}",
+      "availability_zone": "melbourne-qh2",
       "identity_endpoint": "https://keystone.rc.nectar.org.au:5000/v3.0/",
       "image_name": "fedora-24-x86_64",
       "source_image": "{{user `fedora-24_image_id`}}",
