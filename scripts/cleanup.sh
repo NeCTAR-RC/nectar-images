@@ -64,4 +64,4 @@ rm -fr /var/lib/cloud/*
 
 #Remove ssh keys from current user The user's key should be injected by
 #cloud-init on boot.
-truncate -s0 ${HOME}/.ssh/authorized_keys
+truncate -s0 ${HOME}/.ssh/authorized_keys || true
