@@ -19,6 +19,9 @@ esac
 # Install our cloud-init and heat-cfn tools
 zypper -n --no-gpg-checks install cloud-init python-heat-cfntools e2fsprogs
 
+# Remove repo after package installation
+zypper -n removerepo Liberty
+
 # Ensure cloud-init services are enabled on boot
 for SERVICE in cloud-config cloud-final cloud-init cloud-init-local; do
     systemctl enable $SERVICE

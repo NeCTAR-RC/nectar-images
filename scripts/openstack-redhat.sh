@@ -41,6 +41,8 @@ fi
 "${RH_INSTALL}" -y install dracut-modules-growroot cloud-initramfs-tools \
        cloud-utils-growpart cloud-utils heat-cfntools || true
 
+# Remove repo after package installation
+rm -f /etc/yum.repos.d/CentOS-OpenStack-kilo.repo
 
 # Move our cloud config into place
 [ -f /tmp/cloud.cfg ] && mv /tmp/cloud.cfg /etc/cloud/cloud.cfg
