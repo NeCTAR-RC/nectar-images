@@ -52,6 +52,9 @@ apt-get -q -y install libaugeas-dev
 
 if [ "$VERSION_ID" == "16.04" ]; then
     apt-get -q -y install virtualenv tox npm ruby-puppet-syntax nodejs-legacy
+    # InfluxDB needed by gnocchi tests
+    apt-get -q -y install influxdb
+    systemctl enable influxdb.service
 fi
 
 if [ "$VERSION_ID" == "14.04" ]; then
