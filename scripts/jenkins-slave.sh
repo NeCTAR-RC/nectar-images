@@ -59,6 +59,10 @@ if [ "$VERSION_ID" == "14.04" ]; then
     pip install --upgrade 'pip==7.1.2' 'virtualenv==13.1.2' 'setuptools==19.4' 'pbr==1.8.1' 'tox==2.3.1'
 fi
 
+# InfluxDB needed by gnocchi tests
+wget https://dl.influxdata.com/influxdb/releases/influxdb_1.0.0_amd64.deb -O /tmp/influxdb.deb
+dpkg -i /tmp/influxdb.deb
+
 # Install packer
 PACKER_FILE=packer_current_linux_amd64.zip
 wget -q http://mirrors.rc.nectar.org.au/$PACKER_FILE -O /tmp/$PACKER_FILE
