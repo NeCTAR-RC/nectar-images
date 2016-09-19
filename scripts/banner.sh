@@ -25,7 +25,7 @@ if [ -z "\$DISTRIB_DESCRIPTION" ] && [ -x /usr/bin/lsb_release ]; then
 fi
 
 echo "-------------------------------------------------------------------------------------"
-echo "  NeCTAR \$DISTRIB_DESCRIPTION $(uname -i)"
+echo "  NeCTAR \$DISTRIB_DESCRIPTION \$(uname -i)"
 echo "  Image details and information is available at"
 echo "  https://support.nectar.org.au/support/solutions/articles/6000106269-image-catalog"
 echo "-------------------------------------------------------------------------------------"
