@@ -67,7 +67,7 @@ if [ "${MAKE_PUBLIC}" == "true" ] ; then
 fi
 
 echo "Creating image \"NeCTAR ${NAME}\"..."
-IMAGE_ID=$(openstack image create --os-image-api-version=1 -f value -c id --disk-format qcow2 --container-format bare --file ${OUTPUT_DIR}/${NAME}.qcow2 ${GLANCE_ARGS} $EXTRA_ARGS "NeCTAR ${NAME}")
+IMAGE_ID=$(openstack image create --os-image-api-version=1 -f value -c id --disk-format qcow2 --container-format bare --file ${OUTPUT_DIR}/${NAME}.qcow2 ${GLANCE_ARGS} "NeCTAR ${NAME}")
 echo "Image ID: ${IMAGE_ID}"
 
 # Any extra image build props - we use this for Murano
