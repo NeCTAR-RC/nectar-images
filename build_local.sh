@@ -12,6 +12,8 @@ if [ -z ${FILE} ]; then
 fi
 
 . "$(basename ${0} .sh).cfg"
+export ORGANISATION
+export IMAGE_SUPPORT_URL
 
 if [ -z "${PACKER_VARS}" ] ; then
     PACKER_VARS=variables.json
@@ -58,6 +60,12 @@ echo "Shrinking image..."
 qemu-img convert -c -o compat=0.10 -O qcow2 ${OUTPUT_DIR}/${NAME} ${OUTPUT_DIR}/${NAME}.qcow2
 rm ${OUTPUT_DIR}/${NAME}
 
+if [ "${ORGANISATION}" != "" ] ; then
+    IMAGE_NAME="${ORGANISATION} ${NAME^}"
+else
+    IMAGE_NAME=${NAME^}
+fi
+
 if [ "${BUILD_PROPERTY}" != "" ] ; then
     GLANCE_ARGS="--property ${BUILD_PROPERTY}=${BUILD_NUMBER}"
 fi
@@ -66,13 +74,13 @@ if [ "${MAKE_PUBLIC}" == "true" ] ; then
     GLANCE_ARGS="--public ${GLANCE_ARGS}"
 fi
 
-echo "Creating image \"NeCTAR ${NAME}\"..."
-IMAGE_ID=$(openstack image create --os-image-api-version=1 -f value -c id --disk-format qcow2 --container-format bare --file ${OUTPUT_DIR}/${NAME}.qcow2 ${GLANCE_ARGS} "NeCTAR ${NAME}")
+echo "Creating image \"${IMAGE_NAME}\"..."
+IMAGE_ID=$(openstack image create --os-image-api-version=1 -f value -c id --disk-format qcow2 --container-format bare --file ${OUTPUT_DIR}/${NAME}.qcow2 ${GLANCE_ARGS} "${IMAGE_NAME}")
 echo "Image ID: ${IMAGE_ID}"
 
 # Any extra image build props - we use this for Murano
 if [[ "$NAME" =~ "murano" ]]; then
-    glance image-update --property murano_image_info="{\"title\": \"NeCTAR ${NAME}\", \"type\": \"linux\"}" ${IMAGE_ID}
+    glance image-update --property murano_image_info="{\"title\": \"${IMAGE_NAME}\", \"type\": \"linux\"}" ${IMAGE_ID}
 fi
 
 echo "Removing image working directory..."
