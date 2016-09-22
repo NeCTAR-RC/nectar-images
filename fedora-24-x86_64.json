@@ -1,7 +1,9 @@
 {
   "variables": {
     "fedora-24_image_id": "",
-    "fedora-24_flavor_name":""
+    "fedora-24_flavor_name": "",
+    "ORGANISATION": "{{env `ORGANISATION`}}",
+    "IMAGE_SUPPORT_URL": "{{env `IMAGE_SUPPORT_URL`}}"
   },
   "builders": [
     {
@@ -27,6 +29,10 @@
     },
     {
       "type": "shell",
+      "environment_vars": [
+        "ORGANISATION={{user `ORGANISATION`}}",
+        "IMAGE_SUPPORT_URL={{user `IMAGE_SUPPORT_URL`}}"
+      ],
       "execute_command": "sudo -E /bin/bash '{{.Path}}'",
       "scripts": [
         "scripts/banner.sh",
