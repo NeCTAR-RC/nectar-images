@@ -22,6 +22,98 @@
       "revId": "3cd6933365a4c083642036a59c418eb0bd11fd77",
       "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_f6524412",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/tests/scenario/test_community_image.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2016-10-31T00:48:23Z",
+      "side": 1,
+      "message": "Maybe only for NeCTAR official images, but either way we need to ensure that ephemeral disk is present at least before we run this test",
+      "range": {
+        "startLine": 172,
+        "startChar": 0,
+        "endLine": 174,
+        "endChar": 66
+      },
+      "revId": "3cd6933365a4c083642036a59c418eb0bd11fd77",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_d64d4874",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/tests/scenario/test_community_image.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2016-10-31T00:48:23Z",
+      "side": 1,
+      "message": "Only for NeCTAR official images",
+      "range": {
+        "startLine": 176,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 52
+      },
+      "revId": "3cd6933365a4c083642036a59c418eb0bd11fd77",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_b6319cee",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/tests/scenario/test_community_image.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2016-10-31T00:48:23Z",
+      "side": 1,
+      "message": "Only for NeCTAR official images",
+      "range": {
+        "startLine": 200,
+        "startChar": 0,
+        "endLine": 201,
+        "endChar": 66
+      },
+      "revId": "3cd6933365a4c083642036a59c418eb0bd11fd77",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_16589031",
+        "filename": "community_image_tests/setup.cfg",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2016-10-31T00:48:23Z",
+      "side": 1,
+      "message": "whitespace",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 4
+      },
+      "revId": "3cd6933365a4c083642036a59c418eb0bd11fd77",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
     }
   ]
 }
