@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_f6a6c4c0",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/api_schema/response/nectar_community_image/v2/image.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-11-02T04:57:47Z",
+      "side": 1,
+      "message": "here too",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 55
+      },
+      "revId": "df7eb1aa016b175fe133233f66793aae292cd800",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_16ac10a0",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/config.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-11-02T04:57:47Z",
+      "side": 1,
+      "message": "and here",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 22
+      },
+      "revId": "df7eb1aa016b175fe133233f66793aae292cd800",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_7692b458",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/config.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-11-02T04:57:47Z",
+      "side": 1,
+      "message": "do we need any of these options? Aren\u0027t they already defined in tempest?",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 74
+      },
+      "revId": "df7eb1aa016b175fe133233f66793aae292cd800",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_36b10cf9",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/plugin.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-11-02T04:57:47Z",
+      "side": 1,
+      "message": "and here",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 22
+      },
+      "revId": "df7eb1aa016b175fe133233f66793aae292cd800",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_5695b83e",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/tests/scenario/test_community_image.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-11-02T04:57:47Z",
+      "side": 1,
+      "message": "see comment from previous patchset",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 104,
+        "endChar": 50
+      },
+      "revId": "df7eb1aa016b175fe133233f66793aae292cd800",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
