@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_f6d88455",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/api_schema/response/nectar_community_image/v2/image.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-11-02T03:05:40Z",
+      "side": 1,
+      "message": "Wondering if we can use the common_image_schema defined in tempest.lib.api_schema.response.compute.v2_1 and just update the required attribute?",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 5
+      },
+      "revId": "5bfabf37da45d1bfcc00c34e90b829c511f14e6c",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_36e3cc08",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/services/v2/community_image_client.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-11-02T03:05:40Z",
+      "side": 1,
+      "message": "might want to change this :-)",
+      "range": {
+        "startLine": 1,
+        "startChar": 2,
+        "endLine": 1,
+        "endChar": 26
+      },
+      "revId": "5bfabf37da45d1bfcc00c34e90b829c511f14e6c",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_16ded03f",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/services/v2/community_image_client.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-11-02T03:05:40Z",
+      "side": 1,
+      "message": "Should this be overriding show_image_metadata_item ?",
+      "range": {
+        "startLine": 37,
+        "startChar": 8,
+        "endLine": 37,
+        "endChar": 23
+      },
+      "revId": "5bfabf37da45d1bfcc00c34e90b829c511f14e6c",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_56e77812",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/tests/scenario/test_community_image.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-11-02T03:05:40Z",
+      "side": 1,
+      "message": "Do we need all this? Won\u0027t they be setup in the super call?",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 66
+      },
+      "revId": "5bfabf37da45d1bfcc00c34e90b829c511f14e6c",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_76e4740d",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/tests/scenario/test_community_image.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-11-02T03:05:40Z",
+      "side": 1,
+      "message": "If we inherited from TestMinimumBasicScenario we wouldn\u0027t need to define any of this. Would just need to override the method test_minimum_basic_scenario",
+      "range": {
+        "startLine": 100,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 50
+      },
+      "revId": "5bfabf37da45d1bfcc00c34e90b829c511f14e6c",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_96f100d0",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/tests/scenario/test_community_image.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-11-02T03:05:40Z",
+      "side": 1,
+      "message": "imports should go at the top",
+      "range": {
+        "startLine": 152,
+        "startChar": 8,
+        "endLine": 152,
+        "endChar": 23
+      },
+      "revId": "5bfabf37da45d1bfcc00c34e90b829c511f14e6c",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
