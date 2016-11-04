@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_51414238",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/api_schema/response/nectar_community_image/v2/image.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-11-04T03:52:28Z",
+      "side": 1,
+      "message": "you should either remove copyright or put a company in. This looks like the copyright belongs to 2016 :-)",
+      "range": {
+        "startLine": 1,
+        "startChar": 2,
+        "endLine": 1,
+        "endChar": 16
+      },
+      "revId": "4985cb95caa37ccb2c3687be6f053033628f0e9b",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_713e3eba",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/config.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-11-04T03:52:28Z",
+      "side": 1,
+      "message": "what is the point of this file?",
+      "revId": "4985cb95caa37ccb2c3687be6f053033628f0e9b",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_914bca58",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/plugin.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-11-04T03:52:28Z",
+      "side": 1,
+      "message": "pointless?",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 12
+      },
+      "revId": "4985cb95caa37ccb2c3687be6f053033628f0e9b",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
