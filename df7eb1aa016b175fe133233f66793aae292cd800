@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "7adec928_110a5a21",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-11-04T02:34:20Z",
+      "side": 1,
+      "message": "this is unneeded, and doesn\u0027t make any sense to someone reading this commit message. It doesn\u0027t explain what the commit does",
+      "range": {
+        "startLine": 9,
+        "startChar": 1,
+        "endLine": 21,
+        "endChar": 45
+      },
+      "revId": "df7eb1aa016b175fe133233f66793aae292cd800",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7adec928_f6a6c4c0",
         "filename": "community_image_tests/community_image_tests_tempest_plugin/api_schema/response/nectar_community_image/v2/image.py",
         "patchSetId": 4
