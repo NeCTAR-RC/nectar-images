@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_11deda3f",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/api_schema/response/nectar_community_image/v2/image.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2016-11-07T03:11:34Z",
+      "side": 1,
+      "message": "I think we should require a name - so maybe remove the null?",
+      "range": {
+        "startLine": 32,
+        "startChar": 12,
+        "endLine": 32,
+        "endChar": 49
+      },
+      "revId": "5e5beffe40f90e03686a7372578b26347e7bd410",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_71e47e0d",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/tests/scenario/test_community_image.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2016-11-07T03:11:34Z",
+      "side": 1,
+      "message": "These things depend on cloud-init being installed and working. Are we adding cloud-init to the requirements for a community image to be accepted?",
+      "range": {
+        "startLine": 105,
+        "startChar": 0,
+        "endLine": 115,
+        "endChar": 44
+      },
+      "revId": "5e5beffe40f90e03686a7372578b26347e7bd410",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_31e3d608",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/tests/scenario/test_community_image.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2016-11-07T03:11:34Z",
+      "side": 1,
+      "message": "Remove for community images",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 120,
+        "endChar": 41
+      },
+      "revId": "5e5beffe40f90e03686a7372578b26347e7bd410",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_51e78212",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/tests/scenario/test_community_image.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2016-11-07T03:11:34Z",
+      "side": 1,
+      "message": "Remove for community images",
+      "range": {
+        "startLine": 122,
+        "startChar": 0,
+        "endLine": 124,
+        "endChar": 78
+      },
+      "revId": "5e5beffe40f90e03686a7372578b26347e7bd410",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
