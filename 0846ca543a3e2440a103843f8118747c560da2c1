@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_b1f9a64f",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/tests/scenario/test_community_image.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2016-11-07T23:54:04Z",
+      "side": 1,
+      "message": "Is this correct? I think we should be testing the flavor object to determine if ephemeral disk is available",
+      "range": {
+        "startLine": 106,
+        "startChar": 8,
+        "endLine": 106,
+        "endChar": 48
+      },
+      "revId": "0846ca543a3e2440a103843f8118747c560da2c1",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
