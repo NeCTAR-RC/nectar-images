@@ -9,7 +9,7 @@
     {
       "type": "openstack",
       "flavor": "{{user `fedora-24_flavor_name`}}",
-      "identity_endpoint": "https://keystone.rc.nectar.org.au:5000/",
+      "identity_endpoint": "{{env `OS_AUTH_URL`}}",
       "image_name": "fedora-24-x86_64",
       "source_image": "{{user `fedora-24_image_id`}}",
       "ssh_port": 22,
