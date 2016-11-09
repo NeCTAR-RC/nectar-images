@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_c9792695",
+        "filename": "fedora-24-x86_64.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000147
+      },
+      "writtenOn": "2016-11-09T23:08:37Z",
+      "side": 1,
+      "message": "Needs to be declared in \"variables\"?",
+      "range": {
+        "startLine": 12,
+        "startChar": 6,
+        "endLine": 12,
+        "endChar": 51
+      },
+      "revId": "b2fc26b2c4d9fc7ac46f21bd9e786394beebd218",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
