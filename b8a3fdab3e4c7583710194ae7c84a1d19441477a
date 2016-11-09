@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_d79b82c7",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/tests/scenario/test_community_image.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-11-09T01:02:44Z",
+      "side": 1,
+      "message": "I don\u0027t think we need to care about this in community images?",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 36
+      },
+      "revId": "b8a3fdab3e4c7583710194ae7c84a1d19441477a",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_b75fd60d",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/tests/scenario/test_community_image.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-11-09T01:02:44Z",
+      "side": 1,
+      "message": "don\u0027t want this creating flavours, its something we want to be able to run in production",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 26
+      },
+      "revId": "b8a3fdab3e4c7583710194ae7c84a1d19441477a",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
