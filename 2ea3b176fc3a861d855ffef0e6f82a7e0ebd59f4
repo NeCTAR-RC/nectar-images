@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "7adec928_17b5eaed",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/api_schema/response/nectar_community_image/v2/image.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2016-11-09T03:59:17Z",
+      "side": 1,
+      "message": "all other fields use \u003csomething\u003e_at, so maybe we should use expires_at instead for consistency?",
+      "range": {
+        "startLine": 61,
+        "startChar": 13,
+        "endLine": 61,
+        "endChar": 24
+      },
+      "revId": "2ea3b176fc3a861d855ffef0e6f82a7e0ebd59f4",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_f7879e5f",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/tests/scenario/test_community_image.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2016-11-09T03:59:17Z",
+      "side": 1,
+      "message": "phrasing?",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 20
+      },
+      "revId": "2ea3b176fc3a861d855ffef0e6f82a7e0ebd59f4",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7adec928_d7baa2e0",
         "filename": "community_image_tests/community_image_tests_tempest_plugin/tests/scenario/test_community_image.py",
         "patchSetId": 13
@@ -18,6 +64,29 @@
         "startChar": 0,
         "endLine": 109,
         "endChar": 71
+      },
+      "revId": "2ea3b176fc3a861d855ffef0e6f82a7e0ebd59f4",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_b7eef6ea",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/tests/scenario/test_community_image.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2016-11-09T03:59:17Z",
+      "side": 1,
+      "message": "get rid of this?",
+      "range": {
+        "startLine": 100,
+        "startChar": 0,
+        "endLine": 109,
+        "endChar": 11
       },
       "revId": "2ea3b176fc3a861d855ffef0e6f82a7e0ebd59f4",
       "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
