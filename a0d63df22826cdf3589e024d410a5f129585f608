@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_a995bae5",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/api_schema/response/nectar_community_image/v2/image.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2016-11-10T06:33:43Z",
+      "side": 1,
+      "message": "please make sure this change is reflected in the guidelines and docs that Joseph has been working on",
+      "range": {
+        "startLine": 61,
+        "startChar": 13,
+        "endLine": 61,
+        "endChar": 23
+      },
+      "revId": "a0d63df22826cdf3589e024d410a5f129585f608",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_c99a0614",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/tests/scenario/test_community_image.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2016-11-10T06:33:43Z",
+      "side": 1,
+      "message": "Probably can\u0027t assume git is installed",
+      "range": {
+        "startLine": 97,
+        "startChar": 24,
+        "endLine": 98,
+        "endChar": 60
+      },
+      "revId": "a0d63df22826cdf3589e024d410a5f129585f608",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
