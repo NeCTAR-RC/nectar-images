@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_22c45f91",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/tests/scenario/test_community_image.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-11-18T03:30:03Z",
+      "side": 1,
+      "message": "doesn\u0027t look like this is used?",
+      "range": {
+        "startLine": 84,
+        "startChar": 8,
+        "endLine": 84,
+        "endChar": 36
+      },
+      "revId": "ba20e7b8a42fddee54d77c50979eceed08c52deb",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_62be6701",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/tests/scenario/test_community_image.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-11-18T03:30:03Z",
+      "side": 1,
+      "message": "This could actually go into another test too",
+      "range": {
+        "startLine": 139,
+        "startChar": 0,
+        "endLine": 145,
+        "endChar": 79
+      },
+      "revId": "ba20e7b8a42fddee54d77c50979eceed08c52deb",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
