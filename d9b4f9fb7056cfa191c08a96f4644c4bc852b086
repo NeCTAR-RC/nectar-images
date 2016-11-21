@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_425b2b54",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/tests/scenario/test_community_image.py",
+        "patchSetId": 19
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-11-21T02:30:13Z",
+      "side": 1,
+      "message": "It doesn\u0027t make sense to create a keypair here. Should be done in the create_server_client method",
+      "range": {
+        "startLine": 72,
+        "startChar": 8,
+        "endLine": 73,
+        "endChar": 44
+      },
+      "revId": "d9b4f9fb7056cfa191c08a96f4644c4bc852b086",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_62582757",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/tests/scenario/test_community_image.py",
+        "patchSetId": 19
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-11-21T02:30:13Z",
+      "side": 1,
+      "message": "info variable never used",
+      "range": {
+        "startLine": 82,
+        "startChar": 8,
+        "endLine": 82,
+        "endChar": 36
+      },
+      "revId": "d9b4f9fb7056cfa191c08a96f4644c4bc852b086",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
