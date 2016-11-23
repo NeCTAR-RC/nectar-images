@@ -42,9 +42,13 @@
       "destination": "/tmp/cloud.cfg"
     },
     {
+      "type": "shell",
+      "inline": "/bin/mkdir -p /var/lib/packer/build"
+    },
+    {
       "type": "file",
       "source": "files/testing",
-      "destination": "/usr/nectar"
+      "destination": "/var/lib/packer/build"
     },
     {
       "type": "shell",
@@ -58,6 +62,7 @@
         "scripts/openstack-debian.sh",
         "scripts/murano-agent.sh",
         "scripts/fail2ban.sh",
+        "scripts/nectar.sh",
         "scripts/ubuntu.sh",
         "scripts/cleanup.sh",
         "scripts/zerodisk.sh"
