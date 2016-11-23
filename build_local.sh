@@ -132,8 +132,8 @@ done
 # Sleep 60 seconds for instance boot to settle
 sleep 60
 
-echo "Running tests (ssh $USER_ACCOUNT@$IP_ADDRESS '/bin/bash /usr/nectar/run_tests.sh')..."
-ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $USER_ACCOUNT@$IP_ADDRESS '/bin/bash /usr/nectar/run_tests.sh'
+echo "Running tests (ssh $USER_ACCOUNT@$IP_ADDRESS '/bin/bash /var/lib/packer/build/run_tests.sh')..."
+ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $USER_ACCOUNT@$IP_ADDRESS '/bin/bash /var/lib/packer/build/run_tests.sh'
 
 echo "Deleting instance ${INSTANCE_ID}..."
 openstack server delete ${INSTANCE_ID}

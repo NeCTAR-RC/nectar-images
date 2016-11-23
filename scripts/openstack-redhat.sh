@@ -47,7 +47,7 @@ rm -f /etc/yum.repos.d/CentOS-OpenStack-kilo.repo
 # Move our cloud config into place
 [ -f /tmp/cloud.cfg ] && mv /tmp/cloud.cfg /etc/cloud/cloud.cfg
 # Move nectar testing directory into place
-[ -d /tmp/nectar ] && mv /tmp/nectar /usr/nectar
+[ -d /tmp/testing ] && mv /tmp/testing/* /var/lib/packer/build
 
 # Make sure cloud init is enabled for systemd
 if which systemctl >/dev/null 2>&1; then
