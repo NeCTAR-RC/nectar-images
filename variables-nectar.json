@@ -16,6 +16,8 @@
   "debian-8_iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/debian-8.1.0-amd64-netinst.iso",
   "fedora-24_image_id": "5fe99e2d-7d84-45b6-8c14-e23079c846d4",
   "fedora-24_flavor_name": "m2.tiny",
+  "fedora-25_image_id": "5fe99e2d-7d84-45b6-8c14-e23079c846d4",
+  "fedora-25_flavor_name": "m2.tiny",
   "opensuse-13.2_iso_checksum": "f2f0ecc6b1939d3725f22221baed237f",
   "opensuse-13.2_iso_checksum_type": "md5",
   "opensuse-13.2_iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/openSUSE-13.2-NET-x86_64.iso",
