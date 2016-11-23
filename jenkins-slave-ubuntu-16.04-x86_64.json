@@ -42,9 +42,13 @@
       "destination": "/tmp/cloud.cfg"
     },
     {
+      "type": "shell",
+      "inline": "/bin/mkdir -p /var/lib/packer/build"
+    },
+    {
       "type": "file",
       "source": "files/testing",
-      "destination": "/usr/nectar"
+      "destination": "/var/lib/packer/build"
     },
     {
       "type": "shell",
@@ -57,6 +61,7 @@
         "scripts/openstack-debian.sh",
         "scripts/jenkins-slave.sh",
         "scripts/ubuntu.sh",
+        "scripts/nectar.sh",
         "scripts/cleanup.sh",
         "scripts/zerodisk.sh"
       ]

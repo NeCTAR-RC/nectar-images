@@ -48,9 +48,13 @@
       "destination": "/etc/dhclient.conf"
     },
     {
+      "type": "shell",
+      "inline": "/bin/mkdir -p /var/lib/packer/build"
+    },
+    {
       "type": "file",
       "source": "files/testing",
-      "destination": "/usr/nectar"
+      "destination": "/var/lib/packer/build"
     },
     {
       "type": "shell",
@@ -64,6 +68,7 @@
         "scripts/epel.sh",
         "scripts/openstack-redhat.sh",
         "scripts/fail2ban.sh",
+        "scripts/nectar.sh",
         "scripts/cleanup.sh",
         "scripts/zerodisk.sh"
       ]
