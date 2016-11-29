@@ -16,11 +16,8 @@
 
 import os
 
-from tempest import config
+from tempest import config as community_image_config
 from tempest.test_discover import plugins
-
-from community_image_tests_tempest_plugin \
-    import config as community_image_config
 
 
 class CommunityImageTestPlugin(plugins.TempestPlugin):
