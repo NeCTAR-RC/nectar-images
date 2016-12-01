@@ -48,10 +48,6 @@ if [ -f /etc/redhat-release ]; then
     sed -i -e 's/^\(HWADDR\|UUID\|IPV6INIT\|NM_CONTROLLED\|MTU\).*//;/^$/d' \
         /etc/sysconfig/network-scripts/ifcfg-eth0
 
-    # Remove all kernels except the current version
-    rpm -qa | grep ^kernel-[0-9].* | sort | grep -v $(uname -r) | \
-        xargs -r yum -y remove
-
     # Clean yum/dnf
     if hash dnf 2>/dev/null; then
         dnf -y clean all
