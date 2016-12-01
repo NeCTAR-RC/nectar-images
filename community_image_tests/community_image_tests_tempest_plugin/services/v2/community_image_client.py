@@ -19,10 +19,10 @@ from six.moves.urllib import parse as urllib
 from community_image_tests_tempest_plugin.\
     api_schema.response.nectar_community_image.v2\
     import image as schema
-from tempest.common import glance_http
+
 from tempest.lib.common import rest_client
 from tempest.lib import exceptions as lib_exc
-from tempest.services.image.v2.json import images_client
+from tempest.lib.services.image.v2 import images_client
 
 
 class CommunityImagesClient(images_client.ImagesClient):
