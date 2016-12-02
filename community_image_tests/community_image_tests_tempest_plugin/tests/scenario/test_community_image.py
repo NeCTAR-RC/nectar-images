@@ -85,8 +85,6 @@ class TestCommunityImage(test_minimum_basic.TestMinimumBasicScenario):
         self.server = self.create_server(image_id=CONF.compute.image_ref,
                                     key_name=self.keypair['name'],
                                     wait_until='ACTIVE')
-        servers = self.nova_list()
-        self.assertIn(self.server['id'], [x['id'] for x in servers])
         self.nova_show(self.server)
         self.ip = self.get_server_ip(self.server)
         self.create_and_add_security_group_to_server(self.server)
