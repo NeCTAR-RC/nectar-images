@@ -16,7 +16,6 @@
 
 import os
 
-from tempest import config as community_image_config
 from tempest.test_discover import plugins
 
 
@@ -33,17 +32,3 @@ class CommunityImageTestPlugin(plugins.TempestPlugin):
 
     def get_opt_lists(self):
         pass
-
-    def get_service_clients(self):
-        community_image_client_config = \
-                community_image_config.service_client_config(
-                                'community_image_client')
-        params_community_image_client = {
-            'name': 'community_image_client_v2',
-            'service_version': 'community_image_client.v2',
-            'module_path': 'community_image_tests_tempest_plugin.\
-                           services.v2.community_image_client',
-            'client_names': ['CommunityImagesClient'],
-        }
-        params_community_image_client.update(community_image_client_config)
-        return [params_community_image_client]
