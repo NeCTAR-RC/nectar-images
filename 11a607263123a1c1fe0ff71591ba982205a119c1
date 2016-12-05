@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_39881171",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/plugin.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2016-12-05T03:18:15Z",
+      "side": 1,
+      "message": "Hey Sam, I realised that we don\u0027t need this at all as I am inheriting from an existing service client. Can you please delete this section and I will do a +1 to it.",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 45,
+        "endChar": 46
+      },
+      "revId": "11a607263123a1c1fe0ff71591ba982205a119c1",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
