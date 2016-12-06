@@ -22,6 +22,29 @@
       "revId": "44bda69ee55a4ff4ef7d5fddcf4995adaca9e412",
       "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_8472987a",
+        "filename": "scripts/fail2ban.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000104
+      },
+      "writtenOn": "2016-12-06T05:23:53Z",
+      "side": 1,
+      "message": "or maybe change this to \n if [ -f /etc/redhat-release ]\n?",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 57
+      },
+      "revId": "44bda69ee55a4ff4ef7d5fddcf4995adaca9e412",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
     }
   ]
 }
