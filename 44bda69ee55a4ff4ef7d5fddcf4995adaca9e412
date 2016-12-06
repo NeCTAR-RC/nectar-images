@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_445970fd",
+        "filename": "scripts/fail2ban.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000105
+      },
+      "writtenOn": "2016-12-06T05:18:47Z",
+      "side": 1,
+      "message": "I don\u0027t think we strictly need this, as we aren\u0027t building\nscientific linux 7.\n\nHowever I don\u0027t mind putting it in, however this is getting\na bit ugly and I think a case statement might be better.",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 1
+      },
+      "revId": "44bda69ee55a4ff4ef7d5fddcf4995adaca9e412",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
