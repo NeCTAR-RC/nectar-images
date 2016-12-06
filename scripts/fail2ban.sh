@@ -24,7 +24,9 @@ else
     RH_INSTALL=yum
 fi
 
-if [ "$ID" == "centos" ] || [ "$ID" == "fedora" ] || [ "$ID" == "scientific linux" ]; then
+case "${ID}" in
+    centos|rhel|fedora|scientific\ linux)
+
     ${RH_INSTALL} -q -yy install fail2ban ed
 
     # Make our jail.d directory if doesn't exist
@@ -80,11 +82,12 @@ EOF
         chkconfig --add fail2ban
 
     fi
+    ;;
 
 #
 # Debian
 #
-elif [ "$ID" == "debian" ]; then
+    debian)
 
     # Install fail2ban package
     apt-get -qq -y install fail2ban
@@ -119,11 +122,12 @@ EOF
 enabled = true
 EOF
     fi
+    ;;
 
 #
 # Ubuntu 14.04+
 #
-elif [ "$ID" == "ubuntu" ]; then
+    ubuntu)
 
     # Install fail2ban package
     apt-get -qq -y install fail2ban
@@ -152,11 +156,11 @@ EOF
 
     # Enable service
     [ -f /etc/init.d/fail2ban ] && update-rc.d fail2ban enable
-
+    ;;
 #
 # OpenSuSE 13.2
 #
-elif [ "$ID" == "opensuse" ]; then
+    opensuse)
     # Install fail2ban package
     zypper -n --no-gpg-checks install fail2ban
 
@@ -177,7 +181,8 @@ EOF
 [sshd]
 enabled = true
 EOF
-fi
+    ;;
+esac
 
 # Some new distros don't ship the hostsdeny action
 if [ ! -e /etc/fail2ban/action.d/hostsdeny.conf ]; then
