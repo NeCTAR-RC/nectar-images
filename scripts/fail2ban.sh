@@ -24,7 +24,9 @@ else
     RH_INSTALL=yum
 fi
 
-if [ "$ID" == "centos" ] || [ "$ID" == "fedora" ] || [ "$ID" == "scientific linux" ]; then
+if [ "$ID" == "centos" ] || [ "$ID" == "fedora" ] || \
+   [ "$ID" == "scientific linux" ] || [ "$ID" == "rhel" ] ; then
+
     ${RH_INSTALL} -q -yy install fail2ban ed
 
     # Make our jail.d directory if doesn't exist
