@@ -36,8 +36,8 @@ if [ "$ID" == "centos" ] || [ "$ID" == "fedora" ] || [ "$ID" == "scientific linu
         rpm -e fail2ban fail2ban-firewalld
     fi
 
-    # CentOS 7, Fedora 20+
-    if [ $VERSION_ID -eq 7 ] || [ $VERSION_ID -ge 20 ]; then
+    # CentOS 7, Fedora 20+, etc
+    if [ ${VERSION_ID%%.*} -eq 7 ] || [ ${VERSION_ID%%.*} -ge 20 ]; then
 
         if [ "$ID" == "fedora" ]; then
             # Fedora 20+ has SSH logs in systemd
@@ -60,7 +60,7 @@ EOF
         systemctl enable fail2ban
 
     # CentOS 6
-    elif [ $VERSION_ID -eq 6 ]; then
+    elif [ ${VERSION_ID%%.*} -eq 6 ]; then
         cat > /etc/fail2ban/jail.d/01-ssh-iptables.conf << EOF
 # don't use iptables by default
 [ssh-iptables]
