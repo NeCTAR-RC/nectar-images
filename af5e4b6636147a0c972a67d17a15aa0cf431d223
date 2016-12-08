@@ -22,6 +22,30 @@
       "revId": "af5e4b6636147a0c972a67d17a15aa0cf431d223",
       "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_ff7929fd",
+        "filename": "scripts/nectar.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000147
+      },
+      "writtenOn": "2016-12-08T04:21:57Z",
+      "side": 1,
+      "message": "Just to keep backwards compatibility. I saw it was used here:\n\nhttps://github.com/NeCTAR-RC/nectar-ci/blob/57ef07d0c021285fa9141cf3a2f8d0326dddf538/images.yaml#L413",
+      "parentUuid": "7adec928_9fc74545",
+      "range": {
+        "startLine": 6,
+        "startChar": 4,
+        "endLine": 6,
+        "endChar": 44
+      },
+      "revId": "af5e4b6636147a0c972a67d17a15aa0cf431d223",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
     }
   ]
 }
