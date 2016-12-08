@@ -23,3 +23,10 @@ APT::Periodic::Unattended-Upgrade "0";' | tee /etc/apt/apt.conf.d/10periodic /et
 # Fix for: Ignoring file '20auto-upgrades.ucf-dist' in directory
 # '/etc/apt/apt.conf.d/' as it has an invalid filename extension
 rm -f /etc/apt/apt.conf.d/*.ucf-dist
+
+# Disable i386 architecture. This saves time, bandwidth and diskspace
+# by not updating the i386 repositories (which are typically unused)
+foreign_arch=$(dpkg --print-foreign-architectures)
+if [ "${foreign_arch}" == "i386" ] ; then
+   dpkg --remove-architecture i386
+fi
