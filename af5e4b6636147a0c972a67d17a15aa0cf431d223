@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_9fc74545",
+        "filename": "scripts/nectar.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2016-12-08T03:39:48Z",
+      "side": 1,
+      "message": "why bother with the symlink?",
+      "range": {
+        "startLine": 6,
+        "startChar": 4,
+        "endLine": 6,
+        "endChar": 44
+      },
+      "revId": "af5e4b6636147a0c972a67d17a15aa0cf431d223",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
