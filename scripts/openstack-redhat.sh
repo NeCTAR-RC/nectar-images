@@ -76,19 +76,18 @@ fi
 
 # Only works in very recent systemd
 if [ $RELEASEVER -gt 22 ]; then
-  KERNEL_ARGS="$KERNEL_ARGS systemd.log_color=no"
+    KERNEL_ARGS="$KERNEL_ARGS systemd.log_color=no"
 fi
 
+# Install grub2
 if [ $RELEASEVER -gt 23 ]; then
-  BOOTLOADER="--extlinux"
-else
-  BOOTLOADER=""
+    "${RH_INSTALL}" -y install grub2
+    grub2-mkconfig -o /boot/grub2/grub.cfg
+    grub2-install /dev/vda
 fi
 
 # Add our Grub kernel args for OpenStack
-
-grubby ${BOOTLOADER} --update-kernel=ALL --remove-args="rhgb quiet" \
-    --args="$KERNEL_ARGS"
+grubby --update-kernel=ALL --remove-args="rhgb quiet" --args="$KERNEL_ARGS"
 
 # Make sure sudo works properly with openstack
 sed -i "s/^.*requiretty$/Defaults !requiretty/" /etc/sudoers
