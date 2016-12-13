@@ -5,14 +5,17 @@ set -e
 . /etc/os-release
 
 case $VERSION_ID in
+    42.2)
+        zypper addrepo -f obs://Cloud:OpenStack:Master/openSUSE_Leap_42.2 openstack
+        ;;
     42.1)
-        zypper addrepo -f obs://Cloud:OpenStack:Liberty/openSUSE_Leap_42.1 Liberty
+        zypper addrepo -f obs://Cloud:OpenStack:Liberty/openSUSE_Leap_42.1 openstack
         ;;
     13.2)
-        zypper addrepo -f obs://Cloud:OpenStack:Kilo/openSUSE_13.2 Liberty
+        zypper addrepo -f obs://Cloud:OpenStack:Kilo/openSUSE_13.2 openstack
         ;;
     *)
-        echo "No OpenStack repository defines for openSUSE $VERSION"
+        echo "No OpenStack repository defined for openSUSE $VERSION"
         ;;
 esac
 
@@ -20,7 +23,7 @@ esac
 zypper -n --no-gpg-checks install cloud-init python-heat-cfntools e2fsprogs
 
 # Remove repo after package installation
-zypper -n removerepo Liberty
+zypper -n removerepo openstack
 
 # Ensure cloud-init services are enabled on boot
 for SERVICE in cloud-config cloud-final cloud-init cloud-init-local; do
