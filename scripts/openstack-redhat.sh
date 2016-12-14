@@ -91,3 +91,6 @@ grubby --update-kernel=ALL --remove-args="rhgb quiet" --args="$KERNEL_ARGS"
 
 # Make sure sudo works properly with openstack
 sed -i "s/^.*requiretty$/Defaults !requiretty/" /etc/sudoers
+
+# Set UseDNS to speed up ssh logins
+sed -i 's/#UseDNS.*/UseDNS no/' /etc/ssh/sshd_config
