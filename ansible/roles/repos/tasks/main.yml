@@ -1,0 +1,16 @@
+---
+- name: Include OS-specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}.yml"
+    - "defaults.yml"
+
+- include: setup-Debian.yml
+  when: ansible_os_family == 'Debian'
+
+- include: setup-CentOS.yml
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Scientific'
+
+- include: setup-Fedora.yml
+  when: ansible_distribution == 'Fedora'

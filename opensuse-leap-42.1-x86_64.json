@@ -1,8 +1,4 @@
 {
-  "variables": {
-    "ORGANISATION": "{{env `ORGANISATION`}}",
-    "IMAGE_SUPPORT_URL": "{{env `IMAGE_SUPPORT_URL`}}"
-  },
   "builders": [
     {
       "type": "qemu",
@@ -13,9 +9,9 @@
       "format": "qcow2",
       "headless": true,
       "http_directory": "http",
-      "iso_url": "{{user `opensuse-leap-42.1_iso_url`}}",
-      "iso_checksum": "{{user `opensuse-leap-42.1_iso_checksum`}}",
-      "iso_checksum_type": "{{user `opensuse-leap-42.1_iso_checksum_type`}}",
+      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/openSUSE-Leap-42.1-NET-x86_64.iso",
+      "iso_checksum": "7667262584cc4936673578b5242efdff86cc1434ce60a25324faad7a2a36dbd7",
+      "iso_checksum_type": "sha256",
       "ssh_password": "b4dP4ssw0Rd",
       "ssh_port": 22,
       "ssh_username": "root",
@@ -36,29 +32,18 @@
   ],
   "provisioners": [
     {
-      "type": "file",
-      "source": "files/opensuse/cloud.cfg",
-      "destination": "/tmp/cloud.cfg"
+      "type": "shell",
+      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/setup.sh"
     },
     {
-      "type": "file",
-      "source": "files/testing",
-      "destination": "/usr/nectar"
+      "type": "ansible",
+      "playbook_file": "ansible/playbook.yml"
     },
     {
       "type": "shell",
-      "environment_vars": [
-        "ORGANISATION={{user `ORGANISATION`}}",
-        "IMAGE_SUPPORT_URL={{user `IMAGE_SUPPORT_URL`}}"
-      ],
-      "scripts": [
-        "scripts/banner.sh",
-        "scripts/security.sh",
-        "scripts/openstack-suse.sh",
-        "scripts/fail2ban.sh",
-        "scripts/cleanup.sh",
-        "scripts/zerodisk.sh"
-      ]
+      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/cleanup.sh"
     }
   ]
 }

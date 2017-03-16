@@ -1,0 +1,36 @@
+---
+- name: set distro-specific variables
+  include_vars: '{{ item }}'
+  with_first_found:
+    - '{{ ansible_distribution }}.yml'
+    - '{{ ansible_os_family }}.yml'
+    - default.yml
+
+- name: Clean up logs keys and configs
+  shell: "{{ item }}"
+  args:
+    warn: no
+  with_items:
+    - 'find /var/log -type f -exec bash -c ''cat /dev/null > {}'' \;'
+    - 'rm -fr /var/lib/cloud/*'
+    - 'rm -fr /home/{{ default_user }}/.ssh/*'
+    - 'rm -fr /etc/ssh/*key'
+    - 'rm -fr /root/.ssh'
+  when: "ansible_ssh_user != 'vagrant'"
+
+- name: Lock and disable root account
+  shell: "{{ item }}"
+  args:
+    warn: no
+  with_items:
+    - passwd -d root
+    - passwd -l root
+
+- include: cleanup-RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
+- include: cleanup-Debian.yml
+  when: ansible_os_family == 'Debian'
+
+- include: cleanup-openSUSE.yml
+  when: ansible_distribution == 'openSUSE Leap'

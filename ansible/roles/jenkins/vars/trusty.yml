@@ -1,0 +1,8 @@
+---
+openstack_version: liberty
+pip_packages:
+  - { name: pip, version: 7.1.2 }
+  - { name: virtualenv, version: 13.1.2 }
+  - { name: setuptools, version: 19.4 }
+  - { name: pbr, version: 1.8.1 }
+  - { name: tox, version: 2.3.1 }

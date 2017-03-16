@@ -1,62 +1,27 @@
 {
-  "variables": {
-    "ORGANISATION": "{{env `ORGANISATION`}}",
-    "IMAGE_SUPPORT_URL": "{{env `IMAGE_SUPPORT_URL`}}"
-  },
   "builders": [
     {
-      "type": "qemu",
-      "name": "debian-8-x86_64",
-      "vm_name": "debian-8-x86_64",
-      "accelerator": "kvm",
-      "disk_size": 2048,
-      "format": "qcow2",
-      "headless": true,
-      "http_directory": "http",
-      "iso_url": "{{user `debian-8_iso_url`}}",
-      "iso_checksum": "{{user `debian-8_iso_checksum`}}",
-      "iso_checksum_type": "{{user `debian-8_iso_checksum_type`}}",
-      "ssh_password": "b4dP4ssw0Rd",
-      "ssh_port": 22,
-      "ssh_username": "root",
-      "ssh_wait_timeout": "10000s",
-      "qemuargs": [
-        [ "-m", "4096M" ],
-        [ "-cpu", "host" ],
-        [ "-smp", "1" ]
-      ],
-      "boot_wait": "1s",
-      "boot_command": [
-        "<esc><wait5><tab>",
-        "auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-8-x86_64-preseed.cfg keymap=us debian-installer/keymap=us<enter><wait>"
-      ]
+      "type": "openstack",
+      "flavor": "m2.xsmall",
+      "image_name": "debian-8-x86_64_build",
+      "source_image": "cdc32061-26f2-4aa5-a3c8-2bb72b058725",
+      "ssh_username": "debian"
     }
   ],
   "provisioners": [
     {
-      "type": "file",
-      "source": "files/debian/cloud.cfg",
-      "destination": "/tmp/cloud.cfg"
+      "type": "shell",
+      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/setup.sh"
     },
     {
-      "type": "file",
-      "source": "files/testing",
-      "destination": "/usr/nectar"
+      "type": "ansible",
+      "playbook_file": "ansible/playbook.yml"
     },
     {
       "type": "shell",
-      "environment_vars": [
-        "ORGANISATION={{user `ORGANISATION`}}",
-        "IMAGE_SUPPORT_URL={{user `IMAGE_SUPPORT_URL`}}"
-      ],
-      "scripts": [
-        "scripts/banner.sh",
-        "scripts/security.sh",
-        "scripts/openstack-debian.sh",
-        "scripts/fail2ban.sh",
-        "scripts/cleanup.sh",
-        "scripts/zerodisk.sh"
-      ]
+      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/cleanup.sh"
     }
   ]
 }

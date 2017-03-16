@@ -1,0 +1,55 @@
+---
+- name: Remove Ubuntus cloudimg settings (xenial)
+  file:
+    path: /etc/default/grub.d/50-cloudimg-settings.cfg
+    state: absent
+
+- name: Set base kernel args
+  set_fact:
+    kernel_args: 'console=tty0 console=ttyS0,115200n8 vga=788 consoleblank=0 net.ifnames=0 biosdevname=0'
+
+- name: Set noop scheduler for older kernels
+  set_fact:
+    kernel_args: "{{ kernel_args }} elevator=noop"
+  when: "{{ ansible_kernel | version_compare('3.3', '<') }}"
+
+- name: Set systemd no log colour
+  set_fact:
+    kernel_args: "{{ kernel_args }} systemd.log_color=no"
+  when: "{{ ansible_kernel | version_compare('4.4', '>=') }}"
+
+- name: Check if grub config is present
+  stat:
+    path: /etc/default/grub
+  register: etc_default_grub
+
+- name: Set kernel parameters in grub
+  lineinfile:
+    dest: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT'
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="{{ kernel_args }}"'
+    backup: yes
+  notify: update grub
+  when: etc_default_grub.stat.exists == True and ansible_os_family == 'Debian'
+
+- name: Set kernel parameters in grub
+  lineinfile:
+    dest: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT'
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="{{ kernel_args }}"'
+    backup: yes
+  notify: grub-mkconfig
+  when: etc_default_grub.stat.exists == True and ansible_distribution == 'openSUSE Leap'
+
+- name: Check if extlinux config present
+  stat:
+    path: /boot/extlinux/extlinux.conf
+  register: extlinux_conf
+
+- name: Update kernel commands for grub on RedHat
+  command: 'grubby --update-kernel=ALL --remove-args="rhgb quiet" --args="{{ kernel_args }}"'
+  when: ansible_os_family == 'RedHat' and extlinux_conf.stat.exists == False
+
+- name: Update kernel commands for extlinux on RedHat
+  command: 'grubby --extlinux --update-kernel=ALL --remove-args="rhgb quiet" --args="{{ kernel_args }}"'
+  when: ansible_os_family == 'RedHat' and extlinux_conf.stat.exists == True

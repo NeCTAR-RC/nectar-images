@@ -1,0 +1,2 @@
+---
+generated_password: "{{ ansible_fqdn | hash('md5') }}"

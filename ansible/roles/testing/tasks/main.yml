@@ -1,0 +1,6 @@
+---
+- name: Install testing scripts
+  copy:
+    src: testing/
+    dest: /usr/nectar
+    mode: 0755
