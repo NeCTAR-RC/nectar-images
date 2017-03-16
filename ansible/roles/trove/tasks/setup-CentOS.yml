@@ -1,0 +1,14 @@
+---
+- name: Install Trove Guest agent
+  package:
+    name: '{{ item }}'
+    state: installed
+  with_items:
+    trove-guestagent
+
+- name: Install MySQL packages
+  package:
+    name: '{{ item }}'
+    state: installed
+  with_items:
+    - mysql-server

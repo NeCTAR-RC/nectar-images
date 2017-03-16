@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# Scripts to run by MySQL systemd service
+#
+# Needed argument: pre | post
+#
+# pre mode  :  try to perform sanity check for configuration, log, data
+# post mode :  ping server until answer is received
+
+sanity () {
+  if [ ! -r /etc/mysql/my.cnf ]; then
+    echo "MySQL configuration not found at /etc/mysql/my.cnf. Please create one."
+    exit 1
+  fi
+}
+
+pinger () {
+  server_up=false
+  for i in $(seq 1 30); do
+    sleep 1
+    if mysqladmin ping >/dev/null 2>&1; then
+      server_up=true
+      break
+    fi
+  done
+  if [ ! $server_up ]; then
+    echo "MySQL server not started"
+    exit 1
+  fi
+}
+
+case $1 in
+  "pre")  sanity ;;
+  "post") pinger ;;
+esac
+

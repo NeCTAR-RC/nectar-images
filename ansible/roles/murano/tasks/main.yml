@@ -1,0 +1,29 @@
+---
+- name: Include OS-specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
+    - "{{ ansible_distribution }}.yml"
+    - "default.yml"
+
+- name: Include OS-specific tasks
+  include: "{{ item }}"
+  with_first_found:
+    - "setup-{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "setup-{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
+
+- name: Create Murano directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0775
+    recurse: yes
+  with_items:
+    - /etc/murano
+    - /var/murano/plans
+
+- name: Enable murano guest agent service
+  service:
+    name: murano-agent
+    enabled: yes

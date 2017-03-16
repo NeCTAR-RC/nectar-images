@@ -1,0 +1,2 @@
+---
+kernel_args: 'console=tty0 console=ttyS0,115200n8 vga=788 consoleblank=0 net.ifnames=0 biosdevname=0'
