@@ -1,65 +1,27 @@
 {
-  "variables": {
-    "ORGANISATION": "{{env `ORGANISATION`}}",
-    "IMAGE_SUPPORT_URL": "{{env `IMAGE_SUPPORT_URL`}}"
-  },
   "builders": [
     {
-      "type": "qemu",
-      "name": "jenkins-slave-ubuntu-16.04-x86_64",
-      "vm_name": "jenkins-slave-ubuntu-16.04-x86_64",
-      "accelerator": "kvm",
-      "disk_size": 4096,
-      "format": "qcow2",
-      "headless": true,
-      "http_directory": "http",
-      "iso_url": "{{user `ubuntu-16.04_iso_url`}}",
-      "iso_checksum": "{{user `ubuntu-16.04_iso_checksum`}}",
-      "iso_checksum_type": "{{user `ubuntu-16.04_iso_checksum_type`}}",
-      "ssh_password": "b4dP4ssw0Rd",
-      "ssh_port": 22,
-      "ssh_username": "root",
-      "ssh_wait_timeout": "10000s",
-      "qemuargs": [
-        [ "-m", "4096M" ],
-        [ "-cpu", "host" ],
-        [ "-smp", "1" ]
-      ],
-      "boot_wait": "10s",
-      "boot_command": [
-        "<tab><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
-        "fb=false hostname=ubuntu locale=en_AU ",
-        "console-keymaps-at/keymap=us console-setup/ask_detect=false ",
-        "console-setup/layoutcode=us keyboard-configuration/layout=USA keyboard-configuration/variant=USA ",
-        "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu-16.04-x86_64-preseed.cfg <enter><wait>"
-      ]
+      "type": "openstack",
+      "flavor": "m1.small",
+      "image_name": "jenkins-slave-ubuntu-16.04-x86_64_build",
+      "source_image": "749a14ba-48af-4cf0-8aed-4eec5b205655",
+      "ssh_username": "ubuntu"
     }
   ],
   "provisioners": [
     {
-      "type": "file",
-      "source": "files/ubuntu/cloud.cfg",
-      "destination": "/tmp/cloud.cfg"
+      "type": "shell",
+      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/setup.sh"
     },
     {
-      "type": "file",
-      "source": "files/testing",
-      "destination": "/usr/nectar"
+      "type": "ansible",
+      "playbook_file": "ansible/playbook-jenkins-slave.yml"
     },
     {
       "type": "shell",
-      "environment_vars": [
-        "ORGANISATION={{user `ORGANISATION`}}",
-        "IMAGE_SUPPORT_URL={{user `IMAGE_SUPPORT_URL`}}"
-      ],
-      "scripts": [
-        "scripts/security.sh",
-        "scripts/openstack-debian.sh",
-        "scripts/jenkins-slave.sh",
-        "scripts/ubuntu.sh",
-        "scripts/cleanup.sh",
-        "scripts/zerodisk.sh"
-      ]
+      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/cleanup.sh"
     }
   ]
 }

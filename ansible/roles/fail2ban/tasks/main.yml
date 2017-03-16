@@ -1,0 +1,43 @@
+---
+- name: Include OS-specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}.yml"
+    - "default.yml"
+
+- include: setup-CentOS6.yml
+  when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Scientific') and ansible_distribution_major_version == '6'
+
+- include: setup-CentOS.yml
+  when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Scientific') and ansible_distribution_major_version > '6'
+
+- include: setup-Fedora.yml
+  when: ansible_distribution == 'Fedora'
+
+- include: setup-Ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'
+
+- include: setup-Debian7.yml
+  when:
+    - ansible_distribution == 'Debian'
+    - ansible_distribution_major_version == '7'
+
+- include: setup-Debian.yml
+  when:
+    - ansible_distribution == 'Debian'
+    - ansible_distribution_major_version > '7'
+
+- include: setup-openSUSE.yml
+  when: ansible_distribution == 'openSUSE Leap'
+
+- name: Install hostsdeny action
+  copy:
+    src: hostsdeny.conf
+    dest: /etc/fail2ban/action.d/hostsdeny.conf
+
+- name: Ensure fail2ban is running and enabled on boot
+  service:
+    name: fail2ban
+    state: started
+    enabled: yes

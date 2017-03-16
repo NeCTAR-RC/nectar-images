@@ -5,6 +5,9 @@ output-*
 *.box
 *.tar.gz
 *.log
+*.qcow2
+*.retry
+.vagrant
 virtualbox
 vmware
 iso

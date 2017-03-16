@@ -1,0 +1,20 @@
+---
+- name: Clean up yum
+  command: yum clean all
+
+- name: Remove interface persistence
+  file:
+    name: /etc/udev/rules.d/70-persistent-net.rules
+    state: absent
+
+- name: Remove RedHat interface hardware specifics
+  lineinfile:
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth0
+    regexp: "{{ item }}"
+    state: absent
+  with_items:
+    - '^HWADDR'
+    - '^UUID'
+    - '^IPV6INIT'
+    - '^NM_CONTROLLED'
+    - '^MTU'

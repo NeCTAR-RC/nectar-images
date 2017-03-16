@@ -1,0 +1,7 @@
+---
+openstack_version: mitaka
+
+cloud_packages:
+  - cloud-init
+  - cloud-utils-growpart
+  - heat-cfntools

@@ -1,0 +1,27 @@
+---
+- name: Add Ubuntu cloud archive key
+  apt_key:
+    keyserver: pgp.mit.edu
+    id: 391A9AA2147192839E9DB0315EDB1B62EC4926EA
+
+- name: Add Ubuntu cloud archive repository
+  apt_repository:
+    repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_distribution_release }}-updates/{{ openstack_version }} main"
+    update_cache: yes
+
+- name: Install dependency packages
+  package:
+    name: "{{ item }}"
+    state: installed
+  with_items: "{{ murano_agent_dependency_packages }}"
+
+- name: Install Murano Agent into VirtualEnv
+  pip:
+    name: "git+{{ murano_agent_repo }}#egg=murano-agent"
+    virtualenv: '{{ murano_agent_venv_dir }}'
+    virtualenv_site_packages: yes
+
+- name: Install service config
+  template:
+    src: "{{ ansible_distribution }}_{{ ansible_distribution_release }}/murano-agent.conf.j2"
+    dest: /etc/init/murano-agent.conf

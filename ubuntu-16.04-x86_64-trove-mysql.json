@@ -1,0 +1,27 @@
+{
+  "builders": [
+    {
+      "type": "openstack",
+      "flavor": "m2.xsmall",
+      "image_name": "ubuntu-16.04-x86_64-trove-mysql57_build",
+      "source_image": "749a14ba-48af-4cf0-8aed-4eec5b205655",
+      "ssh_username": "ubuntu"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/setup.sh"
+    },
+    {
+      "type": "ansible",
+      "playbook_file": "ansible/playbook-trove-mysql.yml"
+    },
+    {
+      "type": "shell",
+      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/cleanup.sh"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+---
+- name: wipe existing sources.list
+  copy:
+    content: '# Empty'
+    dest: /etc/apt/sources.list
+    force: true
+
+- name: set up debian mirror
+  apt_repository:
+    repo: "{{ item }}"
+    update_cache: true
+  with_items: "{{ apt_repositories }}"
+
+- name: Perform a full upgrade
+  apt:
+    upgrade: dist
+    update_cache: yes
+    dpkg_options: 'force-confold,force-confdef'
+  when: "ansible_ssh_user != 'vagrant'"

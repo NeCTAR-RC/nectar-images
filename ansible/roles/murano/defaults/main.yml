@@ -1,0 +1,6 @@
+---
+dir: /opt/stack
+venv_dir: "{{ dir }}/dir/venvs/murano-agent"
+source_dir: "{{ dir }}/murano-agent"
+repo: git://git.openstack.org/openstack/murano-agent.git
+branch: stable/liberty
