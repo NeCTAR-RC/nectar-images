@@ -1,0 +1,45 @@
+---
+- name: Check if EPEL repo is already configured
+  stat: path={{ epel_repofile_path }}
+  register: epel_repofile_result
+
+- name: Install EPEL repo
+  yum:
+    name: "{{ epel_repo_url }}"
+    state: present
+  register: result
+  until: '"failed" not in result'
+  retries: 5
+  delay: 10
+  when: not epel_repofile_result.stat.exists
+
+- name: Import EPEL GPG key
+  rpm_key:
+    key: "{{ epel_repo_gpg_key_url }}"
+    state: present
+  when: not epel_repofile_result.stat.exists
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Find all repo files
+  raw: find /etc/yum.repos.d -type f -name "*.repo"
+  register: repo_files
+
+- name: Comment out mirror list for yum repos
+  replace:
+    dest: "{{ item }}"
+    regexp: '^(mirrorlist.*)$'
+    replace: '#\1'
+  with_items: "{{ repo_files.stdout_lines }}"
+
+- name: Set baseurl for repos
+  replace:
+    dest: "{{ item }}"
+    regexp: '^.*baseurl=.*/(\w+)/(\$releasever|\d.*)/(.*)$'
+    replace: 'baseurl=http://mirror.aarnet.edu.au/pub/\1/{{ ansible_distribution_major_version }}/\3'
+  with_items: "{{ repo_files.stdout_lines }}"
+
+- name: Perform a full upgrade
+  yum:
+    name: '*'
+    state: latest
+  when: ansible_ssh_user != 'vagrant' and perform_upgrade == True

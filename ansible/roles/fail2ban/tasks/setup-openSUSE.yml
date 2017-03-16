@@ -1,0 +1,16 @@
+---
+- name: Install fail2ban packages
+  package:
+    name: "{{ item }}"
+  with_items:
+    - fail2ban
+
+- name: Install 00-hostdeny.conf
+  template:
+    src: 00-hostdeny.conf.j2
+    dest: /etc/fail2ban/jail.d/00-hostdeny.conf
+
+- name: Install 01-sshd.conf
+  template:
+    src: 01-sshd.conf.j2
+    dest: /etc/fail2ban/jail.d/01-sshd.conf

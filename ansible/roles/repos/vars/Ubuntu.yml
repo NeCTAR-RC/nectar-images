@@ -1,0 +1,7 @@
+---
+apt_mirror: http://au.archive.ubuntu.com/ubuntu/
+apt_repositories:
+  - "deb {{ apt_mirror }} {{ ansible_distribution_release }} main restricted universe multiverse"
+  - "deb {{ apt_mirror }} {{ ansible_distribution_release }}-updates main restricted universe multiverse"
+  - "deb {{ apt_mirror }} {{ ansible_distribution_release }}-backports main restricted universe multiverse"
+  - "deb {{ apt_mirror }} {{ ansible_distribution_release }}-security main restricted universe multiverse"

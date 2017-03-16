@@ -1,0 +1,6 @@
+---
+apt_mirror: http://ftp.au.debian.org/debian
+apt_repositories:
+  - "deb {{ apt_mirror }} {{ ansible_distribution_release }} main"
+  - "deb {{ apt_mirror }} {{ ansible_distribution_release }}-updates main"
+  - "deb {{ apt_mirror }} {{ ansible_distribution_release }}-backports main"

@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: yes
+
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    - role: repos
+    - role: cloud
+    - role: ntp
+    - role: kernel-params
+    - role: testing
+    - role: trove
+    - role: cleanup

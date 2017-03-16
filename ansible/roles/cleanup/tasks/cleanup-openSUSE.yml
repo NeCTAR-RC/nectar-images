@@ -1,0 +1,10 @@
+---
+- name: Clean up zypper
+  command: zypper clean
+  args:
+    warn: no
+
+- name: Remove interface persistence
+  file:
+    name: /etc/udev/rules.d/70-persistent-net.rules
+    state: absent

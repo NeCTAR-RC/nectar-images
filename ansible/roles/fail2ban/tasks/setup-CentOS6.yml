@@ -1,0 +1,15 @@
+---
+- name: Install fail2ban packages
+  package:
+    name: "{{ item }}"
+  with_items:
+    - fail2ban
+    - ed
+
+- name: Install fail2ban config files
+  copy:
+    src: "CentOS6/jail.d/{{ item }}"
+    dest: "/etc/fail2ban/jail.d/{{ item }}"
+  with_items:
+    - 01-ssh-iptables.conf
+    - 02-ssh-tcpwrapper.conf

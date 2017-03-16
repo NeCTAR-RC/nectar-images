@@ -1,0 +1,8 @@
+---
+openstack_version: mitaka
+packages:
+  - virtualenv
+  - tox
+  - npm
+  - ruby-puppet-syntax
+  - nodejs-legacy

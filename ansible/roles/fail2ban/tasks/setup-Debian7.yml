@@ -1,0 +1,11 @@
+---
+- name: Install fail2ban packages
+  package:
+    name: "{{ item }}"
+  with_items:
+    - fail2ban
+
+- name: Install fail2ban jail.local
+  copy:
+    src: Debian7/jail.local
+    dest: /etc/fail2ban/jail.local

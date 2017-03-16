@@ -1,0 +1,6 @@
+---
+openstack_version: liberty
+cloud_packages:
+  - cloud-init
+  - growpart
+  - python-heat-cfntools

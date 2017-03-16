@@ -1,0 +1,98 @@
+---
+- name: Include OS-specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}_{{ ansible_distribution_version }}.yml"
+    - "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+    - "default.yml"
+
+- name: Add cloud repository for CentOS
+  yum_repository:
+    name: "centos-openstack-{{ openstack_version }}"
+    description: "CentOS {{ ansible_distribution_major_version }} - OpenStack {{ openstack_version }}"
+    baseurl: "http://mirror.centos.org/centos/{{ ansible_distribution_major_version }}/cloud/x86_64/openstack-{{ openstack_version }}/"
+    gpgcheck: no
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Scientific'
+
+- name: Add cloud repository for openSUSE
+  zypper_repository:
+    name: openstack
+    repo: "obs://Cloud:OpenStack:{{ openstack_version }}/openSUSE_Leap_{{ ansible_distribution_version }}"
+    disable_gpg_check: true
+  when: ansible_distribution == 'openSUSE Leap'
+
+- name: Add gplhost apt-key
+  apt_key:
+    url: http://syd2.apt-proxy.gplhost.com/debian/repository_key.asc
+    state: present
+  when: ansible_distribution == 'Debian' and ansible_distribution_major_version == '7'
+- name: Add cloud repository for Debian 7
+  apt_repository:
+    repo: "deb http://syd2.apt-proxy.gplhost.com/debian {{ item }} main"
+    state: present
+  with_items:
+    - juno
+    - juno-backports
+  when: ansible_distribution == 'Debian' and ansible_distribution_major_version == '7'
+
+- name: Install cloud packages
+  package:
+    name: "{{ item }}"
+    state: installed
+  with_items: "{{ cloud_packages }}"
+
+- name: Remove cloud repository for CentOS
+  yum_repository:
+    name: "centos-openstack-{{ openstack_version }}"
+    state: absent
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Scientific'
+
+- name: Remove cloud repository for Debian 7
+  apt_repository:
+    repo: "deb http://syd2.apt-proxy.gplhost.com/debian {{ item }} main"
+    state: absent
+  with_items:
+    - juno
+    - juno-backports
+  when: ansible_distribution == 'Debian' and ansible_distribution_major_version == '7'
+
+- name: Install custom heat-cfntools for Ubuntu trusty
+  apt:
+    deb: http://au.archive.ubuntu.com/ubuntu/pool/universe/h/heat-cfntools/heat-cfntools_1.2.7-2_all.deb
+  when: ansible_distribution_release == 'trusty'
+
+- name: Add cloud-init config file
+  copy:
+    src: "{{ item }}"
+    dest: /etc/cloud/cloud.cfg
+  with_first_found:
+    - "{{ ansible_distribution }}/{{ ansible_distribution_major_version }}/cloud.cfg"
+    - "{{ ansible_distribution }}/cloud.cfg"
+
+- name: Don't requiretty for sudo
+  lineinfile:
+    dest: /etc/sudoers
+    regexp: '^Defaults\t!requiretty$'
+    insertafter: '^Defaults\s+env_reset$'
+    line: 'Defaults	!requiretty'
+    validate: 'visudo -cf %s'
+
+- name: Reset networking config on Ubuntu xenial
+  copy:
+    src: "{{ ansible_distribution }}/interfaces"
+    dest: /etc/network/interfaces
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Fix networking to bring up interface and work correctly with cloud-init
+  replace:
+    dest: /etc/network/interfaces
+    regexp: '^allow-hotplug (\w+)$'
+    replace: 'auto \1'
+  when: ansible_os_family == 'Debian'
+
+- name: Remove bad Debian cloud-init config
+  file:
+    path: /etc/cloud/cloud.cfg.d/90_dpkg.cfg
+    state: absent
