@@ -1,8 +1,4 @@
 {
-  "variables": {
-    "ORGANISATION": "{{env `ORGANISATION`}}",
-    "IMAGE_SUPPORT_URL": "{{env `IMAGE_SUPPORT_URL`}}"
-  },
   "builders": [
     {
       "type": "qemu",
@@ -54,10 +50,6 @@
     },
     {
       "type": "shell",
-      "environment_vars": [
-        "ORGANISATION={{user `ORGANISATION`}}",
-        "IMAGE_SUPPORT_URL={{user `IMAGE_SUPPORT_URL`}}"
-      ],
       "scripts": [
         "scripts/banner.sh",
         "scripts/security.sh",

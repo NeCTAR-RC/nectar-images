@@ -1,0 +1,50 @@
+---
+openstack_version: liberty
+murano_agent_venv_dir: /opt/stack/venvs/murano-agent
+murano_agent_repo: http://git.openstack.org/openstack/murano-agent.git@liberty-eol
+murano_agent_bin: "{{ murano_agent_venv_dir }}/bin/muranoagent"
+
+murano_agent_dependency_packages:
+  - git-core
+  - wget
+  - make 
+  - gcc
+  - python-pip
+  - python-dev 
+  - python-virtualenv
+  - python-setuptools
+  - python-amqp
+  - python-babel
+  - python-bunch
+  - python-enum34
+  - python-eventlet
+  - python-git
+  - python-gitdb
+  - python-greenlet
+  - python-iso8601
+  - python-kombu
+  - python-netaddr
+  - python-netifaces
+  - python-oslo.concurrency
+  - python-oslo.config
+  - python-oslo.context
+  - python-oslo.i18n
+  - python-oslo.log
+  - python-oslo.serialization
+  - python-oslo.service
+  - python-oslo.utils
+  - python-monotonic
+  - python-paste
+  - python-pastedeploy
+  - python-pyinotify
+  - python-dateutil
+  - python-repoze.lru
+  - python-requests
+  - python-retrying
+  - python-routes
+  - python-semantic-version
+  - python-smmap
+  - python-stevedore
+  - python-webob
+  - python-wrapt
+

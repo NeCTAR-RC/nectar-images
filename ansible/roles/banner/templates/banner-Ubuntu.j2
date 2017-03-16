@@ -1,0 +1,12 @@
+#!/bin/sh
+[ -r /etc/lsb-release ] && . /etc/lsb-release
+
+if [ -z "$DISTRIB_DESCRIPTION" ] && [ -x /usr/bin/lsb_release ]; then
+    DISTRIB_DESCRIPTION=$(lsb_release -s -d)
+fi
+
+echo "--------------------------------------------------------------------------------"
+echo "NeCTAR $DISTRIB_DESCRIPTION $(uname -i)"
+echo "Image details and information is available at"
+echo "{{ support_url }}"
+echo "--------------------------------------------------------------------------------"

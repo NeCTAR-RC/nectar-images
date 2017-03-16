@@ -1,48 +1,27 @@
 {
-  "variables": {
-    "fedora-24_image_id": "",
-    "fedora-24_flavor_name": "",
-    "ORGANISATION": "{{env `ORGANISATION`}}",
-    "OS_AUTH_URL": "{{env `OS_AUTH_URL`}}",
-    "IMAGE_SUPPORT_URL": "{{env `IMAGE_SUPPORT_URL`}}"
-  },
   "builders": [
     {
       "type": "openstack",
-      "flavor": "{{user `fedora-24_flavor_name`}}",
-      "identity_endpoint": "{{user `OS_AUTH_URL`}}",
-      "image_name": "fedora-24-x86_64",
-      "source_image": "{{user `fedora-24_image_id`}}",
-      "ssh_port": 22,
+      "flavor": "m2.xsmall",
+      "image_name": "fedora-24-x86_64_build",
+      "source_image": "fedora-24-x86_64_vendor",
       "ssh_username": "fedora"
     }
   ],
   "provisioners": [
-    {
-      "type": "file",
-      "source": "files/fedora/cloud.cfg",
-      "destination": "/tmp/cloud.cfg"
+    { 
+      "type": "shell",
+      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/setup.sh"
     },
-    {
-      "type": "file",
-      "source": "files/testing",
-      "destination": "/tmp/nectar"
+    { 
+      "type": "ansible",
+      "playbook_file": "ansible/playbook.yml"
     },
     {
       "type": "shell",
-      "environment_vars": [
-        "ORGANISATION={{user `ORGANISATION`}}",
-        "IMAGE_SUPPORT_URL={{user `IMAGE_SUPPORT_URL`}}"
-      ],
-      "execute_command": "sudo -E /bin/bash '{{.Path}}'",
-      "scripts": [
-        "scripts/banner.sh",
-        "scripts/security.sh",
-        "scripts/openstack-redhat.sh",
-        "scripts/fail2ban.sh",
-        "scripts/cleanup.sh",
-        "scripts/zerodisk.sh"
-      ]
+      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/cleanup.sh"
     }
   ]
 }

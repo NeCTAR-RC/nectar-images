@@ -1,0 +1,21 @@
+[Unit]
+Description=Trove Guest
+After=syslog.target
+After=network.target
+
+[Service]
+Type=simple
+User=trove
+Group=trove
+
+ExecStartPre=/bin/bash -c "sudo chown -R trove:root /etc/trove"
+ExecStart=/usr/bin/trove-guestagent --config-dir=/etc/trove/conf.d
+
+# Give a reasonable amount of time for the server to start up/shut down
+TimeoutSec=300
+
+# PgSql doesn't play nice with PrivateTmp
+PrivateTmp=false
+
+[Install]
+WantedBy=multi-user.target

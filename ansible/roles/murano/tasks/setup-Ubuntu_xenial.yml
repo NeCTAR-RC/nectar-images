@@ -1,0 +1,36 @@
+---
+- name: Remove any old init scripts
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - /etc/init.d/murano-agent
+    - /etc/init/murano-agent.conf
+
+- name: Remove existing Murano config
+  shell: "rm -fr {{ item }}"
+  args:
+    warn: no
+  with_items:
+    - /etc/murano-agent
+    - /var/log/murano
+    - /var/log/murano-agent
+
+- apt_key:
+    keyserver: pgp.mit.edu
+    id: 391A9AA2147192839E9DB0315EDB1B62EC4926EA
+
+- name: Add repositories
+  apt_repository:
+    repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_distribution_release }}-updates/ocata main"
+    update_cache: yes
+
+- name: Install Murano Guest agent
+  package:
+    name: murano-agent
+    state: installed
+
+- name: Install updated systemd service config
+  template:
+    src: "{{ ansible_distribution }}_{{ ansible_distribution_release }}/murano-agent.service.j2"
+    dest: /etc/systemd/system/murano-agent.service

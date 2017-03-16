@@ -1,0 +1,24 @@
+---
+- name: Add cloud repository for CentOS
+  yum_repository:
+    name: "centos-openstack-{{ openstack_version }}"
+    description: "CentOS {{ ansible_distribution_major_version }} - OpenStack {{ openstack_version }}"
+    baseurl: "http://mirror.centos.org/centos/{{ ansible_distribution_major_version }}/cloud/x86_64/openstack-{{ openstack_version }}/"
+    gpgcheck: no
+
+- name: Install dependency packages
+  package:
+    name: "{{ item }}"
+    state: installed
+  with_items: "{{ murano_agent_dependency_packages }}"
+
+- name: Install Murano Agent into VirtualEnv
+  pip:
+    name: "git+{{ murano_agent_repo }}#egg=murano-agent"
+    virtualenv: '{{ murano_agent_venv_dir }}'
+    virtualenv_site_packages: yes
+
+- name: Install systemd service config
+  template:
+    src: "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}/murano-agent.service.j2"
+    dest: /etc/systemd/system/murano-agent.service

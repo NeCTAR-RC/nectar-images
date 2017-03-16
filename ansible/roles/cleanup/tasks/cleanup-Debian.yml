@@ -1,0 +1,7 @@
+---
+- name: Clean up apt
+  command: "{{ item }}"
+  with_items:
+    - apt-get -y autoremove
+    - apt-get -y autoclean
+    - apt-get -y clean all
