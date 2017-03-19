@@ -17,7 +17,7 @@
     },
     {
       "type": "ansible",
-      "playbook_file": "ansible/playbook-murano.yml"
+      "playbook_file": "ansible/playbook-murano-agent.yml"
     },
     {
       "type": "shell",
