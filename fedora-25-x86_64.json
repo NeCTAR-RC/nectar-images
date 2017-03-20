@@ -4,7 +4,7 @@
       "type": "openstack",
       "flavor": "m2.xsmall",
       "image_name": "fedora_25-x86_64_build",
-      "source_image": "dc4a0ea0-011e-41c9-984f-0ead1f777bfd",
+      "source_image": "d63329a5-139b-4eee-a9e4-7ed96dcaaa82",
       "ssh_username": "fedora"
     }
   ],
