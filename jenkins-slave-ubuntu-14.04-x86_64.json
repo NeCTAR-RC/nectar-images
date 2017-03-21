@@ -4,7 +4,7 @@
       "type": "openstack",
       "flavor": "m1.small",
       "image_name": "jenkins-slave-ubuntu-14.04-x86_64_build",
-      "source_image": "26070d12-2edc-4a6d-93c9-3be7f860927e",
+      "source_image": "e7b62102-c3d1-4669-b938-372aed837842",
       "ssh_username": "ubuntu"
     }
   ],
