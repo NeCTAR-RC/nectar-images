@@ -11,8 +11,9 @@
   "provisioners": [
     {
       "type": "shell",
-      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
-      "script": "scripts/setup.sh"
+      "inline": [
+        "sudo dnf -q -y install python2 libselinux-python python2-dnf"
+      ]
     },
     {
       "type": "ansible",

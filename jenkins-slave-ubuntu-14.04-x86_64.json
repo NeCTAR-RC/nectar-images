@@ -12,8 +12,10 @@
   "provisioners": [
     {
       "type": "shell",
-      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
-      "script": "scripts/setup.sh"
+      "inline": [
+        "sudo apt-get -q -y update",
+        "sudo apt-get -q -y install python-apt"
+      ]
     },
     {
       "type": "ansible",

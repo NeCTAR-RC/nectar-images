@@ -30,7 +30,9 @@
   "provisioners": [
     {
       "type": "shell",
-      "script": "scripts/setup.sh"
+      "inline": [
+        "yum -q -y install python libselinux-python"
+      ]
     },
     {
       "type": "ansible",

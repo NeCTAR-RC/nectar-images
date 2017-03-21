@@ -30,7 +30,10 @@
   "provisioners": [
     {
       "type": "shell",
-      "script": "scripts/setup.sh"
+      "inline": [
+        "sudo apt-get -q -y update",
+        "sudo apt-get -q -y install python-apt"
+      ]
     },
     {
       "type": "ansible",

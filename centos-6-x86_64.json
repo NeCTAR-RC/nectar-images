@@ -12,8 +12,9 @@
   "provisioners": [
     {
       "type": "shell",
-      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
-      "script": "scripts/setup.sh"
+      "inline": [
+        "sudo yum -q -y install python libselinux-python"
+      ]
     },
     {
       "type": "ansible",

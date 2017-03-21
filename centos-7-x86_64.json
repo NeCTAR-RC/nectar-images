@@ -4,7 +4,7 @@
       "type": "openstack",
       "flavor": "m2.xsmall",
       "image_name": "centos-7-x86_64_build",
-      "source_image": "8096476f-14c3-46b6-9525-5b1947b73631",
+      "source_image": "7c7d09c6-dd4b-404a-8c39-30d34ca87776",
       "ssh_pty": true,
       "ssh_username": "centos"
     }
@@ -12,8 +12,9 @@
   "provisioners": [
     {
       "type": "shell",
-      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
-      "script": "scripts/setup.sh"
+      "inline": [
+        "sudo yum -q -y install python libselinux-python"
+      ]
     },
     {
       "type": "ansible",
