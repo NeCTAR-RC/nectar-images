@@ -5,6 +5,7 @@
       "flavor": "m1.small",
       "image_name": "jenkins-slave-ubuntu-14.04-x86_64_build",
       "source_image": "e7b62102-c3d1-4669-b938-372aed837842",
+      "security_groups": [ "jenkins-slave" ],
       "ssh_username": "ubuntu"
     }
   ],
