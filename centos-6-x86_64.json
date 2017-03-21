@@ -4,7 +4,7 @@
       "type": "openstack",
       "flavor": "m2.xsmall",
       "image_name": "centos-6-x86_64_build",
-      "source_image": "9407826d-1369-40a9-9bd9-1184731a8112",
+      "source_image": "a5351b72-a382-4b98-a44b-4ebc5b7a0fa1",
       "ssh_pty": true,
       "ssh_username": "centos"
     }

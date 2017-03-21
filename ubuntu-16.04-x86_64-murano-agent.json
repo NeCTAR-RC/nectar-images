@@ -4,7 +4,7 @@
       "type": "openstack",
       "flavor": "m2.xsmall",
       "image_name": "ubuntu-16.04-x86_64-murano-agent_build",
-      "source_image": "749a14ba-48af-4cf0-8aed-4eec5b205655",
+      "source_image": "fe9b229c-6174-4557-a00a-561698027376",
       "ssh_username": "ubuntu"
     }
   ],

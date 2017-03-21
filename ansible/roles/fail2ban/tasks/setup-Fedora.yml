@@ -6,6 +6,11 @@
     - fail2ban-server
     - fail2ban-systemd
 
+- name: Make rundir
+  file:
+    path: /var/run/fail2ban
+    state: directory
+
 - name: Install 00-hostdeny.conf
   template:
     src: 00-hostdeny.conf.j2

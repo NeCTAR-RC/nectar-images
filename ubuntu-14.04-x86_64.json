@@ -4,7 +4,7 @@
       "type": "openstack",
       "flavor": "m2.xsmall",
       "image_name": "ubuntu-14.04-x86_64_build",
-      "source_image": "26070d12-2edc-4a6d-93c9-3be7f860927e",
+      "source_image": "5129e3ce-4a68-4a52-bc82-05fc85b5711f",
       "ssh_username": "ubuntu"
     }
   ],

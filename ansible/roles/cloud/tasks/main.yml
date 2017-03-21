@@ -96,3 +96,9 @@
   file:
     path: /etc/cloud/cloud.cfg.d/90_dpkg.cfg
     state: absent
+
+- name: Disable SELinux
+  selinux:
+    policy: targeted
+    state: permissive
+  when: ansible_os_family == 'RedHat'

@@ -18,7 +18,7 @@
   with_items: "{{ repo_files.stdout_lines }}"
 
 - name: Perform a full upgrade
-  yum:
+  dnf:
     name: '*'
     state: latest
   when: "ansible_ssh_user != 'vagrant'"
