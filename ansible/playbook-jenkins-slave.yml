@@ -10,5 +10,6 @@
     - role: repos
     - role: cloud
     - role: ntp
+    - role: kernel-params
     - role: jenkins
     - role: cleanup
