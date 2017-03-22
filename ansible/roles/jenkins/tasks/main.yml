@@ -85,4 +85,9 @@
     dest: /usr/local/bin/
     remote_src: True
 
-
+- name: Perform a full upgrade
+  apt:
+    upgrade: dist
+    update_cache: yes
+    dpkg_options: 'force-confold,force-confdef'
+  when: "ansible_ssh_user != 'vagrant'"
