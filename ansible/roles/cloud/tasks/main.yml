@@ -102,3 +102,11 @@
     policy: targeted
     state: permissive
   when: ansible_os_family == 'RedHat'
+
+# https://code.launchpad.net/~jordane/cloud-init/sshd-systemd-fix
+- name: Fix cloud-init service dependency with SSH for CentOS 7
+  copy:
+    src: CentOS/7/cloud-init.service
+    dest: /etc/systemd/system/cloud-init.service
+  notify: systemctl-daemon-reload
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'
