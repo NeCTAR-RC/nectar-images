@@ -1,5 +1,5 @@
-#!/bin/bash -xe
+#!/bin/bash -x
 
-dd if=/dev/zero of=/EMPTY bs=1M || true
+dd if=/dev/zero of=/EMPTY bs=1M
 rm -f /EMPTY
 sync
