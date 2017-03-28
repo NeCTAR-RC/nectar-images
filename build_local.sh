@@ -101,11 +101,6 @@ if [ ! -z $BUILD_PROPERTY ]; then
     GLANCE_ARGS="--property ${BUILD_PROPERTY}=${BUILD_NUMBER}"
 fi
 
-# Any extra image build props - we use this for Murano
-if [[ "$NAME" =~ "murano" ]]; then
-    GLANCE_ARGS="--property murano_image_info='{\"title\": \"${IMAGE_NAME}\", \"type\": \"linux\"}' ${GLANCE_ARGS}"
-fi
-
 if [ "$MAKE_PUBLIC" == "true" ] ; then
     GLANCE_ARGS="--public ${GLANCE_ARGS}"
 fi
@@ -115,6 +110,11 @@ echo "--> openstack image create --disk-format qcow2 --container-format bare --f
 IMAGE_ID=$(openstack image create -f value -c id --disk-format qcow2 --container-format bare --file ${OUTPUT_DIR}/${BUILD_NAME}.qcow2 ${GLANCE_ARGS} "${IMAGE_NAME}")
 echo "Found image ID: ${IMAGE_ID}"
 rm -f ${OUTPUT_DIR}/${BUILD_NAME}.qcow2
+
+# Any extra image build props - we use this for Murano
+if [[ "$NAME" =~ "murano" ]]; then
+    openstack image set --property murano_image_info="{\"title\": \"${IMAGE_NAME}\", \"type\": \"linux\"}" ${IMAGE_ID}
+fi
 
 echo "Creating instance \"test_${NAME}_${BUILD_NUMBER}\"..."
 echo "--> openstack server create --image ${IMAGE_ID} --flavor ${TEST_FLAVOUR} --key-name ${TEST_SSH_KEY} \"${BUILD_NAME}\""
@@ -183,7 +183,7 @@ while [ $ATTEMPT -le $ATTEMPTS ]; do
       echo -e "\nERROR: reached maximum attempts ($ATTEMPTS)"
       ssh -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $USER_ACCOUNT@$IP_ADDRESS exit
       #openstack image delete $IMAGE_ID
-      nova console-log $INSTANCE_ID > ${OUTPUT_DIR}/${BUILD_NAME}-console.txt
+      openstack console log show $INSTANCE_ID > ${OUTPUT_DIR}/${BUILD_NAME}-console.txt
       echo "Deleting instance ${INSTANCE_ID}..."
       openstack server delete $INSTANCE_ID
       exit 1
@@ -198,7 +198,7 @@ echo "Waiting 60 seconds for instance to settle..."
 sleep 60
 
 echo "Running tests (ssh $USER_ACCOUNT@$IP_ADDRESS '/bin/bash /usr/nectar/run_tests.sh')..."
-ssh -q -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $USER_ACCOUNT@$IP_ADDRESS '/bin/bash /usr/nectar/run_tests.sh'
+ssh -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $USER_ACCOUNT@$IP_ADDRESS '/bin/bash /usr/nectar/run_tests.sh'
 
 echo "Deleting instance ${INSTANCE_ID}..."
 openstack server delete $INSTANCE_ID
