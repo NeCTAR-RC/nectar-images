@@ -39,5 +39,5 @@
 - name: Ensure fail2ban is running and enabled on boot
   service:
     name: fail2ban
-    state: started
+    state: stopped
     enabled: yes
