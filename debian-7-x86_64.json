@@ -9,9 +9,9 @@
       "format": "qcow2",
       "headless": true,
       "http_directory": "http",
+      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/debian-7.9.0-amd64-netinst.iso",
       "iso_checksum": "774d1fc8c5364e63b22242c33a89c1a3",
       "iso_checksum_type": "md5",
-      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/debian-7.9.0-amd64-netinst.iso",
       "ssh_password": "b4dP4ssw0Rd",
       "ssh_port": 22,
       "ssh_username": "root",
@@ -21,7 +21,7 @@
         [ "-cpu", "host" ],
         [ "-smp", "1" ]
       ],
-      "boot_wait": "10s",
+      "boot_wait": "5s",
       "boot_command": [
         "<esc><wait> auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-7-x86_64-preseed.cfg keymap=us debian-installer/keymap=us<enter><wait>"
       ]
@@ -31,8 +31,8 @@
     {
       "type": "shell",
       "inline": [
-        "sudo apt-get -q -y update",
-        "sudo apt-get -q -y install python-apt"
+        "apt-get -q -y update",
+        "apt-get -q -y install python-apt"
       ]
     },
     {

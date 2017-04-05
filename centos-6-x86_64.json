@@ -1,19 +1,37 @@
 {
   "builders": [
     {
-      "type": "openstack",
-      "flavor": "m2.xsmall",
-      "image_name": "centos-6-x86_64_build",
-      "source_image": "a5351b72-a382-4b98-a44b-4ebc5b7a0fa1",
-      "ssh_pty": true,
-      "ssh_username": "centos"
+      "type": "qemu",
+      "name": "centos-6-x86_64",
+      "vm_name": "centos-6-x86_64",
+      "accelerator": "kvm",
+      "disk_size": 4096,
+      "format": "qcow2",
+      "headless": true,
+      "http_directory": "http",
+      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/CentOS-6.8-x86_64-minimal.iso",
+      "iso_checksum": "ec49c297d484b9da0787e5944edc38f7c70f21c0f6a60178d8e9a8926d1949f4",
+      "iso_checksum_type": "sha256",
+      "ssh_password": "b4dP4ssw0Rd",
+      "ssh_port": 22,
+      "ssh_username": "root",
+      "ssh_wait_timeout": "10000s",
+      "qemuargs": [
+        [ "-m", "4096M" ],
+        [ "-cpu", "host" ],
+        [ "-smp", "1" ]
+      ],
+      "boot_wait": "5s",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-6-x86_64-kickstart.cfg<enter><wait>"
+      ]
     }
   ],
   "provisioners": [
     {
       "type": "shell",
       "inline": [
-        "sudo yum -q -y install python libselinux-python"
+        "yum -q -y install python libselinux-python"
       ]
     },
     {
@@ -22,7 +40,6 @@
     },
     {
       "type": "shell",
-      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
       "script": "scripts/cleanup.sh"
     }
   ]

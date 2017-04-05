@@ -1,19 +1,39 @@
 {
   "builders": [
     {
-      "type": "openstack",
-      "flavor": "m2.xsmall",
-      "image_name": "debian-8-x86_64_build",
-      "source_image": "cdc32061-26f2-4aa5-a3c8-2bb72b058725",
-      "ssh_username": "debian"
+      "type": "qemu",
+      "name": "debian-8-x86_64",
+      "vm_name": "debian-8-x86_64",
+      "accelerator": "kvm",
+      "disk_size": 2048,
+      "format": "qcow2",
+      "headless": true,
+      "http_directory": "http",
+      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/debian-8.7.1-amd64-netinst.iso",
+      "iso_checksum": "749a15b7690769dd99e85d6104182a03d370b04b36106ec7cfaf6a551aa89fb4",
+      "iso_checksum_type": "sha256",
+      "ssh_password": "b4dP4ssw0Rd",
+      "ssh_port": 22,
+      "ssh_username": "root",
+      "ssh_wait_timeout": "10000s",
+      "qemuargs": [
+        [ "-m", "4096M" ],
+        [ "-cpu", "host" ],
+        [ "-smp", "1" ]
+      ],
+      "boot_wait": "5s",
+      "boot_command": [
+        "<esc><wait5><tab>",
+        "auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-8-x86_64-preseed.cfg keymap=us debian-installer/keymap=us<enter><wait>"
+      ]
     }
   ],
   "provisioners": [
     {
       "type": "shell",
       "inline": [
-        "sudo apt-get -q -y update",
-        "sudo apt-get -q -y install python-apt"
+        "apt-get -q -y update",
+        "apt-get -q -y install python-apt"
       ]
     },
     {
@@ -22,7 +42,6 @@
     },
     {
       "type": "shell",
-      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
       "script": "scripts/cleanup.sh"
     }
   ]

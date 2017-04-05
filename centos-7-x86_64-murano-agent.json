@@ -1,12 +1,30 @@
 {
   "builders": [
     {
-      "type": "openstack",
-      "flavor": "m2.xsmall",
-      "image_name": "centos-7-x86_64_build",
-      "source_image": "8096476f-14c3-46b6-9525-5b1947b73631",
-      "ssh_pty": true,
-      "ssh_username": "centos"
+      "type": "qemu",
+      "name": "centos-7-x86_64-murano-agent",
+      "vm_name": "centos-7-x86_64-murano-agent",
+      "accelerator": "kvm",
+      "disk_size": 4096,
+      "format": "qcow2",
+      "headless": true,
+      "http_directory": "http",
+      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/CentOS-7-x86_64-Minimal-1611.iso",
+      "iso_checksum": "27bd866242ee058b7a5754e83d8ee8403e216b93d130d800852a96f41c34d86a",
+      "iso_checksum_type": "sha256",
+      "ssh_password": "b4dP4ssw0Rd",
+      "ssh_port": 22,
+      "ssh_username": "root",
+      "ssh_wait_timeout": "10000s",
+      "qemuargs": [
+        [ "-m", "4096M" ],
+        [ "-cpu", "host" ],
+        [ "-smp", "1" ]
+      ],
+      "boot_wait": "5s",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-7-x86_64-kickstart.cfg<enter><wait>"
+      ]
     }
   ],
   "provisioners": [
@@ -22,7 +40,6 @@
     },
     {
       "type": "shell",
-      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
       "script": "scripts/cleanup.sh"
     }
   ]
