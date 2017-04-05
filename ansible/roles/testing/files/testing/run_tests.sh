@@ -46,6 +46,7 @@ assert "/sbin/ip route | grep -E 'default via .* dev eth0'"
 assert_end "Default route via interface named eth0"
 
 ### Fail2ban
+skip_if "test -z \"$(which fail2ban 2>/dev/null)\"" # only run test if installed
 assert_raises "pgrep fail2ban"
 assert_end "Fail2ban is running"
 
