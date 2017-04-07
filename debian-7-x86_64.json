@@ -32,7 +32,7 @@
       "type": "shell",
       "inline": [
         "apt-get -q -y update",
-        "apt-get -q -y install python-apt"
+        "apt-get -q -y install python-apt sudo"
       ]
     },
     {
