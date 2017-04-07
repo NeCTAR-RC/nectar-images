@@ -25,48 +25,7 @@ community_image_schema = {
     'status_code': [200],
     'response_body': {
         'type': 'object',
-        'properties': {
-            'id': {'type': 'string'},
-            'status': {'type': 'string'},
-            'updated_at': {'type': 'string'},
-            'name': {'type': 'string'},
-            'architecture': {'type': 'string'},
-            'created_at': {'type': 'string'},
-            'min_disk': {'type': 'integer'},
-            'min_ram': {'type': 'integer'},
-            'container_format': {'type': 'string'},
-            'disk_format': {'type': 'string'},
-            'schema': {'type': 'string'},
-            'tags': {'type': 'array'},
-            'updated_at': {'type': 'string'},
-            'published_at': {'type': 'string'},
-            'publisher_name': {'type': 'string'},
-            'publisher_org': {'type': 'string'},
-            'publisher_email': {'type': 'string'},
-            'visibility': {'type': 'string'},
-            'file': {'type': 'string'},
-            'owner': {'type': 'string'},
-            'virtual_size': {'type': ['integer', 'null']},
-            'checksum': {'type': 'string'},
-            'protected': {'type': 'boolean'},
-            'self': {'type': 'string'},
-            'image_location': {'type': 'string'},
-            'image_state': {'type': 'string'},
-            'image_type': {'type': 'string'},
-            'availability_zone': {'type': 'string'},
-            'ramdisk_id': {'type': ['string', 'null']},
-            'kernel_id': {'type': ['string', 'null']},
-            'clean_attempts': {'type': 'string'},
-            'os_distro': {'type': 'string'},
-            'os_version': {'type': 'string'},
-            'default_user': {'type': 'string'},
-            'added_packages': {'type': 'string'},
-            'description': {'type': 'string'},
-            'change_log': {'type': 'string'},
-            'unpublished_at': {'type': 'string'},
-            'expires_at': {'type': 'string'},
-            'size': {'type': ['integer', 'null']}
-        },
+        'properties': {},
         'additionalProperties': True,
         # The required parameters for community images
         'required': [
@@ -76,4 +35,3 @@ community_image_schema = {
                     'publisher_org', 'publisher_email', 'change_log']
     }
 }
-
