@@ -40,7 +40,9 @@ community_image_schema = {
             'tags': {'type': 'array'},
             'updated_at': {'type': 'string'},
             'published_at': {'type': 'string'},
-            'publisher_details': {'type': 'string'},
+            'publisher_name': {'type': 'string'},
+            'publisher_org': {'type': 'string'},
+            'publisher_email': {'type': 'string'},
             'visibility': {'type': 'string'},
             'file': {'type': 'string'},
             'owner': {'type': 'string'},
@@ -65,12 +67,13 @@ community_image_schema = {
             'expires_at': {'type': 'string'},
             'size': {'type': ['integer', 'null']}
         },
-        'additionalProperties': False,
+        'additionalProperties': True,
         # The required parameters for community images
         'required': [
-                    'container_format', 'min_disk', 'min_ram', 'published_at',
+                    'container_format', 'min_disk', 'min_ram',
                     'disk_format', 'os_distro', 'os_version', 'default_user',
-                    'added_packages', 'description', 'expires_at',
-                    'publisher_details', 'change_log']
+                    'added_packages', 'description', 'publisher_name',
+                    'publisher_org', 'publisher_email', 'change_log']
     }
 }
+
