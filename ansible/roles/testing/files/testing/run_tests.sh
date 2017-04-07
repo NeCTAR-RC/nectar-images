@@ -20,8 +20,9 @@ else
     exit 1
 fi
 
-### Ensure OpenStack datasource is used by cloud-init
-assert_raises "tail -n1 /var/log/cloud-init-output.log | grep 'DataSourceOpenStack'"
+### Ensure OpenStack datasource is used by cloud-init (for v0.7.5+)
+skip_if "test $(cloud-init -v 2>&1 | awk '{print $NF}' | sed 's/\.//g') -lt 075"
+assert "tail -n1 /var/log/cloud-init-output.log | sed -n -e 's/.*Datasource \([[:alnum:]]\+\).*/\1/p'" "DataSourceOpenStack"
 assert_end "Check that OpenStack data source is used by cloud-init"
 
 ### I/O scheduler is none/noop
@@ -34,7 +35,7 @@ assert_raises "grep '/dev/vdb.*ext4.*rw' /proc/mounts"
 assert_end "Check that ephemeral disk is ext4 and read-write mounted on vdb"
 
 ### Root disk resized
-assert "test $(df -P -BG / | sed -n -e 's/^\/\s\+\([0-9]\+\)G.*/\1/p') -gt 4"
+assert_raises "test $(df -P -BG / | tail -n1 | awk '{print $2}' | sed -n 's/^\([0-9]\+\)G/\1/p') -gt 4"
 assert_end "Root filesystem resized"
 
 ### Serial console set in right order
@@ -42,13 +43,13 @@ assert_raises "grep -E 'console=tty0\s.*console=ttyS0' /proc/cmdline"
 assert_end "Kernel console log configured correctly"
 
 ### Default interface is eth0
-assert "/sbin/ip route | grep -E 'default via .* dev eth0'"
+assert_raises "/sbin/ip route | grep -E 'default via.*dev eth0'"
 assert_end "Default route via interface named eth0"
 
 ### Fail2ban
-skip_if "test -z \"$(which fail2ban 2>/dev/null)\"" # only run test if installed
+skip_if "test -z $(which fail2ban-server 2>/dev/null)" # only run test if installed
 assert_raises "pgrep fail2ban"
-assert_end "Fail2ban is running"
+assert_end "fail2ban is running"
 
 ### heat-cfntools for everything except CentOS 5
 skip_if "test \"$ID\" = \"centos\" -a $VERSION_ID -lt 6"
@@ -56,23 +57,23 @@ assert_raises "which cfn-create-aws-symlinks cfn-get-metadata cfn-push-stats cfn
 assert_end "heat-cfntools are installed"
 
 ### No default passwords
-assert_raises "test \"$(sudo cut -d ':' -f 2 /etc/shadow | cut -d '$' -sf3)\" = ''"
+assert "sudo cut -d ':' -f 2 /etc/shadow | cut -d '$' -sf3" ''
 assert_end "No default passwords exist"
 
 ### NTP running
 assert_raises "pgrep 'ntp|chronyd'"
 assert_end "NTP or chrony service is running"
 
-### SSH key for root
+### SSH key for root (populated by cloud-init)
 assert "sudo wc -l /root/.ssh/authorized_keys | cut -d ' ' -f1" 1
 assert_end "Single SSH authorized key for root exists"
 
-### SSH key for current user
+### SSH key for current user (populated by cloud-init)
 assert "wc -l ~/.ssh/authorized_keys | cut -d ' ' -f1" 1
 assert_end "Single SSH authorized key for current user exists"
 
 ### Only one user home directory
-assert "test $(find /home -mindepth 1 -maxdepth 1 -type d) -eq 1"
+assert_raises "test $(find /home -mindepth 1 -maxdepth 1 -type d | wc -l) -eq 1"
 assert_end "Single home directory exists in /home"
 
 ### Package repos
