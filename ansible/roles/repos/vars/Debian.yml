@@ -4,3 +4,4 @@ apt_repositories:
   - "deb {{ apt_mirror }} {{ ansible_distribution_release }} main"
   - "deb {{ apt_mirror }} {{ ansible_distribution_release }}-updates main"
   - "deb {{ apt_mirror }} {{ ansible_distribution_release }}-backports main"
+  - "deb http://security.debian.org/ {{ ansible_distribution_release }}/updates main
