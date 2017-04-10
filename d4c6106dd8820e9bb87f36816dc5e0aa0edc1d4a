@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ae8d1ca_ed08ca2f",
+        "filename": "community_image_tests/community_image_tests_tempest_plugin/api_schema/response/nectar_community_image/v2/image.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2017-04-10T00:40:22Z",
+      "side": 1,
+      "message": "this looks like wrong style?",
+      "range": {
+        "startLine": 31,
+        "startChar": 19,
+        "endLine": 32,
+        "endChar": 22
+      },
+      "revId": "d4c6106dd8820e9bb87f36816dc5e0aa0edc1d4a",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
