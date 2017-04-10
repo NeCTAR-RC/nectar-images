@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ae8d1ca_e86438e7",
+        "filename": "ansible/roles/repos/vars/Debian.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000104
+      },
+      "writtenOn": "2017-04-10T03:41:04Z",
+      "side": 1,
+      "message": "why do we need non-free?",
+      "range": {
+        "startLine": 5,
+        "startChar": 82,
+        "endLine": 5,
+        "endChar": 90
+      },
+      "revId": "8abab5fc8890afdcb1f54742fd8d741b8faf0fc1",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
