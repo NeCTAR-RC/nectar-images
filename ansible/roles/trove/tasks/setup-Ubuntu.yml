@@ -47,6 +47,10 @@
     name: trove-guestagent
     enabled: yes
 
+- name: Install percona-xtrabackup
+  package:
+    name: percona-xtrabackup-24
+
 - name: Create trove sudoers file
   copy:
     dest: /etc/sudoers.d/60_trove_guest

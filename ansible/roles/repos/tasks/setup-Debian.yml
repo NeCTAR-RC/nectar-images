@@ -11,6 +11,11 @@
     update_cache: true
   with_items: "{{ apt_repositories }}"
 
+- name: set up percona repo
+  apt:
+    deb: https://repo.percona.com/apt/percona-release_0.1-4.{{ ansible_distribution_release }}_all.deb
+    update_cache: yes
+
 - name: Perform a full upgrade
   apt:
     upgrade: dist
