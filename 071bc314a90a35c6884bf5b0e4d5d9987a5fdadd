@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e45470cc",
+        "filename": "ansible/roles/repos/tasks/setup-Debian.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2017-05-29T06:11:19Z",
+      "side": 1,
+      "message": "this is specific to trove, so don\u0027t put this here, move it with the package installation",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 21
+      },
+      "revId": "071bc314a90a35c6884bf5b0e4d5d9987a5fdadd",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
