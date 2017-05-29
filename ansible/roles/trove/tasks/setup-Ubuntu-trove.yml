@@ -8,6 +8,11 @@
     repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_distribution_release }}-updates/ocata main"
     update_cache: yes
 
+- name: set up percona repo
+  apt:
+    deb: https://repo.percona.com/apt/percona-release_0.1-4.{{ ansible_distribution_release }}_all.deb
+    update_cache: yes
+
 - name: Install Trove Guest agent
   package:
     name: "{{ item }}"
@@ -47,6 +52,10 @@
     name: trove-guestagent
     enabled: yes
 
+- name: Install percona-xtrabackup
+  package:
+    name: percona-xtrabackup-24
+
 - name: Create trove sudoers file
   copy:
     dest: /etc/sudoers.d/60_trove_guest
@@ -57,38 +66,3 @@
 - name: Install debconf-utils
   package:
     name: debconf-utils
-
-- name: Set initial MySQL password
-  shell: 'echo "mysql-server-5.7 mysql-server/root_password password {{ generated_password }}" | debconf-set-selections'
-
-- name: Set initial MySQL password (again)
-  shell: 'echo "mysql-server-5.7 mysql-server/root_password_again password {{ generated_password }}" | debconf-set-selections'
-
-- name: Write MySQL password to security file
-  copy:
-    dest: /root/.mysql_secret
-    content: "# The random password set for the root user at {{ ansible_date_time.date }} (local time): {{ generated_password }}\n"
-
-- name: Install mysql-server
-  package:
-    name: mysql-server
-
-- name: Remove any old mysql init scripts
-  file:
-    name: "{{ item }}"
-    state: absent
-  with_items:
-    - /etc/init.d/mysql
-    - /etc/init/mysql.conf
-
-- name: Write base MySQL config
-  copy:
-    src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/my.cnf"
-    dest: /etc/mysql/my.cnf
-
-- name: Replace MySQL start script
-  copy:
-    src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/mysql-systemd-start"
-    dest: /usr/share/mysql/mysql-systemd-start
-    mode: 0755
-

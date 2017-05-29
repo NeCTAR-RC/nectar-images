@@ -1,15 +1,15 @@
 ---
-- name: wipe existing sources.list
-  copy:
-    content: '# Empty'
-    dest: /etc/apt/sources.list
-    force: true
-
 - name: set up debian mirror
   apt_repository:
     repo: "{{ item }}"
     update_cache: true
   with_items: "{{ apt_repositories }}"
+
+- name: wipe existing sources.list
+  copy:
+    content: '# Empty'
+    dest: /etc/apt/sources.list
+    force: true
 
 - name: Perform a full upgrade
   apt:

@@ -9,5 +9,5 @@
 - include: setup-CentOS.yml
   when: ansible_distribution == 'CentOS'
 
-- include: setup-Ubuntu.yml
+- include: setup-Ubuntu-pgsql.yml
   when: ansible_distribution == 'Ubuntu'
