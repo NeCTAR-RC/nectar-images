@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_4430c456",
+        "filename": "ansible/roles/repos/tasks/setup-Debian.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2017-06-02T05:02:57Z",
+      "side": 1,
+      "message": "why did this need to be re-ordered?",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 15
+      },
+      "revId": "542d489f13b3e540aa9f2ec37f57cf7762dcabfb",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_6435c045",
+        "filename": "ansible/roles/trove/files/Ubuntu16/postgresql.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2017-06-02T05:02:57Z",
+      "side": 1,
+      "message": "aren\u0027t we installing the 9.4 package?",
+      "range": {
+        "startLine": 1,
+        "startChar": 38,
+        "endLine": 1,
+        "endChar": 41
+      },
+      "revId": "542d489f13b3e540aa9f2ec37f57cf7762dcabfb",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_242bb8ec",
+        "filename": "ansible/roles/trove/tasks/main.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2017-06-02T05:02:57Z",
+      "side": 1,
+      "message": "I think we should probably remove CentOS from here, as it\u0027s not going to be used. Not sure why I even added it in the first place.\n\nThen, we should accept a parameter, passed from within the playbook that indicates the type of DB we\u0027re building.\n\nE.g.\n(in playbook-trove-mysql.yml)\n    - role: trove\n      db_type: mysql\n\n(in playbook-trove-pgsql.yml)\n    - role: trove\n      db_type: pgsql\n\n\nThen in trove\u0027s main.yml,\n\n- include: \"{{ inc_file }}\"\n  with_first_found:\n    - files:\n        - \"setup-{{ ansible_distribution }}-{{ ansible_distribution_major_version }}-{{ db_type }}.yml\"\n        - \"setup-{{ ansible_distribution }}-{{ db_type }}.yml\"\n      skip: true\n  loop_control:\n    loop_var: inc_file\n\n(UNTESTED though)\n\nAnd include setup-Ubuntu.yml from main, and not from the DB task files",
+      "range": {
+        "startLine": 12,
+        "startChar": 11,
+        "endLine": 12,
+        "endChar": 33
+      },
+      "revId": "542d489f13b3e540aa9f2ec37f57cf7762dcabfb",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_843acc34",
+        "filename": "ansible/roles/trove/tasks/setup-Ubuntu-pgsql.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2017-06-02T05:02:57Z",
+      "side": 1,
+      "message": "installing 9.4?",
+      "range": {
+        "startLine": 24,
+        "startChar": 17,
+        "endLine": 24,
+        "endChar": 20
+      },
+      "revId": "542d489f13b3e540aa9f2ec37f57cf7762dcabfb",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_648300cd",
+        "filename": "ansible/roles/trove/tasks/setup-Ubuntu-trove.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2017-06-02T05:02:57Z",
+      "side": 1,
+      "message": "I\u0027d like to see this left with original filename. Is there a reason to change?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 3
+      },
+      "revId": "542d489f13b3e540aa9f2ec37f57cf7762dcabfb",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
