@@ -29,6 +29,7 @@ common_packages:
   - libldap2-dev
   - libsasl2-dev
   - python-pip
+  - dh-apache2
   - dh-systemd
   - openstack-pkg-tools
   - python-sphinx
