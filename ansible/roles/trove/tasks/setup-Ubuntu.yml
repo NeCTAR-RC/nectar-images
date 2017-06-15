@@ -8,6 +8,14 @@
     repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_distribution_release }}-updates/ocata main"
     update_cache: yes
 
+- name: Install Percona repo
+  apt:
+    deb: "https://repo.percona.com/apt/percona-release_0.1-4.xenial_all.deb"
+    update_cache: yes
+
+- name: Update  Apt
+  shell: apt-get update
+
 - name: Install Trove Guest agent
   package:
     name: "{{ item }}"
@@ -53,6 +61,13 @@
     content: 'trove	ALL=(ALL)	NOPASSWD:ALL'
     mode: 0440
     validate: 'visudo -cf %s'
+- name: Install mysql-server
+  package:
+    name: "{{ item }}"
+  with_items:
+    - mysql-server
+    - libmysqlclient20
+    - percona-xtrabackup-24
 
 - name: Install debconf-utils
   package:
