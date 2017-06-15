@@ -68,6 +68,30 @@
       "revId": "648aefb335a55bb2e0335eec07c6c64c7cad12ca",
       "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e4470b1c",
+        "filename": "ansible/roles/trove/tasks/setup-Ubuntu.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-06-15T06:03:41Z",
+      "side": 1,
+      "message": "Hey Andy,\n It is not using the Percona MySQL server.\n\nI couldn\u0027t get that to build packer image for me, with what these current Ansible scripts do. \nHowever, I simply installed percona-xtrbackup package manually on the running instance to get that to start doing backups. \nIs there some extra stuff that you did ? Where is it sitting?? \n\nregards,\n\nShahaan",
+      "parentUuid": "1ae5cdf2_a446e321",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 27
+      },
+      "revId": "648aefb335a55bb2e0335eec07c6c64c7cad12ca",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
     }
   ]
 }
