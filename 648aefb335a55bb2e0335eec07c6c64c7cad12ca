@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_8441e70d",
+        "filename": "ansible/roles/trove/tasks/setup-Ubuntu.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2017-06-15T05:51:41Z",
+      "side": 1,
+      "message": "please use apt_key and apt_repository instead",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 23
+      },
+      "revId": "648aefb335a55bb2e0335eec07c6c64c7cad12ca",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_84cac79f",
+        "filename": "ansible/roles/trove/tasks/setup-Ubuntu.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2017-06-15T05:51:41Z",
+      "side": 1,
+      "message": "missing a blank line above here",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 28
+      },
+      "revId": "648aefb335a55bb2e0335eec07c6c64c7cad12ca",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_a446e321",
+        "filename": "ansible/roles/trove/tasks/setup-Ubuntu.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2017-06-15T05:51:41Z",
+      "side": 1,
+      "message": "At least for the Ubuntu repo package of mysql, it needs to be installed after debconf is complete, or it doesn\u0027t work.\n\nRather than install mysql from percona, can we stick with the Ubuntu version and only install the xtrabackup stuff?\n\nOtherwise, are you certain all this stuff works properly with that version? There\u0027s some serious work that went into getting this to work properly against the Ubuntu repo version.",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 27
+      },
+      "revId": "648aefb335a55bb2e0335eec07c6c64c7cad12ca",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
