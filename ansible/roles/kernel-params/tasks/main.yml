@@ -11,12 +11,12 @@
 - name: Set noop scheduler for older kernels
   set_fact:
     kernel_args: "{{ kernel_args }} elevator=noop"
-  when: "{{ ansible_kernel | version_compare('3.3', '<') }}"
+  when: ansible_kernel|version_compare('3.3', '<')
 
 - name: Set systemd no log colour
   set_fact:
     kernel_args: "{{ kernel_args }} systemd.log_color=no"
-  when: "{{ ansible_kernel | version_compare('4.4', '>=') }}"
+  when: ansible_kernel|version_compare('4.4', '>=')
 
 - name: Check if grub config is present
   stat:
