@@ -51,13 +51,8 @@ else
     IMAGE_NAME="${ORGANISATION} ${NAME}"
 fi
 
-if [ "${OS_USERNAME}" != "${IMAGEBUILDER_USERNAME}" ]; then
-    echo "Please load the OpenStack credentials for ${IMAGEBUILDER_USERNAME}"
-    exit 1
-fi
-
-if ! ssh-add -l | grep -q "$TEST_SSH_KEY"; then
-    echo "Please load $TEST_SSH_KEY testing SSH key to your agent"
+if [ -z "$OS_USERNAME" ]; then
+    echo "Please load the OpenStack credentials for testing"
     exit 1
 fi
 
@@ -116,9 +111,14 @@ if [[ "$NAME" =~ "murano" ]]; then
     openstack image set --property murano_image_info="{\"title\": \"${IMAGE_NAME}\", \"type\": \"linux\"}" ${IMAGE_ID}
 fi
 
+if [ -z $TEST_SSH_KEY ]; then
+    echo "No keypair provided, so not running tests."
+    exit 0
+fi
+
 echo "Creating instance \"test_${NAME}_${BUILD_NUMBER}\"..."
 echo "--> openstack server create --image ${IMAGE_ID} --flavor ${TEST_FLAVOUR} --key-name ${TEST_SSH_KEY} \"${BUILD_NAME}\""
-INSTANCE_ID=$(openstack server create -f value -c id --image ${IMAGE_ID} --flavor ${TEST_FLAVOUR} --key-name ${TEST_SSH_KEY} "${BUILD_NAME}")
+INSTANCE_ID=$(openstack server create -f value -c id --image ${IMAGE_ID} --flavor ${TEST_FLAVOUR} --security-group ssh --key-name ${TEST_SSH_KEY} "${BUILD_NAME}")
 echo "Found instance ID: ${INSTANCE_ID}"
 
 set +e
@@ -182,6 +182,7 @@ while [ $ATTEMPT -le $ATTEMPTS ]; do
       # One last attempt with output
       echo -e "\nERROR: reached maximum attempts ($ATTEMPTS)"
       ssh -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $USER_ACCOUNT@$IP_ADDRESS exit
+      echo "NOT deleting image ${IMAGE_ID}"
       #openstack image delete $IMAGE_ID
       openstack console log show $INSTANCE_ID > ${OUTPUT_DIR}/${BUILD_NAME}-console.txt
       echo "Deleting instance ${INSTANCE_ID}..."
@@ -199,6 +200,9 @@ sleep 60
 
 echo "Running tests (ssh $USER_ACCOUNT@$IP_ADDRESS '/bin/bash /usr/nectar/run_tests.sh')..."
 ssh -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $USER_ACCOUNT@$IP_ADDRESS '/bin/bash /usr/nectar/run_tests.sh'
+
+echo "=== Cleaning up instance in 60 seconds, unless you CTRL+C now! ==="
+sleep 60
 
 echo "Deleting instance ${INSTANCE_ID}..."
 openstack server delete $INSTANCE_ID

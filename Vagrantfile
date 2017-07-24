@@ -64,7 +64,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     c.vm.provision "shell", inline: "sudo apt-get -q update"
     c.vm.provision "shell", inline: "sudo apt-get -q -y install python-apt"
     c.vm.provision "ansible" do |ansible|
-      ansible.playbook = "ansible/playbook.yml"
+      ansible.playbook = "ansible/playbook-trove-mysql.yml"
       ansible.sudo = true
     end
   end

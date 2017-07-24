@@ -9,8 +9,10 @@
   roles:
     - role: repos
     - role: cloud
+    - role: ssh
     - role: ntp
     - role: kernel-params
-    - role: testing
     - role: trove
+    - role: nectar-user
+    - role: testing
     - role: cleanup

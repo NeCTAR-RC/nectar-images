@@ -1,19 +1,28 @@
 ---
-- apt_key:
-    keyserver: pgp.mit.edu
-    id: 391A9AA2147192839E9DB0315EDB1B62EC4926EA
+- name: Add repository public keys
+  apt_key:
+    id: '{{ item }}'
+    keyserver: keyserver.ubuntu.com
+  with_items:
+    - 391A9AA2147192839E9DB0315EDB1B62EC4926EA # Ubuntu cloud archive
+    - 9334A25F8507EFA5 # Percona
 
 - name: Add repositories
   apt_repository:
-    repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_distribution_release }}-updates/ocata main"
+    repo: "{{ item }}"
     update_cache: yes
+  with_items:
+    - "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_distribution_release }}-updates/ocata main"
+    - "deb http://repo.percona.com/apt {{ ansible_distribution_release }} main"
 
 - name: Install Trove Guest agent
   package:
     name: "{{ item }}"
     state: installed
   with_items:
-    trove-guestagent
+    - trove-guestagent
+    - percona-xtrabackup
+    - debconf-utils
 
 - name: Remove existing Trove config
   shell: rm -rf /etc/trove
@@ -54,15 +63,11 @@
     mode: 0440
     validate: 'visudo -cf %s'
 
-- name: Install debconf-utils
-  package:
-    name: debconf-utils
-
-- name: Set initial MySQL password
-  shell: 'echo "mysql-server-5.7 mysql-server/root_password password {{ generated_password }}" | debconf-set-selections'
-
-- name: Set initial MySQL password (again)
-  shell: 'echo "mysql-server-5.7 mysql-server/root_password_again password {{ generated_password }}" | debconf-set-selections'
+- name: Set MySQL password
+  shell: "{{ item }}"
+  with_items:
+    - 'echo "mysql-server-5.7 mysql-server/root_password password {{ generated_password }}" | debconf-set-selections'
+    - 'echo "mysql-server-5.7 mysql-server/root_password_again password {{ generated_password }}" | debconf-set-selections'
 
 - name: Write MySQL password to security file
   copy:
@@ -91,4 +96,3 @@
     src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/mysql-systemd-start"
     dest: /usr/share/mysql/mysql-systemd-start
     mode: 0755
-
