@@ -21,7 +21,7 @@
     state: installed
   with_items:
     - trove-guestagent
-    - percona-xtrabackup
+    - percona-xtrabackup-24
     - debconf-utils
 
 - name: Remove existing Trove config
