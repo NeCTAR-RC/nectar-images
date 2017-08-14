@@ -85,6 +85,23 @@
     dest: /usr/local/bin/
     remote_src: True
 
+- name: Add openjdk-r PPA
+  apt_repository:
+    repo: 'ppa:openjdk-r/ppa'
+  when: ansible_distribution_release == 'trusty'
+
+- name: Install openjdk8
+  package:
+    name: 'openjdk-8-jdk'
+    state: installed
+  when: ansible_distribution_release == 'trusty'
+
+- name: Correct java version selected
+  alternatives:
+    name: java
+    path: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+  when: ansible_distribution_release == 'trusty'
+
 - name: Perform a full upgrade
   apt:
     upgrade: dist
