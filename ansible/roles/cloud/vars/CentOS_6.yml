@@ -4,4 +4,5 @@ cloud_packages:
   - cloud-init
   - cloud-utils-growpart
   - heat-cfntools
+  - curl
   - dracut-modules-growroot # centos 6 resizes in initramfs

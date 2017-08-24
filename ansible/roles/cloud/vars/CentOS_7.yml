@@ -5,3 +5,4 @@ cloud_packages:
   - cloud-init
   - cloud-utils-growpart
   - heat-cfntools
+  - curl

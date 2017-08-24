@@ -3,3 +3,4 @@ cloud_packages:
   - cloud-init
   - cloud-initramfs-growroot
   - heat-cfntools
+  - curl

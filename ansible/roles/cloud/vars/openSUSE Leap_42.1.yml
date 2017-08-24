@@ -4,3 +4,4 @@ cloud_packages:
   - cloud-init
   - growpart
   - python-heat-cfntools
+  - curl
