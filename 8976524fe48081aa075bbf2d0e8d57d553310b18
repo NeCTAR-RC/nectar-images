@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_ae9ce36a",
+        "filename": "ansible/roles/cloud/vars/CentOS_6.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000104
+      },
+      "writtenOn": "2017-08-24T08:21:59Z",
+      "side": 1,
+      "message": "wow, that\u0027s old. what does this do?",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 23
+      },
+      "revId": "8976524fe48081aa075bbf2d0e8d57d553310b18",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
