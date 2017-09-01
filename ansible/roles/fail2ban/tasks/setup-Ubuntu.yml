@@ -4,6 +4,7 @@
     name: "{{ item }}"
   with_items:
     - fail2ban
+    - ed
 
 - name: Remove default debian config
   file:

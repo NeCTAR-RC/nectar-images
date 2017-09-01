@@ -5,6 +5,7 @@
   with_items:
     - fail2ban-server
     - fail2ban-systemd
+    - ed
 
 - name: Install 00-hostdeny.conf
   template:

@@ -4,6 +4,7 @@
     name: "{{ item }}"
   with_items:
     - fail2ban
+    - ed
 
 - name: Install 00-hostdeny.conf
   template:
