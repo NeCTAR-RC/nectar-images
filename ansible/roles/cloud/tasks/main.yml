@@ -118,6 +118,12 @@
   notify: systemctl-daemon-reload
   when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'
 
+- name: Ensure cloud-init set to start on boot
+  systemd:
+    name: cloud-init
+    enabled: yes
+  when: ansible_distribution == 'Fedora'
+
 # http://blog.backslasher.net/growroot-centos.html
 - name: Rebuild initramfs with growroot for CentOS 6
   shell: 'dracut -f'
