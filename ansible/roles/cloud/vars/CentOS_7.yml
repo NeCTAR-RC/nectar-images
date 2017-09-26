@@ -1,5 +1,5 @@
 ---
-openstack_version: mitaka
+openstack_version: pike
 
 cloud_packages:
   - cloud-init

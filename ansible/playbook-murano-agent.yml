@@ -15,5 +15,5 @@
     - role: kernel-params
     - role: banner
     - role: testing
-    - role: murano
+    - role: murano-agent
     - role: cleanup

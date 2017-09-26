@@ -1,0 +1,4 @@
+---
+openstack_version: ocata
+murano_agent_package_name: murano-agent
+murano_agent_service_name: murano-agent

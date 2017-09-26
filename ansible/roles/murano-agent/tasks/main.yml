@@ -25,5 +25,5 @@
 
 - name: Enable murano guest agent service
   service:
-    name: murano-agent
+    name: "{{ murano_agent_service_name }}"
     enabled: yes

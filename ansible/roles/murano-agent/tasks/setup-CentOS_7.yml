@@ -1,0 +1,17 @@
+---
+- name: Add cloud repository for CentOS
+  yum_repository:
+    name: "centos-openstack-{{ openstack_version }}"
+    description: "CentOS {{ ansible_distribution_major_version }} - OpenStack {{ openstack_version }}"
+    baseurl: "http://mirror.centos.org/centos/{{ ansible_distribution_major_version }}/cloud/x86_64/openstack-{{ openstack_version }}/"
+    gpgcheck: no
+
+- name: Install Murano Guest agent
+  package:
+    name: "{{ murano_agent_package_name }}"
+    state: installed
+
+- name: Remove cloud repository for CentOS
+  yum_repository:
+    name: "centos-openstack-{{ openstack_version }}"
+    state: absent
