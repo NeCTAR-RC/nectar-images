@@ -22,7 +22,7 @@ fi
 
 ### Ensure OpenStack datasource is used by cloud-init (for v0.7.5+)
 skip_if "test $(cloud-init -v 2>&1 | awk '{print $NF}' | sed 's/\.//g') -lt 075"
-assert "grep Datasource /var/log/cloud-init*log | tail -n1 | sed -n -e 's/.*Datasource \([[:alnum:]]\+\).*/\1/p'" "DataSourceOpenStack"
+assert "sudo grep Datasource /var/log/cloud-init*log | tail -n1 | sed -n -e 's/.*Datasource \([[:alnum:]]\+\).*/\1/p'" "DataSourceOpenStack"
 assert_end "Check that OpenStack data source is used by cloud-init"
 
 ### I/O scheduler is none/noop
