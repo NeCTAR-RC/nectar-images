@@ -6,7 +6,7 @@
       "vm_name": "scientific-6-x86_64",
       "accelerator": "kvm",
       "disk_size": 2048,
-      "format": "qcow2",
+      "format": "raw",
       "headless": true,
       "http_directory": "http",
       "iso_checksum": "7e7290de3c9e71622e34bc3291197a31f52cafd258ab200dbe856d8e1daf175c",

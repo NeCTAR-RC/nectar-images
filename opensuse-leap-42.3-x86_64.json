@@ -6,7 +6,7 @@
       "vm_name": "opensuse-leap-42.3-x86_64",
       "accelerator": "kvm",
       "disk_size": 2048,
-      "format": "qcow2",
+      "format": "raw",
       "headless": true,
       "http_directory": "http",
       "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/openSUSE-Leap-42.3-NET-x86_64-Current.iso",

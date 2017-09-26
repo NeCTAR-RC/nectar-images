@@ -6,7 +6,7 @@
       "vm_name": "fedora-26-x86_64",
       "accelerator": "kvm",
       "disk_size": 4096,
-      "format": "qcow2",
+      "format": "raw",
       "headless": true,
       "http_directory": "http",
       "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/Fedora-Server-netinst-x86_64-26-1.5.iso",

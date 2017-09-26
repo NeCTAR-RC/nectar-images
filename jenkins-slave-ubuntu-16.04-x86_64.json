@@ -6,7 +6,7 @@
       "vm_name": "jenkins-slave-ubuntu-16.04-x86_64",
       "accelerator": "kvm",
       "disk_size": 4096,
-      "format": "qcow2",
+      "format": "raw",
       "headless": true,
       "http_directory": "http",
       "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/ubuntu-16.04-x86_64-mini.iso",

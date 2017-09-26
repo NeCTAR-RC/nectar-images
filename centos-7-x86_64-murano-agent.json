@@ -6,7 +6,7 @@
       "vm_name": "centos-7-x86_64-murano-agent",
       "accelerator": "kvm",
       "disk_size": 4096,
-      "format": "qcow2",
+      "format": "raw",
       "headless": true,
       "http_directory": "http",
       "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/CentOS-7-x86_64-Minimal-1611.iso",
