@@ -82,7 +82,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # CentOS 6
   config.vm.define "centos6" do |c|
-    c.vm.box = "geerlingguy/centos6"
+    c.vm.box = "centos/6"
     c.vm.provision "shell", inline: "sudo yum -q -y install libselinux-python"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook.yml"
@@ -92,7 +92,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # CentOS 7
   config.vm.define "centos7" do |c|
-    c.vm.box = "geerlingguy/centos7"
+    c.vm.box = "centos/7"
     c.vm.provision "shell", inline: "sudo yum -q -y install libselinux-python"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook.yml"
@@ -102,7 +102,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # CentOS 7 with Murano Agent
   config.vm.define "centos7-murano-agent" do |c|
-    c.vm.box = "geerlingguy/centos7"
+    c.vm.box = "centos/7"
     c.vm.provision "shell", inline: "sudo yum -q -y install libselinux-python"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook-murano-agent.yml"
