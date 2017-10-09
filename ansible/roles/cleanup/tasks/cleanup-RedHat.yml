@@ -1,6 +1,8 @@
 ---
 - name: Clean up yum
-  command: yum clean all
+  shell: yum clean all
+  args:
+    warn: no
 
 - name: Remove interface persistence
   file:
