@@ -10,7 +10,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     c.vm.provision "shell", inline: "sudo apt-get -q -y install python-apt"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook.yml"
-      ansible.sudo = true
+      ansible.become = true
     end
   end
 
@@ -21,7 +21,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     c.vm.provision "shell", inline: "sudo apt-get -q -y install python-apt"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook.yml"
-      ansible.sudo = true
+      ansible.become = true
     end
   end
 
@@ -32,7 +32,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     c.vm.provision "shell", inline: "sudo apt-get -q -y install python-apt"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook.yml"
-      ansible.sudo = true
+      ansible.become = true
     end
   end
 
@@ -43,7 +43,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     c.vm.provision "shell", inline: "sudo apt-get -q -y install python-apt"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook-murano-agent.yml"
-      ansible.sudo = true
+      ansible.become = true
     end
   end
 
@@ -54,7 +54,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     c.vm.provision "shell", inline: "sudo apt-get -q -y install python-apt"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook.yml"
-      ansible.sudo = true
+      ansible.become = true
     end
   end
 
@@ -65,7 +65,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     c.vm.provision "shell", inline: "sudo apt-get -q -y install python-apt"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook-trove-mysql.yml"
-      ansible.sudo = true
+      ansible.become = true
     end
   end
 
@@ -76,7 +76,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     c.vm.provision "shell", inline: "sudo apt-get -q -y install python-apt"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook-murano-agent.yml"
-      ansible.sudo = true
+      ansible.become = true
     end
   end
 
@@ -86,7 +86,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     c.vm.provision "shell", inline: "sudo yum -q -y install libselinux-python"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook.yml"
-      ansible.sudo = true
+      ansible.become = true
     end
   end
 
@@ -96,7 +96,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     c.vm.provision "shell", inline: "sudo yum -q -y install libselinux-python"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook.yml"
-      ansible.sudo = true
+      ansible.become = true
     end
   end
 
@@ -106,7 +106,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     c.vm.provision "shell", inline: "sudo yum -q -y install libselinux-python"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook-murano-agent.yml"
-      ansible.sudo = true
+      ansible.become = true
     end
   end
 
@@ -116,7 +116,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     c.vm.provision "shell", inline: "sudo dnf -q -y install python2 libselinux-python python2-dnf"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook.yml"
-      ansible.sudo = true
+      ansible.become = true
     end
   end
 
@@ -126,7 +126,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     c.vm.provision "shell", inline: "sudo dnf -q -y install python2 libselinux-python python2-dnf"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook.yml"
-      ansible.sudo = true
+      ansible.become = true
     end
   end
 
@@ -137,7 +137,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     c.vm.provision "shell", inline: "zypper -n install python"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook.yml"
-      ansible.sudo = true
+      ansible.become = true
     end
   end
 
@@ -147,7 +147,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     c.vm.provision "shell", inline: "sudo yum -q -y install libselinux-python"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook.yml"
-      ansible.sudo = true
+      ansible.become = true
     end
   end
 
@@ -158,7 +158,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     c.vm.provision "shell", inline: "sudo apt-get -q -y install python-apt"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook-jenkins-slave.yml"
-      ansible.sudo = true
+      ansible.become = true
     end
   end
 
@@ -169,7 +169,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     c.vm.provision "shell", inline: "sudo apt-get -q -y install python-apt"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook-jenkins-slave.yml"
-      ansible.sudo = true
+      ansible.become = true
     end
   end
 
