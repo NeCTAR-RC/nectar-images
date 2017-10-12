@@ -37,16 +37,16 @@
     - juno-backports
   when: ansible_distribution == 'Debian' and ansible_distribution_major_version == '7'
 
-- name: Ensure debconf-utils is installed
+- name: Ensure debconf is installed
   package:
-    name: debconf-utils
+    name: debconf
     state: installed
 
 # We include the datasources in the cloud.cfg file anyway, but the cloud-init
 # package generates /etc/cloud/cloud.cfg.d/90_dpkg.cfg from debconf, so we
 # also need to set this here, or package upgrades will just override it
 - name: Set datasources for Ubuntu/Debian
-  shell: "echo 'cloud-init cloud-init/datasources multiselect ConfigDrive OpenStack' | debconf-set-selections"
+  shell: "echo 'cloud-init cloud-init/datasources multiselect ConfigDrive, OpenStack' | debconf-set-selections"
 
 - name: Install cloud packages
   package:
