@@ -6,8 +6,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Debian 7 (wheezy)
   config.vm.define "debian7" do |c|
     c.vm.box = "debian/wheezy64"
-    c.vm.provision "shell", inline: "sudo apt-get -q update"
-    c.vm.provision "shell", inline: "sudo apt-get -q -y install python-apt"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
@@ -16,9 +14,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Debian 8 (jessie)
   config.vm.define "debian8" do |c|
-    c.vm.box = "geerlingguy/debian8"
-    c.vm.provision "shell", inline: "sudo apt-get -q update"
-    c.vm.provision "shell", inline: "sudo apt-get -q -y install python-apt"
+    c.vm.box = "debian/jessie64"
+    c.vm.provision "ansible" do |ansible|
+      ansible.playbook = "ansible/playbook.yml"
+      ansible.become = true
+    end
+  end
+
+  # Debian 9 (stretch)
+  config.vm.define "debian9" do |c|
+    c.vm.box = "debian/stretch64"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
@@ -27,9 +32,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Ubuntu 14.04 (trusty)
   config.vm.define "ubuntu1404" do |c|
-    c.vm.box = "geerlingguy/ubuntu1404"
-    c.vm.provision "shell", inline: "sudo apt-get -q update"
-    c.vm.provision "shell", inline: "sudo apt-get -q -y install python-apt"
+    c.vm.box = "ubuntu/trusty64"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
@@ -38,9 +41,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Ubuntu 14.04 (trusty) with Murano Agent
   config.vm.define "ubuntu1404-murano-agent" do |c|
-    c.vm.box = "geerlingguy/ubuntu1404"
-    c.vm.provision "shell", inline: "sudo apt-get -q update"
-    c.vm.provision "shell", inline: "sudo apt-get -q -y install python-apt"
+    c.vm.box = "ubuntu/trusty64"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook-murano-agent.yml"
       ansible.become = true
@@ -49,10 +50,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Ubuntu 16.04 (xenial)
   config.vm.define "ubuntu1604" do |c|
-    c.vm.box = "geerlingguy/ubuntu1604"
-    c.vm.provision "shell", inline: "sudo apt-get -q update"
-    c.vm.provision "shell", inline: "sudo apt-get -q -y install python-apt"
+    c.vm.box = "ubuntu/xenial64"
     c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { ansible_python_interpreter: "/usr/bin/python3" }
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -60,10 +60,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Ubuntu 16.04 (xenial) with Trove Agent and MySQL 5.7
   config.vm.define "ubuntu1604-trove-mysql" do |c|
-    c.vm.box = "geerlingguy/ubuntu1604"
-    c.vm.provision "shell", inline: "sudo apt-get -q update"
-    c.vm.provision "shell", inline: "sudo apt-get -q -y install python-apt"
+    c.vm.box = "ubuntu/xenial64"
     c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { ansible_python_interpreter: "/usr/bin/python3" }
       ansible.playbook = "ansible/playbook-trove-mysql.yml"
       ansible.become = true
     end
@@ -71,10 +70,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Ubuntu 16.04 (xenial) with Murano Agent
   config.vm.define "ubuntu1604-murano-agent" do |c|
-    c.vm.box = "geerlingguy/ubuntu1604"
-    c.vm.provision "shell", inline: "sudo apt-get -q update"
-    c.vm.provision "shell", inline: "sudo apt-get -q -y install python-apt"
+    c.vm.box = "ubuntu/xenial64"
     c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { ansible_python_interpreter: "/usr/bin/python3" }
       ansible.playbook = "ansible/playbook-murano-agent.yml"
       ansible.become = true
     end
@@ -153,9 +151,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Ubuntu 14.04 (trusty) Jenkins slave
   config.vm.define "ubuntu1404-jenkins" do |c|
-    c.vm.box = "geerlingguy/ubuntu1404"
-    c.vm.provision "shell", inline: "sudo apt-get -q update"
-    c.vm.provision "shell", inline: "sudo apt-get -q -y install python-apt"
+    c.vm.box = "ubuntu/trusty64"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook-jenkins-slave.yml"
       ansible.become = true
@@ -164,10 +160,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Ubuntu 16.04 (xenial) Jenkins slave
   config.vm.define "ubuntu1604-jenkins" do |c|
-    c.vm.box = "geerlingguy/ubuntu1604"
-    c.vm.provision "shell", inline: "sudo apt-get -q update"
-    c.vm.provision "shell", inline: "sudo apt-get -q -y install python-apt"
+    c.vm.box = "ubuntu/xenial64"
     c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { ansible_python_interpreter: "/usr/bin/python3" }
       ansible.playbook = "ansible/playbook-jenkins-slave.yml"
       ansible.become = true
     end
