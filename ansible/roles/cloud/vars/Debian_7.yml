@@ -6,5 +6,4 @@ cloud_packages:
   - curl
 
 datasources:
-  - ConfigDrive
-  - OpenStack
+  - Ec2
