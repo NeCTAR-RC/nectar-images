@@ -1,6 +1,8 @@
 ---
 - name: Clean up apt
   command: "{{ item }}"
+  args:
+    warn: no
   with_items:
     - apt-get -y autoremove
     - apt-get -y autoclean
