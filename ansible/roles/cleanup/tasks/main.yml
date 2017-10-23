@@ -16,6 +16,7 @@
     - 'rm -fr /home/{{ default_user }}/.ssh/*'
     - 'rm -fr /etc/ssh/*key'
     - 'rm -fr /root/.ssh'
+    - 'rm -fr /root/*.cfg'
   when: "ansible_ssh_user != 'vagrant'"
 
 - name: Lock and disable root account
