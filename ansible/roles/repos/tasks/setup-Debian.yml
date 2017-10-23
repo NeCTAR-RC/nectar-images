@@ -1,9 +1,10 @@
 ---
-- name: Set up mirror
+# This dummy resource ensures the python apt support is installed
+# before we wipe the sources list in the next step
+- name: Ensure python apt support is installed
   apt_repository:
-    repo: "{{ item }}"
-    update_cache: true
-  with_items: "{{ apt_repositories }}"
+    repo: deb http://dummy repo test
+    state: absent
 
 - name: Wipe existing sources.list
   copy:
@@ -11,9 +12,15 @@
     dest: /etc/apt/sources.list
     force: true
 
+- name: Set up mirror
+  apt_repository:
+    repo: "{{ item }}"
+    update_cache: true
+  with_items: "{{ apt_repositories }}"
+
 - name: Perform a full upgrade
   apt:
     upgrade: dist
     update_cache: yes
     dpkg_options: 'force-confold,force-confdef'
-  when: "ansible_ssh_user != 'vagrant'"
+  when: ansible_ssh_user != 'vagrant'
