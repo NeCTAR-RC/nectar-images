@@ -20,11 +20,6 @@ else
     exit 1
 fi
 
-### Ensure OpenStack datasource is used by cloud-init (for v0.7.5+)
-skip_if "test $(cloud-init -v 2>&1 | awk '{print $NF}' | sed 's/\.//g') -lt 075"
-assert "sudo grep Datasource /var/log/cloud-init*log | tail -n1 | sed -n -e 's/.*Datasource \([[:alnum:]]\+\).*/\1/p'" "DataSourceOpenStack"
-assert_end "Check that OpenStack data source is used by cloud-init"
-
 ### I/O scheduler is none/noop
 assert "grep -Ev '(none|\[noop\])' /sys/block/*/queue/scheduler" ''
 assert_end "Check that none/noop I/O scheduler in use"
@@ -61,8 +56,8 @@ assert "sudo cut -d ':' -f 2 /etc/shadow | cut -d '$' -sf3" ''
 assert_end "No default passwords exist"
 
 ### NTP running
-assert_raises "pgrep 'ntp|chronyd'"
-assert_end "NTP or chrony service is running"
+assert_raises "pgrep -f 'ntp|chronyd|systemd-timesyncd'"
+assert_end "NTP, chrony or systemd-timesyncd service is running"
 
 ### SSH key for root (populated by cloud-init)
 assert "sudo wc -l /root/.ssh/authorized_keys | cut -d ' ' -f1" 1
