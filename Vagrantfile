@@ -25,6 +25,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "debian9" do |c|
     c.vm.box = "debian/stretch64"
     c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { ansible_python_interpreter: "/usr/bin/python3" }
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -78,6 +79,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
+  # Ubuntu 17.10 (artful)
+  config.vm.define "ubuntu1710" do |c|
+    c.vm.box = "ubuntu/artful64"
+    c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.playbook = "ansible/playbook.yml"
+      ansible.become = true
+    end
+  end
+
   # CentOS 6
   config.vm.define "centos6" do |c|
     c.vm.box = "centos/6"
@@ -108,31 +119,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-  # Fedora 24
-  config.vm.define "fedora24" do |c|
-    c.vm.box = "fedora/24-cloud-base"
-    c.vm.provision "shell", inline: "sudo dnf -q -y install python2 libselinux-python python2-dnf"
+  # Fedora 26
+  config.vm.define "fedora26" do |c|
+    c.vm.box = "fedora/26-cloud-base"
     c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { ansible_python_interpreter: "/usr/bin/python3" }
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
   end
 
-  # Fedora 25
-  config.vm.define "fedora25" do |c|
-    c.vm.box = "fedora/25-cloud-base"
-    c.vm.provision "shell", inline: "sudo dnf -q -y install python2 libselinux-python python2-dnf"
-    c.vm.provision "ansible" do |ansible|
-      ansible.playbook = "ansible/playbook.yml"
-      ansible.become = true
-    end
-  end
-
-  # openSUSE 42.1
-  config.vm.define "opensuse421" do |c|
-    c.vm.box = "opensuse/openSUSE-42.1-x86_64"
-    c.vm.provision "shell", inline: "zypper --gpg-auto-import-keys refresh"
-    c.vm.provision "shell", inline: "zypper -n install python"
+  # openSUSE Leap 42.3
+  config.vm.define "opensuse423" do |c|
+    c.vm.box = "opensuse/openSUSE-42.3-x86_64"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
@@ -142,7 +141,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Scientific
   config.vm.define "scientific6" do |c|
     c.vm.box = "iamc/scientific65_x86_64_minimal"
-    c.vm.provision "shell", inline: "sudo yum -q -y install libselinux-python"
     c.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
