@@ -117,7 +117,7 @@ if [ -z $TEST_SSH_KEY ]; then
 fi
 
 echo "Creating instance \"test_${NAME}_${BUILD_NUMBER}\"..."
-echo "--> openstack server create --image ${IMAGE_ID} --flavor ${TEST_FLAVOUR} --key-name ${TEST_SSH_KEY} \"${BUILD_NAME}\""
+echo "--> openstack server create --image ${IMAGE_ID} --flavor ${TEST_FLAVOUR} --security-group ssh --key-name ${TEST_SSH_KEY} --wait \"${BUILD_NAME}\""
 INSTANCE_ID=$(openstack server create -f value -c id --image ${IMAGE_ID} --flavor ${TEST_FLAVOUR} --security-group ssh --key-name ${TEST_SSH_KEY} "${BUILD_NAME}")
 echo "Found instance ID: ${INSTANCE_ID}"
 
@@ -201,8 +201,14 @@ sleep 60
 echo "Running tests (ssh $USER_ACCOUNT@$IP_ADDRESS '/bin/bash /usr/nectar/run_tests.sh')..."
 ssh -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $USER_ACCOUNT@$IP_ADDRESS '/bin/bash /usr/nectar/run_tests.sh'
 
-echo "=== Cleaning up instance in 60 seconds, unless you CTRL+C now! ==="
-sleep 60
+read -r -p "Would you like to clean up the instance? [y/N] " response
+if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+    echo "Deleting instance ${INSTANCE_ID}..."
+    openstack server delete $INSTANCE_ID
+fi
 
-echo "Deleting instance ${INSTANCE_ID}..."
-openstack server delete $INSTANCE_ID
+read -r -p "Would you like to clean up the image? [y/N] " response
+if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+    echo "Deleting image ${IMAGE_ID}..."
+    openstack image delete $IMAGE_ID
+fi
