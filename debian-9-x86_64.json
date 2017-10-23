@@ -33,12 +33,16 @@
       "type": "shell",
       "inline": [
         "apt-get -q -y update",
-        "apt-get -q -y install python-apt sudo"
+        "apt-get -q -y install python3 sudo"
       ]
     },
     {
       "type": "ansible",
-      "playbook_file": "ansible/playbook.yml"
+      "playbook_file": "ansible/playbook.yml",
+      "extra_arguments": [
+        "--extra-vars",
+        "ansible_python_interpreter=/usr/bin/python3"
+      ]
     },
     {
       "type": "shell",
