@@ -19,7 +19,7 @@
 - name: Add cloud repository for openSUSE
   zypper_repository:
     name: openstack
-    repo: "obs://Cloud:OpenStack:{{ openstack_version }}/openSUSE_Leap_{{ ansible_distribution_version }}"
+    repo: "obs://Cloud:OpenStack:{{ openstack_version|title }}/openSUSE_Leap_{{ ansible_distribution_version }}"
     disable_gpg_check: true
   when: ansible_distribution == 'openSUSE Leap'
 
@@ -41,12 +41,14 @@
   package:
     name: debconf
     state: installed
+  when: ansible_os_family == 'Debian'
 
 # We include the datasources in the cloud.cfg file anyway, but the cloud-init
 # package generates /etc/cloud/cloud.cfg.d/90_dpkg.cfg from debconf, so we
 # also need to set this here, or package upgrades will just override it
 - name: Set datasources for Ubuntu/Debian
   shell: echo "cloud-init cloud-init/datasources multiselect {{ datasources|join(', ') }}" | debconf-set-selections
+  when: ansible_os_family == 'Debian'
 
 - name: Install cloud packages
   package:
@@ -55,9 +57,10 @@
   with_items: "{{ cloud_packages }}"
 
 - name: Add dpkg-divert for cloud.cfg
-  command: dpkg-divert --add --rename --quiet --local --divert /etc/cloud/cloud.cfg.debian /etc/cloud/cloud.cfg
+  command: dpkg-divert --add --rename --quiet --local --divert /etc/cloud/cloud.cfg.dist /etc/cloud/cloud.cfg
   args:
     creates: '/etc/cloud/cloud.cfg.debian'
+  when: ansible_os_family == 'Debian'
 
 - name: Remove cloud repository for CentOS
   yum_repository:
@@ -80,12 +83,9 @@
   when: ansible_distribution_release == 'trusty'
 
 - name: Add cloud-init config file
-  copy:
-    src: "{{ item }}"
+  template:
+    src: cloud.cfg.j2
     dest: /etc/cloud/cloud.cfg
-  with_first_found:
-    - "{{ ansible_distribution }}/{{ ansible_distribution_major_version }}/cloud.cfg"
-    - "{{ ansible_distribution }}/cloud.cfg"
 
 - name: Don't requiretty for sudo
   lineinfile:
@@ -115,10 +115,13 @@
     line: "output: {all: '| tee -a /var/log/cloud-init-output.log'}"
   when: ansible_distribution == 'Debian' and ansible_distribution_major_version == '7'
 
+# Ansible 2.4 breaks the config file. We'll handle it manually with regex
 - name: Disable SELinux
-  selinux:
-    policy: targeted
-    state: permissive
+  lineinfile:
+    dest: /etc/selinux/config
+    regexp: '^#?SELINUX='
+    line: 'SELINUX=disabled'
+    state: present
   when: ansible_os_family == 'RedHat'
 
 # https://code.launchpad.net/~jordane/cloud-init/sshd-systemd-fix
@@ -130,10 +133,15 @@
   when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'
 
 - name: Ensure cloud-init set to start on boot
-  systemd:
-    name: cloud-init
+  service:
+    name: "{{ item }}"
     enabled: yes
-  when: ansible_distribution == 'Fedora'
+  with_items:
+    - cloud-config
+    - cloud-init-local
+    - cloud-init
+    - cloud-final
+  when: ansible_ssh_user != 'vagrant'
 
 # http://blog.backslasher.net/growroot-centos.html
 - name: Rebuild initramfs with growroot for CentOS 6

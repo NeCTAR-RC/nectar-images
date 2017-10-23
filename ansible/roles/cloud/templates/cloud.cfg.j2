@@ -1,0 +1,79 @@
+#cloud-config
+
+users:
+ - default
+
+disable_root: true
+
+{% if ansible_os_family == "RedHat" %}
+resize_rootfs_tmp: /dev
+ssh_deletekeys:   0
+ssh_genkeytypes:  ~
+ssh_pwauth:   0
+
+{% elif ansible_os_family == "Suse" %}
+syslog_fix_perms: root:root
+
+{% elif ansible_os_family == "Debian" %}
+apt_preserve_sources_list: true
+
+{% endif %}
+mount_default_fields: [None, None, 'auto', 'defaults,nofail', '0', '2']
+
+preserve_hostname: false
+
+manage_etc_hosts: localhost
+
+locale: en_AU.UTF-8
+
+timezone: Etc/UTC
+
+datasource_list:
+{% if datasources is defined %}
+{% for datasource in datasources %}
+  - {{ datasource }}
+{% endfor %}
+{% else %}
+  - ConfigDrive
+  - OpenStack
+{% endif %}
+
+datasource:
+  OpenStack:
+    max_wait: 120
+    timeout: 30
+    retries: 20
+
+cloud_init_modules:
+{% for module in cloud_init_modules %}
+  - {{ module }}
+{% endfor %}
+
+cloud_config_modules:
+{% for module in cloud_config_modules %}
+  - {{ module }}
+{% endfor %}
+
+cloud_final_modules:
+{% for module in cloud_final_modules %}
+  - {{ module }}
+{% endfor %}
+
+# System and/or distro specific settings
+# (not accessible to handlers/transforms)
+system_info:
+  distro: {{ distro }}
+  default_user:
+    name: {{ default_user }}
+    lock_passwd: True
+    gecos: {{ ansible_distribution }}
+    groups: [{{ user_groups|join(', ')}}]
+    sudo: "ALL=(ALL) NOPASSWD:ALL"
+    shell: /bin/bash
+  paths:
+     cloud_dir: /var/lib/cloud/
+     templates_dir: /etc/cloud/templates/
+{% if ansible_distribution == "Ubuntu" %}
+     upstart_dir: /etc/init/
+{% endif %}
+  ssh_svcname: {{ ssh_svcname }}

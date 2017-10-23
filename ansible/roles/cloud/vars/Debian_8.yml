@@ -1,20 +1,22 @@
 ---
-openstack_version: Pike
 cloud_packages:
   - cloud-init
-  - growpart
-#  - python-heat-cfntools Not found in Pike repo :(
+  - cloud-initramfs-growroot
+  - heat-cfntools
   - curl
 
-distro: opensuse
+distro: debian
 
-default_user: ec2-user
+default_user: debian
+
+datasources:
+  - ConfigDrive
+  - OpenStack
 
 cloud_init_modules:
  - migrator
  - bootcmd
  - write-files
- - growpart
  - resizefs
  - set_hostname
  - update_hostname
@@ -25,11 +27,17 @@ cloud_init_modules:
  - ssh
 
 cloud_config_modules:
+ - emit_upstart
+ - disk_setup
  - mounts
  - ssh-import-id
  - locale
  - set-passwords
+ - grub-dpkg
+ - apt-pipelining
+ - apt-configure
  - package-update-upgrade-install
+ - landscape
  - timezone
  - puppet
  - chef
@@ -50,3 +58,15 @@ cloud_final_modules:
  - phone-home
  - final-message
  - power-state-change
+
+user_groups:
+  - adm
+  - audio
+  - cdrom
+  - dialout
+  - floppy
+  - video
+  - plugdev
+  - dip
+
+ssh_svcname: ssh

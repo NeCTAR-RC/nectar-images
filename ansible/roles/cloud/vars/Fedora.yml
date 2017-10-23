@@ -1,21 +1,23 @@
 ---
-openstack_version: Pike
 cloud_packages:
   - cloud-init
-  - growpart
-#  - python-heat-cfntools Not found in Pike repo :(
+  - cloud-utils-growpart
+  - heat-cfntools
   - curl
 
-distro: opensuse
+distro: fedora
 
-default_user: ec2-user
+default_user: fedora
 
 cloud_init_modules:
  - migrator
+ - seed_random
  - bootcmd
  - write-files
  - growpart
  - resizefs
+ - disk_setup
+ - mounts
  - set_hostname
  - update_hostname
  - update_etc_hosts
@@ -25,22 +27,24 @@ cloud_init_modules:
  - ssh
 
 cloud_config_modules:
- - mounts
  - ssh-import-id
  - locale
  - set-passwords
- - package-update-upgrade-install
+ - spacewalk
+ - yum-add-repo
+ - ntp
  - timezone
+ - disable-ec2-metadata
+ - runcmd
+
+cloud_final_modules:
+ - package-update-upgrade-install
  - puppet
  - chef
  - salt-minion
  - mcollective
- - disable-ec2-metadata
- - runcmd
- - byobu
-
-cloud_final_modules:
  - rightscale_userdata
+ - scripts-vendor
  - scripts-per-once
  - scripts-per-boot
  - scripts-per-instance
@@ -50,3 +54,10 @@ cloud_final_modules:
  - phone-home
  - final-message
  - power-state-change
+
+user_groups:
+  - adm
+  - wheel
+  - systemd-journal
+
+ssh_svcname: sshd

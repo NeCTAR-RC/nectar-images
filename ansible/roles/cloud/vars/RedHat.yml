@@ -4,3 +4,13 @@ cloud_packages:
   - cloud-utils-growpart
   - heat-cfntools
   - curl
+
+user_groups:
+  - adm
+  - wheel
+
+distro: rhel
+
+default_user: ec2-user
+
+ssh_svcname: sshd
