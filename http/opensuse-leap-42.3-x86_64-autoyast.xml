@@ -97,11 +97,14 @@
 
   <bootloader>
     <loader_type>grub2</loader_type>
+    <global>
+      <append>net.ifnames=0 biosdevname=0</append>
+    </global>
   </bootloader>
 
   <networking>
-    <ipv6 config:type="boolean">true</ipv6>
-    <keep_install_network config:type="boolean">false</keep_install_network>
+    <ipv6 config:type="boolean">false</ipv6>
+    <keep_install_network config:type="boolean">true</keep_install_network>
     <dns>
       <dhcp_hostname config:type="boolean">false</dhcp_hostname>
       <domain>localdomain</domain>
@@ -138,7 +141,6 @@
       <package>yast2-trans-en_US</package>
       <package>wget</package>
       <package>curl</package>
-      <package>rsyslog</package>
     </packages>
     <patterns config:type="list">
       <pattern>minimal_base</pattern>
@@ -150,7 +152,6 @@
     <services>
       <disable config:type="list"/>
       <enable config:type="list">
-        <service>rsyslog</service>
         <service>sshd</service>
         <service>ntpd</service>
       </enable>

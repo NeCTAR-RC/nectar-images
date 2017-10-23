@@ -9,8 +9,8 @@
       "format": "raw",
       "headless": true,
       "http_directory": "http",
-      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/openSUSE-Leap-42.3-NET-x86_64-Current.iso",
-      "iso_checksum": "3fb8ba21011beea22701ba774eda1a792adbfcf6f9f463ff6eafd5d8a73ca71c",
+      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/openSUSE-Leap-42.3-NET-x86_64.iso",
+      "iso_checksum": "d1a17116cf33a5582b83ef479d7b151b33938e60f07eebc544abf162e2aa5c12",
       "iso_checksum_type": "sha256",
       "ssh_password": "b4dP4ssw0Rd",
       "ssh_port": 22,
@@ -23,19 +23,14 @@
       ],
       "boot_wait": "10s",
       "boot_command": [
-        "<esc><enter><wait>linux netdevice=eth0 netsetup=dhcp ",
+        "<esc><enter><wait>linux net.ifnames=0 biosdevname=0 netdevice=eth0 netsetup=dhcp ",
         "install=http://mirror.aarnet.edu.au/pub/opensuse/opensuse/distribution/leap/42.3/repo/oss/ insecure=1 ",
-        "lang=en_AU autoyast=http://{{ .HTTPIP }}:{{ .HTTPPort }}/opensuse-leap-42.3-x86_64-autoyast.xml ",
+        "lang=en_US autoyast=http://{{ .HTTPIP }}:{{ .HTTPPort }}/opensuse-leap-42.3-x86_64-autoyast.xml ",
         "textmode=1<enter><wait>"
       ]
     }
   ],
   "provisioners": [
-    {
-      "type": "shell",
-      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
-      "script": "scripts/setup.sh"
-    },
     {
       "type": "ansible",
       "playbook_file": "ansible/playbook.yml"
