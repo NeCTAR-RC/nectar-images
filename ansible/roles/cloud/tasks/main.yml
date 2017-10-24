@@ -68,6 +68,13 @@
     state: absent
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Scientific'
 
+- name: Remove cloud repository for openSUSE
+  zypper_repository:
+    name: openstack
+    repo: "obs://Cloud:OpenStack:{{ openstack_version|title }}/openSUSE_Leap_{{ ansible_distribution_version }}"
+    state: absent
+  when: ansible_distribution == 'openSUSE Leap'
+
 - name: Remove cloud repository for Debian 7
   apt_repository:
     repo: "deb http://syd2.apt-proxy.gplhost.com/debian {{ item }} main"

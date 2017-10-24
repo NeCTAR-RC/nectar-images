@@ -1,0 +1,15 @@
+---
+- name: Install SSH key for root user
+  authorized_key:
+    user: root
+    state: present
+    key: '{{ item }}'
+  with_file:
+    - andybotting.pub
+
+- name: Allow SSH key login for root
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^#?PermitRootLogin'
+    line: 'PermitRootLogin without-password'
+    state: present
