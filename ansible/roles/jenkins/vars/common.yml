@@ -35,6 +35,7 @@ common_packages:
   - python-sphinx
   - python3-setuptools
   - libcurl3
+  - genisoimage
   - python-ceilometerclient
   - python-cinderclient
   - python-designateclient
