@@ -23,6 +23,7 @@ common_packages:
   - libpq-dev
   - unzip
   - qemu
+  - qemu-kvm
   - pkg-config
   - libvirt-dev
   - libsqlite3-dev
