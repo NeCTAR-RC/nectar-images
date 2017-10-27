@@ -12,7 +12,7 @@
     - role: ssh
     - role: ntp
     - role: kernel-params
-    - { role: trove, datastore: 'mysql' }
+    - { role: trove, datastore: 'pgsql' }
     - role: nectar-user
     - role: testing
     - role: cleanup

@@ -1,0 +1,47 @@
+---
+- name: Add apt-key for postgresql
+  apt_key:
+    url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
+    state: present
+
+- name: Add repositories
+  apt_repository:
+    repo: "{{ item }}"
+    update_cache: yes
+  with_items:
+    - "deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main" # Postgresql
+
+- name: Install pgsql-server
+  package:
+    name: "{{ item }}"
+  with_items:
+    - "libpq-dev"
+    - "postgresql-9.6" 
+    - "postgresql-contrib-9.6" 
+    - "postgresql-server-dev-9.6"
+    - "python-pip"
+
+- name: Install native python client
+  pip:
+    name: "psycopg2"
+
+- name: Fix checkpoint_segments in postgresql.service
+  lineinfile:
+    path: /lib/systemd/system/postgresql.service
+    insertafter: 'oneshot'
+    line: ExecStartPre=/bin/sh -c "sed -i 's/checkpoint_segments/#checkpoint_segments/g' /etc/postgresql/9.6/main/postgresql.conf"
+    state: present
+
+- name: Fix checkpoint_segments in postgresql@.service
+  lineinfile:
+    path: /lib/systemd/system/postgresql@.service
+    insertafter: 'forking'
+    line: ExecStartPre=/bin/sh -c "sed -i 's/checkpoint_segments/#checkpoint_segments/g' /etc/postgresql/9.6/main/postgresql.conf"
+    state: present
+    
+- name: Set Restart on failure in postgresql@.service
+  lineinfile:
+    path: /lib/systemd/system/postgresql@.service
+    regexp: '#Restart=on-failure'
+    line: 'Restart=on-failure'
+    state: present
