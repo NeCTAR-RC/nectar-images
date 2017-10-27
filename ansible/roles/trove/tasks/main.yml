@@ -2,5 +2,16 @@
 - include: setup-CentOS.yml
   when: ansible_distribution == 'CentOS'
 
-- include: setup-Ubuntu.yml
-  when: ansible_distribution == 'Ubuntu'
+- include: setup-trove-Ubuntu.yml
+  when:
+    - ansible_distribution == 'Ubuntu'
+
+- include: setup-mysql-Ubuntu.yml
+  when:
+    - ansible_distribution == 'Ubuntu'
+    - datastore == 'mysql'
+  
+- include: setup-pgsql-Ubuntu.yml
+  when: 
+    - ansible_distribution == 'Ubuntu'
+    - datastore == 'pgsql'
