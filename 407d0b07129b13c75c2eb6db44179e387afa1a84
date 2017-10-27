@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e7d2f46_d3ffb956",
+        "filename": "ansible/roles/trove/files/Ubuntu16/postgresql.service",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2017-10-27T06:12:31Z",
+      "side": 1,
+      "message": "is /bin/sh really needed?",
+      "range": {
+        "startLine": 10,
+        "startChar": 13,
+        "endLine": 10,
+        "endChar": 20
+      },
+      "revId": "407d0b07129b13c75c2eb6db44179e387afa1a84",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1bf98e11_0210b7f1",
+        "filename": "ansible/roles/trove/files/Ubuntu16/postgresql@.service",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2017-10-27T06:12:31Z",
+      "side": 1,
+      "message": "is the /bin/sh really needed?",
+      "range": {
+        "startLine": 15,
+        "startChar": 13,
+        "endLine": 15,
+        "endChar": 26
+      },
+      "revId": "407d0b07129b13c75c2eb6db44179e387afa1a84",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "59711c87_40aff34a",
+        "filename": "ansible/roles/trove/tasks/setup-pgsql-Ubuntu.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2017-10-27T06:12:31Z",
+      "side": 1,
+      "message": "needed?",
+      "range": {
+        "startLine": 22,
+        "startChar": 6,
+        "endLine": 22,
+        "endChar": 18
+      },
+      "revId": "407d0b07129b13c75c2eb6db44179e387afa1a84",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "232d61a9_72561619",
+        "filename": "ubuntu-16.04-x86_64-trove-mysql.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2017-10-27T06:12:31Z",
+      "side": 1,
+      "message": "remove this",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 6
+      },
+      "revId": "407d0b07129b13c75c2eb6db44179e387afa1a84",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cdbbe9ba_31e20671",
+        "filename": "ubuntu-16.04-x86_64-trove-pgsql.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2017-10-27T06:12:31Z",
+      "side": 1,
+      "message": "remove this",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 6
+      },
+      "revId": "407d0b07129b13c75c2eb6db44179e387afa1a84",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
