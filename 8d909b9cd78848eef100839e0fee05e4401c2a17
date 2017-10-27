@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af8fd5c8_c81cd42c",
+        "filename": "ubuntu-16.04-x86_64-trove-pgsql.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2017-10-27T04:11:14Z",
+      "side": 1,
+      "message": "I think this can go actually. I\u0027ve fixed the ansible stuff so we shouldn\u0027t need this now.",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 6
+      },
+      "revId": "8d909b9cd78848eef100839e0fee05e4401c2a17",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
