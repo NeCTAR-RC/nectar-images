@@ -30,6 +30,8 @@ common_packages:
   - libldap2-dev
   - libsasl2-dev
   - python-pip
+  - python3-pip
+  - git-review
   - dh-apache2
   - dh-systemd
   - openstack-pkg-tools
@@ -43,14 +45,20 @@ common_packages:
   - python-glanceclient
   - python-heatclient
   - python-keystoneclient
+  - python-manilaclient
+  - python-mistralclient
+  - python-muranoclient
   - python-neutronclient
   - python-novaclient
-  - python-muranoclient
   - python-openstackclient
+  - python-saharaclient
   - python-swiftclient
+  - python-troveclient
   - python-hivemind-contrib
   - python-hivemind
   - nodejs
   - libkrb5-dev
   - libaugeas-dev
+  - mariadb-server
+  - mariadb-client
   - ansible

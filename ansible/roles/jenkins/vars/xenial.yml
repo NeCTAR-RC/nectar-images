@@ -6,3 +6,5 @@ packages:
   - npm
   - ruby-puppet-syntax
   - nodejs-legacy
+pip_packages:
+  - { name: tox, version: 2.7.0 }
