@@ -2,8 +2,8 @@
   "builders": [
     {
       "type": "qemu",
-      "name": "ubuntu-16.04-x86_64-trove-mysql",
-      "vm_name": "ubuntu-16.04-x86_64-trove-mysql",
+      "name": "ubuntu-16.04-x86_64-trove-pgsql",
+      "vm_name": "ubuntu-16.04-x86_64-trove-pgsql",
       "accelerator": "kvm",
       "disk_size": 2048,
       "format": "raw",
@@ -33,15 +33,9 @@
   ],
   "provisioners": [
     {
-      "type": "shell",
-      "inline": [
-        "apt-get -q -y update",
-        "apt-get -q -y install python-apt"
-      ]
-    },
-    {
       "type": "ansible",
-      "playbook_file": "ansible/playbook-trove-mysql.yml"
+      "playbook_file": "ansible/playbook-trove.yml",
+      "extra_arguments": [ "--extra-vars", "datastore=pgsql" ]
     },
     {
       "type": "shell",

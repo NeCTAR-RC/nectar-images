@@ -33,15 +33,9 @@
   ],
   "provisioners": [
     {
-      "type": "shell",
-      "inline": [
-        "apt-get -q -y update",
-        "apt-get -q -y install python-apt"
-      ]
-    },
-    {
       "type": "ansible",
-      "playbook_file": "ansible/playbook-trove-mysql.yml"
+      "playbook_file": "ansible/playbook-trove-mysql.yml",
+      "extra_arguments": [ "--extra-vars", "datastore=mysql" ]
     },
     {
       "type": "shell",
