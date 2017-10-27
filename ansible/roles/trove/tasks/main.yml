@@ -1,6 +1,6 @@
 ---
-- include: setup-CentOS.yml
-  when: ansible_distribution == 'CentOS'
+# OS setup
+- include: "setup-{{ ansible_distribution }}.yml"
 
-- include: setup-Ubuntu.yml
-  when: ansible_distribution == 'Ubuntu'
+# Datastore setup
+- include: "setup-{{ datastore }}-{{ ansible_distribution }}.yml"

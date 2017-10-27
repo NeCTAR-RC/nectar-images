@@ -1,19 +1,13 @@
 ---
-- name: Add repository public keys
+- name: Add Ubuntu cloud archive key
   apt_key:
-    id: '{{ item }}'
+    id: 391A9AA2147192839E9DB0315EDB1B62EC4926EA
     keyserver: keyserver.ubuntu.com
-  with_items:
-    - 391A9AA2147192839E9DB0315EDB1B62EC4926EA # Ubuntu cloud archive
-    - 9334A25F8507EFA5 # Percona
 
-- name: Add repositories
+- name: Add Ubuntu cloud archive repository
   apt_repository:
-    repo: "{{ item }}"
+    repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_distribution_release }}-updates/ocata main"
     update_cache: yes
-  with_items:
-    - "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_distribution_release }}-updates/ocata main"
-    - "deb http://repo.percona.com/apt {{ ansible_distribution_release }} main"
 
 - name: Install Trove Guest agent
   package:
@@ -21,7 +15,6 @@
     state: installed
   with_items:
     - trove-guestagent
-    - percona-xtrabackup-24
     - debconf-utils
 
 - name: Remove existing Trove config
@@ -62,37 +55,3 @@
     content: 'trove	ALL=(ALL)	NOPASSWD:ALL'
     mode: 0440
     validate: 'visudo -cf %s'
-
-- name: Set MySQL password
-  shell: "{{ item }}"
-  with_items:
-    - 'echo "mysql-server-5.7 mysql-server/root_password password {{ generated_password }}" | debconf-set-selections'
-    - 'echo "mysql-server-5.7 mysql-server/root_password_again password {{ generated_password }}" | debconf-set-selections'
-
-- name: Write MySQL password to security file
-  copy:
-    dest: /root/.mysql_secret
-    content: "# The random password set for the root user at {{ ansible_date_time.date }} (local time): {{ generated_password }}\n"
-
-- name: Install mysql-server
-  package:
-    name: mysql-server
-
-- name: Remove any old mysql init scripts
-  file:
-    name: "{{ item }}"
-    state: absent
-  with_items:
-    - /etc/init.d/mysql
-    - /etc/init/mysql.conf
-
-- name: Write base MySQL config
-  copy:
-    src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/my.cnf"
-    dest: /etc/mysql/my.cnf
-
-- name: Replace MySQL start script
-  copy:
-    src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/mysql-systemd-start"
-    dest: /usr/share/mysql/mysql-systemd-start
-    mode: 0755
