@@ -33,13 +33,6 @@
   ],
   "provisioners": [
     {
-      "type": "shell",
-      "inline": [
-        "apt-get -q -y update",
-        "apt-get -q -y install python-apt"
-      ]
-    },
-    {
       "type": "ansible",
       "playbook_file": "ansible/playbook.yml"
     },

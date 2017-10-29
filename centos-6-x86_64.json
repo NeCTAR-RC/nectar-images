@@ -29,12 +29,6 @@
   ],
   "provisioners": [
     {
-      "type": "shell",
-      "inline": [
-        "yum -q -y install python libselinux-python"
-      ]
-    },
-    {
       "type": "ansible",
       "playbook_file": "ansible/playbook.yml"
     },
