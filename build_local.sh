@@ -117,8 +117,9 @@ if [ -z $TEST_SSH_KEY ]; then
 fi
 
 echo "Creating instance \"test_${NAME}_${BUILD_NUMBER}\"..."
-echo "--> openstack server create --image ${IMAGE_ID} --flavor ${TEST_FLAVOUR} --security-group ssh --key-name ${TEST_SSH_KEY} --wait \"${BUILD_NAME}\""
-INSTANCE_ID=$(openstack server create -f value -c id --image ${IMAGE_ID} --flavor ${TEST_FLAVOUR} --security-group ssh --key-name ${TEST_SSH_KEY} "${BUILD_NAME}")
+[ -z $TEST_AZ ] || AZ_OPT="--availability-zone $TEST_AZ"
+echo "--> openstack server create --image ${IMAGE_ID} --flavor ${TEST_FLAVOUR} ${AZ_OPT} --security-group ${TEST_SG} --key-name ${TEST_SSH_KEY} --wait \"${BUILD_NAME}\""
+INSTANCE_ID=$(openstack server create -f value -c id --image ${IMAGE_ID} --flavor ${TEST_FLAVOUR} ${AZ_OPT} --security-group ${TEST_SG} --key-name ${TEST_SSH_KEY} "${BUILD_NAME}")
 echo "Found instance ID: ${INSTANCE_ID}"
 
 set +e
