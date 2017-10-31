@@ -135,9 +135,10 @@ class TestCommunityImage(test_minimum_basic.TestMinimumBasicScenario):
         # Skipping Firewall checking : [FIRE-4512], [FIRE-4513], [FIRE-4590]
         # Skipping Postfix information leakage: [MAIL-8818]
         # Skipping Accounts w/o password checking: [AUTH-9218]
+        # Skipping Vulnerable packages checks: [PKGS-7392]
         lynis_skip_list = [
                         'FIRE-4512', 'FIRE-4513', 'FIRE-4590',
-                        'MAIL-8818', 'AUTH-9218']
+                        'MAIL-8818', 'AUTH-9218', 'PKGS-7392']
         skip = '\n'.join(
                         "skip-test=" + test +
                         "\\" for test in lynis_skip_list)
