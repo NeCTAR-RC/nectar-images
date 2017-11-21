@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75ae6d05_ff461b52",
+        "filename": "ansible/roles/trove/tasks/setup-pgsql-Ubuntu.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2017-11-21T03:08:24Z",
+      "side": 1,
+      "message": "This failed for me during my last build, which is why this has been added",
+      "revId": "0a69b332f1c4d4129d608b772fabfcecda538dfd",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
