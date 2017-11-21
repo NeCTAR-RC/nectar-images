@@ -43,4 +43,4 @@
   yum:
     name: '*'
     state: latest
-  when: ansible_ssh_user != 'vagrant' and perform_upgrade == True
+  when: nectar_test_build is not defined

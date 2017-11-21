@@ -23,4 +23,4 @@
     upgrade: dist
     update_cache: yes
     dpkg_options: 'force-confold,force-confdef'
-  when: ansible_ssh_user != 'vagrant'
+  when: nectar_test_build is not defined

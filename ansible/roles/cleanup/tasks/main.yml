@@ -17,7 +17,7 @@
     - 'rm -fr /etc/ssh/*key'
     - 'rm -fr /root/.ssh'
     - 'rm -fr /root/*.cfg'
-  when: "ansible_ssh_user != 'vagrant'"
+  when: nectar_test_build is not defined
 
 - name: Lock and disable root account
   shell: "{{ item }}"

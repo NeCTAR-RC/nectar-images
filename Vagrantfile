@@ -7,6 +7,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "debian7" do |c|
     c.vm.box = "debian/wheezy64"
     c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { nectar_test_build: true }
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -16,6 +17,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "debian8" do |c|
     c.vm.box = "debian/jessie64"
     c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { nectar_test_build: true }
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -25,7 +27,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "debian9" do |c|
     c.vm.box = "debian/stretch64"
     c.vm.provision "ansible" do |ansible|
-      ansible.extra_vars = { ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.extra_vars = { nectar_test_build: true,
+                             ansible_python_interpreter: "/usr/bin/python3" }
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -35,6 +38,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "ubuntu1404" do |c|
     c.vm.box = "ubuntu/trusty64"
     c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { nectar_test_build: true }
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -44,6 +48,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "ubuntu1404-murano-agent" do |c|
     c.vm.box = "ubuntu/trusty64"
     c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { nectar_test_build: true }
       ansible.playbook = "ansible/playbook-murano-agent.yml"
       ansible.become = true
     end
@@ -53,18 +58,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "ubuntu1604" do |c|
     c.vm.box = "ubuntu/xenial64"
     c.vm.provision "ansible" do |ansible|
-      ansible.extra_vars = { ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.extra_vars = { nectar_test_build: true,
+                             ansible_python_interpreter: "/usr/bin/python3" }
       ansible.playbook = "ansible/playbook.yml"
-      ansible.become = true
-    end
-  end
-
-  # Ubuntu 16.04 (xenial) with Trove Agent and MySQL 5.7
-  config.vm.define "ubuntu1604-trove-mysql" do |c|
-    c.vm.box = "ubuntu/xenial64"
-    c.vm.provision "ansible" do |ansible|
-      ansible.extra_vars = { ansible_python_interpreter: "/usr/bin/python3" }
-      ansible.playbook = "ansible/playbook-trove-mysql.yml"
       ansible.become = true
     end
   end
@@ -73,7 +69,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "ubuntu1604-murano-agent" do |c|
     c.vm.box = "ubuntu/xenial64"
     c.vm.provision "ansible" do |ansible|
-      ansible.extra_vars = { ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.extra_vars = { nectar_test_build: true,
+                             ansible_python_interpreter: "/usr/bin/python3" }
       ansible.playbook = "ansible/playbook-murano-agent.yml"
       ansible.become = true
     end
@@ -83,7 +80,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "ubuntu1710" do |c|
     c.vm.box = "ubuntu/artful64"
     c.vm.provision "ansible" do |ansible|
-      ansible.extra_vars = { ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.extra_vars = { nectar_test_build: true,
+                             ansible_python_interpreter: "/usr/bin/python3" }
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -94,6 +92,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     c.vm.box = "centos/6"
     c.vm.provision "shell", inline: "sudo yum -q -y install libselinux-python"
     c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { nectar_test_build: true }
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -104,6 +103,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     c.vm.box = "centos/7"
     c.vm.provision "shell", inline: "sudo yum -q -y install libselinux-python"
     c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { nectar_test_build: true }
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -114,6 +114,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     c.vm.box = "centos/7"
     c.vm.provision "shell", inline: "sudo yum -q -y install libselinux-python"
     c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { nectar_test_build: true }
       ansible.playbook = "ansible/playbook-murano-agent.yml"
       ansible.become = true
     end
@@ -123,7 +124,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "fedora26" do |c|
     c.vm.box = "fedora/26-cloud-base"
     c.vm.provision "ansible" do |ansible|
-      ansible.extra_vars = { ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.extra_vars = { nectar_test_build: true,
+                             ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.playbook = "ansible/playbook.yml"
+      ansible.become = true
+    end
+  end
+
+  # Fedora 27
+  config.vm.define "fedora27" do |c|
+    c.vm.box = "fedora/27-cloud-base"
+    c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { nectar_test_build: true,
+                             ansible_python_interpreter: "/usr/bin/python3" }
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -133,6 +146,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "opensuse423" do |c|
     c.vm.box = "opensuse/openSUSE-42.3-x86_64"
     c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { nectar_test_build: true }
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -142,7 +156,32 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "scientific6" do |c|
     c.vm.box = "iamc/scientific65_x86_64_minimal"
     c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { nectar_test_build: true }
       ansible.playbook = "ansible/playbook.yml"
+      ansible.become = true
+    end
+  end
+
+  # Trove MySQL (Ubuntu 16.04 xenial)
+  config.vm.define "trove-mysql-ubuntu1604" do |c|
+    c.vm.box = "ubuntu/xenial64"
+    c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { nectar_test_build: true,
+                             ansible_python_interpreter: "/usr/bin/python3",
+                             datastore: "mysql" }
+      ansible.playbook = "ansible/playbook-trove.yml"
+      ansible.become = true
+    end
+  end
+
+  # Trove PostgreSQL (Ubuntu 16.04 xenial)
+  config.vm.define "trove-pgsql-ubuntu1604" do |c|
+    c.vm.box = "ubuntu/xenial64"
+    c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { nectar_test_build: true,
+                             ansible_python_interpreter: "/usr/bin/python3",
+                             datastore: "pgsql" }
+      ansible.playbook = "ansible/playbook-trove.yml"
       ansible.become = true
     end
   end
@@ -151,6 +190,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "ubuntu1404-jenkins" do |c|
     c.vm.box = "ubuntu/trusty64"
     c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { nectar_test_build: true }
       ansible.playbook = "ansible/playbook-jenkins-slave.yml"
       ansible.become = true
     end
@@ -160,7 +200,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "ubuntu1604-jenkins" do |c|
     c.vm.box = "ubuntu/xenial64"
     c.vm.provision "ansible" do |ansible|
-      ansible.extra_vars = { ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.extra_vars = { nectar_test_build: true,
+                             ansible_python_interpreter: "/usr/bin/python3" }
       ansible.playbook = "ansible/playbook-jenkins-slave.yml"
       ansible.become = true
     end
