@@ -3,6 +3,7 @@
   apt_key:
     url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
     state: present
+    validate_certs: False
 
 - name: Add repositories
   apt_repository:
@@ -18,9 +19,16 @@
     - postgresql-contrib-9.6
     - postgresql-server-dev-9.6
     - python-psycopg2
+    - patch
 
 - name: Copy postgresql@.service
   copy:
     src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/postgresql@.service"
     dest: /lib/systemd/system/postgresql@.service
     mode: 0644
+
+# https://bugs.launchpad.net/trove/+bug/1675328
+- name: Patch Trove postgres service manager
+  patch:
+    src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/postgres-dont-disable-postgres-admin_ocata.patch"
+    dest: /usr/lib/python2.7/dist-packages/trove/guestagent/datastore/experimental/postgresql/service.py

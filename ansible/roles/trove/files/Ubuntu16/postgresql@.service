@@ -12,12 +12,14 @@ Before=postgresql.service
 
 [Service]
 Type=forking
+# TODO (andybotting): Remove checkpoint_segments setting because it doesn't work with newer pgsql
 ExecStartPre=/bin/sed -i '/checkpoint_segments/d' /etc/postgresql/%I/postgresql.conf
 # @: use "postgresql@%i" as process name
 ExecStart=@/usr/bin/pg_ctlcluster postgresql@%i --skip-systemctl-redirect %i start
 ExecStop=/usr/bin/pg_ctlcluster --skip-systemctl-redirect -m fast %i stop
 ExecReload=/usr/bin/pg_ctlcluster --skip-systemctl-redirect %i reload
-PIDFile=/var/run/postgresql/%i.pid
+# TODO (andybotting): Use Trove's hard coded pid file location
+PIDFile=/var/run/postgresql/postgresql.pid
 SyslogIdentifier=postgresql@%i
 # prevent OOM killer from choosing the postmaster (individual backends will
 # reset the score to 0)
