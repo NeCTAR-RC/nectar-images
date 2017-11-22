@@ -25,6 +25,8 @@ from community_image_tests_tempest_plugin.\
     services.v2.community_image_client\
     import CommunityImagesClient
 from tempest import test
+from tempest.lib import decorators
+from tempest.common import utils
 import datetime
 
 CONF = config.CONF
@@ -94,8 +96,8 @@ class TestCommunityImage(test_minimum_basic.TestMinimumBasicScenario):
             self.ip, username=self.linux_user,
             private_key=self.keypair['private_key'])
 
-    @test.idempotent_id('0f6b273d-3ded-4382-96a0-6523a11fd6e8')
-    @test.services('compute', 'image')
+    @decorators.idempotent_id('0f6b273d-3ded-4382-96a0-6523a11fd6e8')
+    @utils.services('compute', 'image')
     def test_image_expiry(self):
         # Get the image info
         info = self.get_image_info()
@@ -106,8 +108,8 @@ class TestCommunityImage(test_minimum_basic.TestMinimumBasicScenario):
         now = datetime.datetime.now()
         self.assertTrue('Image ' + info['id'] + 'is expired', expires_at > now)
 
-    @test.idempotent_id('fbebd1b0-2a40-43b7-be16-8709fb83511c')
-    @test.services('compute', 'image')
+    @decorators.idempotent_id('fbebd1b0-2a40-43b7-be16-8709fb83511c')
+    @utils.services('compute', 'image')
     def test_os_vulnerability(self):
         # Create the server client
         self.create_server_client()
@@ -147,8 +149,8 @@ class TestCommunityImage(test_minimum_basic.TestMinimumBasicScenario):
                         sudo ./lynis audit system""" % skip
         self.linux_client.exec_command(skip_command)
 
-    @test.idempotent_id('a94ff412-062d-4327-b345-df69cb7ea1aa')
-    @test.services('compute', 'image')
+    @decorators.idempotent_id('a94ff412-062d-4327-b345-df69cb7ea1aa')
+    @utils.services('compute', 'image')
     def test_minimum_basic_scenario(self):
         # Create the server client
         self.create_server_client()
