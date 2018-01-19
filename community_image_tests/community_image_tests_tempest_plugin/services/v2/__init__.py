@@ -14,5 +14,5 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from community_image_client import CommunityImagesClient
+from .community_image_client import CommunityImagesClient
 __all__ = ['CommunityImagesClient']
