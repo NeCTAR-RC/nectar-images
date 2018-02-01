@@ -1,0 +1,17 @@
+# QEMU guest agent config file
+#
+# Comma-separated blacklist of RPCs to disable, or empty list to enable all.
+#
+# You can get the list of RPC commands using "qemu-ga --blacklist='?'".
+# There should be no spaces between commas and commands in the blacklist.
+BLACKLIST_RPC={{ qemu_ga_blacklist|join(',') }}
+
+{% if ansible_os_family == 'RedHat' and ansible_distribution_major_version == '6' %}
+# CentOS 6 required the path to be set
+DEVPATH=/dev/virtio-ports/org.qemu.guest_agent.0
+{% endif %}
+
+{% if ansible_os_family == "Debian" %}
+# Final string for daemon arguments for Debian/Ubuntu init.d script
+DAEMON_ARGS="--blacklist=${BLACKLIST_RPC}"
+{% endif %}

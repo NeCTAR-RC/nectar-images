@@ -1,0 +1,4 @@
+---
+qemu_ga_service: qemu-guest-agent
+
+qemu_ga_config_file: /etc/default/qemu-guest-agent
