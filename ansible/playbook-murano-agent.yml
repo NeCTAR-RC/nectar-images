@@ -7,13 +7,14 @@
     - vars/main.yml
 
   roles:
+    - role: testing
     - role: repos
     - role: cloud
+    - role: qemu-guest-agent
     - role: ssh
     - role: fail2ban
     - role: ntp
     - role: kernel-params
     - role: banner
-    - role: testing
     - role: murano-agent
     - role: cleanup

@@ -1,0 +1,10 @@
+---
+qemu_ga_blacklist:
+ - guest-file-open
+ - guest-file-close
+ - guest-file-read
+ - guest-file-write
+ - guest-file-seek
+ - guest-file-flush
+ - guest-exec
+ - guest-exec-status
