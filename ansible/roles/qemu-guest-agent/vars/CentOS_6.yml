@@ -1,0 +1,4 @@
+---
+qemu_ga_service: qemu-ga
+
+qemu_ga_config_file: /etc/sysconfig/qemu-ga
