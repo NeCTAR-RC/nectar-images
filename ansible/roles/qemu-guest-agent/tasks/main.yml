@@ -1,0 +1,24 @@
+---
+- name: Include OS-specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}_{{ ansible_distribution_version }}.yml"
+    - "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+    - "default.yml"
+
+- name: Install QEMU Guest Agent
+  package:
+    name: qemu-guest-agent
+
+- name: Ensure qemu-guest-agent is running and enabled
+  service:
+    name: "{{ qemu_ga_service }}"
+    enabled: yes
+
+- name: Install testing script
+  copy:
+    src: 100-qemu-running.sh
+    dest: /usr/nectar/tests.d
+    mode: 0755
