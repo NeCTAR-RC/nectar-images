@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "456d07f2_ce92c144",
+        "filename": "ansible/roles/testing/files/testing/tests.d/007-heat-cfntools.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000104
+      },
+      "writtenOn": "2018-02-04T23:44:18Z",
+      "side": 1,
+      "message": "wondering if it might be good to have these variables exported in run-tests.sh, so all the scripts following have access to it",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 2
+      },
+      "revId": "3e48f95c22a543eedec0cce5ec0a7ad30ce80474",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": true
+    }
+  ]
+}
