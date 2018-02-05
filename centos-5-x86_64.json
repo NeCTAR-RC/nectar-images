@@ -17,9 +17,9 @@
       "ssh_username": "root",
       "ssh_wait_timeout": "10000s",
       "qemuargs": [
-        [ "-m", "4096M" ],
+        [ "-m", "2048M" ],
         [ "-cpu", "host" ],
-        [ "-smp", "1" ]
+        [ "-smp", "2" ]
       ],
       "boot_wait": "10s",
       "boot_command": [
