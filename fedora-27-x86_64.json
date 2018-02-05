@@ -2,15 +2,15 @@
   "builders": [
     {
       "type": "qemu",
-      "name": "centos-6-x86_64",
-      "vm_name": "centos-6-x86_64",
+      "name": "fedora-27-x86_64",
+      "vm_name": "fedora-27-x86_64",
       "accelerator": "kvm",
       "disk_size": 4096,
       "format": "raw",
       "headless": true,
       "http_directory": "http",
-      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/CentOS-6.9-x86_64-minimal.iso",
-      "iso_checksum": "422af57b493b8af49d485885a730c5a1d955f803fac85aa51311c393168b9080",
+      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/Fedora-Server-netinst-x86_64-27-1.6.iso",
+      "iso_checksum": "2b93836c38833b26891345388ff5ddea60529b27a616b4539d432a3520d1c90b",
       "iso_checksum_type": "sha256",
       "ssh_password": "b4dP4ssw0Rd",
       "ssh_port": 22,
@@ -23,17 +23,22 @@
       ],
       "boot_wait": "5s",
       "boot_command": [
-        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-6-x86_64-kickstart.cfg<enter><wait>"
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-27-x86_64-kickstart.cfg<enter><wait>"
       ]
     }
   ],
   "provisioners": [
     {
       "type": "ansible",
-      "playbook_file": "ansible/playbook.yml"
+      "playbook_file": "ansible/playbook.yml",
+      "extra_arguments": [
+        "--extra-vars",
+        "ansible_python_interpreter=/usr/bin/python3"
+      ]
     },
     {
       "type": "shell",
+      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
       "script": "scripts/cleanup.sh"
     }
   ]
