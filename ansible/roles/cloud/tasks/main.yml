@@ -16,13 +16,6 @@
     gpgcheck: no
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Scientific'
 
-- name: Add cloud repository for openSUSE
-  zypper_repository:
-    name: openstack
-    repo: "obs://Cloud:OpenStack:{{ openstack_version|title }}/openSUSE_Leap_{{ ansible_distribution_version }}"
-    disable_gpg_check: true
-  when: ansible_distribution == 'openSUSE Leap'
-
 - name: Add gplhost apt-key
   apt_key:
     url: http://syd2.apt-proxy.gplhost.com/debian/repository_key.asc
@@ -67,6 +60,19 @@
     name: "centos-openstack-{{ openstack_version }}"
     state: absent
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Scientific'
+
+- name: Add cloud repository for openSUSE
+  zypper_repository:
+    name: openstack
+    repo: "obs://Cloud:OpenStack:{{ openstack_version|title }}/openSUSE_Leap_{{ ansible_distribution_version }}"
+    disable_gpg_check: true
+  when: ansible_distribution == 'openSUSE Leap'
+
+- name: Install python-heat-cfntools
+  package:
+    name: python-heat-cfntools
+    state: installed
+  when: ansible_distribution == 'openSUSE Leap'
 
 - name: Remove cloud repository for openSUSE
   zypper_repository:

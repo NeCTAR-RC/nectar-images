@@ -4,7 +4,7 @@ openstack_version: Master
 cloud_packages:
   - cloud-init
   - growpart
-  - python-heat-cfntools # not in Pike
+#  - python-heat-cfntools # not in Pike - installed separately
   - curl
 
 distro: opensuse
