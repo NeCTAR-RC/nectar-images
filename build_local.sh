@@ -56,6 +56,17 @@ if [ -z "$OS_USERNAME" ]; then
     exit 1
 fi
 
+# Test keypair is available
+if [ -n "$TEST_SSH_KEY" ]; then
+    KEY=$(openstack keypair show -f value -c name "$TEST_SSH_KEY")
+    if [ -n "$KEY" ]; then
+        echo "Found testing keypair: $KEY"
+    else
+        echo "Testing keypair $TEST_SSH_KEY not found"
+        exit 1
+    fi
+fi
+
 if [ -d ${OUTPUT_DIR} ]; then
     echo "Cleaning up existing output directory \"${OUTPUT_DIR}\"..."
     rm -fr ${OUTPUT_DIR}
