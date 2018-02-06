@@ -25,20 +25,6 @@
   raw: find /etc/yum.repos.d -type f -name "*.repo"
   register: repo_files
 
-- name: Comment out mirror list for yum repos
-  replace:
-    dest: "{{ item }}"
-    regexp: '^(mirrorlist.*)$'
-    replace: '#\1'
-  with_items: "{{ repo_files.stdout_lines }}"
-
-- name: Set baseurl for repos
-  replace:
-    dest: "{{ item }}"
-    regexp: '^.*baseurl=.*/(\w+)/(\$releasever|\d.*)/(.*)$'
-    replace: 'baseurl=http://mirror.aarnet.edu.au/pub/\1/{{ ansible_distribution_major_version }}/\3'
-  with_items: "{{ repo_files.stdout_lines }}"
-
 - name: Perform a full upgrade
   yum:
     name: '*'
