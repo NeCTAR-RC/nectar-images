@@ -111,8 +111,11 @@ if [ "$MAKE_PUBLIC" == "true" ] ; then
     GLANCE_ARGS="--public ${GLANCE_ARGS}"
 fi
 
+# Extra props
+GLANCE_ARGS="--property hw_qemu_guest_agent=yes ${GLANCE_ARGS}"
+
 echo "Creating image \"${IMAGE_NAME}\"..."
-echo "--> openstack image create --disk-format qcow2 --container-format bare --file ${OUTPUT_DIR}/${BUILD_NAME}.qcow2 ${GLANCE_ARGS} \"${IMAGE_NAME}\""
+echo "--> openstack image create --disk-format qcow2 --container-format bare --file ${OUTPUT_DIR}/${BUILD_NAME}.qcow2 --property hw_qemu_guest_agent=yes ${GLANCE_ARGS} \"${IMAGE_NAME}\""
 IMAGE_ID=$(openstack image create -f value -c id --disk-format qcow2 --container-format bare --file ${OUTPUT_DIR}/${BUILD_NAME}.qcow2 ${GLANCE_ARGS} "${IMAGE_NAME}")
 echo "Found image ID: ${IMAGE_ID}"
 rm -f ${OUTPUT_DIR}/${BUILD_NAME}.qcow2
