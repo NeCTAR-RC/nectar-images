@@ -2,6 +2,7 @@
 common_packages:
   - default-jdk
   - rake
+  - puppet-agent
   - ruby-puppetlabs-spec-helper
   - puppet-lint
   - git
