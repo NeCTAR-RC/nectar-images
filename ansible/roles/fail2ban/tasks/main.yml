@@ -31,6 +31,13 @@
 - include: setup-openSUSE.yml
   when: ansible_distribution == 'openSUSE Leap'
 
+# Fix bug https://github.com/fail2ban/fail2ban/issues/2080
+- name: Install updated SSH filter
+  file:
+    path: filter-sshd.conf
+    dest: /etc/fail2ban/filter.d/sshd.conf
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_major_version == '18'
+
 - name: Install hostsdeny action
   copy:
     src: hostsdeny.conf
