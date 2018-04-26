@@ -2,3 +2,7 @@
 perform_upgrade: True
 organisation_name: Nectar
 support_url: https://support.ehelp.edu.au/support/solutions/articles/6000106269
+
+facts:
+  - organisation_name
+  - support_url

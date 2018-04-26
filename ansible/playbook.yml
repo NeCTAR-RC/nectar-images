@@ -16,4 +16,5 @@
     - role: ntp
     - role: kernel-params
     - role: banner
+    - role: facts
     - role: cleanup
