@@ -1,0 +1,15 @@
+---
+- name: "Create facts directory ({{ playbook_dir }}/.facts)"
+  local_action:
+    module: file
+    path: "{{ playbook_dir }}/.facts"
+    state: directory
+  become: False
+
+- name: Save facts
+  local_action:
+    module: copy
+    content: "{{ vars[item] }}"
+    dest: "{{ playbook_dir }}/.facts/{{ item }}"
+  become: False
+  with_items: "{{ facts }}"
