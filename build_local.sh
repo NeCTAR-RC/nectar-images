@@ -28,6 +28,7 @@ BUILD_NUMBER=$(date "+%Y%m%d%H%M")
 BUILD_NAME="${NAME}_build_${BUILD_NUMBER}"
 OUTPUT_DIR=output-${NAME}
 PACKER_WORKING_FILE=$(mktemp)
+FACT_DIR=ansible/.facts
 
 # Source build config
 . "$(basename $0 .sh).cfg"
@@ -72,6 +73,9 @@ if [ -d ${OUTPUT_DIR} ]; then
     rm -fr ${OUTPUT_DIR}
 fi
 
+# Clean out any old Ansible facts
+rm -fr ansible/.facts
+
 if [ "${BUILDER_TYPE}" == "qemu" ]; then
     if [ -n "${SSH_CLIENT}" ] || [ -n "${SSH_TTY}" ]; then
         write_val headless true
@@ -107,12 +111,19 @@ if [ ! -z $BUILD_PROPERTY ]; then
     GLANCE_ARGS="--property ${BUILD_PROPERTY}=${BUILD_NUMBER}"
 fi
 
+# Set extra properties from Ansible facts (see Ansible facts role)
+if [ -d $FACT_DIR ]; then
+    for PROP in $(ls $FACT_DIR); do
+        GLANCE_ARGS="${GLANCE_ARGS} --property ${PROP}=$(cat $FACT_DIR/$PROP)"
+    done
+fi
+
+# QEMU Guest Agent is installed
+GLANCE_ARGS="--property hw_qemu_guest_agent=yes ${GLANCE_ARGS}"
+
 if [ "$MAKE_PUBLIC" == "true" ] ; then
     GLANCE_ARGS="--public ${GLANCE_ARGS}"
 fi
-
-# Extra props
-GLANCE_ARGS="--property hw_qemu_guest_agent=yes ${GLANCE_ARGS}"
 
 echo "Creating image \"${IMAGE_NAME}\"..."
 echo "--> openstack image create --disk-format qcow2 --container-format bare --file ${OUTPUT_DIR}/${BUILD_NAME}.qcow2 --property hw_qemu_guest_agent=yes ${GLANCE_ARGS} \"${IMAGE_NAME}\""

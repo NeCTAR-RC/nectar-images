@@ -12,3 +12,4 @@ virtualbox
 vmware
 iso
 *_build_*json
+ansible/.facts
