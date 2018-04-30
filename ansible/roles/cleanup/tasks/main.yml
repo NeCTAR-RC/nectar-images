@@ -27,6 +27,12 @@
     - passwd -d root
     - passwd -l root
 
+# Left over from a server install. Cloud-init will generate a new one
+- name: Remove initial netplan config
+  file:
+    name: /etc/netplan/01-netcfg.yaml
+    state: absent
+
 - include: cleanup-RedHat.yml
   when: ansible_os_family == 'RedHat'
 
