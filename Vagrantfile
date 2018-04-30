@@ -99,6 +99,17 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # Ubuntu 18.04 (bionic)
+  config.vm.define "ubuntu1804" do |c|
+    c.vm.box = "peru/ubuntu-18.04-server-amd64"
+    c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { nectar_test_build: true,
+                             ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.playbook = "ansible/playbook.yml"
+      ansible.become = true
+    end
+  end
+
   # CentOS 6
   config.vm.define "centos6" do |c|
     c.vm.box = "centos/6"
@@ -146,6 +157,17 @@ Vagrant.configure("2") do |config|
   # Fedora 27
   config.vm.define "fedora27" do |c|
     c.vm.box = "fedora/27-cloud-base"
+    c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { nectar_test_build: true,
+                             ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.playbook = "ansible/playbook.yml"
+      ansible.become = true
+    end
+  end
+
+  # Fedora 28
+  config.vm.define "fedora28" do |c|
+    c.vm.box = "fedora/28-cloud-base"
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
