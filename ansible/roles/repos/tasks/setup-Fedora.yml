@@ -6,16 +6,23 @@
 - name: Comment out mirror list for yum repos
   replace:
     dest: "{{ item }}"
-    regexp: '^(mirrorlist.*)$'
+    regexp: '^(metalink.*)$'
     replace: '#\1'
   with_items: "{{ repo_files.stdout_lines }}"
 
-- name: Set baseurl for CentOS base
+- name: Set baseurl for repo
   replace:
     dest: "{{ item }}"
     regexp: '^.*baseurl=.*/(\w+)/(\$releasever|\d)/(.*)$'
-    replace: 'baseurl=http://mirror.aarnet.edu.au/pub/\1/$releasever/\3'
+    replace: 'baseurl=http://mirror.aarnet.edu.au/pub/fedora/linux/\1/$releasever/\3'
   with_items: "{{ repo_files.stdout_lines }}"
+
+# The baseurl given in F28 updates repo includes /os on the end which is incorrect
+- name: Fix URL for updates on Fedora 28
+  replace:
+    dest: /etc/yum.repos.d/fedora-updates.repo
+    regexp: '^(.*)os/$'
+    replace: '\1'
 
 - name: Perform a full upgrade
   dnf:

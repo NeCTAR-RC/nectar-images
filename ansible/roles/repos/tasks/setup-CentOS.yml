@@ -12,7 +12,7 @@
   until: '"failed" not in result'
   retries: 5
   delay: 10
-  when: not epel_repofile_result.stat.exists
+  when: epel_repofile_result.stat.exists == False
 
 - name: Import EPEL GPG key
   shell: rpm --import "{{ epel_repo_gpg_key_url }}"
