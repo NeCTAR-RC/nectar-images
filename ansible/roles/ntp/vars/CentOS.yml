@@ -1,0 +1,5 @@
+---
+# systemd-timesyncd is disabled in CentOS 7, and not available in 6
+ntp_service: ntpd
+
+ntp_daemon: ntpd

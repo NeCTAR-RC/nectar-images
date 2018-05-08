@@ -1,2 +1,5 @@
 ---
+# Service can be either systemd-timesyncd or ntpd
+ntp_service: systemd-timesyncd
+
 ntp_daemon: ntpd

@@ -6,10 +6,10 @@ ntp_timezone: Etc/UTC
 # See: http://support.ntp.org/bin/view/Servers/NTPPoolServers
 ntp_area: '.au'
 ntp_servers:
-  - "0{{ ntp_area }}.pool.ntp.org iburst"
-  - "1{{ ntp_area }}.pool.ntp.org iburst"
-  - "2{{ ntp_area }}.pool.ntp.org iburst"
-  - "3{{ ntp_area }}.pool.ntp.org iburst"
+  - "0{{ ntp_area }}.pool.ntp.org"
+  - "1{{ ntp_area }}.pool.ntp.org"
+  - "2{{ ntp_area }}.pool.ntp.org"
+  - "3{{ ntp_area }}.pool.ntp.org"
 
 ntp_restrict:
   - "127.0.0.1"

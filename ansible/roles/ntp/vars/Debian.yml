@@ -1,2 +1,4 @@
 ---
+ntp_service: systemd-timesyncd
+
 ntp_daemon: ntp

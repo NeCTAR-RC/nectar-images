@@ -2,8 +2,6 @@
 - name: Include OS-specific variables
   include_vars: "{{ item }}"
   with_first_found:
-    - "{{ ansible_distribution }}_{{ ansible_distribution_version }}.yml"
-    - "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
     - "{{ ansible_distribution }}.yml"
     - "{{ ansible_os_family }}.yml"
     - "default.yml"
@@ -23,10 +21,18 @@
     force: yes
   when: ansible_os_family == 'Debian'
 
-- name: Include ntpd configuration
-  include: ntpd.yml
-  when: ansible_service_mgr != 'systemd' or (ntp_service is undefined or ntp_service == 'ntpd')
+- name: Install NTP package
+  package:
+    name: ntp
 
-- name: Include systemd-timesyncd configuration
-  include: systemd-timesyncd.yml
-  when: ansible_service_mgr == 'systemd' and (ntp_service is undefined or ntp_service == 'systemd-timesyncd')
+- name: Ensure NTP is running and enabled as configured.
+  service:
+    name: "{{ ntp_daemon }}"
+    state: started
+    enabled: yes
+
+- name: Generate ntp.conf file
+  template:
+    src: ntp.conf.j2
+    dest: /etc/ntp.conf
+  notify: restart ntp
