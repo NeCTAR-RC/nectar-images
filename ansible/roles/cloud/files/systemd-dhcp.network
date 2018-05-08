@@ -1,0 +1,7 @@
+# Nectar config for hotplug all network interfaces with
+# with a DHCP config for IPv4
+[Match]
+Name=eth*
+
+[Network]
+DHCP=ipv4

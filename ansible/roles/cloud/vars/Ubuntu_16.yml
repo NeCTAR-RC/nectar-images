@@ -5,9 +5,6 @@ cloud_packages:
   - heat-cfntools
   - curl
 
-network:
-  config: disabled
-
 datasources:
   - ConfigDrive
   - OpenStack

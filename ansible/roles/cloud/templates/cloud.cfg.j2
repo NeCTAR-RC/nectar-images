@@ -28,6 +28,11 @@ locale: en_AU.UTF-8
 
 timezone: Etc/UTC
 
+{% if network is defined %}
+network:
+  {{ network | to_nice_yaml }}
+{% endif %}
+
 datasource_list:
 {% if datasources is defined %}
 {% for datasource in datasources %}

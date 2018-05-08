@@ -114,6 +114,17 @@
     dest: /etc/network/interfaces
   when: ansible_distribution == 'Ubuntu'
 
+# Also remember to set networking disabled in cloud-init config in vars
+- block:
+    - name: Add config for systemd-networkd
+      copy:
+        src: systemd-dhcp.network
+        dest: /etc/systemd/network/dhcp.network
+    - name: Enable systemd-networkd service
+      shell: systemctl enable systemd-networkd
+  when: (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version >= '17') or
+        (ansible_distribution == 'Fedora' and ansible_distribution_version >= '28')
+
 - name: Fix networking to bring up interface and work correctly with cloud-init
   replace:
     dest: /etc/network/interfaces
