@@ -29,5 +29,5 @@
 - name: Enable murano-agent service
   systemd:
     name: murano-agent
-    state: enabled
+    enabled: yes
     daemon_reload: yes
