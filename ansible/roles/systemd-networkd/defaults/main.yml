@@ -1,0 +1,7 @@
+---
+systemd_networkd_network:
+  default:
+    - Match:
+      - Name: eth*
+    - Network:
+      - DHCP: ipv4

@@ -31,6 +31,9 @@ timezone: Etc/UTC
 {% if network is defined %}
 network:
   {{ network | to_nice_yaml }}
+{% elif use_systemd_networkd is defined and use_systemd_networkd == True %}
+network:
+  config: disabled
 {% endif %}
 
 datasource_list:
