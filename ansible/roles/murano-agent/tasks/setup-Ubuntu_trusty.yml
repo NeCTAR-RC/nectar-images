@@ -23,5 +23,5 @@
 
 - name: Install service config
   template:
-    src: "{{ ansible_distribution }}_{{ ansible_distribution_release }}/murano-agent.conf.j2"
+    src: ubuntu-murano-agent.service.j2
     dest: /etc/init/murano-agent.conf

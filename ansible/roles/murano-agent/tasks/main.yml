@@ -13,6 +13,7 @@
     - "setup-{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
     - "setup-{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
 
+# These are referenced in the config murano pushes to the client
 - name: Create Murano directories
   file:
     path: "{{ item }}"
