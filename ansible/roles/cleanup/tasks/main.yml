@@ -12,6 +12,7 @@
     warn: no
   with_items:
     - 'find /var/log -type f -exec bash -c ''cat /dev/null > {}'' \;'
+    - 'rm -fr /var/log/journal/*'
     - 'rm -fr /var/lib/cloud/*'
     - 'rm -fr /home/{{ default_user }}/.ssh/*'
     - 'rm -fr /etc/ssh/*key'
