@@ -6,7 +6,7 @@
 
 - name: Add Ubuntu cloud archive repository
   apt_repository:
-    repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_distribution_release }}-updates/ocata main"
+    repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_distribution_release }}-updates/{{ trove_openstack_version }} main"
     update_cache: yes
 
 - name: Install Trove Guest agent

@@ -17,13 +17,13 @@
 - name: Set MySQL password
   shell: "{{ item }}"
   with_items:
-    - 'echo "mysql-server-5.7 mysql-server/root_password password {{ generated_password }}" | debconf-set-selections'
-    - 'echo "mysql-server-5.7 mysql-server/root_password_again password {{ generated_password }}" | debconf-set-selections'
+    - 'echo "mysql-server-5.7 mysql-server/root_password password {{ trove_generated_password }}" | debconf-set-selections'
+    - 'echo "mysql-server-5.7 mysql-server/root_password_again password {{ trove_generated_password }}" | debconf-set-selections'
 
 - name: Write MySQL password to security file
   copy:
     dest: /root/.mysql_secret
-    content: "# The random password set for the root user at {{ ansible_date_time.date }} (local time): {{ generated_password }}\n"
+    content: "# The random password set for the root user at {{ ansible_date_time.date }} (local time): {{ trove_generated_password }}\n"
 
 - name: Install mysql-server
   package:

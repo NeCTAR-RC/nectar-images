@@ -1,2 +1,3 @@
 ---
-generated_password: "{{ ansible_fqdn | hash('md5') }}"
+trove_generated_password: "{{ ansible_fqdn | hash('md5') }}"
+trove_openstack_version: queens
