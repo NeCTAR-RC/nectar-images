@@ -127,7 +127,21 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # CentOS 6
+  # Ubuntu 18.04 (bionic) with Murano/Docker
+  config.vm.define "ubuntu1804-murano-docker" do |c|
+    c.vm.box = "ubuntu/bionic64"
+    config.vm.provider "libvirt" do |v, override|
+      override.vm.box = "peru/ubuntu-18.04-server-amd64"
+    end
+    c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { nectar_test_build: true,
+                             ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.playbook = "ansible/playbook-murano-docker.yml"
+      ansible.become = true
+    end
+  end
+
+# CentOS 6
   config.vm.define "centos6" do |c|
     c.vm.box = "centos/6"
     c.vm.provision "shell", inline: "sudo yum -q -y install libselinux-python"
@@ -193,9 +207,19 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # openSUSE Leap 42.3
-  config.vm.define "opensuse423" do |c|
+  # openSUSE Leap 42
+  config.vm.define "opensuse42" do |c|
     c.vm.box = "opensuse/openSUSE-42.3-x86_64"
+    c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { nectar_test_build: true }
+      ansible.playbook = "ansible/playbook.yml"
+      ansible.become = true
+    end
+  end
+
+  # openSUSE Leap 15
+  config.vm.define "opensuse15" do |c|
+    c.vm.box = "opensuse/openSUSE-15.0-x86_64"
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true }
       ansible.playbook = "ansible/playbook.yml"
@@ -275,6 +299,7 @@ Vagrant.configure("2") do |config|
   config.vm.provider :libvirt do |v|
     v.memory = 2048
     v.cpus = 2
+    v.machine_virtual_size = 4  # 4GB disk
   end
 
   config.vm.provider :virtualbox do |v|
