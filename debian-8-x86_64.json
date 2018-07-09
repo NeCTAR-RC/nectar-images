@@ -16,6 +16,7 @@
       "ssh_port": 22,
       "ssh_username": "root",
       "ssh_wait_timeout": "10000s",
+      "vnc_bind_address": "0.0.0.0",
       "qemuargs": [
         [ "-m", "2048M" ],
         [ "-cpu", "host" ],
