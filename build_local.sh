@@ -133,7 +133,9 @@ rm -f ${OUTPUT_DIR}/${BUILD_NAME}.qcow2
 
 # Any extra image build props - we use this for Murano
 if [[ "$NAME" =~ "murano" ]]; then
-    openstack image set --property murano_image_info="{\"title\": \"${IMAGE_NAME}\", \"type\": \"linux\"}" ${IMAGE_ID}
+    MURANO_TYPE=linux
+    [[ "$NAME" =~ "docker" ]] && MURANO_TYPE="linux.docker"
+    openstack image set --property murano_image_info="{\"title\": \"${IMAGE_NAME}\", \"type\": \"${MURANO_TYPE}\"}" ${IMAGE_ID}
 fi
 
 if [ -z $TEST_SSH_KEY ]; then
