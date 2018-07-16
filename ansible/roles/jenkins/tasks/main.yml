@@ -94,7 +94,7 @@
 
 - name: Install packer
   unarchive:
-    src: http://mirrors.rc.nectar.org.au/packer_current_linux_amd64.zip
+    src: "https://releases.hashicorp.com/packer/{{ packer_version }}/packer_{{ packer_version }}_linux_amd64.zip"
     dest: /usr/local/bin/
     remote_src: True
 
