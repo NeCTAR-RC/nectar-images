@@ -1,12 +1,11 @@
 ---
-openstack_version: mitaka
+openstack_version: queens
 packages:
-  - puppet-agent
-  - libpng12-dev
+  - puppet
+  - libpng-dev
   - virtualenv
   - tox
   - npm
   - ruby-puppet-syntax
-  - nodejs-legacy
 pip_packages:
   - { name: tox, version: 2.7.0 }

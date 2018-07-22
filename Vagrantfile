@@ -294,6 +294,20 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # Ubuntu 18.04 (bionic) Jenkins slave
+  config.vm.define "ubuntu1804-jenkins" do |c|
+    c.vm.box = "ubuntu/bionic64"
+    config.vm.provider "libvirt" do |v, override|
+      override.vm.box = "rboyer/ubuntu-bionic64-libvirt"
+    end
+    c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { nectar_test_build: true,
+                             ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.playbook = "ansible/playbook-jenkins-slave.yml"
+      ansible.become = true
+    end
+  end
+
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
   config.vm.provider :libvirt do |v|

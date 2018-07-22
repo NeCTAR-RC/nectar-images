@@ -1,5 +1,8 @@
 ---
 openstack_version: liberty
+packages:
+  - puppet-agent
+  - libpng12-dev
 pip_packages:
   - { name: pip, version: 7.1.2 }
   - { name: virtualenv, version: 13.1.2 }

@@ -2,7 +2,6 @@
 common_packages:
   - default-jdk
   - rake
-  - puppet-agent
   - ruby-puppetlabs-spec-helper
   - puppet-lint
   - git
@@ -16,7 +15,6 @@ common_packages:
   - build-essential
   - libmysqlclient-dev
   - libfreetype6-dev
-  - libpng12-dev
   - git-buildpackage
   - debhelper
   - dupload
