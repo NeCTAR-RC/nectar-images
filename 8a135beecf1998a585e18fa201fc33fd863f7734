@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a3ae470e_64b81db1",
+        "filename": "ansible/playbook-undercloud.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-07-30T08:02:49Z",
+      "side": 1,
+      "message": "possibly remove all of these and install cloud-init by specifying it in list of packages to install?",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 15
+      },
+      "revId": "8a135beecf1998a585e18fa201fc33fd863f7734",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
