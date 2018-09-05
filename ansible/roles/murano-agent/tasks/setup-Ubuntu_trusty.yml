@@ -23,5 +23,5 @@
 
 - name: Install service config
   template:
-    src: ubuntu-murano-agent.service.j2
+    src: upstart-murano-agent.conf.j2
     dest: /etc/init/murano-agent.conf
