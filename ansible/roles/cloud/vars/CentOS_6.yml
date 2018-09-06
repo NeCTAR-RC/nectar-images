@@ -1,5 +1,6 @@
 ---
 openstack_version: juno
+openstack_repo_mirror: 'http://vault.centos.org'
 
 cloud_packages:
   - cloud-init

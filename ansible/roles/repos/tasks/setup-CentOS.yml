@@ -8,17 +8,13 @@
   yum:
     name: "{{ epel_repo_url }}"
     state: present
-  register: result
-  until: '"failed" not in result'
-  retries: 5
-  delay: 10
   when: epel_repofile_result.stat.exists == False
 
 - name: Import EPEL GPG key
   shell: rpm --import "{{ epel_repo_gpg_key_url }}"
   args:
     warn: no
-  when: not epel_repofile_result.stat.exists
+  when: epel_repofile_result.stat.exists == False
   ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Find all repo files

@@ -12,7 +12,7 @@
   yum_repository:
     name: "centos-openstack-{{ openstack_version }}"
     description: "CentOS {{ ansible_distribution_major_version }} - OpenStack {{ openstack_version }}"
-    baseurl: "http://mirror.centos.org/centos/{{ ansible_distribution_major_version }}/cloud/x86_64/openstack-{{ openstack_version }}/"
+    baseurl: "{{ openstack_repo_mirror }}/centos/{{ ansible_distribution_major_version }}/cloud/x86_64/openstack-{{ openstack_version }}/"
     gpgcheck: no
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Scientific'
 

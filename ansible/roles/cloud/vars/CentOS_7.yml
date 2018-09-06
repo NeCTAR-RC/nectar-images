@@ -1,5 +1,6 @@
 ---
-openstack_version: pike
+openstack_version: rocky
+openstack_repo_mirror: 'http://mirror.centos.org'
 
 cloud_packages:
   - cloud-init
