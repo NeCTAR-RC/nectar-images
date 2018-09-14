@@ -9,6 +9,22 @@
     repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_distribution_release }}-updates/{{ trove_openstack_version }} main"
     update_cache: yes
 
+- name: Add Nectar archive keys
+  apt_key:
+    url: "{{ item }}"
+  with_items:
+    - http://download.rc.nectar.org.au/nectar-archive-key-2016.gpg
+    - http://download.rc.nectar.org.au/nectar-custom.gpg
+
+- name: Add Nectar repositories
+  apt_repository:
+    repo: "{{ item }}"
+    update_cache: yes
+  with_items:
+    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }} main"
+    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }}-{{ trove_openstack_version }} main"
+    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }}-{{ trove_openstack_version }}-testing main"
+
 - name: Install Trove Guest agent
   package:
     name: "{{ item }}"
