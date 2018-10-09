@@ -42,3 +42,9 @@
 
 - include: cleanup-openSUSE.yml
   when: ansible_distribution == 'openSUSE Leap'
+
+- name: Remove the default user
+  user:
+    name: "{{ default_user }}"
+    state: absent
+    remove: yes
