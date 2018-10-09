@@ -12,7 +12,7 @@
 - name: Install Percona Xtrabackup
   package:
     name: percona-xtrabackup-24
-    state: installed
+    state: present
 
 - name: Set MySQL password
   shell: "{{ item }}"

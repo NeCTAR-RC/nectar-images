@@ -75,13 +75,13 @@
 - name: Install common packages
   package:
     name: "{{ item }}"
-    state: installed
+    state: present
   with_items: "{{ common_packages }}"
 
 - name: Install distrubution specific packages
   package:
     name: "{{ item }}"
-    state: installed
+    state: present
   with_items: "{{ packages }}"
   when: packages is defined
 
@@ -106,7 +106,7 @@
 - name: Install openjdk8
   package:
     name: 'openjdk-8-jdk'
-    state: installed
+    state: present
   when: ansible_distribution_release == 'trusty'
 
 - name: Correct java version selected

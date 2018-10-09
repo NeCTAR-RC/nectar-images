@@ -33,7 +33,7 @@
 - name: Ensure debconf is installed
   package:
     name: debconf
-    state: installed
+    state: present
   when: ansible_os_family == 'Debian'
 
 # We include the datasources in the cloud.cfg file anyway, but the cloud-init
@@ -46,7 +46,7 @@
 - name: Install cloud packages
   package:
     name: "{{ item }}"
-    state: installed
+    state: present
   with_items: "{{ cloud_packages }}"
 
 - name: Add dpkg-divert for cloud.cfg
@@ -71,7 +71,7 @@
 - name: Install python-heat-cfntools
   package:
     name: python-heat-cfntools
-    state: installed
+    state: present
   when: ansible_distribution == 'openSUSE Leap'
 
 - name: Remove cloud repository for openSUSE
