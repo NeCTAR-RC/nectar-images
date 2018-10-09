@@ -1,0 +1,96 @@
+#!/bin/bash
+
+#  Licensed under the Apache License, Version 2.0 (the "License"); you may
+#  not use this file except in compliance with the License. You may obtain
+#  a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#  License for the specific language governing permissions and limitations
+#  under the License.
+
+# CloudStor details
+WEBDAV_URL=https://cloudstor.aarnet.edu.au/plus/remote.php/webdav/
+MOUNT_PATH=/cloudstor
+
+if mountpoint -q $MOUNT_PATH; then
+  echo "CloudStor already mounted at $MOUNT_PATH"
+  exit 2
+fi
+
+cat << EOF
+This command helps you through the process of mounting your AARNet CloudStor
+storage to your Nectar instance.
+
+To mount your CloudStor storage, you will be prompted for your institution
+email address and your CloudStor sync password.
+
+Your institutional email address and sync password reset form are available at
+  https://cloudstor.aarnet.edu.au/plus/settings/personal
+
+Press [enter] to continue or Ctrl+c to exit.
+EOF
+read -r -s -n1 _
+echo
+
+read -r -p 'Email address: ' username
+if [ -z "$username" ]; then
+  echo "You must provide your email address!"
+  exit 1
+fi
+
+read -s -r -p 'Sync password: ' password
+echo
+if [ -z "$password" ]; then
+  echo "You must provide your sync password!"
+  exit 1
+fi
+
+# Test credentials before modifying any files
+echo -n "Testing your CloudStor credentials... "
+statuscode=$(curl -sL -w "%{http_code}\\n" -u "$username:$password" "$WEBDAV_URL" -o /dev/null)
+case $statuscode in
+  200)
+    echo "OK"
+    ;;
+  401|503)
+    echo "Error!"
+    echo "Authentication error when testing your CloudStor credentials."
+    echo "Please check your credentials and try again later"
+    exit 1
+    ;;
+  *)
+    echo "Error!"
+    echo "Unknown error when test your CloudStor credentials."
+    exit 1
+    ;;
+esac
+
+# Remove existing credentials if they exist
+sudo sed -i '\,^'"$WEBDAV_URL"'\s\+'"$username"',d' /etc/davfs2/secrets
+
+# Add new credentials
+echo "$WEBDAV_URL $username $password" | sudo tee -a /etc/davfs2/secrets > /dev/null
+
+[ -d $MOUNT_PATH ] || sudo mkdir $MOUNT_PATH
+if ! grep -q "$WEBDAV_URL" /etc/fstab; then
+  echo "$WEBDAV_URL $MOUNT_PATH davfs uid=$USER,_netdev 0 0" | sudo tee -a /etc/fstab > /dev/null
+fi
+
+# Perform mount
+echo -n "Mounting CloudStor storage... "
+if sudo mount $MOUNT_PATH; then
+  echo "done"
+  echo "Your CloudStor account has been mounted to $MOUNT_PATH"
+  exit 0
+fi
+
+echo
+echo "There was an error mounting your CloudStor storage."
+echo "For assistance, please copy the output of this command and submit"
+echo "a ticket with our helpdesk at:"
+echo "  support@ehelp.edu.au"
+exit 1

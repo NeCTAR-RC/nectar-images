@@ -1,0 +1,45 @@
+---
+- name: Set distro-specific variables
+  include_vars: '{{ item }}'
+  with_first_found:
+    - '{{ ansible_distribution }}.yml'
+    - '{{ ansible_os_family }}.yml'
+    - default.yml
+
+- name: Enable suid_file for Debian based distros
+  debconf:
+    name: davfs2
+    question: davfs2/suid_file
+    value: true
+    vtype: boolean
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Install davfs2 package
+  package:
+    name: davfs2
+    state: present
+
+- name: setuid /usr/sbin/mount.davfs
+  file:
+    path: /usr/sbin/mount.davfs
+    state: file
+    mode: 'u=rws,g=rx,o=rx'
+
+- name: Disable use_locks in /etc/davfs2/davfs2.conf
+  replace:
+    dest: /etc/davfs2/davfs2.conf
+    regexp: '#\suse_locks\s+1'
+    replace: 'use_locks 0'
+
+- name: Add user to davfs2 group
+  user:
+    name: '{{ default_user }}'
+    groups: davfs2
+    append: yes
+
+- name: Copy cloudstor-setup script
+  copy:
+    src: cloudstor-setup
+    dest: /usr/local/bin
+    mode: 0755
+  
