@@ -12,7 +12,7 @@
 - name: Install dependency packages
   package:
     name: "{{ item }}"
-    state: installed
+    state: present
   with_items: "{{ murano_agent_dependency_packages }}"
 
 - name: Install Murano Agent into VirtualEnv

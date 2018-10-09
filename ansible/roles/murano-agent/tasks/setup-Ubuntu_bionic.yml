@@ -19,7 +19,7 @@
 - name: Install Murano Guest agent
   package:
     name: murano-agent
-    state: installed
+    state: present
 
 - name: Install updated systemd service config
   template:

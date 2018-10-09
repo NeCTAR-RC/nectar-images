@@ -9,7 +9,7 @@
 - name: Install Murano Guest agent
   package:
     name: "{{ murano_agent_package_name }}"
-    state: installed
+    state: present
 
 - name: Remove cloud repository for CentOS
   yum_repository:
