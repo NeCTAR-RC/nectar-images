@@ -17,6 +17,7 @@
     - role: ssh
     - role: fail2ban
     - role: ntp
+    - role: cloudstor
     - role: kernel-params
     - role: banner
     - role: facts
