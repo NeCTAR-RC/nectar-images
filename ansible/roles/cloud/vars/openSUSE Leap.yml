@@ -9,8 +9,6 @@ cloud_packages:
 
 distro: opensuse
 
-default_user: ec2-user
-
 cloud_init_modules:
  - migrator
  - bootcmd

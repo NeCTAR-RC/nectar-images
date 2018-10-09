@@ -1,11 +1,4 @@
 ---
-- name: set distro-specific variables
-  include_vars: '{{ item }}'
-  with_first_found:
-    - '{{ ansible_distribution }}.yml'
-    - '{{ ansible_os_family }}.yml'
-    - default.yml
-
 - name: Clean up logs keys and configs
   shell: "{{ item }}"
   args:
@@ -48,3 +41,4 @@
     name: "{{ default_user }}"
     state: absent
     remove: yes
+  when: default_user != "vagrant"

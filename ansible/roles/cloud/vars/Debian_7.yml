@@ -10,8 +10,6 @@ datasources:
 
 distro: debian
 
-default_user: debian
-
 cloud_init_modules:
  - migrator
  - bootcmd
