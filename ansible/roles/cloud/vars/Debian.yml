@@ -7,8 +7,6 @@ cloud_packages:
 
 distro: debian
 
-default_user: debian
-
 datasources:
   - ConfigDrive
   - OpenStack

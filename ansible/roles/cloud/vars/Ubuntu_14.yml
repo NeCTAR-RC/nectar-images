@@ -7,8 +7,6 @@ cloud_packages:
 
 distro: ubuntu
 
-default_user: ubuntu
-
 datasources:
   - ConfigDrive
   - OpenStack

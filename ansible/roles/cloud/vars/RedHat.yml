@@ -11,6 +11,4 @@ user_groups:
 
 distro: rhel
 
-default_user: ec2-user
-
 ssh_svcname: sshd

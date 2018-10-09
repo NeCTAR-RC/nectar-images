@@ -11,8 +11,6 @@ cloud_packages:
 
 distro: rhel
 
-default_user: ec2-user
-
 cloud_init_modules:
  - migrator
  - seed_random

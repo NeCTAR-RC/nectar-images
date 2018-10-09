@@ -14,8 +14,6 @@ datasources:
 
 distro: ubuntu
 
-default_user: ubuntu
-
 cloud_init_modules:
  - migrator
  - seed_random

@@ -1,0 +1,3 @@
+---
+# Use stored default user from vars, unless we're running under Vagrant
+default_user: "{% if ansible_user == 'vagrant' %}vagrant{% else %}{{ base_default_user }}{% endif %}"
