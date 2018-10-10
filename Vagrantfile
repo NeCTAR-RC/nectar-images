@@ -1,15 +1,5 @@
 Vagrant.configure("2") do |config|
 
-  # Debian 7 (wheezy)
-  config.vm.define "debian7" do |c|
-    c.vm.box = "debian/wheezy64"
-    c.vm.provision "ansible" do |ansible|
-      ansible.extra_vars = { nectar_test_build: true }
-      ansible.playbook = "ansible/playbook.yml"
-      ansible.become = true
-    end
-  end
-
   # Debian 8 (jessie)
   config.vm.define "debian8" do |c|
     c.vm.box = "debian/jessie64"
