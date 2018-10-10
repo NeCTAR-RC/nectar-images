@@ -35,8 +35,16 @@
   "provisioners": [
     {
       "type": "ansible",
-      "playbook_file": "ansible/playbook-trove.yml",
-      "extra_arguments": [ "--extra-vars", "datastore=pgsql" ]
+      "ansible_env_vars": [
+        "ANSIBLE_CONFIG=ansible/ansible.cfg"
+      ],
+      "extra_arguments": [
+        "--extra-vars",
+        "datastore=pgsql",
+        "--ssh-extra-args",
+        "-o IdentitiesOnly=yes"
+      ],
+      "playbook_file": "ansible/playbook-trove.yml"
     },
     {
       "type": "shell",

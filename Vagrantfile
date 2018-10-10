@@ -5,6 +5,7 @@ Vagrant.configure("2") do |config|
     c.vm.box = "debian/jessie64"
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -16,6 +17,7 @@ Vagrant.configure("2") do |config|
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -29,6 +31,7 @@ Vagrant.configure("2") do |config|
     end
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -42,6 +45,7 @@ Vagrant.configure("2") do |config|
     end
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-murano-agent.yml"
       ansible.become = true
     end
@@ -51,11 +55,12 @@ Vagrant.configure("2") do |config|
   config.vm.define "ubuntu1604" do |c|
     c.vm.box = "ubuntu/xenial64"
     config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "rboyer/ubuntu-xenial64-libvirt"
+      override.vm.box = "generic/ubuntu1604"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -65,11 +70,12 @@ Vagrant.configure("2") do |config|
   config.vm.define "ubuntu1604-murano-agent" do |c|
     c.vm.box = "ubuntu/xenial64"
     config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "rboyer/ubuntu-xenial64-libvirt"
+      override.vm.box = "generic/ubuntu1604"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-murano-agent.yml"
       ansible.become = true
     end
@@ -84,6 +90,7 @@ Vagrant.configure("2") do |config|
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -98,6 +105,7 @@ Vagrant.configure("2") do |config|
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -112,6 +120,7 @@ Vagrant.configure("2") do |config|
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-murano-agent.yml"
       ansible.become = true
     end
@@ -126,6 +135,7 @@ Vagrant.configure("2") do |config|
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-murano-docker.yml"
       ansible.become = true
     end
@@ -137,6 +147,7 @@ Vagrant.configure("2") do |config|
     c.vm.provision "shell", inline: "sudo yum -q -y install libselinux-python"
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -148,6 +159,7 @@ Vagrant.configure("2") do |config|
     c.vm.provision "shell", inline: "sudo yum -q -y install libselinux-python"
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -159,6 +171,7 @@ Vagrant.configure("2") do |config|
     c.vm.provision "shell", inline: "sudo yum -q -y install libselinux-python"
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-murano-agent.yml"
       ansible.become = true
     end
@@ -170,6 +183,7 @@ Vagrant.configure("2") do |config|
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -181,6 +195,7 @@ Vagrant.configure("2") do |config|
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -192,6 +207,7 @@ Vagrant.configure("2") do |config|
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -202,6 +218,7 @@ Vagrant.configure("2") do |config|
     c.vm.box = "opensuse/openSUSE-42.3-x86_64"
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -212,6 +229,7 @@ Vagrant.configure("2") do |config|
     c.vm.box = "opensuse/openSUSE-15.0-x86_64"
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -222,6 +240,7 @@ Vagrant.configure("2") do |config|
     c.vm.box = "iamc/scientific65_x86_64_minimal"
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
     end
@@ -231,12 +250,13 @@ Vagrant.configure("2") do |config|
   config.vm.define "trove-mysql-ubuntu1604" do |c|
     c.vm.box = "ubuntu/xenial64"
     config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "rboyer/ubuntu-xenial64-libvirt"
+      override.vm.box = "generic/ubuntu1604"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3",
                              datastore: "mysql" }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-trove.yml"
       ansible.become = true
     end
@@ -246,12 +266,13 @@ Vagrant.configure("2") do |config|
   config.vm.define "trove-pgsql-ubuntu1604" do |c|
     c.vm.box = "ubuntu/xenial64"
     config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "rboyer/ubuntu-xenial64-libvirt"
+      override.vm.box = "generic/ubuntu1604"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3",
                              datastore: "pgsql" }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-trove.yml"
       ansible.become = true
     end
@@ -265,6 +286,7 @@ Vagrant.configure("2") do |config|
     end
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-jenkins-slave.yml"
       ansible.become = true
     end
@@ -274,11 +296,12 @@ Vagrant.configure("2") do |config|
   config.vm.define "ubuntu1604-jenkins" do |c|
     c.vm.box = "ubuntu/xenial64"
     config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "rboyer/ubuntu-xenial64-libvirt"
+      override.vm.box = "generic/ubuntu1604"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-jenkins-slave.yml"
       ansible.become = true
     end
@@ -288,11 +311,12 @@ Vagrant.configure("2") do |config|
   config.vm.define "undercloud-ubuntu1604" do |c|
     c.vm.box = "ubuntu/xenial64"
     config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "peru/ubuntu-16.04-server-amd64"
+      override.vm.box = "generic/ubuntu1604"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-undercloud.yml"
       ansible.become = true
     end
@@ -302,11 +326,12 @@ Vagrant.configure("2") do |config|
   config.vm.define "ubuntu1804-jenkins" do |c|
     c.vm.box = "ubuntu/bionic64"
     config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "rboyer/ubuntu-bionic64-libvirt"
+      override.vm.box = "generic/ubuntu1804"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-jenkins-slave.yml"
       ansible.become = true
     end
@@ -321,6 +346,7 @@ Vagrant.configure("2") do |config|
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-undercloud.yml"
       ansible.become = true
     end
