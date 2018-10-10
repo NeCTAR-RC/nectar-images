@@ -118,7 +118,7 @@
 - name: Ensure cloud-init set to start on boot
   service:
     name: "{{ item }}"
-    enabled: yes
+    enabled: "{% if nectar_test_build | default(false) %}no{% else %}yes{% endif %}"
   with_items:
     - cloud-config
     - cloud-init-local
