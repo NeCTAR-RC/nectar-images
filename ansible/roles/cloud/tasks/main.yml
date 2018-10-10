@@ -16,20 +16,6 @@
     gpgcheck: no
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Scientific'
 
-- name: Add gplhost apt-key
-  apt_key:
-    url: http://syd2.apt-proxy.gplhost.com/debian/repository_key.asc
-    state: present
-  when: ansible_distribution == 'Debian' and ansible_distribution_major_version == '7'
-- name: Add cloud repository for Debian 7
-  apt_repository:
-    repo: "deb http://syd2.apt-proxy.gplhost.com/debian {{ item }} main"
-    state: present
-  with_items:
-    - juno
-    - juno-backports
-  when: ansible_distribution == 'Debian' and ansible_distribution_major_version == '7'
-
 - name: Ensure debconf is installed
   package:
     name: debconf
@@ -81,15 +67,6 @@
     state: absent
   when: ansible_distribution == 'openSUSE Leap'
 
-- name: Remove cloud repository for Debian 7
-  apt_repository:
-    repo: "deb http://syd2.apt-proxy.gplhost.com/debian {{ item }} main"
-    state: absent
-  with_items:
-    - juno
-    - juno-backports
-  when: ansible_distribution == 'Debian' and ansible_distribution_major_version == '7'
-
 - name: Install custom heat-cfntools for Ubuntu trusty
   apt:
     deb: http://au.archive.ubuntu.com/ubuntu/pool/universe/h/heat-cfntools/heat-cfntools_1.2.7-2_all.deb
@@ -121,13 +98,6 @@
     replace: 'auto \1'
   when: ansible_os_family == 'Debian'
 
-# Update logging config to match cloud-init default in later versions
-- name: Add cloud-init-output.log logging for Debian 7
-  lineinfile:
-    dest: /etc/cloud/cloud.cfg.d/05_logging.cfg
-    line: "output: {all: '| tee -a /var/log/cloud-init-output.log'}"
-  when: ansible_distribution == 'Debian' and ansible_distribution_major_version == '7'
-
 # Ansible 2.4 breaks the config file. We'll handle it manually with regex
 - name: Disable SELinux
   lineinfile:
@@ -154,7 +124,6 @@
     - cloud-init-local
     - cloud-init
     - cloud-final
-  when: nectar_test_build is not defined
 
 # http://blog.backslasher.net/growroot-centos.html
 - name: Rebuild initramfs with growroot for CentOS 6

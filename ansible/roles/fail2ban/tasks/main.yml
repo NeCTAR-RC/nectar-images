@@ -18,15 +18,8 @@
 - include: setup-Ubuntu.yml
   when: ansible_distribution == 'Ubuntu'
 
-- include: setup-Debian7.yml
-  when:
-    - ansible_distribution == 'Debian'
-    - ansible_distribution_major_version == '7'
-
 - include: setup-Debian.yml
-  when:
-    - ansible_distribution == 'Debian'
-    - ansible_distribution_major_version > '7'
+  when: ansible_distribution == 'Debian'
 
 - include: setup-openSUSE.yml
   when: ansible_distribution == 'openSUSE Leap'
