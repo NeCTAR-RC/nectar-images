@@ -40,4 +40,4 @@
   service:
     name: fail2ban
     state: stopped
-    enabled: yes
+    enabled: "{% if nectar_test_build | default(false) %}no{% else %}yes{% endif %}"
