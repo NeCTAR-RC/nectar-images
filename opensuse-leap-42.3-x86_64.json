@@ -34,11 +34,17 @@
   "provisioners": [
     {
       "type": "ansible",
+      "ansible_env_vars": [
+        "ANSIBLE_CONFIG=ansible/ansible.cfg"
+      ],
+      "extra_arguments": [
+        "--ssh-extra-args",
+        "-o IdentitiesOnly=yes"
+      ],
       "playbook_file": "ansible/playbook.yml"
     },
     {
       "type": "shell",
-      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
       "script": "scripts/cleanup.sh"
     }
   ]
