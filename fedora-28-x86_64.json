@@ -39,7 +39,7 @@
         "-o IdentitiesOnly=yes",
         "--extra-vars",
         "ansible_python_interpreter=/usr/bin/python3"
-      ].
+      ],
       "playbook_file": "ansible/playbook.yml"
     },
     {
