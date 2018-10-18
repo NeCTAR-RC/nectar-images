@@ -141,7 +141,22 @@ Vagrant.configure("2") do |config|
     end
   end
 
-# CentOS 6
+  # Ubuntu 18.10 (cosmic)
+  config.vm.define "ubuntu1810" do |c|
+    c.vm.box = "ubuntu/cosmic64"
+    config.vm.provider "libvirt" do |v, override|
+      override.vm.box = "roboxes/ubuntu1810"
+    end
+    c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { nectar_test_build: true,
+                             ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook.yml"
+      ansible.become = true
+    end
+  end
+
+ # CentOS 6
   config.vm.define "centos6" do |c|
     c.vm.box = "centos/6"
     c.vm.provision "shell", inline: "sudo yum -q -y install libselinux-python"
