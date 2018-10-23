@@ -8,8 +8,7 @@
 
   roles:
     - role: default_user
-    - role: systemd-networkd
-      when: ansible_distribution_major_version >= '17'
+    - role: ifupdown
     - role: cloud
     - role: kernel-params
     - role: cleanup

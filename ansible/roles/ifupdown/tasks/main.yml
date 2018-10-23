@@ -1,0 +1,11 @@
+---
+- name: Install ifupdown package
+  apt:
+    name: ifupdown
+    state: present
+
+- name: Remove netplan package and config
+  apt:
+    name: netplan
+    state: absent
+    purge: yes
