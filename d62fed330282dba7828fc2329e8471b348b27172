@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bcb8ae7f_9a7bd0f3",
+        "filename": "ansible/roles/ifupdown/defaults/main.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-10-23T23:30:28Z",
+      "side": 1,
+      "message": "is this correct?",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 24
+      },
+      "revId": "d62fed330282dba7828fc2329e8471b348b27172",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
