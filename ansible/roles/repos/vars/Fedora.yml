@@ -1,0 +1,6 @@
+---
+yum_repo_files:
+  - fedora.repo
+  - fedora-updates.repo
+  - fedora-modular.repo
+  - fedora-updates-modular.repo

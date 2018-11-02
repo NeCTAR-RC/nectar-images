@@ -213,6 +213,18 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # Fedora 29
+  config.vm.define "fedora29" do |c|
+    c.vm.box = "fedora/29-cloud-base"
+    c.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { nectar_test_build: true,
+                             ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook.yml"
+      ansible.become = true
+    end
+  end
+
   # openSUSE Leap 42
   config.vm.define "opensuse42" do |c|
     c.vm.box = "opensuse/openSUSE-42.3-x86_64"

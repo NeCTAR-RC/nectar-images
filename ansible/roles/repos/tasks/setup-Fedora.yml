@@ -1,21 +1,17 @@
 ---
-- name: Find all repo files
-  raw: find /etc/yum.repos.d -type f -name "*.repo"
-  register: repo_files
-
-- name: Comment out mirror list for yum repos
+- name: Comment out mirror list for enabled yum repos
   replace:
-    dest: "{{ item }}"
+    dest: "/etc/yum.repos.d/{{ item }}"
     regexp: '^(metalink.*)$'
     replace: '#\1'
-  with_items: "{{ repo_files.stdout_lines }}"
+  with_items: "{{ yum_repo_files }}"
 
 - name: Set baseurl for repo
   replace:
-    dest: "{{ item }}"
+    dest: "/etc/yum.repos.d/{{ item }}"
     regexp: '^.*baseurl=.*/(\w+)/(\$releasever|\d)/(.*)$'
     replace: 'baseurl=http://mirror.aarnet.edu.au/pub/fedora/linux/\1/$releasever/\3'
-  with_items: "{{ repo_files.stdout_lines }}"
+  with_items: "{{ yum_repo_files }}"
 
 # The baseurl given in F28 updates repo includes /os on the end which is incorrect
 - name: Fix URL for updates on Fedora 28
