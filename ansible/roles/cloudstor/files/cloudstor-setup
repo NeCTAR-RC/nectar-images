@@ -16,13 +16,69 @@
 WEBDAV_URL=https://cloudstor.aarnet.edu.au/plus/remote.php/webdav/
 MOUNT_PATH=/cloudstor
 
+cleanup=false
+username=
+password=
+
+usage() {
+  cat >&2 << EOF
+Usage: $0 [options]
+
+Options:
+  -c     unmount and clean up any CloudStor config
+  -u     username. if not given, you will be prompted
+  -p     password. if not given, you will be prompted
+  -h     this help message
+EOF
+  exit 1
+}
+
+# Should run as unpriv user, so we can use that user in fstab
+if [[ $UID == 0 ]]; then
+  echo "This command should NOT be run as root"
+  exit 1
+fi
+
+
+while getopts "hcu:p:" opt; do
+  case ${opt} in
+    h)
+      usage
+      ;;
+    c)
+      cleanup=true
+      ;;
+    u)
+      username=${OPTARG}
+      ;;
+    p)
+      password=${OPTARG}
+      ;;
+    *)
+      usage
+      ;;
+    esac
+done
+shift $((OPTIND-1))
+
+# Clean up all traces of cloudstor mount setup
+if [ "$cleanup" = true ]; then
+  echo "Cleaning up CloudStor setup..."
+  if mountpoint -q $MOUNT_PATH; then
+    sudo umount $MOUNT_PATH
+  fi
+  sudo sed -i '\,^'"$WEBDAV_URL"',d' /etc/davfs2/secrets /etc/fstab
+  sudo rmdir /cloudstor
+  exit 0
+fi
+
 if mountpoint -q $MOUNT_PATH; then
   echo "CloudStor already mounted at $MOUNT_PATH"
   exit 2
 fi
 
-cat << EOF
-This command helps you through the process of mounting your AARNet CloudStor
+  cat << EOF
+This command guides you through the process of mounting your AARNet CloudStor
 storage to your Nectar instance.
 
 To mount your CloudStor storage, you will be prompted for your institution
@@ -31,22 +87,64 @@ email address and your CloudStor sync password.
 Your institutional email address and sync password reset form are available at
   https://cloudstor.aarnet.edu.au/plus/settings/personal
 
-Press [enter] to continue or Ctrl+c to exit.
-EOF
-read -r -s -n1 _
-echo
+PLEASE NOTE: If you snapshot this instance and share it, your CloudStor
+credentials may be exposed though the configuration file /etc/davfs2/secrets.
+For more information, please see the CloudStor setup article at:
+  https://support.ehelp.edu.au/support/solutions/articles/6000211327
 
-read -r -p 'Email address: ' username
-if [ -z "$username" ]; then
-  echo "You must provide your email address!"
-  exit 1
+EOF
+
+# If username and password are set on the command line, then skip this line
+if [ -z "${username}" ] || [ -z "${password}" ]; then
+  echo "Press [ENTER] to continue or Ctrl+C to exit."
+  read -r -s -n1 _
+  echo
 fi
 
-read -s -r -p 'Sync password: ' password
-echo
+# Package install
+if [ -f '/etc/debian_version' ] ; then
+  # Ubuntu/Debian
+  if ! dpkg -s davfs2 >/dev/null 2>&1; then
+    echo "Installing required packages..."
+    sudo apt-get -y -qq update
+    # Set suid for davfs for unprivileged mount
+    echo "davfs2 davfs2/suid_file boolean true" | sudo debconf-set-selections
+    DEBIAN_FRONTEND=noninteractive sudo apt-get -y -qq install davfs2
+  fi
+elif [ -f '/etc/fedora-release' ]; then
+  # Fedora
+  if ! rpm -q davfs2 >/dev/null 2>&1; then
+    echo "Installing required packages..."
+    sudo dnf install -y -q davfs2
+  fi
+elif [ -f '/etc/redhat-release' ]; then
+  # CentOS
+  if ! rpm -q davfs2 >/dev/null 2>&1; then
+    echo "Installing required packages..."
+    sudo yum -y -q install davfs2
+  fi
+else
+    echo 'Unknown OS. This will only work on Ubuntu, Debian, CentOS or Fedora.'
+    exit 1
+fi
+
+# Read username if not given on the command line
+if [ -z "$username" ]; then
+  read -r -p 'Email address: ' username
+  if [ -z "$username" ]; then
+    echo "You must provide your email address!"
+    exit 1
+  fi
+fi
+
+# Read password if not given on the command line
 if [ -z "$password" ]; then
-  echo "You must provide your sync password!"
-  exit 1
+  read -s -r -p 'Sync password: ' password
+  echo
+  if [ -z "$password" ]; then
+    echo "You must provide your sync password!"
+    exit 1
+  fi
 fi
 
 # Test credentials before modifying any files
@@ -70,15 +168,21 @@ case $statuscode in
 esac
 
 # Remove existing credentials if they exist
-sudo sed -i '\,^'"$WEBDAV_URL"'\s\+'"$username"',d' /etc/davfs2/secrets
+sudo sed -i '\,^'"$WEBDAV_URL"',d' /etc/davfs2/secrets
 
-# Add new credentials
-echo "$WEBDAV_URL $username $password" | sudo tee -a /etc/davfs2/secrets > /dev/null
+# Add new credentials -- note that we quote the password for davfs2, then
+# escape any quotes within in the password itself.
+# shellcheck disable=SC2001
+escapedpassword=$(echo "$password" | sed 's/"/\\"/g')  # noqa
+echo "$WEBDAV_URL $username \"$escapedpassword\"" | sudo tee -a /etc/davfs2/secrets > /dev/null
 
 [ -d $MOUNT_PATH ] || sudo mkdir $MOUNT_PATH
 if ! grep -q "$WEBDAV_URL" /etc/fstab; then
   echo "$WEBDAV_URL $MOUNT_PATH davfs uid=$USER,_netdev 0 0" | sudo tee -a /etc/fstab > /dev/null
 fi
+
+# Explicitly disable locks - not supported by OwnCloud
+sudo sed -i 's/.*use_locks.*/use_locks 0/g' /etc/davfs2/davfs2.conf
 
 # Perform mount
 echo -n "Mounting CloudStor storage... "
