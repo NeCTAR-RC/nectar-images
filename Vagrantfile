@@ -27,7 +27,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "ubuntu1404" do |c|
     c.vm.box = "ubuntu/trusty64"
     config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "rboyer/ubuntu-trusty64-libvirt"
+      override.vm.box = "peru/ubuntu-14.04-server-amd64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true }
@@ -41,7 +41,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "ubuntu1404-murano-agent" do |c|
     c.vm.box = "ubuntu/trusty64"
     config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "rboyer/ubuntu-trusty64-libvirt"
+      override.vm.box = "peru/ubuntu-14.04-server-amd64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { nectar_test_build: true }

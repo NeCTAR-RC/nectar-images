@@ -4,7 +4,7 @@ murano_agent_package_name: murano-agent
 murano_agent_service_name: murano-agent
 
 murano_agent_venv_dir: /opt/stack/venvs/murano-agent
-murano_agent_repo: http://git.openstack.org/openstack/murano-agent.git@liberty-eol
+murano_agent_repo: git+git://github.com/openstack/murano-agent.git@liberty-eol
 murano_agent_bin: "{{ murano_agent_venv_dir }}/bin/muranoagent"
 
 murano_agent_dependency_packages:
