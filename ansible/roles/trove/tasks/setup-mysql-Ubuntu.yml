@@ -28,6 +28,7 @@
 - name: Install mysql-server
   package:
     name: mysql-server
+    state: present
 
 - name: Remove any old mysql init scripts
   file:

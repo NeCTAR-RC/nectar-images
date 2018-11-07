@@ -31,9 +31,8 @@
 
 - name: Install cloud packages
   package:
-    name: "{{ item }}"
+    name: "{{ cloud_packages }}"
     state: present
-  with_items: "{{ cloud_packages }}"
 
 - name: Add dpkg-divert for cloud.cfg
   command: dpkg-divert --add --rename --quiet --local --divert /etc/cloud/cloud.cfg.dist /etc/cloud/cloud.cfg

@@ -74,15 +74,13 @@
 
 - name: Install common packages
   package:
-    name: "{{ item }}"
+    name: "{{ common_packages }}"
     state: present
-  with_items: "{{ common_packages }}"
 
 - name: Install distrubution specific packages
   package:
-    name: "{{ item }}"
+    name: "{{ packages }}"
     state: present
-  with_items: "{{ packages }}"
   when: packages is defined
 
 - name: Install pip packages

@@ -1,11 +1,11 @@
 ---
 - name: Install fail2ban packages
   package:
-    name: "{{ item }}"
-  with_items:
-    - fail2ban-server
-    - fail2ban-systemd
-    - ed
+    name:
+      - fail2ban-server
+      - fail2ban-systemd
+      - ed
+    state: present
 
 - name: Make rundir
   file:

@@ -1,13 +1,12 @@
 ---
 - name: Install Docker and role dependencies
   apt:
-    name: "{{ item }}"
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - software-properties-common
+      - cron
     install_recommends: False
-  with_items:
-    - apt-transport-https
-    - ca-certificates
-    - software-properties-common
-    - cron
 
 - name: Add Docker apt key
   apt_key:

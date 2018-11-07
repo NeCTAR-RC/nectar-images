@@ -1,10 +1,10 @@
 ---
 - name: Install fail2ban packages
   package:
-    name: "{{ item }}"
-  with_items:
-    - fail2ban
-    - ed
+    name:
+      - fail2ban
+      - ed
+    state: present
 
 - name: Remove default debian config
   file:

@@ -12,14 +12,14 @@
 
 - name: Install pgsql-server
   package:
-    name: "{{ item }}"
-  with_items:
-    - libpq-dev
-    - postgresql-9.6
-    - postgresql-contrib-9.6
-    - postgresql-server-dev-9.6
-    - python-psycopg2
-    - patch
+    name:
+      - libpq-dev
+      - postgresql-9.6
+      - postgresql-contrib-9.6
+      - postgresql-server-dev-9.6
+      - python-psycopg2
+      - patch
+    state: present
 
 - name: Copy postgresql@.service
   copy:

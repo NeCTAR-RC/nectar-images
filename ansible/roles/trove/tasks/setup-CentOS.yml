@@ -1,7 +1,5 @@
 ---
 - name: Install Trove Guest agent
   package:
-    name: '{{ item }}'
+    name: trove-guestagent
     state: present
-  with_items:
-    trove-guestagent

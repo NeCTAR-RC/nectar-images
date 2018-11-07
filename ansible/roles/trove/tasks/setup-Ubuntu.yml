@@ -27,11 +27,10 @@
 
 - name: Install Trove Guest agent
   package:
-    name: "{{ item }}"
+    name:
+      - trove-guestagent
+      - debconf-utils
     state: present
-  with_items:
-    - trove-guestagent
-    - debconf-utils
 
 - name: Remove existing Trove config
   shell: rm -rf /etc/trove

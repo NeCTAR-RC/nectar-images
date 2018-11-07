@@ -11,6 +11,7 @@
 - name: Install QEMU Guest Agent
   package:
     name: qemu-guest-agent
+    state: present
 
 - name: Install QEMU Guest Agent service file
   copy:

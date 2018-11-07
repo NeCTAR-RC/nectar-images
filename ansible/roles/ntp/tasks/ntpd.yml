@@ -24,6 +24,7 @@
 - name: Install NTP package
   package:
     name: ntp
+    state: present
 
 - name: Ensure NTP is running and enabled as configured.
   service:
