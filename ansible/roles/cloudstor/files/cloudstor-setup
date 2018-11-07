@@ -81,14 +81,13 @@ fi
 This command guides you through the process of mounting your AARNet CloudStor
 storage to your Nectar instance.
 
-To mount your CloudStor storage, you will be prompted for your institution
-email address and your CloudStor sync password.
-
-Your institutional email address and sync password reset form are available at
-  https://cloudstor.aarnet.edu.au/plus/settings/personal
+To mount your CloudStor storage, you will be prompted for a username and
+password. You can generate specific use 'app passwords' from the security
+settings of your CloudStor account here:
+  https://cloudstor.aarnet.edu.au/plus/settings/personal?sectionid=security
 
 PLEASE NOTE: If you snapshot this instance and share it, your CloudStor
-credentials may be exposed though the configuration file /etc/davfs2/secrets.
+app password may be exposed though the configuration file /etc/davfs2/secrets.
 For more information, please see the CloudStor setup article at:
   https://support.ehelp.edu.au/support/solutions/articles/6000211327
 
