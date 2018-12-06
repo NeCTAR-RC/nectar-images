@@ -1,5 +1,5 @@
 ---
-openstack_version: Master
+openstack_version: Rocky
 
 cloud_packages:
   - cloud-init

@@ -46,24 +46,22 @@
     state: absent
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Scientific'
 
-- name: Add cloud repository for openSUSE
-  zypper_repository:
-    name: openstack
-    repo: "obs://Cloud:OpenStack:{{ openstack_version|title }}/openSUSE_Leap_{{ ansible_distribution_version }}"
-    disable_gpg_check: true
-  when: ansible_distribution == 'openSUSE Leap'
-
-- name: Install python-heat-cfntools
-  package:
-    name: python-heat-cfntools
-    state: present
-  when: ansible_distribution == 'openSUSE Leap'
-
-- name: Remove cloud repository for openSUSE
-  zypper_repository:
-    name: openstack
-    repo: "obs://Cloud:OpenStack:{{ openstack_version|title }}/openSUSE_Leap_{{ ansible_distribution_version }}"
-    state: absent
+# openSUSE build for Newton is the only one that works (and only for 42.2)
+- block:
+  - name: Add cloud repository for openSUSE
+    zypper_repository:
+      repo: "https://download.opensuse.org/repositories/Cloud:OpenStack:Newton/openSUSE_Leap_42.2/Cloud:OpenStack:Newton.repo"
+      disable_gpg_check: true
+  - name: Install python-heat-cfntools
+    package:
+      name:
+        - python-heat-cfntools
+        - python-heat_cfntools
+      state: present
+  - name: Remove cloud repository for openSUSE
+    zypper_repository:
+      name: Cloud_OpenStack_Newton
+      state: absent
   when: ansible_distribution == 'openSUSE Leap'
 
 - name: Install custom heat-cfntools for Ubuntu trusty
