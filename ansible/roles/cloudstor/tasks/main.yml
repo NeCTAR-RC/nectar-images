@@ -7,10 +7,24 @@
     vtype: boolean
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
+- name: Add openSUSE repo
+  zypper_repository:
+    name: filesystems
+    repo: "http://download.opensuse.org/repositories/filesystems/openSUSE_Leap_{{ ansible_distribution_version }}"
+    auto_import_keys: yes
+    state: present
+  when: ansible_distribution == 'openSUSE Leap'
+
 - name: Install davfs2 package
   package:
     name: davfs2
     state: present
+
+- name: Remove openSUSE repo
+  zypper_repository:
+    name: filesystems
+    state: absent
+  when: ansible_distribution == 'openSUSE Leap'
 
 - name: setuid /usr/sbin/mount.davfs
   file:
