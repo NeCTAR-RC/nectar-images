@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5cad0360_6be12e10",
+        "filename": "ansible/roles/cloud/tasks/main.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-12-06T23:20:35Z",
+      "side": 1,
+      "message": "just checking this is meant to be like this. Looks funny",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 30
+      },
+      "revId": "4b7a3586655efa7f9f829b16842a40d520a6b62a",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
