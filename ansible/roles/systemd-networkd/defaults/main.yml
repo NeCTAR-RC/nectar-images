@@ -5,3 +5,5 @@ systemd_networkd_network:
       - Name: eth*
     - Network:
       - DHCP: ipv4
+    - DHCP:
+      - UseMTU: true
