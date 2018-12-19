@@ -1,28 +1,19 @@
 ---
-cloud_packages:
+cloud_init_packages:
   - cloud-init
   - cloud-initramfs-growroot
-  - heat-cfntools
-  - curl
 
-network:
-  config: disabled
+distro: debian
 
 datasources:
   - ConfigDrive
   - OpenStack
 
-distro: ubuntu
-
 cloud_init_modules:
  - migrator
- - seed_random
  - bootcmd
  - write-files
- - growpart
  - resizefs
- - disk_setup
- - mounts
  - set_hostname
  - update_hostname
  - update_etc_hosts
@@ -31,31 +22,29 @@ cloud_init_modules:
  - users-groups
  - ssh
 
-cloud_config_modules:
+cloud_init_config_modules:
  - emit_upstart
- - snap_config
+ - disk_setup
+ - mounts
  - ssh-import-id
  - locale
  - set-passwords
  - grub-dpkg
  - apt-pipelining
  - apt-configure
- - ntp
- - timezone
- - disable-ec2-metadata
- - runcmd
- - byobu
-
-cloud_final_modules:
- - snappy
  - package-update-upgrade-install
- - lxd
+ - landscape
+ - timezone
  - puppet
  - chef
  - salt-minion
  - mcollective
+ - disable-ec2-metadata
+ - runcmd
+ - byobu
+
+cloud_init_final_modules:
  - rightscale_userdata
- - scripts-vendor
  - scripts-per-once
  - scripts-per-boot
  - scripts-per-instance
@@ -71,12 +60,9 @@ user_groups:
   - audio
   - cdrom
   - dialout
-  - dip
   - floppy
-  - lxd
-  - netdev
-  - plugdev
-  - sudo
   - video
+  - plugdev
+  - dip
 
 ssh_svcname: ssh

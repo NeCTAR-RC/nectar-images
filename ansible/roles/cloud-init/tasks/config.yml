@@ -1,0 +1,13 @@
+---
+- name: Add cloud-init config file
+  template:
+    src: cloud.cfg.j2
+    dest: /etc/cloud/cloud.cfg
+
+- name: Don't requiretty for sudo
+  lineinfile:
+    dest: /etc/sudoers
+    regexp: '^Defaults\t!requiretty$'
+    insertafter: '^Defaults\s+env_reset$'
+    line: 'Defaults !requiretty'
+    validate: 'visudo -cf %s'

@@ -1,9 +1,7 @@
 ---
-cloud_packages:
+cloud_init_packages:
   - cloud-init
   - cloud-utils-growpart
-  - heat-cfntools
-  - curl
 
 user_groups:
   - adm

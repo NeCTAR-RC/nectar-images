@@ -1,0 +1,45 @@
+---
+- name: Include OS-specific variables
+  include_vars: "{{ var_item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}_{{ ansible_distribution_version }}.yml"
+    - "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+    - default.yml
+  loop_control:
+    loop_var: var_item
+
+- name: Ensure debconf is installed
+  package:
+    name: debconf
+    state: present
+
+# We include the datasources in the cloud.cfg file anyway, but the cloud-init
+# package generates /etc/cloud/cloud.cfg.d/90_dpkg.cfg from debconf, so we
+# also need to set this here, or package upgrades will just override it
+- name: Set datasources for Ubuntu/Debian
+  shell: echo "cloud-init cloud-init/datasources multiselect {{ datasources|join(', ') }}" | debconf-set-selections
+
+- include: install.yml
+
+- name: Add dpkg-divert for cloud.cfg
+  command: dpkg-divert --add --rename --quiet --local --divert /etc/cloud/cloud.cfg.dist /etc/cloud/cloud.cfg
+  args:
+    creates: '/etc/cloud/cloud.cfg.debian'
+
+- include: config.yml
+
+- name: Reset networking config on Ubuntu xenial
+  copy:
+    src: "{{ ansible_distribution }}/interfaces"
+    dest: /etc/network/interfaces
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Fix networking to bring up interface and work correctly with cloud-init
+  replace:
+    dest: /etc/network/interfaces
+    regexp: '^allow-hotplug (\w+)$'
+    replace: 'auto \1'
+
+- include: services.yml

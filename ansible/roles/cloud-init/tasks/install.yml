@@ -1,0 +1,5 @@
+---
+- name: Install cloud-init packages
+  package:
+    name: "{{ cloud_init_packages }}"
+    state: present
