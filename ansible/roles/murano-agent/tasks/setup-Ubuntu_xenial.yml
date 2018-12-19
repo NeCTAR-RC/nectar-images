@@ -17,7 +17,7 @@
     - /var/log/murano-agent
 
 - apt_key:
-    keyserver: pgp.mit.edu
+    keyserver: keyserver.ubuntu.com
     id: 391A9AA2147192839E9DB0315EDB1B62EC4926EA
 
 - name: Add repositories

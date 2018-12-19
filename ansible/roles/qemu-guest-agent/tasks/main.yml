@@ -34,3 +34,4 @@
     src: 100-qemu-running.sh
     dest: /usr/nectar/tests.d
     mode: 0755
+  when: nectar_test_build is not defined
