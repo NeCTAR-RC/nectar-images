@@ -1,17 +1,21 @@
 ---
 - name: Include OS-specific variables
-  include_vars: "{{ item }}"
+  include_vars: "{{ vars_item }}"
   with_first_found:
     - "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
     - "{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
     - "{{ ansible_distribution }}.yml"
-    - "default.yml"
+    - default.yml
+  loop_control:
+    loop_var: vars_item
 
 - name: Include OS-specific tasks
-  include: "{{ item }}"
+  include: "{{ tasks_item }}"
   with_first_found:
     - "setup-{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
     - "setup-{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
+  loop_control:
+    loop_var: tasks_item
 
 # These are referenced in the config murano pushes to the client
 - name: Create Murano directories

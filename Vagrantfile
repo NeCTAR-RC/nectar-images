@@ -4,10 +4,16 @@ Vagrant.configure("2") do |config|
   config.vm.define "debian8" do |c|
     c.vm.box = "debian/jessie64"
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
     end
   end
 
@@ -15,11 +21,17 @@ Vagrant.configure("2") do |config|
   config.vm.define "debian9" do |c|
     c.vm.box = "debian/stretch64"
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
     end
   end
 
@@ -30,10 +42,16 @@ Vagrant.configure("2") do |config|
       override.vm.box = "peru/ubuntu-14.04-server-amd64"
     end
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
     end
   end
 
@@ -44,10 +62,16 @@ Vagrant.configure("2") do |config|
       override.vm.box = "peru/ubuntu-14.04-server-amd64"
     end
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-murano-agent.yml"
       ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
     end
   end
 
@@ -58,11 +82,17 @@ Vagrant.configure("2") do |config|
       override.vm.box = "generic/ubuntu1604"
     end
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
     end
   end
 
@@ -73,11 +103,17 @@ Vagrant.configure("2") do |config|
       override.vm.box = "generic/ubuntu1604"
     end
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-murano-agent.yml"
       ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
     end
   end
 
@@ -88,11 +124,17 @@ Vagrant.configure("2") do |config|
       override.vm.box = "peru/ubuntu-18.04-server-amd64"
     end
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
     end
   end
 
@@ -103,11 +145,17 @@ Vagrant.configure("2") do |config|
       override.vm.box = "peru/ubuntu-18.04-server-amd64"
     end
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-murano-agent.yml"
       ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
     end
   end
 
@@ -118,11 +166,17 @@ Vagrant.configure("2") do |config|
       override.vm.box = "peru/ubuntu-18.04-server-amd64"
     end
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-murano-docker.yml"
       ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
     end
   end
 
@@ -133,11 +187,17 @@ Vagrant.configure("2") do |config|
       override.vm.box = "roboxes/ubuntu1810"
     end
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
     end
   end
 
@@ -146,10 +206,16 @@ Vagrant.configure("2") do |config|
     c.vm.box = "centos/6"
     c.vm.provision "shell", inline: "sudo yum -q -y install libselinux-python"
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
     end
   end
 
@@ -158,10 +224,16 @@ Vagrant.configure("2") do |config|
     c.vm.box = "centos/7"
     c.vm.provision "shell", inline: "sudo yum -q -y install libselinux-python"
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
     end
   end
 
@@ -170,10 +242,16 @@ Vagrant.configure("2") do |config|
     c.vm.box = "centos/7"
     c.vm.provision "shell", inline: "sudo yum -q -y install libselinux-python"
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-murano-agent.yml"
       ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
     end
   end
 
@@ -181,11 +259,17 @@ Vagrant.configure("2") do |config|
   config.vm.define "fedora26" do |c|
     c.vm.box = "fedora/26-cloud-base"
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
     end
   end
 
@@ -193,11 +277,17 @@ Vagrant.configure("2") do |config|
   config.vm.define "fedora27" do |c|
     c.vm.box = "fedora/27-cloud-base"
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
     end
   end
 
@@ -205,11 +295,17 @@ Vagrant.configure("2") do |config|
   config.vm.define "fedora28" do |c|
     c.vm.box = "fedora/28-cloud-base"
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
     end
   end
 
@@ -217,11 +313,17 @@ Vagrant.configure("2") do |config|
   config.vm.define "fedora29" do |c|
     c.vm.box = "fedora/29-cloud-base"
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
     end
   end
 
@@ -229,10 +331,16 @@ Vagrant.configure("2") do |config|
   config.vm.define "opensuse42" do |c|
     c.vm.box = "opensuse/openSUSE-42.3-x86_64"
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
     end
   end
 
@@ -240,10 +348,16 @@ Vagrant.configure("2") do |config|
   config.vm.define "opensuse15" do |c|
     c.vm.box = "opensuse/openSUSE-15.0-x86_64"
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
     end
   end
 
@@ -251,10 +365,16 @@ Vagrant.configure("2") do |config|
   config.vm.define "scientific6" do |c|
     c.vm.box = "iamc/scientific65_x86_64_minimal"
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
     end
   end
 
@@ -265,6 +385,7 @@ Vagrant.configure("2") do |config|
       override.vm.box = "generic/ubuntu1604"
     end
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3",
                              datastore: "mysql" }
@@ -281,6 +402,7 @@ Vagrant.configure("2") do |config|
       override.vm.box = "generic/ubuntu1604"
     end
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3",
                              datastore: "pgsql" }
@@ -297,6 +419,7 @@ Vagrant.configure("2") do |config|
       override.vm.box = "rboyer/ubuntu-trusty64-libvirt"
     end
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-jenkins-slave.yml"
@@ -311,6 +434,7 @@ Vagrant.configure("2") do |config|
       override.vm.box = "generic/ubuntu1604"
     end
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
       ansible.config_file = "ansible/ansible.cfg"
@@ -326,6 +450,7 @@ Vagrant.configure("2") do |config|
       override.vm.box = "generic/ubuntu1604"
     end
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
       ansible.config_file = "ansible/ansible.cfg"
@@ -341,6 +466,7 @@ Vagrant.configure("2") do |config|
       override.vm.box = "generic/ubuntu1804"
     end
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
       ansible.config_file = "ansible/ansible.cfg"
@@ -356,6 +482,7 @@ Vagrant.configure("2") do |config|
       override.vm.box = "peru/ubuntu-18.04-server-amd64"
     end
     c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
       ansible.config_file = "ansible/ansible.cfg"
@@ -375,8 +502,6 @@ Vagrant.configure("2") do |config|
   config.vm.provider :virtualbox do |v|
     v.memory = 2048
     v.cpus = 2
-    v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-    v.customize ["modifyvm", :id, "--ioapic", "on"]
   end
 
 end
