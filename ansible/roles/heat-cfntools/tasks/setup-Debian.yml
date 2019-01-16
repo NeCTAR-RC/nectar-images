@@ -1,0 +1,20 @@
+- name: Include OS-specific variables
+  include_vars: "{{ vars_item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}_{{ ansible_distribution_version }}.yml"
+    - "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+    - default.yml
+  loop_control:
+    loop_var: vars_item
+
+- name: Install packages
+  package:
+    name: "{{ heat_cfntools_packages }}"
+    state: present
+
+- name: Install custom heat-cfntools for Ubuntu trusty
+  apt:
+    deb: http://au.archive.ubuntu.com/ubuntu/pool/universe/h/heat-cfntools/heat-cfntools_1.2.7-2_all.deb
+  when: ansible_distribution_release == 'trusty'

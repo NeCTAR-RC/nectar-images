@@ -9,6 +9,6 @@
   roles:
     - role: default_user
     - role: ifupdown
-    - role: cloud
+    - role: cloud-init
     - role: kernel-params
     - role: cleanup

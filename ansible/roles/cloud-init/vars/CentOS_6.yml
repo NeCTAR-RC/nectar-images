@@ -1,11 +1,13 @@
 ---
-cloud_packages:
+# only juno available from CentOS vault for 6.8
+openstack_repo: "http://vault.centos.org/centos/6.8/cloud/x86_64/openstack-juno/"
+
+cloud_init_packages:
   - cloud-init
   - cloud-utils-growpart
-  - heat-cfntools
-  - curl
+  - dracut-modules-growroot # centos 6 resizes in initramfs
 
-distro: fedora
+distro: rhel
 
 cloud_init_modules:
  - migrator
@@ -24,18 +26,16 @@ cloud_init_modules:
  - users-groups
  - ssh
 
-cloud_config_modules:
+cloud_init_config_modules:
  - ssh-import-id
  - locale
  - set-passwords
- - spacewalk
  - yum-add-repo
- - ntp
  - timezone
  - disable-ec2-metadata
  - runcmd
 
-cloud_final_modules:
+cloud_init_final_modules:
  - package-update-upgrade-install
  - puppet
  - chef
@@ -56,6 +56,5 @@ cloud_final_modules:
 user_groups:
   - adm
   - wheel
-  - systemd-journal
 
 ssh_svcname: sshd

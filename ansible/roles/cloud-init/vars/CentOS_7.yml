@@ -1,12 +1,9 @@
 ---
-openstack_version: rocky
-openstack_repo_mirror: 'http://mirror.centos.org'
+openstack_repo: "http://mirror.centos.org/centos/{{ ansible_distribution_major_version }}/cloud/x86_64/openstack-rocky/"
 
-cloud_packages:
+cloud_init_packages:
   - cloud-init
   - cloud-utils-growpart
-  - heat-cfntools
-  - curl
 
 distro: rhel
 
@@ -27,7 +24,7 @@ cloud_init_modules:
  - users-groups
  - ssh
 
-cloud_config_modules:
+cloud_init_config_modules:
  - ssh-import-id
  - locale
  - set-passwords
@@ -37,7 +34,7 @@ cloud_config_modules:
  - disable-ec2-metadata
  - runcmd
 
-cloud_final_modules:
+cloud_init_final_modules:
  - package-update-upgrade-install
  - puppet
  - chef

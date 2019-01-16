@@ -1,0 +1,8 @@
+---
+# openSUSE build for Newton is the only one that works (and only for 42.2)
+openstack_repo: 'http://download.opensuse.org/repositories/Cloud:/OpenStack:/Newton/openSUSE_Leap_42.2/'
+
+heat_cfntools_packages:
+  - python-heat-cfntools
+  - python-heat_cfntools
+  - curl

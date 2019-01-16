@@ -13,7 +13,7 @@
             (ansible_distribution == 'Fedora' and ansible_distribution_version >= '28')
     - role: testing
     - role: repos
-    - role: cloud
+    - role: cloud-init
     - role: qemu-guest-agent
     - role: ssh
     - role: ntp

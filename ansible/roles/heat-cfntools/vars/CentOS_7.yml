@@ -1,0 +1,6 @@
+---
+openstack_repo: "http://mirror.centos.org/centos/{{ ansible_distribution_major_version }}/cloud/x86_64/openstack-rocky/"
+
+heat_cfntools_packages:
+  - heat-cfntools
+  - curl

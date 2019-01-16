@@ -1,0 +1,27 @@
+- name: Include OS-specific variables
+  include_vars: "{{ vars_item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}_{{ ansible_distribution_version }}.yml"
+    - "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+    - default.yml
+  loop_control:
+    loop_var: vars_item
+
+- name: Add cloud repository for CentOS
+  yum_repository:
+    name: openstack
+    description: "CentOS OpenStack"
+    baseurl: "{{ openstack_repo }}"
+    gpgcheck: no
+
+- name: Install package
+  package:
+    name: "{{ heat_cfntools_packages }}"
+    state: present
+
+- name: Remove cloud repository for CentOS
+  yum_repository:
+    name: openstack
+    state: absent

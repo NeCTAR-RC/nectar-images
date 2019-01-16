@@ -1,0 +1,7 @@
+---
+# only juno available from CentOS vault for 6.8
+openstack_repo: "http://vault.centos.org/centos/6.8/cloud/x86_64/openstack-juno/"
+
+heat_cfntools_packages:
+  - heat-cfntools
+  - curl

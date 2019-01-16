@@ -1,0 +1,55 @@
+---
+openstack_version: Rocky
+
+cloud_init_packages:
+  - cloud-init
+  - growpart
+
+distro: opensuse
+
+cloud_init_modules:
+ - migrator
+ - bootcmd
+ - write-files
+ - growpart
+ - resizefs
+ - set_hostname
+ - update_hostname
+ - update_etc_hosts
+ - ca-certs
+ - rsyslog
+ - users-groups
+ - ssh
+
+cloud_init_config_modules:
+ - mounts
+ - ssh-import-id
+ - locale
+ - set-passwords
+ - package-update-upgrade-install
+ - timezone
+ - puppet
+ - chef
+ - salt-minion
+ - mcollective
+ - disable-ec2-metadata
+ - runcmd
+ - byobu
+
+cloud_init_final_modules:
+ - rightscale_userdata
+ - scripts-per-once
+ - scripts-per-boot
+ - scripts-per-instance
+ - scripts-user
+ - ssh-authkey-fingerprints
+ - keys-to-console
+ - phone-home
+ - final-message
+ - power-state-change
+
+user_groups:
+ - cdrom
+ - users
+
+ssh_svcname: sshd

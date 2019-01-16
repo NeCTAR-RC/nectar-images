@@ -1,19 +1,17 @@
 ---
-openstack_version: Rocky
-
-cloud_packages:
+cloud_init_packages:
   - cloud-init
-  - growpart
-#  - python-heat-cfntools
-  - curl
+  - cloud-initramfs-growroot
 
-distro: opensuse
+datasources:
+  - Ec2
+
+distro: debian
 
 cloud_init_modules:
  - migrator
  - bootcmd
  - write-files
- - growpart
  - resizefs
  - set_hostname
  - update_hostname
@@ -23,12 +21,18 @@ cloud_init_modules:
  - users-groups
  - ssh
 
-cloud_config_modules:
+cloud_init_config_modules:
+ - emit_upstart
+ - disk_setup
  - mounts
  - ssh-import-id
  - locale
  - set-passwords
+ - grub-dpkg
+ - apt-pipelining
+ - apt-configure
  - package-update-upgrade-install
+ - landscape
  - timezone
  - puppet
  - chef
@@ -38,7 +42,7 @@ cloud_config_modules:
  - runcmd
  - byobu
 
-cloud_final_modules:
+cloud_init_final_modules:
  - rightscale_userdata
  - scripts-per-once
  - scripts-per-boot
@@ -51,7 +55,13 @@ cloud_final_modules:
  - power-state-change
 
 user_groups:
- - cdrom
- - users
+  - adm
+  - audio
+  - cdrom
+  - dialout
+  - floppy
+  - video
+  - plugdev
+  - dip
 
-ssh_svcname: sshd
+ssh_svcname: ssh
