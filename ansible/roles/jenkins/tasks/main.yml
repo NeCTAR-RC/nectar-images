@@ -46,7 +46,6 @@
   apt_key:
     keyserver: keyserver.ubuntu.com
     id: 6F6B15509CF8E59E6E469F327F438280EF8D349F
-  when: ansible_distribution_release == 'xenial'
 
 - name: Add Puppet PC1 Repo
   apt_repository:
