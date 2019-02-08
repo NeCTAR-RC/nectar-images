@@ -34,6 +34,7 @@ common_packages:
   - dh-apache2
   - dh-systemd
   - openstack-pkg-tools
+  - puppet-agent
   - python-sphinx
   - python3-setuptools
   - libcurl3
@@ -61,3 +62,7 @@ common_packages:
   - mariadb-server
   - mariadb-client
   - ansible
+  - virtualenv
+  - tox
+  - npm
+  - ruby-puppet-syntax

@@ -1,12 +1,7 @@
 ---
 openstack_version: mitaka
 packages:
-  - puppet-agent
   - libpng12-dev
-  - virtualenv
-  - tox
-  - npm
-  - ruby-puppet-syntax
   - nodejs-legacy
   - libpcre3-dev
 pip_packages:

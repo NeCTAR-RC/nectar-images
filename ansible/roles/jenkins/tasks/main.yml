@@ -54,6 +54,11 @@
     update_cache: yes
   when: ansible_distribution_release == 'xenial'
 
+- name: Add Puppet 5 Repo
+  apt_repository:
+    repo: "deb http://apt.puppetlabs.com {{ ansible_distribution_release }} puppet5"
+    update_cache: yes
+  when: ansible_distribution_release == 'bionic'
 
 - name: Add NodeJS repo key
   apt_key:

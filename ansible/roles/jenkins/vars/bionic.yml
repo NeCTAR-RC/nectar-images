@@ -1,11 +1,6 @@
 ---
 openstack_version: queens
 packages:
-  - puppet
   - libpng-dev
-  - virtualenv
-  - tox
-  - npm
-  - ruby-puppet-syntax
 pip_packages:
   - { name: tox, version: 2.7.0 }
