@@ -1,8 +1,13 @@
 ---
 openstack_version: mitaka
 packages:
+  - tox
+  - virtualenv
   - libpng12-dev
+  - nodejs
   - nodejs-legacy
   - libpcre3-dev
+  - npm
+  - ruby-puppet-syntax
 pip_packages:
   - { name: tox, version: 2.7.0 }

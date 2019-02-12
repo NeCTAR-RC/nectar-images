@@ -31,7 +31,7 @@
 
 - name: Add Ubuntu cloud archive key
   apt_key:
-    keyserver: pgp.mit.edu
+    keyserver: keyserver.ubuntu.com
     id: 391A9AA2147192839E9DB0315EDB1B62EC4926EA
   when: ansible_distribution_release == 'trusty'
 
@@ -40,7 +40,6 @@
     repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_distribution_release }}-updates/{{ openstack_version }} main"
     update_cache: yes
   when: ansible_distribution_release == 'trusty'
-
 
 - name: Add Puppet Key
   apt_key:
@@ -51,7 +50,7 @@
   apt_repository:
     repo: "deb http://apt.puppetlabs.com {{ ansible_distribution_release }} PC1"
     update_cache: yes
-  when: ansible_distribution_release == 'xenial'
+  when: ansible_distribution_release == 'xenial' or ansible_distribution_release == 'trusty'
 
 - name: Add Puppet 5 Repo
   apt_repository:
