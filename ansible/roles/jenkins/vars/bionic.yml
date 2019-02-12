@@ -2,5 +2,6 @@
 openstack_version: queens
 packages:
   - libpng-dev
+  - nodejs=8.10.0~dfsg-2ubuntu0.2
 pip_packages:
   - { name: tox, version: 2.7.0 }
