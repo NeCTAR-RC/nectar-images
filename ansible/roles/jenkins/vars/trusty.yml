@@ -10,3 +10,5 @@ pip_packages:
   - { name: setuptools, version: 19.4 }
   - { name: pbr, version: 1.8.1 }
   - { name: tox, version: 2.3.1 }
+
+nodejs_repo: node_4.x

@@ -60,16 +60,16 @@
 
 - name: Add NodeJS repo key
   apt_key:
-    keyserver: keyserver.ubuntu.com
-    id: 68576280
-  when: ansible_distribution_release == 'trusty'
+    url: http://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    state: present
+  when: nodejs_repo is defined
 
-- name: Add NodeJS for Freshdesk integration
+- name: Add NodeJS repo
   apt_repository:
-    repo: "deb https://deb.nodesource.com/node_4.x {{ ansible_distribution_release }} main"
+    repo: "deb https://deb.nodesource.com/{{ nodejs_repo }} {{ ansible_distribution_release }} main"
     update_cache: yes
     filename: nodejs
-  when: ansible_distribution_release == 'trusty'
+  when: nodejs_repo is defined
 
 - name: Add ansible PPA
   apt_repository:
