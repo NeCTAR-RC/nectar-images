@@ -39,7 +39,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "ubuntu1404" do |c|
     c.vm.box = "ubuntu/trusty64"
     config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "peru/ubuntu-14.04-server-amd64"
+      override.vm.box = "s3than/trusty64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -59,7 +59,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "ubuntu1404-murano-agent" do |c|
     c.vm.box = "ubuntu/trusty64"
     config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "peru/ubuntu-14.04-server-amd64"
+      override.vm.box = "s3than/trusty64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -416,7 +416,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "ubuntu1404-jenkins" do |c|
     c.vm.box = "ubuntu/trusty64"
     config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "rboyer/ubuntu-trusty64-libvirt"
+      override.vm.box = "s3than/trusty64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -432,6 +432,22 @@ Vagrant.configure("2") do |config|
     c.vm.box = "ubuntu/xenial64"
     config.vm.provider "libvirt" do |v, override|
       override.vm.box = "generic/ubuntu1604"
+    end
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true,
+                             ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook-jenkins-slave.yml"
+      ansible.become = true
+    end
+  end
+
+  # Ubuntu 18.04 (bionic) Jenkins slave
+  config.vm.define "ubuntu1804-jenkins" do |c|
+    c.vm.box = "ubuntu/bionic64"
+    config.vm.provider "libvirt" do |v, override|
+      override.vm.box = "generic/ubuntu1804"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
