@@ -5,7 +5,7 @@
       "name": "jenkins-slave-ubuntu-18.04-x86_64",
       "vm_name": "jenkins-slave-ubuntu-18.04-x86_64",
       "accelerator": "kvm",
-      "disk_size": 4096,
+      "disk_size": 8192,
       "format": "raw",
       "headless": true,
       "http_directory": "http",
