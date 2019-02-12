@@ -56,7 +56,6 @@ common_packages:
   - python-troveclient
   - python-hivemind-contrib
   - python-hivemind
-  - nodejs
   - libkrb5-dev
   - libaugeas-dev
   - mariadb-server

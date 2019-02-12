@@ -2,6 +2,7 @@
 openstack_version: mitaka
 packages:
   - libpng12-dev
+  - nodejs
   - nodejs-legacy
   - libpcre3-dev
 pip_packages:
