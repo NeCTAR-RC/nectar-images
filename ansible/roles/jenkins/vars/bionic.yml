@@ -10,3 +10,6 @@ pip_packages:
   - { name: tox, version: 2.7.0 }
 
 nodejs_repo: node_8.x
+
+gem_packages:
+  - puppet
