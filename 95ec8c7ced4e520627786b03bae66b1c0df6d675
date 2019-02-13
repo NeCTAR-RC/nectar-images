@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b751547c_60454857",
+        "filename": "ansible/roles/jenkins/tasks/main.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2019-02-13T08:37:16Z",
+      "side": 1,
+      "message": "You shouldn\u0027t need to do this. I\u0027d leave it as just \"{{ item }}\" and make gem_packages a plain list of names.",
+      "range": {
+        "startLine": 104,
+        "startChar": 11,
+        "endLine": 104,
+        "endChar": 27
+      },
+      "revId": "95ec8c7ced4e520627786b03bae66b1c0df6d675",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": true
+    }
+  ]
+}
