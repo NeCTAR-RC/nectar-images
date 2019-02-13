@@ -99,6 +99,12 @@
     dest: /usr/local/bin/
     remote_src: True
 
+- name: Install gem packages
+  gem:
+    name: "{{ gem_packages }}"
+    state: present
+  when: gem_packages is defined
+
 - name: Add openjdk-r PPA
   apt_repository:
     repo: 'ppa:openjdk-r/ppa'
