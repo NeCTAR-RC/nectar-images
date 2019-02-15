@@ -9,5 +9,7 @@ packages:
   - libpcre3-dev
   - npm
   - ruby-puppet-syntax
+  - shellcheck
+  - yamllint
 pip_packages:
   - { name: tox, version: 2.7.0 }
