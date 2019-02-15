@@ -42,3 +42,22 @@
     state: absent
     remove: yes
   when: default_user != "vagrant"
+
+- name: remove /var/lib/dbus/machine-id
+  file:
+    path: /var/lib/dbus/machine-id
+    state: absent
+
+- name: check if /etc/machine-id exists
+  stat:
+    path: /etc/machine-id
+  register: etc_machine_id
+
+# machine-id should be empty for systemd to regenerate
+# ignore errors because some systemd have this tmpfs mounted
+- name: empty /etc/machine-id
+  copy:
+    dest: /etc/machine-id
+    content: ''
+  when: etc_machine_id.stat.exists == True
+  ignore_errors: yes
