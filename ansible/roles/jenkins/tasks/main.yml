@@ -103,6 +103,7 @@
   gem:
     name: "{{ item }}"
     state: present
+    user_install: no
   with_items: "{{ gem_packages }}"
   when: gem_packages is defined
 
