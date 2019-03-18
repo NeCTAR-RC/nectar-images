@@ -1,15 +1,7 @@
 ---
 openstack_version: queens
 packages:
-  - tox
-  - virtualenv
   - libpng-dev
-  - nodejs
-  - ruby-puppet-syntax
-  - shellcheck
-  - yamllint
-pip_packages:
-  - { name: tox, version: 2.7.0 }
 
 nodejs_repo: node_8.x
 

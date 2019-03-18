@@ -61,3 +61,12 @@ common_packages:
   - mariadb-server
   - mariadb-client
   - ansible
+  - tox
+  - virtualenv
+  - nodejs
+  - ruby-puppet-syntax
+  - shellcheck
+  - yamllint
+
+pip_packages:
+  - { name: tox, version: 2.7.0 }

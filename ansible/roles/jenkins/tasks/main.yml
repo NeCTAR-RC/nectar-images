@@ -29,18 +29,6 @@
     - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }}-{{ openstack_version }} main"
     - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }}-{{ openstack_version }}-testing main"
 
-- name: Add Ubuntu cloud archive key
-  apt_key:
-    keyserver: keyserver.ubuntu.com
-    id: 391A9AA2147192839E9DB0315EDB1B62EC4926EA
-  when: ansible_distribution_release == 'trusty'
-
-- name: Add Ubuntu cloud archive repository
-  apt_repository:
-    repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_distribution_release }}-updates/{{ openstack_version }} main"
-    update_cache: yes
-  when: ansible_distribution_release == 'trusty'
-
 - name: Add Puppet Key
   apt_key:
     keyserver: keyserver.ubuntu.com
@@ -50,7 +38,7 @@
   apt_repository:
     repo: "deb http://apt.puppetlabs.com {{ ansible_distribution_release }} PC1"
     update_cache: yes
-  when: ansible_distribution_release == 'xenial' or ansible_distribution_release == 'trusty'
+  when: ansible_distribution_release == 'xenial'
 
 - name: Add Puppet 5 Repo
   apt_repository:
@@ -106,23 +94,6 @@
     user_install: no
   with_items: "{{ gem_packages }}"
   when: gem_packages is defined
-
-- name: Add openjdk-r PPA
-  apt_repository:
-    repo: 'ppa:openjdk-r/ppa'
-  when: ansible_distribution_release == 'trusty'
-
-- name: Install openjdk8
-  package:
-    name: 'openjdk-8-jdk'
-    state: present
-  when: ansible_distribution_release == 'trusty'
-
-- name: Correct java version selected
-  alternatives:
-    name: java
-    path: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
-  when: ansible_distribution_release == 'trusty'
 
 - name: Perform a full upgrade
   apt:

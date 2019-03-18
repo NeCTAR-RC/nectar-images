@@ -13,8 +13,3 @@
   package:
     name: "{{ heat_cfntools_packages }}"
     state: present
-
-- name: Install custom heat-cfntools for Ubuntu trusty
-  apt:
-    deb: http://au.archive.ubuntu.com/ubuntu/pool/universe/h/heat-cfntools/heat-cfntools_1.2.7-2_all.deb
-  when: ansible_distribution_release == 'trusty'

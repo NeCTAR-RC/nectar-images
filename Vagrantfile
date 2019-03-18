@@ -35,46 +35,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Ubuntu 14.04 (trusty)
-  config.vm.define "ubuntu1404" do |c|
-    c.vm.box = "ubuntu/trusty64"
-    config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "s3than/trusty64"
-    end
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
-  # Ubuntu 14.04 (trusty) with Murano Agent
-  config.vm.define "ubuntu1404-murano-agent" do |c|
-    c.vm.box = "ubuntu/trusty64"
-    config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "s3than/trusty64"
-    end
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-murano-agent.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
   # Ubuntu 16.04 (xenial)
   config.vm.define "ubuntu1604" do |c|
     c.vm.box = "ubuntu/xenial64"
@@ -408,21 +368,6 @@ Vagrant.configure("2") do |config|
                              datastore: "pgsql" }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-trove.yml"
-      ansible.become = true
-    end
-  end
-
-  # Ubuntu 14.04 (trusty) Jenkins slave
-  config.vm.define "ubuntu1404-jenkins" do |c|
-    c.vm.box = "ubuntu/trusty64"
-    config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "s3than/trusty64"
-    end
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-jenkins-slave.yml"
       ansible.become = true
     end
   end
