@@ -21,7 +21,7 @@ cloud_init_modules:
  - users-groups
  - ssh
 
-cloud_init_config_modules:
+cloud_init_modules:
  - emit_upstart
  - disk_setup
  - mounts

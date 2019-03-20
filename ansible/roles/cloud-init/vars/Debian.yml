@@ -26,7 +26,7 @@ cloud_init_modules:
  - users-groups
  - ssh
 
-cloud_init_config_modules:
+cloud_init_modules:
  - emit_upstart
  - snap_config
  - ssh-import-id
