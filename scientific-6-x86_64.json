@@ -12,7 +12,7 @@
       "iso_checksum": "7e7290de3c9e71622e34bc3291197a31f52cafd258ab200dbe856d8e1daf175c",
       "iso_checksum_type": "sha256",
       "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/SL-6-x86_64-netinstall.iso",
-      "ssh_password": "b4dP4ssw0Rd",
+      "ssh_password": "not_a_real_password",
       "ssh_port": 22,
       "ssh_username": "root",
       "ssh_wait_timeout": "10000s",

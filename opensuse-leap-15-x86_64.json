@@ -12,7 +12,7 @@
       "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/openSUSE-Leap-15.0-NET-x86_64.iso",
       "iso_checksum": "1a322de7c215da96fdbad4c247d218eb79073c5620a332a759c0291b44746fbc",
       "iso_checksum_type": "sha256",
-      "ssh_password": "b4dP4ssw0Rd",
+      "ssh_password": "not_a_real_password",
       "ssh_port": 22,
       "ssh_username": "root",
       "ssh_wait_timeout": "10000s",

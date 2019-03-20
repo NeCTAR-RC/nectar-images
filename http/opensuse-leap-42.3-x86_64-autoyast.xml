@@ -161,7 +161,7 @@
   <users config:type="list">
     <user>
       <username>root</username>
-      <user_password>b4dP4ssw0Rd</user_password>
+      <user_password>not_a_real_password</user_password>
     </user>
   </users>
 

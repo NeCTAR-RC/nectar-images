@@ -12,7 +12,7 @@
       "iso_url": "http://mirror.aarnet.edu.au/pub/fedora/linux/releases/29/Server/x86_64/iso/Fedora-Server-netinst-x86_64-29-1.2.iso",
       "iso_checksum": "aa7fb0e6e5b71774ebdaab0dae76bdd9246a5bc7aedc28b7f1103aaaf9750654",
       "iso_checksum_type": "sha256",
-      "ssh_password": "b4dP4ssw0Rd",
+      "ssh_password": "not_a_real_password",
       "ssh_port": 22,
       "ssh_username": "root",
       "ssh_wait_timeout": "10000s",
