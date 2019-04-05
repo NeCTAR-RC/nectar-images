@@ -47,10 +47,10 @@ datasource_list:
 {% endif %}
 
 datasource:
-  OpenStack:
-    max_wait: 120
-    timeout: 30
-    retries: 20
+ OpenStack:
+  max_wait: 90
+  timeout: 30
+  retries: 3
 
 cloud_init_modules:
 {% for module in cloud_init_modules %}
