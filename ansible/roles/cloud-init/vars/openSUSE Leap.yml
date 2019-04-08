@@ -21,7 +21,7 @@ cloud_init_modules:
  - users-groups
  - ssh
 
-cloud_init_modules:
+cloud_config_modules:
  - mounts
  - ssh-import-id
  - locale
@@ -36,7 +36,7 @@ cloud_init_modules:
  - runcmd
  - byobu
 
-cloud_init_final_modules:
+cloud_final_modules:
  - rightscale_userdata
  - scripts-per-once
  - scripts-per-boot

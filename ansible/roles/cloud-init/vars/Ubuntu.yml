@@ -31,7 +31,7 @@ cloud_init_modules:
  - users-groups
  - ssh
 
-cloud_init_modules:
+cloud_config_modules:
  - emit_upstart
  - snap_config
  - ssh-import-id
@@ -46,7 +46,7 @@ cloud_init_modules:
  - runcmd
  - byobu
 
-cloud_init_final_modules:
+cloud_final_modules:
  - snappy
  - package-update-upgrade-install
  - lxd

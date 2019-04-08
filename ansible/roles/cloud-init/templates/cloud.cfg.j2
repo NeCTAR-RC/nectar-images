@@ -57,13 +57,13 @@ cloud_init_modules:
   - {{ module }}
 {% endfor %}
 
-cloud_init_modules:
-{% for module in cloud_init_modules %}
+cloud_config_modules:
+{% for module in cloud_config_modules %}
   - {{ module }}
 {% endfor %}
 
 cloud_final_modules:
-{% for module in cloud_init_final_modules %}
+{% for module in cloud_final_modules %}
   - {{ module }}
 {% endfor %}
 

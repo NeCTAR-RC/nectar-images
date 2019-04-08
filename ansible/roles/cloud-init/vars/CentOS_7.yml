@@ -24,7 +24,7 @@ cloud_init_modules:
  - users-groups
  - ssh
 
-cloud_init_modules:
+cloud_config_modules:
  - ssh-import-id
  - locale
  - set-passwords
@@ -34,7 +34,7 @@ cloud_init_modules:
  - disable-ec2-metadata
  - runcmd
 
-cloud_init_final_modules:
+cloud_final_modules:
  - package-update-upgrade-install
  - puppet
  - chef
