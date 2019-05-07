@@ -7,7 +7,7 @@
     - vars/main.yml
 
   roles:
-    - role: default_user
+    - role: default-user
     - role: systemd-networkd
       when: (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version >= '17') or
             (ansible_distribution == 'Fedora' and ansible_distribution_version >= '28')

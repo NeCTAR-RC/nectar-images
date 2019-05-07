@@ -7,7 +7,7 @@
     - vars/main.yml
 
   roles:
-    - role: default_user
+    - role: default-user
     - role: ifupdown
     - role: cloud-init
     - role: kernel-params

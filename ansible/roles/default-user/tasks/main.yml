@@ -9,3 +9,7 @@
 - name: Set default_user fact
   set_fact:
     default_user: "{{ default_user }}"
+
+- name: Set default_user image property
+  set_fact:
+    nectar_image_property_default_user: "{{ default_user }}"
