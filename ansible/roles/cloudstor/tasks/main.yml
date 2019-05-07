@@ -15,6 +15,12 @@
     state: present
   when: ansible_distribution == 'openSUSE Leap'
 
+- name: "Install specfic libneon27 package for Ubuntu 18.04 (bug https://bugs.launchpad.net/ubuntu/+source/neon27/+bug/1826063)"
+  apt:
+    name: libneon27=0.30.2-2build1
+    state: present
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '18.04'
+
 - name: Install davfs2 package
   package:
     name: davfs2
