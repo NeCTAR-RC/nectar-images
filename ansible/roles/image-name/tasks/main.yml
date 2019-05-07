@@ -1,0 +1,15 @@
+---
+- name: Include OS-specific variables
+  include_vars: "{{ var_item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}.yml"
+    - default.yml
+  loop_control:
+    loop_var: var_item
+
+- name: Set nectar_image_name fact
+  set_fact:
+    nectar_image_name: "{{ nectar_image_name }}"
+
+- debug:
+    msg: "Image name is {{ nectar_image_name }}"

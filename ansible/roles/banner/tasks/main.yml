@@ -14,7 +14,7 @@
 
 - name: Set banner file (Ubuntu)
   template:
-    src: banner-Ubuntu.j2
+    src: banner.j2
     dest: /etc/update-motd.d/00-header
     force: yes
   when: ansible_distribution == 'Ubuntu'

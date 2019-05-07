@@ -1,0 +1,3 @@
+---
+# e.g. CentOS 7 x86_64
+nectar_image_name: "{{ ansible_distribution }} {{ ansible_distribution_major_version }} {{ ansible_architecture }}"
