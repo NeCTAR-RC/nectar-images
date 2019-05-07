@@ -35,3 +35,9 @@
     dest: /usr/nectar/tests.d
     mode: 0755
   when: nectar_test_build is not defined
+
+# If murano_image_type is set, use that (e.g. docker), otherwise we use the
+# distro name, lowercase, which is what our Murano apps expect
+- name: Set default_user image property
+  set_fact:
+    nectar_image_property_hw_qemu_guest_agent: 'yes'

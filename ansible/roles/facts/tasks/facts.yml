@@ -1,0 +1,17 @@
+---
+- name: Set architecture fact
+  set_fact:
+    nectar_image_property_architecture: "{{ ansible_architecture }}"
+
+- name: Set os_distro fact
+  set_fact:
+    nectar_image_property_os_distro: "{{ ansible_distribution|lower }}"
+
+- name: Set os_version fact
+  set_fact:
+    nectar_image_property_os_version: "{% if ansible_distribution == 'Ubuntu' %}{{ ansible_distribution_version }}{% else %}{{ ansible_distribution_major_version }}{% endif %}"
+
+# Should be overridden by the packer config for non-standard images (e.g. trove)
+- name: Set nectar_name fact
+  set_fact:
+    nectar_image_property_nectar_name: "{{ nectar_image_name }}"

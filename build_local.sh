@@ -28,7 +28,7 @@ BUILD_NUMBER=$(date "+%Y%m%d%H%M")
 BUILD_NAME="${NAME}_build_${BUILD_NUMBER}"
 OUTPUT_DIR=output-${NAME}
 PACKER_WORKING_FILE=$(mktemp)
-FACT_DIR=ansible/.facts
+FACT_DIR=$OUTPUT_DIR/.facts
 
 # Source build config
 . "$(basename $0 .sh).cfg"
@@ -43,14 +43,12 @@ write_val() {
   mv $TMPFILE $PACKER_WORKING_FILE
 }
 
+read_fact() {
+  cat $FACT_DIR/${1}
+}
+
 cp $FILE $PACKER_WORKING_FILE
 BUILDER_TYPE=$(read_val type)
-
-if [ -z $ORGANISATION ]; then
-    IMAGE_NAME=${NAME}
-else
-    IMAGE_NAME="${ORGANISATION} ${NAME}"
-fi
 
 if [ -z "$OS_USERNAME" ]; then
     echo "Please load the OpenStack credentials for testing"
@@ -94,6 +92,11 @@ echo "Building image ${NAME}..."
 ${PACKER} build $PACKER_WORKING_FILE
 rm -f $PACKER_WORKING_FILE
 
+IMAGE_NAME="$(read_fact nectar_name)"
+if [ ! -z $ORGANISATION ]; then
+    IMAGE_NAME="${ORGANISATION} ${IMAGE_NAME}"
+fi
+
 if [ "${BUILDER_TYPE}" == "openstack" ]; then
     echo "Downloading image ${NAME}..."
     mkdir ${OUTPUT_DIR}
@@ -107,35 +110,24 @@ echo "Shrinking image..."
 qemu-img convert -c -o compat=0.10 -O qcow2 ${OUTPUT_DIR}/${BUILD_NAME} ${OUTPUT_DIR}/${BUILD_NAME}.qcow2
 rm -f ${OUTPUT_DIR}/${BUILD_NAME}
 
-if [ ! -z $BUILD_PROPERTY ]; then
-    GLANCE_ARGS="--property ${BUILD_PROPERTY}=${BUILD_NUMBER}"
-fi
-
-# Set extra properties from Ansible facts (see Ansible facts role)
-if [ -d $FACT_DIR ]; then
-    for PROP in $(ls $FACT_DIR); do
-        GLANCE_ARGS="${GLANCE_ARGS} --property ${PROP}=$(cat $FACT_DIR/$PROP)"
-    done
-fi
-
-# QEMU Guest Agent is installed
-GLANCE_ARGS="--property hw_qemu_guest_agent=yes ${GLANCE_ARGS}"
-
-if [ "$MAKE_PUBLIC" == "true" ] ; then
-    GLANCE_ARGS="--public ${GLANCE_ARGS}"
-fi
-
 echo "Creating image \"${IMAGE_NAME}\"..."
-echo "--> openstack image create --disk-format qcow2 --container-format bare --file ${OUTPUT_DIR}/${BUILD_NAME}.qcow2 --property hw_qemu_guest_agent=yes ${GLANCE_ARGS} \"${IMAGE_NAME}\""
-IMAGE_ID=$(openstack image create -f value -c id --disk-format qcow2 --container-format bare --file ${OUTPUT_DIR}/${BUILD_NAME}.qcow2 ${GLANCE_ARGS} "${IMAGE_NAME}")
+echo "--> openstack image create --disk-format qcow2 --container-format bare --file ${OUTPUT_DIR}/${BUILD_NAME}.qcow2 \"${IMAGE_NAME}\""
+IMAGE_ID=$(openstack image create -f value -c id --disk-format qcow2 --container-format bare --file ${OUTPUT_DIR}/${BUILD_NAME}.qcow2 "${IMAGE_NAME}")
 echo "Found image ID: ${IMAGE_ID}"
 rm -f ${OUTPUT_DIR}/${BUILD_NAME}.qcow2
 
-# Any extra image build props - we use this for Murano
-if [[ "$NAME" =~ "murano" ]]; then
-    MURANO_TYPE=linux
-    [[ "$NAME" =~ "docker" ]] && MURANO_TYPE="linux.docker"
-    openstack image set --property murano_image_info="{\"title\": \"${IMAGE_NAME}\", \"type\": \"${MURANO_TYPE}\"}" ${IMAGE_ID}
+# Set extra properties from Ansible facts (see Ansible facts role)
+if [ -d $FACT_DIR ]; then
+    for FACT in $(ls $FACT_DIR); do
+        VAL=$(cat $FACT_DIR/$FACT)
+        echo "Setting property $FACT=$VAL"
+        openstack image set --property $FACT=$"$VAL" $IMAGE_ID || true
+    done
+fi
+
+if [ ! -z $BUILD_PROPERTY ]; then
+    echo "Setting property $BUILD_PROPERTY=$BUILD_NUMBER"
+    openstack image set --property $BUILD_PROPERTY="$BUILD_NUMBER" $IMAGE_ID || true
 fi
 
 if [ -z $TEST_SSH_KEY ]; then
