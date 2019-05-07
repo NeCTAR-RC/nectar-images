@@ -2,8 +2,8 @@
   "builders": [
     {
       "type": "qemu",
-      "name": "ubuntu-18.04-x86_64-murano-docker",
-      "vm_name": "ubuntu-18.04-x86_64-murano-docker",
+      "name": "ubuntu-18.04-x86_64-docker",
+      "vm_name": "ubuntu-18.04-x86_64-docker",
       "accelerator": "kvm",
       "disk_size": 2048,
       "format": "raw",
@@ -40,9 +40,11 @@
       ],
       "extra_arguments": [
         "--ssh-extra-args",
-        "-o IdentitiesOnly=yes"
+        "-o IdentitiesOnly=yes",
+        "--extra-vars",
+        "murano_image_type=docker nectar_image_name='Ubuntu 18.04 LTS (Bionic) amd64 (with Docker)' image_build_dir='{{pwd}}/output-{{build_name}}'"
       ],
-      "playbook_file": "ansible/playbook-murano-docker.yml"
+      "playbook_file": "ansible/playbook-docker.yml"
     },
     {
       "type": "shell",

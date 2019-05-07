@@ -7,7 +7,8 @@
     - vars/main.yml
 
   roles:
-    - role: default_user
+    - role: image-name
+    - role: default-user
     - role: systemd-networkd
       when: (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version >= '17') or
             (ansible_distribution == 'Fedora' and ansible_distribution_version >= '28')
@@ -15,12 +16,14 @@
     - role: repos
     - role: cloud-init
     - role: heat-cfntools
+    - role: murano-agent
     - role: qemu-guest-agent
     - role: ssh
     - role: fail2ban
     - role: ntp
     - role: cloudstor
+    - role: docker
     - role: kernel-params
     - role: banner
-    - role: murano-agent
+    - role: facts
     - role: cleanup

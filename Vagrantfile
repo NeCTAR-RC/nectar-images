@@ -56,27 +56,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Ubuntu 16.04 (xenial) with Murano Agent
-  config.vm.define "ubuntu1604-murano-agent" do |c|
-    c.vm.box = "ubuntu/xenial64"
-    config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "generic/ubuntu1604"
-    end
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             ansible_python_interpreter: "/usr/bin/python3" }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-murano-agent.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
   # Ubuntu 18.04 (bionic)
   config.vm.define "ubuntu1804" do |c|
     c.vm.box = "ubuntu/bionic64"
@@ -98,8 +77,8 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Ubuntu 18.04 (bionic) with Murano Agent
-  config.vm.define "ubuntu1804-murano-agent" do |c|
+  # Ubuntu 18.04 (bionic) with Docker
+  config.vm.define "ubuntu1804-docker" do |c|
     c.vm.box = "ubuntu/bionic64"
     config.vm.provider "libvirt" do |v, override|
       override.vm.box = "generic/ubuntu1804"
@@ -107,30 +86,11 @@ Vagrant.configure("2") do |config|
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
+                             murano_image_type: "Docker",
+                             nectar_image_name: "Ubuntu 18.04 LTS (Bionic) amd64 (with Docker)",
                              ansible_python_interpreter: "/usr/bin/python3" }
       ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-murano-agent.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
-  # Ubuntu 18.04 (bionic) with Murano/Docker
-  config.vm.define "ubuntu1804-murano-docker" do |c|
-    c.vm.box = "ubuntu/bionic64"
-    config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "generic/ubuntu1804"
-    end
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             ansible_python_interpreter: "/usr/bin/python3" }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-murano-docker.yml"
+      ansible.playbook = "ansible/playbook-docker.yml"
       ansible.become = true
     end
     c.vm.provision "shell" do |shell|
@@ -188,24 +148,6 @@ Vagrant.configure("2") do |config|
       ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
-  # CentOS 7 with Murano Agent
-  config.vm.define "centos7-murano-agent" do |c|
-    c.vm.box = "centos/7"
-    c.vm.provision "shell", inline: "sudo yum -q -y install libselinux-python"
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-murano-agent.yml"
       ansible.become = true
     end
     c.vm.provision "shell" do |shell|

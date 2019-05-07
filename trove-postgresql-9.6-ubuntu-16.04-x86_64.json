@@ -39,10 +39,10 @@
         "ANSIBLE_CONFIG=ansible/ansible.cfg"
       ],
       "extra_arguments": [
-        "--extra-vars",
-        "datastore=pgsql",
         "--ssh-extra-args",
-        "-o IdentitiesOnly=yes"
+        "-o IdentitiesOnly=yes",
+        "--extra-vars",
+        "datastore=pgsql nectar_image_name='Trove PostgreSQL 9.6 (Ubuntu 16.04 LTS)' image_build_dir='{{pwd}}/output-{{build_name}}'"
       ],
       "playbook_file": "ansible/playbook-trove.yml"
     },
