@@ -9,26 +9,45 @@
   loop_control:
     loop_var: vars_item
 
-- name: Include OS-specific tasks
-  include: "{{ tasks_item }}"
-  with_first_found:
-    - "setup-{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
-    - "setup-{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
-  loop_control:
-    loop_var: tasks_item
+# The default file has murano_agent_install set to false so we only install
+# for distros that we have a specific config for
+- block:
+    - name: Include OS-specific tasks
+      include: "{{ tasks_item }}"
+      with_first_found:
+        - files:
+          - "setup-{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+          - "setup-{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
+          skip: true
+      loop_control:
+        loop_var: tasks_item
 
-# These are referenced in the config murano pushes to the client
-- name: Create Murano directories
-  file:
-    path: "{{ item }}"
-    state: directory
-    mode: 0775
-    recurse: yes
-  with_items:
-    - /etc/murano
-    - /var/murano/plans
+    # These are referenced in the config murano pushes to the client
+    - name: Create Murano directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: 0775
+        recurse: yes
+      with_items:
+        - /etc/murano
+        - /var/murano/plans
 
-- name: Enable murano guest agent service
-  service:
-    name: "{{ murano_agent_service_name }}"
-    enabled: yes
+    # We disable the agent here because the Murano setup script delivered through
+    # cloud-init will start it anyway.
+    - name: Disable murano guest agent service
+      service:
+        name: "{{ murano_agent_service_name }}"
+        enabled: no
+
+    # If murano_image_type is set, use that (e.g. docker), otherwise we use the
+    # distro name, lowercase, which is what our Murano apps expect
+    - name: Set murano_image_type image property
+      vars:
+        murano_image_info:
+          title: "{{ murano_image_title | default(murano_default_title) }}"
+          type: "linux.{{ murano_image_type | default(murano_default_type) }}"
+      set_fact:
+        nectar_image_property_murano_image_info: "{{ murano_image_info | to_json }}"
+
+  when: murano_agent_install|default(True) == True

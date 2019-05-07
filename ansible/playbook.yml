@@ -15,6 +15,7 @@
     - role: repos
     - role: cloud-init
     - role: heat-cfntools
+    - role: murano-agent
     - role: qemu-guest-agent
     - role: ssh
     - role: fail2ban
