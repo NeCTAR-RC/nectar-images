@@ -32,3 +32,9 @@
   patch:
     src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/postgres-dont-disable-postgres-admin_ocata.patch"
     dest: /usr/lib/python2.7/dist-packages/trove/guestagent/datastore/experimental/postgresql/service.py
+
+- name: Set Trove image properties
+  set_fact:
+    nectar_image_property_datastore_name: PostgreSQL
+    nectar_image_property_datastore_type: postgresql
+    nectar_image_property_datastore_version: 9.6

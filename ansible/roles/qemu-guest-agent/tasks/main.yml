@@ -35,3 +35,7 @@
     dest: /usr/nectar/tests.d
     mode: 0755
   when: nectar_test_build is not defined
+
+- name: Set hw_qemu_guest_agent image property
+  set_fact:
+    nectar_image_property_hw_qemu_guest_agent: 'yes'

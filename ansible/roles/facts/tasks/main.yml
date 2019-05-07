@@ -1,15 +1,20 @@
 ---
-- name: "Create facts directory ({{ playbook_dir }}/.facts)"
+- name: "Create facts directory ({{ fact_dir }})"
   local_action:
     module: file
-    path: "{{ playbook_dir }}/.facts"
+    path: "{{ fact_dir }}"
     state: directory
   become: False
 
+# Common facts we want to apply to all images
+- include: facts.yml
+
+# We lookup any facts starting with nectar_image_property_ and read those
+# into files, stripping off the prefix.
 - name: Save facts
   local_action:
     module: copy
     content: "{{ vars[item] }}"
-    dest: "{{ playbook_dir }}/.facts/{{ item }}"
+    dest: "{{ fact_dir }}/{{ item | regex_replace('^nectar_image_property_', '') }}"
   become: False
-  with_items: "{{ facts }}"
+  with_items: "{{ vars | select('match', '^nectar_image_property_.*') | list }}"

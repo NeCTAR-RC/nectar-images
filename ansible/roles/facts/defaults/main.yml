@@ -1,0 +1,5 @@
+---
+# This should be overridden by packer to the output directory for the image
+image_build_dir: "{{ playbook_dir }}"
+
+fact_dir: "{{ image_build_dir }}/.facts"
