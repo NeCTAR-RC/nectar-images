@@ -11,6 +11,15 @@
     name: "{{ murano_agent_package_name }}"
     state: present
 
+# In CentOS the service name is openstack-murano-agent, which is different
+# from what murano expects. Symlink it to make sure cloud-init can start
+# the right service
+- name: Symlink murano agent service
+  file:
+    src: /usr/lib/systemd/system/openstack-murano-agent.service
+    dest: /usr/lib/systemd/system/murano-agent.service
+    state: link
+
 - name: Remove cloud repository for CentOS
   yum_repository:
     name: "centos-openstack-{{ openstack_version }}"

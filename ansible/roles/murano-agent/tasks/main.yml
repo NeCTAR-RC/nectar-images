@@ -40,6 +40,12 @@
         name: "{{ murano_agent_service_name }}"
         enabled: no
 
+    - name: Install testing script
+      copy:
+        src: 100-murano-agent.sh
+        dest: /usr/nectar/tests.d
+        mode: 0755
+
     # If murano_image_type is set, use that (e.g. docker), otherwise we use the
     # distro name, lowercase, which is what our Murano apps expect
     - name: Set murano_image_type image property
