@@ -1,5 +1,10 @@
 # QEMU guest agent config file
 #
+{# NOTE: On CentOS, this file is a systemd environment file, but on
+   Debian based distros, it's a shell script which is sourced. Make
+   sure changes work for both scenarios
+#}
+#
 # Comma-separated blacklist of RPCs to disable, or empty list to enable all.
 #
 # You can get the list of RPC commands using "qemu-ga --blacklist='?'".
@@ -7,11 +12,16 @@
 BLACKLIST_RPC={{ qemu_ga_blacklist|join(',') }}
 
 {% if ansible_os_family == 'RedHat' and ansible_distribution_major_version == '6' %}
-# CentOS 6 required the path to be set
+{# CentOS 6 required the path to be set #}
 DEVPATH=/dev/virtio-ports/org.qemu.guest_agent.0
 {% endif %}
 
 {% if ansible_os_family == "Debian" %}
 # Final string for daemon arguments for Debian/Ubuntu init.d script
 DAEMON_ARGS="--blacklist=${BLACKLIST_RPC}"
+{% endif %}
+
+{% if ansible_os_family == 'RedHat' %}
+# Disabled fsfreeze hook, as we don't ship any hooks
+FSFREEZE_HOOK_PATHNAME=/dev/null
 {% endif %}
