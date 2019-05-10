@@ -13,16 +13,46 @@
     name: qemu-guest-agent
     state: present
 
-- name: Install QEMU Guest Agent service file
-  copy:
-    src: qemu-guest-agent.service
-    dest: "/etc/systemd/system/{{ qemu_ga_service }}.service"
-  when: qemu_install_systemd_service is defined and qemu_install_systemd_service == True
+- name: Creates QEMU guest agent config directory
+  file:
+    path: /etc/qemu
+    state: directory
 
-- name: Install QEMU config file
+# This is the new-style config file, only read by newer versions of qemu
+# guest agent. Newer distros have moved away from passing the args on the
+# command line to reading this config instead, but it's difficult to
+# determine which distro does what, so we'll just push this config file
+# anyway to all distros using systemd
+- name: Install QEMU guest agent config file
+  template:
+    src: qemu-ga.conf.j2
+    dest: /etc/qemu/qemu-ga.conf
+  when: ansible_service_mgr == 'systemd'
+
+- stat:
+    path: /etc/sysconfig/qemu-ga
+  register: qemu_sysconfig
+
+# Most older distros use a sysconfig file for env vars sourced by the
+# sysvinit/systemd service script. If it exists, write config to it.
+- name: Install QEMU sysconfig config file
   template:
     src: qemu-ga-config.j2
-    dest: "{{ qemu_ga_config_file }}"
+    dest: /etc/sysconfig/qemu-ga
+  when: qemu_sysconfig.stat.exists == True
+
+- stat:
+    path: /etc/default/qemu-guest-agent
+  register: qemu_default
+
+# On Debian based distros, look for the default config file, and if it exists
+# when write a config to it. Newer Ubuntu distros drop this entirely and use
+# the /etc/qemu/qemu-ga.conf file instead.
+- name: Install QEMU default config file
+  template:
+    src: qemu-ga-config.j2
+    dest: /etc/default/qemu-guest-agent
+  when: qemu_default.stat.exists == True
 
 - name: Ensure qemu-guest-agent is enabled
   service:

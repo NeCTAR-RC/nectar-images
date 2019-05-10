@@ -1,0 +1,6 @@
+[general]
+daemon=false
+verbose=true
+method=virtio-serial
+path=/dev/virtio-ports/org.qemu.guest_agent.0
+blacklist={{ qemu_ga_blacklist|join(',') }}
