@@ -1,6 +1,2 @@
 ---
 qemu_ga_service: qemu-guest-agent
-
-qemu_ga_config_file: /etc/sysconfig/qemu-ga
-
-qemu_install_systemd_service: True

@@ -11,14 +11,13 @@
     - role: default-user
     - role: systemd-networkd
       when: (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version >= '17') or
-            (ansible_distribution == 'Fedora' and ansible_distribution_version >= '28')
+            (ansible_distribution == 'Fedora' and ansible_distribution_version < '30')
     - role: testing
     - role: repos
     - role: cloud-init
     - role: qemu-guest-agent
     - role: ssh
     - role: ntp
-    - role: kernel-params
     - role: trove
     - role: nectar-user
     - role: cleanup

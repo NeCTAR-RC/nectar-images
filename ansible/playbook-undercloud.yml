@@ -11,5 +11,4 @@
     - role: default-user
     - role: ifupdown
     - role: cloud-init
-    - role: kernel-params
     - role: cleanup

@@ -102,7 +102,7 @@
   <bootloader>
     <loader_type>grub2</loader_type>
     <global>
-      <append>net.ifnames=0 biosdevname=0</append>
+      <append>console=tty0 console=ttyS0,115200n8 vga=788 consoleblank=0 net.ifnames=0 biosdevname=0 systemd.log_color=no</append>
     </global>
   </bootloader>
 
