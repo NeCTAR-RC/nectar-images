@@ -25,7 +25,8 @@
       "boot_wait": "5s",
       "boot_command": [
         "<esc><wait5><tab>",
-        "auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-8-x86_64-preseed.cfg keymap=us debian-installer/keymap=us<enter><wait>"
+        "auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-8-x86_64-preseed.cfg keymap=us ",
+        "debian-installer/keymap=us net.ifnames=0 biosdevname=0<enter><wait>"
       ]
     }
   ],
