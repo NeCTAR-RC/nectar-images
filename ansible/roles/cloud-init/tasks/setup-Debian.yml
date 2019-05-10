@@ -30,16 +30,23 @@
 
 - include: config.yml
 
+# /etc/network/interfaces doesn't exist at all in Ubuntu 19.04
+- name: Check if /etc/network/interfaces exists
+  stat:
+    path: /etc/network/interfaces
+  register: etc_network_interfaces
+
 - name: Reset networking config on Ubuntu xenial
   copy:
     src: "{{ ansible_distribution }}/interfaces"
     dest: /etc/network/interfaces
-  when: ansible_distribution == 'Ubuntu'
+  when: ansible_distribution == 'Ubuntu' and etc_network_interfaces.stat.exists == True
 
 - name: Fix networking to bring up interface and work correctly with cloud-init
   replace:
     dest: /etc/network/interfaces
     regexp: '^allow-hotplug (\w+)$'
     replace: 'auto \1'
+  when: etc_network_interfaces.stat.exists == True
 
 - include: services.yml
