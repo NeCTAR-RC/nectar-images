@@ -20,4 +20,5 @@
     - role: ntp
     - role: trove
     - role: nectar-user
+    - role: facts
     - role: cleanup
