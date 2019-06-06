@@ -25,7 +25,7 @@
       "boot_wait": "10s",
       "boot_command": [
         "<tab><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
-        "fb=false hostname=ubuntu locale=en_AU ",
+        "net.ifnames=0 biosdevname=0 fb=false hostname=ubuntu locale=en_AU ",
         "console-keymaps-at/keymap=us console-setup/ask_detect=false ",
         "console-setup/layoutcode=us keyboard-configuration/layout=USA keyboard-configuration/variant=USA ",
         "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu-16.04-x86_64-preseed.cfg <enter><wait>"
