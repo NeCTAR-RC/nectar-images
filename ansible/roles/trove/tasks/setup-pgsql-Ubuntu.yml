@@ -10,31 +10,8 @@
     repo: "deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main"
     update_cache: yes
 
-- name: Install pgsql-server
-  package:
-    name:
-      - libpq-dev
-      - postgresql-9.6
-      - postgresql-contrib-9.6
-      - postgresql-server-dev-9.6
-      - python-psycopg2
-      - patch
-    state: present
-
-- name: Copy postgresql@.service
-  copy:
-    src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/postgresql@.service"
-    dest: /lib/systemd/system/postgresql@.service
-    mode: 0644
-
-# https://bugs.launchpad.net/trove/+bug/1675328
-- name: Patch Trove postgres service manager
-  patch:
-    src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/postgres-dont-disable-postgres-admin_ocata.patch"
-    dest: /usr/lib/python2.7/dist-packages/trove/guestagent/datastore/experimental/postgresql/service.py
-
 - name: Set Trove image properties
   set_fact:
     nectar_image_property_datastore_name: PostgreSQL
     nectar_image_property_datastore_type: postgresql
-    nectar_image_property_datastore_version: 9.6
+    nectar_image_property_datastore_version: "{{ datastore_version }}"

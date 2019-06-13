@@ -290,7 +290,8 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3",
-                             datastore: "mysql" }
+                             datastore: "mysql",
+                             datastore_version: "5.7"}
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-trove.yml"
       ansible.become = true
@@ -307,7 +308,8 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3",
-                             datastore: "pgsql" }
+                             datastore: "pgsql",
+                             datastore_version: "9.6"}
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-trove.yml"
       ansible.become = true
