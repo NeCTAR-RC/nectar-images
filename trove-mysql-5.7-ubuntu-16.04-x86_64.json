@@ -42,7 +42,7 @@
         "--ssh-extra-args",
         "-o IdentitiesOnly=yes",
         "--extra-vars",
-        "datastore=mysql nectar_image_name='Trove MySQL 5.7 (Ubuntu 16.04 LTS)' image_build_dir='{{pwd}}/output-{{build_name}}'"
+        "datastore=mysql datastore_version=5.7 nectar_image_name='Trove MySQL 5.7 (Ubuntu 16.04 LTS)' image_build_dir='{{pwd}}/output-{{build_name}}'"
       ],
       "playbook_file": "ansible/playbook-trove.yml"
     },

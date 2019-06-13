@@ -4,3 +4,6 @@
 
 # Datastore setup
 - include: "setup-{{ datastore }}-{{ ansible_distribution }}.yml"
+
+# Datastore version setup
+- include: "setup-{{ datastore }}-{{ datastore_version }}-{{ ansible_distribution }}.yml"
