@@ -1,0 +1,10 @@
+---
+- name: Install pgsql-server
+  package:
+    name:
+      - libpq-dev
+      - postgresql-11
+      - postgresql-server-dev-11
+      - python-psycopg2
+      - patch
+    state: present
