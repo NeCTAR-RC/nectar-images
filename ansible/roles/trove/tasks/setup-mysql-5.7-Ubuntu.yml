@@ -40,7 +40,7 @@
 
 - name: Write base MySQL config
   copy:
-    src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/my.cnf"
+    src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/my-5.7.cnf"
     dest: /etc/mysql/my.cnf
 
 - name: Replace MySQL start script
