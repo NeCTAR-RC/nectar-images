@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e6a6644_213a1f84",
+        "filename": "Vagrantfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2019-06-14T01:27:57Z",
+      "side": 1,
+      "message": "bionic",
+      "range": {
+        "startLine": 301,
+        "startChar": 30,
+        "endLine": 301,
+        "endChar": 36
+      },
+      "revId": "f2e5f845d11aae8e3e5165b4a9c78173d6c7cc70",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5da1957c_649762f3",
+        "filename": "Vagrantfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2019-06-14T01:27:57Z",
+      "side": 1,
+      "message": "ubuntu/bionic64",
+      "range": {
+        "startLine": 303,
+        "startChar": 16,
+        "endLine": 303,
+        "endChar": 31
+      },
+      "revId": "f2e5f845d11aae8e3e5165b4a9c78173d6c7cc70",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e7abda4_95c17d79",
+        "filename": "Vagrantfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2019-06-14T01:27:57Z",
+      "side": 1,
+      "message": "ubuntu/bionic64",
+      "range": {
+        "startLine": 339,
+        "startChar": 16,
+        "endLine": 339,
+        "endChar": 31
+      },
+      "revId": "f2e5f845d11aae8e3e5165b4a9c78173d6c7cc70",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": true
+    }
+  ]
+}
