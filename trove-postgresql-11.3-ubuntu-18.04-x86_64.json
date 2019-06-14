@@ -5,7 +5,7 @@
       "name": "trove-postgresql-11.3-ubuntu-18.04-x86_64",
       "vm_name": "trove-postgresql-11.3-ubuntu-18.04-x86_64",
       "accelerator": "kvm",
-      "disk_size": 2048,
+      "disk_size": 4096,
       "format": "raw",
       "headless": true,
       "http_directory": "http",
