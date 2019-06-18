@@ -17,9 +17,7 @@ max_allowed_packet  = 16M
 thread_stack        = 192K
 thread_cache_size       = 8
 myisam-recover-options  = BACKUP
-query_cache_size        = 16M
 log_error = /var/log/mysql/error.log
 max_binlog_size   = 100M
 
 !includedir /etc/mysql/conf.d/
-!includedir /etc/mysql/mysql.conf.d/
