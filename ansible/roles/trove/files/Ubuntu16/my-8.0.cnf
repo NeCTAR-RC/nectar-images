@@ -19,5 +19,6 @@ thread_cache_size       = 8
 myisam-recover-options  = BACKUP
 log_error = /var/log/mysql/error.log
 max_binlog_size   = 100M
+default-authentication-plugin = mysql_native_password
 
 !includedir /etc/mysql/conf.d/
