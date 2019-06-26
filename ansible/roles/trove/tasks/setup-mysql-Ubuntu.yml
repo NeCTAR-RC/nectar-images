@@ -1,4 +1,26 @@
 ---
+# We dont't add user/group when using vagrant as uid/gid clashes as extra users
+# exist in the image
+
+- name: Ensure group "mysql" exists
+  group:
+    name: mysql
+    state: present
+    gid: 116
+    system: yes
+  when: nectar_test_build | default(False) == False
+
+- name: Ensure user "mysql" exists
+  user:
+    name: mysql
+    shell: /bin/false
+    system: yes
+    home: /var/lib/mysql
+    group: mysql
+    uid: 111
+    comment: 'MySQL Server'
+  when: nectar_test_build | default(False) == False
+
 - name: Set Trove image properties
   set_fact:
     nectar_image_property_datastore_name: MySQL
