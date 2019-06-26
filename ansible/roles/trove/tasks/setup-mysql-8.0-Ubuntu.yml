@@ -44,4 +44,9 @@
 - name: Write base MySQL config
   copy:
     src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/my-8.0.cnf"
+    dest: /etc/mysql/my.cnf
+
+- name: Write base MySQL config
+  copy:
+    src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/my-8.0.cnf"
     dest: /etc/mysql/mysql.cnf
