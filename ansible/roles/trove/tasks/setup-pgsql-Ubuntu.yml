@@ -15,3 +15,25 @@
     nectar_image_property_datastore_name: PostgreSQL
     nectar_image_property_datastore_type: postgresql
     nectar_image_property_datastore_version: "{{ datastore_version }}"
+
+# We dont't add user/group when using vagrant as uid/gid clashes as extra users
+# exist in the image
+
+- name: Ensure group "postgres" exists
+  group:
+    name: postgres
+    state: present
+    gid: 117
+    system: yes
+  when: nectar_test_build | default(False) == False
+
+- name: Ensure user "postgres" exists
+  user:
+    name: postgres
+    shell: /bin/bash
+    system: yes
+    home: /var/lib/postgresql
+    group: postgres
+    uid: 111
+    comment: 'PostgreSQL administrator'
+  when: nectar_test_build | default(False) == False
