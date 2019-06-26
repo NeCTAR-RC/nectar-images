@@ -1,6 +1,26 @@
 ---
+
+- name: Ensure group "mysql" exists
+  group:
+    name: mysql
+    state: present
+    gid: 116
+    system: yes
+
+- name: Ensure user "mysql" exists
+  user:
+    name: mysql
+    shell: /bin/false
+    system: yes
+    home: /var/lib/mysql
+    group: mysql
+    uid: 111
+    comment: 'MySQL Server'
+
 - name: Set Trove image properties
   set_fact:
     nectar_image_property_datastore_name: MySQL
     nectar_image_property_datastore_type: mysql
     nectar_image_property_datastore_version: "{{ datastore_version }}"
+
+
