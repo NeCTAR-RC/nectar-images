@@ -1,0 +1,10 @@
+- name: Install NFS utility
+  apt:
+    pkg: nfs-common
+    state: present
+  when: ansible_os_family == "Debian"
+- name: Install ceph-fuse utility
+  apt:
+    pkg: ceph-fuse
+    state: present
+  when: ansible_os_family == "Debian"
