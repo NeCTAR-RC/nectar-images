@@ -33,6 +33,7 @@
     shell: /bin/bash
     system: yes
     home: /var/lib/postgresql
+    create_home: no
     group: postgres
     uid: 111
     comment: 'PostgreSQL administrator'

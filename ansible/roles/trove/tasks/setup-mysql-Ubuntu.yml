@@ -16,6 +16,7 @@
     shell: /bin/false
     system: yes
     home: /var/lib/mysql
+    create_home: no
     group: mysql
     uid: 111
     comment: 'MySQL Server'
