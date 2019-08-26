@@ -6,8 +6,24 @@
 
 - name: Don't requiretty for sudo
   lineinfile:
-    dest: /etc/sudoers
+    path: /etc/sudoers
     regexp: '^Defaults\t!requiretty$'
     insertafter: '^Defaults\s+env_reset$'
     line: 'Defaults !requiretty'
     validate: 'visudo -cf %s'
+
+- name: Get cloud-init version
+  command: cloud-init --version
+  register: cloudinit_version
+
+# Fix for https://bugs.launchpad.net/bugs/1821102 until 19.2 is released.
+- name: Ephemeral DHCP fix
+  lineinfile:
+    path: /usr/lib/python3/dist-packages/cloudinit/net/dhcp.py
+    insertafter: '^    def __enter__\(self\):'
+    line: '        raise NoDHCPLeaseError()  # Nectar disabling Ephemeral'
+    firstmatch: yes
+    state: present
+  when:
+    - cloudinit_version.stdout.split()[1] is version_compare('18.0', '>=')
+    - cloudinit_version.stdout.split()[1] is version_compare('19.2', '<')
