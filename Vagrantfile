@@ -55,9 +55,9 @@ Vagrant.configure("2") do |config|
 
   # Ubuntu 16.04 (xenial)
   config.vm.define "ubuntu1604" do |c|
-    c.vm.box = "ubuntu/xenial64"
-    config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "generic/ubuntu1604"
+    c.vm.box = "generic/ubuntu1604"
+    config.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/xenial64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -76,9 +76,9 @@ Vagrant.configure("2") do |config|
 
   # Ubuntu 18.04 (bionic)
   config.vm.define "ubuntu1804" do |c|
-    c.vm.box = "ubuntu/bionic64"
-    config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "generic/ubuntu1804"
+    c.vm.box = "generic/ubuntu1804"
+    config.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/bionic64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -97,9 +97,9 @@ Vagrant.configure("2") do |config|
 
   # Ubuntu 18.04 (bionic) with Docker
   config.vm.define "ubuntu1804-docker" do |c|
-    c.vm.box = "ubuntu/bionic64"
-    config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "generic/ubuntu1804"
+    c.vm.box = "generic/ubuntu1804"
+    config.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/bionic64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -120,9 +120,9 @@ Vagrant.configure("2") do |config|
 
   # Ubuntu 18.10 (cosmic)
   config.vm.define "ubuntu1810" do |c|
-    c.vm.box = "ubuntu/cosmic64"
-    config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "roboxes/ubuntu1810"
+    c.vm.box = "roboxes/ubuntu1810"
+    config.vm.provider " virtualbox" do |v, override|
+      override.vm.box = "ubuntu/cosmic64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -175,42 +175,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Fedora 26
-  config.vm.define "fedora26" do |c|
-    c.vm.box = "fedora/26-cloud-base"
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             ansible_python_interpreter: "/usr/bin/python3" }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
-  # Fedora 27
-  config.vm.define "fedora27" do |c|
-    c.vm.box = "fedora/27-cloud-base"
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             ansible_python_interpreter: "/usr/bin/python3" }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
   # Fedora 28
   config.vm.define "fedora28" do |c|
     c.vm.box = "fedora/28-cloud-base"
@@ -247,9 +211,27 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # Fedora 30
+  config.vm.define "fedora30" do |c|
+    c.vm.box = "fedora/30-cloud-base"
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true,
+                             ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook.yml"
+      ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
+    end
+  end
+
   # openSUSE Leap 42
   config.vm.define "opensuse42" do |c|
-    c.vm.box = "opensuse/openSUSE-42.3-x86_64"
+    c.vm.box = "generic/opensuse42"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
@@ -266,7 +248,7 @@ Vagrant.configure("2") do |config|
 
   # openSUSE Leap 15
   config.vm.define "opensuse15" do |c|
-    c.vm.box = "opensuse/openSUSE-15.0-x86_64"
+    c.vm.box = "generic/opensuse15"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
@@ -300,9 +282,9 @@ Vagrant.configure("2") do |config|
 
   # Trove MySQL (Ubuntu 16.04 xenial)
   config.vm.define "trove-mysql-ubuntu1604" do |c|
-    c.vm.box = "ubuntu/xenial64"
-    config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "generic/ubuntu1604"
+    c.vm.box = "generic/ubuntu1604"
+    config.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/xenial64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -318,9 +300,9 @@ Vagrant.configure("2") do |config|
 
   # Trove MySQL (Ubuntu 18.04 bionic)
   config.vm.define "trove-mysql-ubuntu1804" do |c|
-    c.vm.box = "ubuntu/bionic64"
-    config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "generic/ubuntu1804"
+    c.vm.box = "generic/ubuntu1804"
+    config.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/bionic64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -336,9 +318,9 @@ Vagrant.configure("2") do |config|
 
   # Trove PostgreSQL (Ubuntu 16.04 xenial)
   config.vm.define "trove-pgsql-ubuntu1604" do |c|
-    c.vm.box = "ubuntu/xenial64"
-    config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "generic/ubuntu1604"
+    c.vm.box = "generic/ubuntu1604"
+    config.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/xenial64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -354,9 +336,9 @@ Vagrant.configure("2") do |config|
 
   # Trove PostgreSQL (Ubuntu 18.04 bionic)
   config.vm.define "trove-pgsql-ubuntu1804" do |c|
-    c.vm.box = "ubuntu/bionic64"
-    config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "generic/ubuntu1804"
+    c.vm.box = "generic/ubuntu1804"
+    config.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/bionic64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -372,9 +354,9 @@ Vagrant.configure("2") do |config|
 
   # Ubuntu 16.04 (xenial) Jenkins slave
   config.vm.define "ubuntu1604-jenkins" do |c|
-    c.vm.box = "ubuntu/xenial64"
-    config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "generic/ubuntu1604"
+    c.vm.box = "generic/ubuntu1604"
+    config.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/xenial64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -388,9 +370,9 @@ Vagrant.configure("2") do |config|
 
   # Ubuntu 18.04 (bionic) Jenkins slave
   config.vm.define "ubuntu1804-jenkins" do |c|
-    c.vm.box = "ubuntu/bionic64"
-    config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "generic/ubuntu1804"
+    c.vm.box = "generic/ubuntu1804"
+    config.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/bionic64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -404,9 +386,9 @@ Vagrant.configure("2") do |config|
 
   # Undercloud Ubuntu 16.04 (xenial)
   config.vm.define "undercloud-ubuntu1604" do |c|
-    c.vm.box = "ubuntu/xenial64"
-    config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "generic/ubuntu1604"
+    c.vm.box = "generic/ubuntu1604"
+    config.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/xenial64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -420,9 +402,9 @@ Vagrant.configure("2") do |config|
 
   # Ubuntu 18.04 (bionic) Jenkins slave
   config.vm.define "ubuntu1804-jenkins" do |c|
-    c.vm.box = "ubuntu/bionic64"
-    config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "generic/ubuntu1804"
+    c.vm.box = "generic/ubuntu1804"
+    config.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/bionic64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -436,9 +418,9 @@ Vagrant.configure("2") do |config|
 
   # Undercloud Ubuntu 18.04 (bionic)
   config.vm.define "undercloud-ubuntu1804" do |c|
-    c.vm.box = "ubuntu/bionic64"
-    config.vm.provider "libvirt" do |v, override|
-      override.vm.box = "generic/ubuntu1804"
+    c.vm.box = "generic/ubuntu1804"
+    config.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/bionic64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
