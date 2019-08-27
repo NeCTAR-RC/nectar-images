@@ -9,7 +9,7 @@
       "format": "raw",
       "headless": true,
       "http_directory": "http",
-      "iso_url": "http://mirror.internode.on.net/pub/debian-cd/current/amd64/iso-cd/debian-10.0.0-amd64-netinst.iso",
+      "iso_url": "http://mirror.aarnet.edu.au/pub/debian-cd/10.0.0/amd64/iso-cd/debian-10.0.0-amd64-netinst.iso",
       "iso_checksum": "3dbb597b7f11dbda71cda08d4c1339c1eb565e784c75409987fa2b91182d9240",
       "iso_checksum_type": "sha256",
       "ssh_password": "not_a_real_password",
