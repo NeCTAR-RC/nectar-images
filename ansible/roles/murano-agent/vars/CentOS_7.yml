@@ -1,4 +1,4 @@
 ---
-openstack_version: pike
+openstack_version: rocky
 murano_agent_package_name: openstack-murano-agent
 murano_agent_service_name: openstack-murano-agent
