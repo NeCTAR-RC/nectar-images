@@ -1,0 +1,51 @@
+{
+  "builders": [
+    {
+      "type": "qemu",
+      "name": "centos-8-x86_64",
+      "vm_name": "centos-8-x86_64",
+      "accelerator": "kvm",
+      "disk_size": 4096,
+      "format": "raw",
+      "headless": true,
+      "http_directory": "http",
+      "iso_url": "http://mirror.aarnet.edu.au/pub/centos/8/isos/x86_64/CentOS-8-x86_64-1905-boot.iso",
+      "iso_checksum": "a7993a0d4b7fef2433e0d4f53530b63c715d3aadbe91f152ee5c3621139a2cbc",
+      "iso_checksum_type": "sha256",
+      "ssh_password": "not_a_real_password",
+      "ssh_port": 22,
+      "ssh_username": "root",
+      "ssh_wait_timeout": "10000s",
+      "vnc_bind_address": "0.0.0.0",
+      "qemuargs": [
+        [ "-m", "2048M" ],
+        [ "-cpu", "host" ],
+        [ "-smp", "2" ]
+      ],
+      "boot_wait": "5s",
+      "boot_command": [
+        "<tab> text net.ifnames=0 biosdevname=0 ",
+        "ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-8-x86_64-kickstart.cfg<enter><wait>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "ansible_env_vars": [
+        "ANSIBLE_CONFIG=ansible/ansible.cfg"
+      ],
+      "extra_arguments": [
+        "--ssh-extra-args",
+        "-o IdentitiesOnly=yes",
+        "--extra-vars",
+        "image_build_dir='{{pwd}}/output-{{build_name}}'"
+      ],
+      "playbook_file": "ansible/playbook.yml"
+    },
+    {
+      "type": "shell",
+      "script": "scripts/cleanup.sh"
+    }
+  ]
+}

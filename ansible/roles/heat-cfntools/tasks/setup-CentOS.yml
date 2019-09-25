@@ -15,6 +15,7 @@
     description: "CentOS OpenStack"
     baseurl: "{{ openstack_repo }}"
     gpgcheck: no
+  when: openstack_repo is defined
 
 - name: Install package
   package:

@@ -16,12 +16,14 @@
     - role: repos
     - role: cloud-init
     - role: heat-cfntools
+      when: (ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] == "8") == False
     - role: murano-agent
     - role: qemu-guest-agent
     - role: ssh
     - role: fail2ban
     - role: ntp
     - role: cloudstor
+      when: (ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] == "8") == False
     - role: banner
     - role: facts
     - role: cleanup

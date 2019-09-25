@@ -1,0 +1,4 @@
+---
+# Chrony is default in CentOS 8
+ntp_service: chrony
+ntp_daemon: chronyd

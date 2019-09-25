@@ -8,19 +8,13 @@
     - "{{ ansible_os_family }}.yml"
     - "default.yml"
 
-- name: Install NTP package
+- name: Install chrony package
   package:
-    name: ntp
+    name: chrony
     state: present
 
-- name: Ensure NTP is running and enabled as configured.
+- name: Ensure chrony is running and enabled as configured.
   service:
-    name: "{{ ntp_daemon }}"
+    name: chronyd
     state: started
     enabled: yes
-
-- name: Generate ntp.conf file
-  template:
-    src: ntp.conf.j2
-    dest: /etc/ntp.conf
-  notify: restart ntp

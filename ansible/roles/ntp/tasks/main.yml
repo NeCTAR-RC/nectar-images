@@ -23,6 +23,10 @@
     force: yes
   when: ansible_os_family == 'Debian'
 
+- name: Include chrony configuration
+  include: chrony.yml
+  when: ntp_service == 'chrony'
+
 - name: Include ntpd configuration
   include: ntpd.yml
   when: ansible_service_mgr != 'systemd' or (ntp_service is undefined or ntp_service == 'ntpd')
