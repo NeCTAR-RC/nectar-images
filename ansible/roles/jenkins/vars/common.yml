@@ -69,4 +69,4 @@ common_packages:
   - yamllint
 
 pip_packages:
-  - { name: tox, version: 2.7.0 }
+  - { name: tox, version: 3.14.0}
