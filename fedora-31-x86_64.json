@@ -1,0 +1,50 @@
+{
+  "builders": [
+    {
+      "type": "qemu",
+      "name": "fedora-31-x86_64",
+      "vm_name": "fedora-31-x86_64",
+      "accelerator": "kvm",
+      "disk_size": 4096,
+      "format": "raw",
+      "headless": true,
+      "http_directory": "http",
+      "iso_url": "http://mirror.aarnet.edu.au/pub/fedora/linux/releases/31/Server/x86_64/iso/Fedora-Server-netinst-x86_64-31-1.9.iso",
+      "iso_checksum": "5be8debd3e8fb4e86b9fbf67c7eb66ea598d2b7ad0c7ba8d505ce88067b43444",
+      "iso_checksum_type": "sha256",
+      "ssh_private_key_file": "packer-ssh-key",
+      "ssh_port": 22,
+      "ssh_username": "root",
+      "ssh_wait_timeout": "10000s",
+      "vnc_bind_address": "0.0.0.0",
+      "qemuargs": [
+        [ "-m", "2048M" ],
+        [ "-cpu", "host" ],
+        [ "-smp", "2" ]
+      ],
+      "boot_wait": "5s",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-31-x86_64-kickstart.cfg<enter><wait>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "ansible_env_vars": [
+        "ANSIBLE_CONFIG=ansible/ansible.cfg"
+      ],
+      "extra_arguments": [
+        "--ssh-extra-args",
+        "-o IdentitiesOnly=yes",
+        "--extra-vars",
+        "ansible_python_interpreter=/usr/bin/python3 image_build_dir='{{pwd}}/output-{{build_name}}'"
+      ],
+      "playbook_file": "ansible/playbook.yml"
+    },
+    {
+      "type": "shell",
+      "script": "scripts/cleanup.sh"
+    }
+  ]
+}
