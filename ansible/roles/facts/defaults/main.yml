@@ -3,3 +3,4 @@
 image_build_dir: "{{ playbook_dir }}"
 
 fact_dir: "{{ image_build_dir }}/.facts"
+tag_dir: "{{ image_build_dir }}/.tags"

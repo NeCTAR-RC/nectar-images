@@ -1,0 +1,109 @@
+---
+- include_vars: default.yml
+- include_vars: ubuntu.yml
+
+- name: Add Ubuntu cloud archive key
+  apt_key:
+    id: 391A9AA2147192839E9DB0315EDB1B62EC4926EA
+    keyserver: keyserver.ubuntu.com
+
+- name: Add Ubuntu cloud archive repository
+  apt_repository:
+    repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_distribution_release }}-updates/{{ octavia_openstack_version }} main"
+    update_cache: true
+
+- name: Add Nectar archive keys
+  apt_key:
+    url: "{{ item }}"
+  with_items:
+    - http://download.rc.nectar.org.au/nectar-archive-key-2016.gpg
+    - http://download.rc.nectar.org.au/nectar-custom.gpg
+
+- name: Add Nectar repositories
+  apt_repository:
+    repo: "{{ item }}"
+    update_cache: yes
+  with_items:
+    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }} main"
+    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }}-{{ octavia_openstack_version }} main"
+    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }}-{{ octavia_openstack_version }}-testing main"
+
+- name: Install Octavia amphora agent
+  package:
+    name: amphora-agent
+    state: present
+
+- name: Create some required directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /etc/octavia/certs
+    - /etc/netns
+    - /etc/network/interfaces.d
+
+- name: Install Octavia amphora service
+  copy:
+    src: amphora-agent.service
+    dest: /etc/systemd/system/amphora-agent.service
+
+- name: Remove old init script
+  file:
+    name: /etc/init.d/amphora-agent
+    state: absent
+
+- name: Reload systemd daemon
+  command: systemctl daemon-reload
+
+- name: Enable amphora agent service
+  service:
+    name: amphora-agent
+    enabled: true
+
+- name: Install dependency packages
+  package:
+    name:
+      - cryptsetup
+      - keepalived
+      - ipvsadm
+      - rsyslog
+      - logrotate
+    state: present
+
+- name: Install certs-ramfs service
+  copy:
+    src: certs-ramfs.service
+    dest: /etc/systemd/system/certs-ramfs.service
+
+- name: Enable certs-ramfs service
+  service:
+    name: certs-ramfs
+    enabled: true
+
+- name: Add certfs-ramfs script
+  copy:
+    src: certfs-ramfs
+    dest: /usr/local/bin/certfs-ramfs
+    mode: 0755
+
+# rebind the ssh daemon to listen only on the management network interface
+# so we allow port 22 open for load balancing if required
+- name: Install rebind-ssh dhcp hook
+  copy:
+    src: rebind-ssh
+    dest: /etc/dhcp/dhclient-enter-hooks.d/rebind-ssh
+    mode: 0755
+
+- name: Install rsyslog config
+  copy:
+    src: 55-octavia-socket.conf
+    dest: /etc/rsyslog.d/55-octavia-socket.conf
+
+- name: Install logrotate config
+  copy:
+    src: amphora-agent.logrotate
+    dest: /etc/logrotate.d/amphora-agent
+
+- name: Set the octavia tag
+  set_fact:
+    nectar_image_tag_octavia: true

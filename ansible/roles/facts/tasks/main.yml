@@ -1,9 +1,12 @@
 ---
-- name: "Create facts directory ({{ fact_dir }})"
+- name: "Create facts and tags directories"
   local_action:
     module: file
-    path: "{{ fact_dir }}"
+    path: "{{ item }}"
     state: directory
+  with_items:
+    - "{{ fact_dir }}"
+    - "{{ tag_dir }}"
   become: False
 
 # Common facts we want to apply to all images
@@ -18,3 +21,13 @@
     dest: "{{ fact_dir }}/{{ item | regex_replace('^nectar_image_property_', '') }}"
   become: False
   with_items: "{{ vars | select('match', '^nectar_image_property_.*') | list }}"
+
+# We lookup any tags starting with nectar_image_tag_ and read those
+# into files, stripping off the prefix.
+- name: Save tags
+  local_action:
+    module: copy
+    content: ''  # empty
+    dest: "{{ tag_dir }}/{{ item | regex_replace('^nectar_image_tag_', '') }}"
+  become: False
+  with_items: "{{ vars | select('match', '^nectar_image_tag_.*') | list }}"

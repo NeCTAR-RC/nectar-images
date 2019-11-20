@@ -1,0 +1,13 @@
+---
+# Vars
+- name: Include driver-specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ driver }}.yml"
+    - "default.yml"
+
+# OS setup
+- include: "setup-{{ ansible_distribution|lower }}.yml"
+
+# Engine setup
+- include: "setup-{{ driver }}.yml"

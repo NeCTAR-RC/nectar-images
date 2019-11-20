@@ -6,6 +6,23 @@
 
 - name: Remove netplan package and config
   apt:
-    name: netplan
+    name:
+      - nplan
+      - netplan.io
     state: absent
     purge: yes
+
+- name: Enable ifupdown networking
+  systemd:
+    name: networking
+    enabled: yes
+    masked: no
+
+- name: Disable systemd-networkd
+  systemd:
+    name: "{{ item }}"
+    enabled: no
+    masked: yes
+  with_items:
+    - systemd-networkd
+    - networkd-dispatcher

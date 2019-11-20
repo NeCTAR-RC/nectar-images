@@ -1,0 +1,22 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: yes
+
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    - role: image-name
+    - role: default-user
+    - role: ifupdown
+    - role: testing
+    - role: repos
+    - role: cloud-init
+    - role: qemu-guest-agent
+    - role: ssh
+    - role: ntp
+    - role: octavia
+    - role: nectar-user
+    - role: facts
+    - role: cleanup
