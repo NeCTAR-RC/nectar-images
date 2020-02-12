@@ -1,0 +1,54 @@
+{
+  "builders": [
+    {
+      "type": "qemu",
+      "name": "ubuntu-19.10-x86_64",
+      "vm_name": "ubuntu-19.10-x86_64",
+      "accelerator": "kvm",
+      "disk_size": 2048,
+      "format": "raw",
+      "headless": true,
+      "http_directory": "http",
+      "iso_url": "http://mirror.aarnet.edu.au/ubuntu/dists/eoan/main/installer-amd64/current/images/netboot/mini.iso",
+      "iso_checksum": "03d3ec50bce69eb13a406ac2cf8a4c3cb2b2e1fa58d257ea4f366469cbf091eb",
+      "iso_checksum_type": "sha256",
+      "ssh_password": "not_a_real_password",
+      "ssh_port": 22,
+      "ssh_username": "root",
+      "ssh_wait_timeout": "10000s",
+      "vnc_bind_address": "0.0.0.0",
+      "qemuargs": [
+        [ "-m", "2048M" ],
+        [ "-cpu", "host" ],
+        [ "-smp", "2" ]
+      ],
+      "boot_wait": "5s",
+      "boot_command": [
+        "<tab><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "net.ifnames=0 biosdevname=0 fb=false hostname=ubuntu locale=en_AU ",
+        "console-keymaps-at/keymap=us console-setup/ask_detect=false ",
+        "console-setup/layoutcode=us keyboard-configuration/layout=USA keyboard-configuration/variant=USA ",
+        "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu-19.10-x86_64-preseed.cfg <enter><wait>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "ansible_env_vars": [
+        "ANSIBLE_CONFIG=ansible/ansible.cfg"
+      ],
+      "extra_arguments": [
+        "--ssh-extra-args",
+        "-o IdentitiesOnly=yes",
+        "--extra-vars",
+        "ansible_python_interpreter=/usr/bin/python3 image_build_dir='{{pwd}}/output-{{build_name}}'"
+      ],
+      "playbook_file": "ansible/playbook.yml"
+    },
+    {
+      "type": "shell",
+      "script": "scripts/cleanup.sh"
+    }
+  ]
+}

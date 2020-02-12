@@ -139,6 +139,28 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # Ubuntu 19.10 (eoan)
+  config.vm.define "ubuntu1910" do |c|
+    c.vm.box = "roboxes/ubuntu1910"
+    config.vm.provider " virtualbox" do |v, override|
+      override.vm.box = "ubuntu/eoan64"
+    end
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true,
+                             ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook.yml"
+      ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
+    end
+  end
+
+
  # CentOS 6
   config.vm.define "centos6" do |c|
     c.vm.box = "centos/6"
