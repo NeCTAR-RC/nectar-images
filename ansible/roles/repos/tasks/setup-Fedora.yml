@@ -13,13 +13,6 @@
     replace: 'baseurl=http://mirror.aarnet.edu.au/pub/fedora/linux/\1/$releasever/\3'
   with_items: "{{ yum_repo_files }}"
 
-# The baseurl given in F28 updates repo includes /os on the end which is incorrect
-- name: Fix URL for updates on Fedora 28
-  replace:
-    dest: /etc/yum.repos.d/fedora-updates.repo
-    regexp: '^(.*)os/$'
-    replace: '\1'
-
 - name: Perform a full upgrade
   dnf:
     name: '*'
