@@ -37,6 +37,7 @@ common_packages:
   - puppet-agent
   - python-sphinx
   - python3-setuptools
+  - curl
   - libcurl3
   - genisoimage
   - python-ceilometerclient
