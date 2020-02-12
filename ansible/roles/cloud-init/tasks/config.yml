@@ -16,6 +16,9 @@
   shell: "cloud-init --version 2>&1 | awk '{print $NF}'"
   register: cloudinit_version
 
+- debug:
+    msg: "cloud-init version is {{ cloudinit_version.stdout }}"
+
 - block:
   - name: Find cloud-init DHCP file
     shell: 'ls /usr/lib/python*/*-packages/cloudinit/net/dhcp.py'
