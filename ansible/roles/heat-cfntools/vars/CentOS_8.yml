@@ -1,0 +1,6 @@
+---
+openstack_repo: "https://cbs.centos.org/repos/cloud8-openstack-train-candidate/x86_64/os/"
+
+heat_cfntools_packages:
+  - heat-cfntools
+  - curl
