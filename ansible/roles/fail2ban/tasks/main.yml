@@ -7,10 +7,10 @@
     - "default.yml"
 
 - include: setup-CentOS6.yml
-  when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Scientific') and ansible_distribution_major_version == '6'
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '6'
 
 - include: setup-CentOS.yml
-  when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Scientific') and ansible_distribution_major_version > '6'
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version > '6'
 
 - include: setup-Fedora.yml
   when: ansible_distribution == 'Fedora'

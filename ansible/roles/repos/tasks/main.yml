@@ -10,7 +10,7 @@
   when: ansible_os_family == 'Debian'
 
 - include: setup-CentOS.yml
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Scientific'
+  when: ansible_distribution == 'CentOS'
 
 - include: setup-Fedora.yml
   when: ansible_distribution == 'Fedora'
