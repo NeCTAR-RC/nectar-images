@@ -7,11 +7,7 @@ if [ -z ${FILE} ]; then
 fi
 
 # Find packer
-if hash packer >/dev/null 2>&1; then
-    PACKER=packer
-elif hash packer-io >/dev/null 2>&1; then
-    PACKER=packer-io
-else
+if ! hash packer >/dev/null 2>&1; then
     echo "You need packer installed to use this script"
     exit 1
 fi
@@ -29,26 +25,63 @@ BUILD_NAME="${NAME}_build_${BUILD_NUMBER}"
 OUTPUT_DIR=output-${NAME}
 PACKER_WORKING_FILE=$(mktemp)
 FACT_DIR=$OUTPUT_DIR/.facts
+TAG_DIR=$OUTPUT_DIR/.tags
+
+DEBUG=1
 
 # Source build config
 . "$(basename $0 .sh).cfg"
 
-read_val() {
-  jq -r ".builders[0].${1}" $PACKER_WORKING_FILE
+read_packer_var() {
+    jq -r ".builders[0].${1}" $PACKER_WORKING_FILE
 }
 
-write_val() {
-  TMPFILE=$(mktemp)
-  jq ".builders[0].${1} = \"${2}\"" $PACKER_WORKING_FILE > $TMPFILE
-  mv $TMPFILE $PACKER_WORKING_FILE
+write_packer_var() {
+    TMPFILE=$(mktemp)
+    jq ".builders[0].${1} = \"${2}\"" $PACKER_WORKING_FILE > $TMPFILE
+    mv $TMPFILE $PACKER_WORKING_FILE
 }
 
 read_fact() {
-  cat $FACT_DIR/${1}
+    cat $FACT_DIR/${1}
+}
+
+delete_image() {
+	DELETE=1
+    if [ $DEBUG ]; then
+		read -r -p "Would you like to clean up the image $1? [y/N] " response
+		[[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]] || DELETE=0
+	fi
+    if [ $DELETE ]; then
+        echo "Deleting image $1..."
+        echo "--> openstack image delete $1"
+        openstack image delete $1
+    else
+        echo "NOT deleting image $1..."
+    fi
+}
+
+delete_instance() {
+    echo "Saving log to ${OUTPUT_DIR}/${BUILD_NAME}-console.txt"
+    openstack server show $1 > ${OUTPUT_DIR}/${BUILD_NAME}-console.txt
+    openstack console log show $1 >> ${OUTPUT_DIR}/${BUILD_NAME}-console.txt
+
+	DELETE=1
+    if [ $DEBUG ]; then
+		read -r -p "Would you like to clean up the instance $1? [y/N] " response
+		[[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]] || DELETE=0
+	fi
+    if [ $DELETE ]; then
+        echo "Deleting instance $1..."
+        echo "--> openstack server delete $1"
+        openstack server delete $1
+    else
+        echo "NOT instance $1..."
+    fi
 }
 
 cp $FILE $PACKER_WORKING_FILE
-BUILDER_TYPE=$(read_val type)
+BUILDER_TYPE=$(read_packer_var type)
 
 if [ -z "$OS_USERNAME" ]; then
     echo "Please load the OpenStack credentials for testing"
@@ -71,25 +104,25 @@ if [ -d ${OUTPUT_DIR} ]; then
     rm -fr ${OUTPUT_DIR}
 fi
 
-# Clean out any old Ansible facts
-rm -fr ansible/.facts
+# Clean out any old Ansible facts/tags
+rm -fr $FACT_DIR $TAG_DIR
 
 if [ "${BUILDER_TYPE}" == "qemu" ]; then
     if [ -n "${SSH_CLIENT}" ] || [ -n "${SSH_TTY}" ]; then
-        write_val headless true
+        write_packer_var headless true
     else
-        write_val headless false
+        write_packer_var headless false
         #sed -i 's/console=ttyS0,115200n8//g' $PACKER_WORKING_FILE
     fi
 
-    write_val vm_name "${BUILD_NAME}"
+    write_packer_var vm_name "${BUILD_NAME}"
 else
-    write_val image_name "${BUILD_NAME}"
-    write_val flavor "${BUILD_FLAVOUR}"
+    write_packer_var image_name "${BUILD_NAME}"
+    write_packer_var flavor "${BUILD_FLAVOUR}"
 fi
 
 echo "Building image ${NAME}..."
-${PACKER} build $PACKER_WORKING_FILE
+packer build $PACKER_WORKING_FILE
 rm -f $PACKER_WORKING_FILE
 
 IMAGE_NAME="$(read_fact nectar_name)"
@@ -125,6 +158,14 @@ if [ -d $FACT_DIR ]; then
     done
 fi
 
+# Set tags from Ansible facts (see Ansible facts role)
+if [ -d $TAG_DIR ]; then
+    for TAG in $(ls $TAG_DIR); do
+        echo "Setting tag $TAG"
+        openstack image set --tag $TAG $IMAGE_ID || true
+    done
+fi
+
 if [ ! -z $BUILD_PROPERTY ]; then
     echo "Setting property $BUILD_PROPERTY=$BUILD_NUMBER"
     openstack image set --property $BUILD_PROPERTY="$BUILD_NUMBER" $IMAGE_ID || true
@@ -151,20 +192,19 @@ while [ $ATTEMPT -le $ATTEMPTS ]; do
     STATUS=$(openstack server show -f value -c status ${INSTANCE_ID})
     if [ "$STATUS" = "ERROR" ]; then
       echo -e "\nERROR: instance failed to reach ACTIVE state."
-      openstack image delete $IMAGE_ID
-      openstack server delete $INSTANCE_ID
+      delete_instance $INSTANCE_ID
+      delete_image $IMAGE_ID
       exit 1
     fi
     [ "$STATUS" = "ACTIVE" ] && break
     if [ $ATTEMPT -eq $ATTEMPTS ]; then
       echo -e "\nERROR: reached maximum attempts ($ATTEMPTS)"
-      #openstack image delete $IMAGE_ID
-      echo "Deleting instance ${INSTANCE_ID}..."
-      openstack server delete $INSTANCE_ID
+      delete_instance $INSTANCE_ID
+      delete_image $IMAGE_ID
       exit 1
     fi
     ATTEMPT=$((ATTEMPT+1))
-    sleep 5
+    sleep 10
 done
 echo
 
@@ -202,11 +242,8 @@ while [ $ATTEMPT -le $ATTEMPTS ]; do
       # One last attempt with output
       echo -e "\nERROR: reached maximum attempts ($ATTEMPTS)"
       ssh -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $USER_ACCOUNT@$IP_ADDRESS exit
-      echo "NOT deleting image ${IMAGE_ID}"
-      #openstack image delete $IMAGE_ID
-      openstack console log show $INSTANCE_ID > ${OUTPUT_DIR}/${BUILD_NAME}-console.txt
-      echo "Deleting instance ${INSTANCE_ID}..."
-      openstack server delete $INSTANCE_ID
+      delete_instance $INSTANCE_ID
+      delete_image $IMAGE_ID
       exit 1
     fi
     ATTEMPT=$((ATTEMPT+1))
@@ -221,14 +258,6 @@ sleep 60
 echo "Running tests (ssh $USER_ACCOUNT@$IP_ADDRESS '/bin/bash /usr/nectar/run_tests.sh')..."
 ssh -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $USER_ACCOUNT@$IP_ADDRESS '/bin/bash /usr/nectar/run_tests.sh'
 
-read -r -p "Would you like to clean up the instance? [y/N] " response
-if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-    echo "Deleting instance ${INSTANCE_ID}..."
-    openstack server delete $INSTANCE_ID
-fi
-
-read -r -p "Would you like to clean up the image? [y/N] " response
-if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-    echo "Deleting image ${IMAGE_ID}..."
-    openstack image delete $IMAGE_ID
-fi
+# Complete
+delete_instance $INSTANCE_ID
+delete_image $IMAGE_ID
