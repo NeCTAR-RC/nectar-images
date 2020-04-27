@@ -26,8 +26,9 @@
     src: systemd-murano-agent.service.j2
     dest: /etc/systemd/system/murano-agent.service
 
-- name: Enable murano-agent service
+- name: Disable murano-agent service
   systemd:
     name: murano-agent
-    enabled: yes
+    enabled: no
+    state: stopped
     daemon_reload: yes
