@@ -18,6 +18,7 @@
         - files:
           - "setup-{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
           - "setup-{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
+          - "setup-{{ ansible_distribution }}.yml"
           skip: true
       loop_control:
         loop_var: tasks_item
