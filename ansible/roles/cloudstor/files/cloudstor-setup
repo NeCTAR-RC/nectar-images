@@ -19,6 +19,7 @@ MOUNT_PATH=/cloudstor
 cleanup=false
 username=
 password=
+mount_path=$MOUNT_PATH
 
 usage() {
   cat >&2 << EOF
@@ -28,6 +29,7 @@ Options:
   -c     unmount and clean up any CloudStor config
   -u     username. if not given, you will be prompted
   -p     password. if not given, you will be prompted
+  -m     mount-directory. defaults to $MOUNT_PATH
   -h     this help message
 EOF
   exit 1
@@ -54,6 +56,13 @@ while getopts "hcu:p:" opt; do
     p)
       password=${OPTARG}
       ;;
+    m)
+      mount_path=${OPTARG}
+      if [ "${mount_path#/" == "${mount_path}" ] ; then
+          echo "-m should be followed by an absolute directory path"
+          usage()
+      fi
+      ;;
     *)
       usage
       ;;
@@ -61,21 +70,42 @@ while getopts "hcu:p:" opt; do
 done
 shift $((OPTIND-1))
 
-# Clean up all traces of cloudstor mount setup
+# Clean up all traces of cloudstor mount setup.
 if [ "$cleanup" = true ]; then
   echo "Cleaning up CloudStor setup..."
-  if mountpoint -q $MOUNT_PATH; then
-    sudo umount $MOUNT_PATH
+  if mountpoint -q "$mount_path"; then
+    sudo umount "$mount_path"
   fi
-  sudo sed -i '\,^'"$WEBDAV_URL"',d' /etc/davfs2/secrets /etc/fstab
-  [ -d $MOUNT_PATH ] && sudo rmdir $MOUNT_PATH
+  sudo sed -i '\,^'"$WEBDAV_URL"'\W+'"$mount_path"',d' /etc/fstab
+  sudo sed -i '\,^'"$WEBDAV_URL"',d' /etc/davfs2/secrets
+  [ -d "$mount_path" ] && sudo rmdir "$mount_path"
   exit 0
 fi
 
-if mountpoint -q $MOUNT_PATH; then
-  echo "CloudStor already mounted at $MOUNT_PATH"
+# Check for active cloudstor mounts
+if mountpoint -q "$mount_path"; then
+  echo "CloudStor is already mounted at $mount_path"
   exit 2
 fi
+if mountpoint -q "$MOUNT_PATH"; then
+  echo "CloudStor is already mounted at $MOUNT_PATH"
+  exit 2
+fi
+
+# Deal with cases where cloudstor is or was mounted on some
+# other mount point (as recorded in the fstab).
+grep -l "$WEBDAV_URL" /etc/fstab | {
+  read URL MP REST
+  if [ "X$mount_path" != "X$MP" ] ; then
+    if mountpoint -q "$MP"; then
+      echo "CloudStor is already mounted at $MP"
+    else
+      echo "CloudStor was previously mounted at $MP"
+      echo "Run 'cloudstor-setup -c -m $MP' to clean this up"
+    fi
+    exit 2
+  fi
+}
 
   cat << EOF
 This command guides you through the process of mounting your AARNet CloudStor
@@ -175,9 +205,9 @@ sudo sed -i '\,^'"$WEBDAV_URL"',d' /etc/davfs2/secrets
 escapedpassword=$(echo "$password" | sed 's/"/\\"/g')  # noqa
 echo "$WEBDAV_URL $username \"$escapedpassword\"" | sudo tee -a /etc/davfs2/secrets > /dev/null
 
-[ -d $MOUNT_PATH ] || sudo mkdir $MOUNT_PATH
+[ -d "$mount_path" ] || sudo mkdir "$mount_path"
 if ! grep -q "$WEBDAV_URL" /etc/fstab; then
-  echo "$WEBDAV_URL $MOUNT_PATH davfs uid=$USER,_netdev 0 0" | sudo tee -a /etc/fstab > /dev/null
+  echo "$WEBDAV_URL $mount_path davfs uid=$USER,_netdev 0 0" | sudo tee -a /etc/fstab > /dev/null
 fi
 
 # Explicitly disable locks - not supported by OwnCloud
@@ -185,9 +215,9 @@ sudo sed -i 's/.*use_locks.*/use_locks 0/g' /etc/davfs2/davfs2.conf
 
 # Perform mount
 echo -n "Mounting CloudStor storage... "
-if sudo mount $MOUNT_PATH; then
+if sudo mount "$mount_path"; then
   echo "done"
-  echo "Your CloudStor account has been mounted to $MOUNT_PATH"
+  echo "Your CloudStor account has been mounted to $mount_path"
   exit 0
 fi
 
