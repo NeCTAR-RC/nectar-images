@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "66c41007_972c7a31",
+        "filename": "http/ubuntu-20.04-x86_64-preseed.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000104
+      },
+      "writtenOn": "2020-04-30T06:13:00Z",
+      "side": 1,
+      "message": "should we default to python3 instead by using python-is-python3 package?",
+      "range": {
+        "startLine": 46,
+        "startChar": 41,
+        "endLine": 46,
+        "endChar": 49
+      },
+      "revId": "66e3019b1e7ddd091b00929ae93105e1642a1d37",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": true
+    }
+  ]
+}
