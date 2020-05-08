@@ -18,9 +18,12 @@
     update_cache: true
   with_items: "{{ apt_repositories }}"
 
+- name: Perform an apt update
+  apt:
+    update_cache: yes
+
 - name: Perform a full upgrade
   apt:
     upgrade: dist
-    update_cache: yes
     dpkg_options: 'force-confold,force-confdef'
   when: nectar_test_build is not defined

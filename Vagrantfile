@@ -414,7 +414,7 @@ Vagrant.configure("2") do |config|
 
   # Ubuntu 16.04 (xenial) Jenkins slave
   config.vm.define "ubuntu1604-jenkins" do |c|
-    c.vm.box = "generic/ubuntu1604"
+    c.vm.box = "peru/ubuntu-20.04-server-amd64"
     config.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/xenial64"
     end
@@ -433,6 +433,22 @@ Vagrant.configure("2") do |config|
     c.vm.box = "generic/ubuntu1804"
     config.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/bionic64"
+    end
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true,
+                             ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook-jenkins-slave.yml"
+      ansible.become = true
+    end
+  end
+
+  # Ubuntu 20.04 (focal) Jenkins slave
+  config.vm.define "ubuntu2004-jenkins" do |c|
+    c.vm.box = "generic/ubuntu2004"
+    config.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/focal64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -460,8 +476,8 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Ubuntu 18.04 (bionic) Jenkins slave
-  config.vm.define "ubuntu1804-jenkins" do |c|
+  # Undercloud Ubuntu 18.04 (bionic)
+  config.vm.define "undercloud-ubuntu1804" do |c|
     c.vm.box = "generic/ubuntu1804"
     config.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/bionic64"
@@ -471,16 +487,16 @@ Vagrant.configure("2") do |config|
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
       ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-jenkins-slave.yml"
+      ansible.playbook = "ansible/playbook-undercloud.yml"
       ansible.become = true
     end
   end
 
-  # Undercloud Ubuntu 18.04 (bionic)
-  config.vm.define "undercloud-ubuntu1804" do |c|
-    c.vm.box = "generic/ubuntu1804"
+  # Undercloud Ubuntu 20.04 (focal)
+  config.vm.define "undercloud-ubuntu2004" do |c|
+    c.vm.box = "peru/ubuntu-20.04-server-amd64"
     config.vm.provider "virtualbox" do |v, override|
-      override.vm.box = "ubuntu/bionic64"
+      override.vm.box = "ubuntu/focal64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"

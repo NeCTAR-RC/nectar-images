@@ -28,23 +28,18 @@
     - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }} main"
     - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }}-{{ openstack_version }} main"
     - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }}-{{ openstack_version }}-testing main"
+  when: openstack_version is defined
 
 - name: Add Puppet Key
   apt_key:
     keyserver: keyserver.ubuntu.com
     id: 6F6B15509CF8E59E6E469F327F438280EF8D349F
 
-- name: Add Puppet PC1 Repo
+- name: Add Puppet Repo
   apt_repository:
-    repo: "deb http://apt.puppetlabs.com {{ ansible_distribution_release }} PC1"
+    repo: "{{ puppet_repo }}"
     update_cache: yes
-  when: ansible_distribution_release == 'xenial'
-
-- name: Add Puppet 5 Repo
-  apt_repository:
-    repo: "deb http://apt.puppetlabs.com {{ ansible_distribution_release }} puppet5"
-    update_cache: yes
-  when: ansible_distribution_release == 'bionic'
+  when: puppet_repo is defined
 
 - name: Add NodeJS repo key
   apt_key:
@@ -62,6 +57,7 @@
 - name: Add ansible PPA
   apt_repository:
     repo: 'ppa:ansible/ansible'
+  when: ansible_ppa is defined and ansible_ppa == True
 
 - name: Install common packages
   package:
