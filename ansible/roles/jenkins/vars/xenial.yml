@@ -1,7 +1,33 @@
 ---
 openstack_version: mitaka
+
+puppet_repo: "deb http://apt.puppetlabs.com {{ ansible_distribution_release }} PC1"
+
 packages:
+  - python-pip
+  - python-sphinx
   - libpng12-dev
   - nodejs-legacy
   - libpcre3-dev
+  - libcurl3
   - npm
+  - python-ceilometerclient
+  - python-cinderclient
+  - python-designateclient
+  - python-glanceclient
+  - python-heatclient
+  - python-keystoneclient
+  - python-manilaclient
+  - python-mistralclient
+  - python-muranoclient
+  - python-neutronclient
+  - python-novaclient
+  - python-openstackclient
+  - python-saharaclient
+  - python-swiftclient
+  - python-troveclient
+  - python-hivemind-contrib
+  - python-hivemind
+
+pip_packages:
+  - { name: tox, version: 3.14.0}

@@ -9,6 +9,7 @@
   roles:
     - role: image-name
     - role: default-user
+    - role: repos
     - role: ifupdown
     - role: cloud-init
     - role: cleanup

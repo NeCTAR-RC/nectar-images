@@ -1,9 +1,37 @@
 ---
 openstack_version: queens
+
+puppet_repo: "deb http://apt.puppetlabs.com {{ ansible_distribution_release }} puppet5"
+
+ansible_ppa: True
+
 packages:
+  - python-pip
+  - python-sphinx
+  - libcurl3
   - libpng-dev
+  - python-ceilometerclient
+  - python-cinderclient
+  - python-designateclient
+  - python-glanceclient
+  - python-heatclient
+  - python-keystoneclient
+  - python-manilaclient
+  - python-mistralclient
+  - python-muranoclient
+  - python-neutronclient
+  - python-novaclient
+  - python-openstackclient
+  - python-saharaclient
+  - python-swiftclient
+  - python-troveclient
+  - python-hivemind-contrib
+  - python-hivemind
 
 nodejs_repo: node_8.x
 
 gem_packages:
   - puppet
+
+pip_packages:
+  - { name: tox, version: 3.14.0}
