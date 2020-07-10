@@ -59,6 +59,12 @@
     repo: 'ppa:ansible/ansible'
   when: ansible_ppa is defined and ansible_ppa == True
 
+# Remove once we no longer install python2 and python3 version of cinderclient
+- name: Diversion for python2/python3-cinderclient conflict
+  command:
+    cmd: dpkg-divert --quiet --package python-cinderclient --divert /usr/share/bash-completion/completions/python2-cinder.bash_completion --rename /usr/share/bash-completion/completions/cinder.bash_completion
+    creates: /usr/share/bash-completion/completions/python2-cinder.bash_completion
+
 - name: Install common packages
   package:
     name: "{{ common_packages }}"

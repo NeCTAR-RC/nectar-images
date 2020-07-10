@@ -6,10 +6,11 @@ puppet_repo: "deb http://apt.puppetlabs.com {{ ansible_distribution_release }} p
 ansible_ppa: True
 
 packages:
+  - libcurl4
+  - libpng-dev
   - python-pip
   - python-sphinx
-  - libcurl3
-  - libpng-dev
+  - python-barbicanclient
   - python-ceilometerclient
   - python-cinderclient
   - python-designateclient
@@ -21,12 +22,32 @@ packages:
   - python-muranoclient
   - python-neutronclient
   - python-novaclient
+  - python-octaviaclient
   - python-openstackclient
   - python-saharaclient
   - python-swiftclient
   - python-troveclient
   - python-hivemind-contrib
   - python-hivemind
+  - python3-barbicanclient
+  - python3-ceilometerclient
+  - python3-cinderclient
+  - python3-designateclient
+  - python3-glanceclient
+  - python3-heatclient
+  - python3-keystoneclient
+  - python3-manilaclient
+  - python3-mistralclient
+  - python3-muranoclient
+  - python3-neutronclient
+  - python3-novaclient
+  - python3-octaviaclient
+  - python3-openstackclient
+  - python3-openstacksdk
+  - python3-saharaclient
+  - python3-swiftclient
+  - python3-troveclient
+  - twine
 
 nodejs_repo: node_8.x
 

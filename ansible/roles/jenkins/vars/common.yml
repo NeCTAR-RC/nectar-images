@@ -48,3 +48,4 @@ common_packages:
   - ruby-puppet-syntax
   - shellcheck
   - yamllint
+  - cmake

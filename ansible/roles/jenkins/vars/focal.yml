@@ -4,6 +4,7 @@ openstack_version: ussuri
 puppet_repo: "deb http://apt.puppetlabs.com {{ ansible_distribution_release }} puppet6"
 
 packages:
+  - libpng-dev
   - python3-ceilometerclient
   - python3-cinderclient
   - python3-designateclient
@@ -19,6 +20,6 @@ packages:
   - python3-saharaclient
   - python3-swiftclient
   - python3-troveclient
-  - libpng-dev
+  - twine
 #  - python3-hivemind-contrib
 #  - python3-hivemind
