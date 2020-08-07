@@ -519,6 +519,10 @@ Vagrant.configure("2") do |config|
   config.vm.provider :virtualbox do |v|
     v.memory = 2048
     v.cpus = 2
+    # Fix for ubuntu images hanging:
+    #   https://bugs.launchpad.net/cloud-images/+bug/1829625
+    v.customize ["modifyvm", :id, "--uart1", "0x3F8", "4"]
+    v.customize ["modifyvm", :id, "--uartmode1", "file", File::NULL]
   end
 
 end
