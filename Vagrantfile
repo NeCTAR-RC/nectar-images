@@ -56,7 +56,7 @@ Vagrant.configure("2") do |config|
   # Ubuntu 16.04 (xenial)
   config.vm.define "ubuntu1604" do |c|
     c.vm.box = "generic/ubuntu1604"
-    config.vm.provider "virtualbox" do |v, override|
+    c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/xenial64"
     end
     c.vm.provision "ansible" do |ansible|
@@ -77,7 +77,7 @@ Vagrant.configure("2") do |config|
   # Ubuntu 18.04 (bionic)
   config.vm.define "ubuntu1804" do |c|
     c.vm.box = "generic/ubuntu1804"
-    config.vm.provider "virtualbox" do |v, override|
+    c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/bionic64"
     end
     c.vm.provision "ansible" do |ansible|
@@ -98,7 +98,7 @@ Vagrant.configure("2") do |config|
   # Ubuntu 18.04 (bionic) with Docker
   config.vm.define "ubuntu1804-docker" do |c|
     c.vm.box = "generic/ubuntu1804"
-    config.vm.provider "virtualbox" do |v, override|
+    c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/bionic64"
     end
     c.vm.provision "ansible" do |ansible|
@@ -121,7 +121,7 @@ Vagrant.configure("2") do |config|
   # Ubuntu 18.10 (cosmic)
   config.vm.define "ubuntu1810" do |c|
     c.vm.box = "roboxes/ubuntu1810"
-    config.vm.provider " virtualbox" do |v, override|
+    c.vm.provider " virtualbox" do |v, override|
       override.vm.box = "ubuntu/cosmic64"
     end
     c.vm.provision "ansible" do |ansible|
@@ -142,7 +142,7 @@ Vagrant.configure("2") do |config|
   # Ubuntu 19.10 (eoan)
   config.vm.define "ubuntu1910" do |c|
     c.vm.box = "roboxes/ubuntu1910"
-    config.vm.provider " virtualbox" do |v, override|
+    c.vm.provider " virtualbox" do |v, override|
       override.vm.box = "ubuntu/eoan64"
     end
     c.vm.provision "ansible" do |ansible|
@@ -163,7 +163,7 @@ Vagrant.configure("2") do |config|
   # Ubuntu 20.04 (focal)
   config.vm.define "ubuntu2004" do |c|
     c.vm.box = "peru/ubuntu-20.04-server-amd64"
-    config.vm.provider " virtualbox" do |v, override|
+    c.vm.provider " virtualbox" do |v, override|
       override.vm.box = "ubuntu/focal64"
     end
     c.vm.provision "ansible" do |ansible|
@@ -326,7 +326,7 @@ Vagrant.configure("2") do |config|
   # Trove MySQL (Ubuntu 16.04 xenial)
   config.vm.define "trove-mysql-ubuntu1604" do |c|
     c.vm.box = "generic/ubuntu1604"
-    config.vm.provider "virtualbox" do |v, override|
+    c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/xenial64"
     end
     c.vm.provision "ansible" do |ansible|
@@ -344,7 +344,7 @@ Vagrant.configure("2") do |config|
   # Trove MySQL (Ubuntu 18.04 bionic)
   config.vm.define "trove-mysql-ubuntu1804" do |c|
     c.vm.box = "generic/ubuntu1804"
-    config.vm.provider "virtualbox" do |v, override|
+    c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/bionic64"
     end
     c.vm.provision "ansible" do |ansible|
@@ -362,7 +362,7 @@ Vagrant.configure("2") do |config|
   # Trove PostgreSQL (Ubuntu 16.04 xenial)
   config.vm.define "trove-pgsql-ubuntu1604" do |c|
     c.vm.box = "generic/ubuntu1604"
-    config.vm.provider "virtualbox" do |v, override|
+    c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/xenial64"
     end
     c.vm.provision "ansible" do |ansible|
@@ -380,7 +380,7 @@ Vagrant.configure("2") do |config|
   # Trove PostgreSQL (Ubuntu 18.04 bionic)
   config.vm.define "trove-pgsql-ubuntu1804" do |c|
     c.vm.box = "generic/ubuntu1804"
-    config.vm.provider "virtualbox" do |v, override|
+    c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/bionic64"
     end
     c.vm.provision "ansible" do |ansible|
@@ -398,7 +398,7 @@ Vagrant.configure("2") do |config|
   # Trove MySQL (Ubuntu 18.04 bionic)
   config.vm.define "octavia-haproxy-ubuntu1804" do |c|
     c.vm.box = "generic/ubuntu1804"
-    config.vm.provider "virtualbox" do |v, override|
+    c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/bionic64"
     end
     c.vm.provision "ansible" do |ansible|
@@ -415,7 +415,7 @@ Vagrant.configure("2") do |config|
   # Ubuntu 16.04 (xenial) Jenkins slave
   config.vm.define "ubuntu1604-jenkins" do |c|
     c.vm.box = "peru/ubuntu-20.04-server-amd64"
-    config.vm.provider "virtualbox" do |v, override|
+    c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/xenial64"
     end
     c.vm.provision "ansible" do |ansible|
@@ -431,7 +431,7 @@ Vagrant.configure("2") do |config|
   # Ubuntu 18.04 (bionic) Jenkins slave
   config.vm.define "ubuntu1804-jenkins" do |c|
     c.vm.box = "generic/ubuntu1804"
-    config.vm.provider "virtualbox" do |v, override|
+    c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/bionic64"
     end
     c.vm.provision "ansible" do |ansible|
@@ -447,7 +447,7 @@ Vagrant.configure("2") do |config|
   # Ubuntu 20.04 (focal) Jenkins slave
   config.vm.define "ubuntu2004-jenkins" do |c|
     c.vm.box = "generic/ubuntu2004"
-    config.vm.provider "virtualbox" do |v, override|
+    c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/focal64"
     end
     c.vm.provision "ansible" do |ansible|
@@ -463,7 +463,7 @@ Vagrant.configure("2") do |config|
   # Undercloud Ubuntu 16.04 (xenial)
   config.vm.define "undercloud-ubuntu1604" do |c|
     c.vm.box = "generic/ubuntu1604"
-    config.vm.provider "virtualbox" do |v, override|
+    c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/xenial64"
     end
     c.vm.provision "ansible" do |ansible|
@@ -479,7 +479,7 @@ Vagrant.configure("2") do |config|
   # Undercloud Ubuntu 18.04 (bionic)
   config.vm.define "undercloud-ubuntu1804" do |c|
     c.vm.box = "generic/ubuntu1804"
-    config.vm.provider "virtualbox" do |v, override|
+    c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/bionic64"
     end
     c.vm.provision "ansible" do |ansible|
@@ -495,7 +495,7 @@ Vagrant.configure("2") do |config|
   # Undercloud Ubuntu 20.04 (focal)
   config.vm.define "undercloud-ubuntu2004" do |c|
     c.vm.box = "peru/ubuntu-20.04-server-amd64"
-    config.vm.provider "virtualbox" do |v, override|
+    c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/focal64"
     end
     c.vm.provision "ansible" do |ansible|
