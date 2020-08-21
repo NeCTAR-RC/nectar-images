@@ -1,0 +1,34 @@
+
+- name: Install Podman and role dependencies
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - software-properties-common
+    install_recommends: False
+
+- name: Add Podman apt key
+  apt_key:
+    url: https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_{{ ansible_distribution_version }}/Release.key
+    id: 2472D6D0D2F66AF87ABA8DA34D64390375060AA4
+
+- name: Configure upstream APT repository
+  apt_repository:
+    repo: "{{ podman_repository }}"
+    update_cache: True
+
+- name: Install Podman
+  apt:
+    name: "podman={{ podman_version }}"
+    state: present
+    update_cache: True
+    install_recommends: False
+    cache_valid_time: 86400
+
+- name: Install Buildah
+  apt:
+    name: "buildah={{ buildah_version }}"
+    state: present
+    update_cache: True
+    install_recommends: False
+    cache_valid_time: 86400
