@@ -32,3 +32,11 @@
     update_cache: True
     install_recommends: False
     cache_valid_time: 86400
+
+- name: Install Skopeo
+  apt:
+    name: "skopeo={{ skopeo_version }}"
+    state: present
+    update_cache: True
+    install_recommends: False
+    cache_valid_time: 86400
