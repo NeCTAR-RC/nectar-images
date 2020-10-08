@@ -2,8 +2,8 @@
   "builders": [
     {
       "type": "qemu",
-      "name": "trove-postgresql-11.3-ubuntu-18.04-x86_64",
-      "vm_name": "trove-postgresql-11.3-ubuntu-18.04-x86_64",
+      "name": "trove-postgresql-11-ubuntu-18.04-x86_64",
+      "vm_name": "trove-postgresql-11-ubuntu-18.04-x86_64",
       "accelerator": "kvm",
       "disk_size": 4096,
       "format": "raw",
@@ -42,7 +42,7 @@
         "--ssh-extra-args",
         "-o IdentitiesOnly=yes",
         "--extra-vars",
-        "datastore=pgsql datastore_version=11.3 nectar_image_name='Trove PostgreSQL 11.3 (Ubuntu 18.04 LTS)' image_build_dir='{{pwd}}/output-{{build_name}}'"
+        "datastore=pgsql datastore_version=11 nectar_image_name='Trove PostgreSQL 11 (Ubuntu 18.04 LTS)' image_build_dir='{{pwd}}/output-{{build_name}}'"
       ],
       "playbook_file": "ansible/playbook-trove.yml"
     },
