@@ -2,7 +2,6 @@
 Description=Trove Guest
 After=syslog.target
 After=network.target
-After=cloud-final.service
 
 [Service]
 Type=simple
