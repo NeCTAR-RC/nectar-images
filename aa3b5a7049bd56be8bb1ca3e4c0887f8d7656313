@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "91844f6e_eedb53e7",
+        "filename": "ansible/roles/trove/tasks/setup-pgsql-9.6-Ubuntu.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2020-10-08T22:20:46Z",
+      "side": 1,
+      "message": "```\n- name: Set Trove image properties\n  set_fact:\n     nectar_image_property_datastore_installed_version: \"{{ postgresql_version.stdout }}\"\n```",
+      "revId": "aa3b5a7049bd56be8bb1ca3e4c0887f8d7656313",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": true
+    }
+  ]
+}
