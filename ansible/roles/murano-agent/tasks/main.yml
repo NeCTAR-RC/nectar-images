@@ -37,9 +37,11 @@
     # We disable the agent here because the Murano setup script delivered through
     # cloud-init will start it anyway.
     - name: Disable murano guest agent service
-      service:
-        name: "{{ murano_agent_service_name }}"
+      systemd:
+        name: murano-agent
         enabled: no
+        state: stopped
+        daemon_reload: yes
 
     - name: Install testing script
       copy:

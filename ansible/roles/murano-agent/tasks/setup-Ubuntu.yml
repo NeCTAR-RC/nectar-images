@@ -16,19 +16,39 @@
     - /var/log/murano
     - /var/log/murano-agent
 
+- name: Add Nectar archive keys
+  apt_key:
+    url: "{{ item }}"
+  with_items:
+    - http://download.rc.nectar.org.au/nectar-archive-key-2016.gpg
+    - http://download.rc.nectar.org.au/nectar-custom.gpg
+
+- name: Add Nectar apt repositories
+  apt_repository:
+    repo: "{{ item }}"
+    update_cache: yes
+  with_items:
+    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }} main"
+    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }}-{{ openstack_version }} main"
+  when: openstack_version is defined
+
 - name: Install Murano Guest agent
   package:
     name: murano-agent
     state: present
+
+- name: Remove Nectar apt repositories
+  apt_repository:
+    repo: "{{ item }}"
+    state: absent
+  with_items:
+    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }} main"
+    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }}-{{ openstack_version }} main"
+  when: openstack_version is defined
 
 - name: Install updated systemd service config
   template:
     src: systemd-murano-agent.service.j2
     dest: /etc/systemd/system/murano-agent.service
 
-- name: Disable murano-agent service
-  systemd:
-    name: murano-agent
-    enabled: no
-    state: stopped
-    daemon_reload: yes
+
