@@ -8,3 +8,11 @@
       - python-psycopg2
       - patch
     state: present
+
+- name: Get postgreSQL version
+  shell: "/usr/lib/postgresql/11/bin/postgres -V | awk '{print $3}'"
+  register: postgresql_version
+
+- debug:
+    msg: "postgresql_version version is {{ postgresql_version.stdout }}"
+

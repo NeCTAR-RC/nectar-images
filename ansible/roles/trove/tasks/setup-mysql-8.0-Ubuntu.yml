@@ -50,3 +50,10 @@
   copy:
     src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/my-8.0.cnf"
     dest: /etc/mysql/mysql.cnf
+
+- name: Get MySQL version
+  shell: "mysqld --version | awk '{print $3}' | awk -F '-' '{print $1}'"
+  register: mysql_version
+
+- debug:
+    msg: "mysql_version version is {{ mysql_version.stdout }}"

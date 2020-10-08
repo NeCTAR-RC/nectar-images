@@ -48,3 +48,10 @@
     src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/mysql-systemd-start"
     dest: /usr/share/mysql/mysql-systemd-start
     mode: 0755
+
+- name: Get MySQL version
+  shell: "mysqld --version | awk '{print $3}' | awk -F '-' '{print $1}'"
+  register: mysql_version
+
+- debug:
+    msg: "mysql_version version is {{ mysql_version.stdout }}"
