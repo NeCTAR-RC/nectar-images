@@ -68,6 +68,7 @@
       - ipvsadm
       - rsyslog
       - logrotate
+      - net-tools
     state: present
 
 - name: Install certs-ramfs service
