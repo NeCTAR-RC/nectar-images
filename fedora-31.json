@@ -2,17 +2,17 @@
   "builders": [
     {
       "type": "qemu",
-      "name": "centos-8-x86_64",
-      "vm_name": "centos-8-x86_64",
+      "name": "fedora-31",
+      "vm_name": "fedora-31",
       "accelerator": "kvm",
       "disk_size": 4096,
       "format": "raw",
       "headless": true,
       "http_directory": "http",
-      "iso_url": "http://mirror.aarnet.edu.au/pub/centos/8.1.1911/isos/x86_64/CentOS-8.1.1911-x86_64-boot.iso",
-      "iso_checksum": "7fea13202bf2f26989df4175aace8fdc16e1137f7961c33512cbfad844008948",
+      "iso_url": "http://mirror.aarnet.edu.au/pub/fedora/linux/releases/31/Server/x86_64/iso/Fedora-Server-netinst-x86_64-31-1.9.iso",
+      "iso_checksum": "5be8debd3e8fb4e86b9fbf67c7eb66ea598d2b7ad0c7ba8d505ce88067b43444",
       "iso_checksum_type": "sha256",
-      "ssh_password": "not_a_real_password",
+      "ssh_private_key_file": "packer-ssh-key",
       "ssh_port": 22,
       "ssh_username": "root",
       "ssh_wait_timeout": "10000s",
@@ -24,8 +24,7 @@
       ],
       "boot_wait": "5s",
       "boot_command": [
-        "<tab> text net.ifnames=0 biosdevname=0 ",
-        "ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-8-x86_64-kickstart.cfg<enter><wait>"
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-31-kickstart.cfg<enter><wait>"
       ]
     }
   ],
@@ -39,7 +38,7 @@
         "--ssh-extra-args",
         "-o IdentitiesOnly=yes",
         "--extra-vars",
-        "image_build_dir='{{pwd}}/output-{{build_name}}'"
+        "ansible_python_interpreter=/usr/bin/python3 image_build_dir='{{pwd}}/output-{{build_name}}'"
       ],
       "playbook_file": "ansible/playbook.yml"
     },

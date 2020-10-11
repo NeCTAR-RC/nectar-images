@@ -2,15 +2,15 @@
   "builders": [
     {
       "type": "qemu",
-      "name": "centos-6-x86_64",
-      "vm_name": "centos-6-x86_64",
+      "name": "fedora-30",
+      "vm_name": "fedora-30",
       "accelerator": "kvm",
       "disk_size": 4096,
       "format": "raw",
       "headless": true,
       "http_directory": "http",
-      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/CentOS-6.9-x86_64-minimal.iso",
-      "iso_checksum": "422af57b493b8af49d485885a730c5a1d955f803fac85aa51311c393168b9080",
+      "iso_url": "http://mirror.aarnet.edu.au/pub/fedora/linux/releases/30/Server/x86_64/iso/Fedora-Server-netinst-x86_64-30-1.2.iso",
+      "iso_checksum": "5e4eac4566d8c572bfb3bcf54b7d6c82006ec3c6c882a2c9235c6d3494d7b100",
       "iso_checksum_type": "sha256",
       "ssh_password": "not_a_real_password",
       "ssh_port": 22,
@@ -24,7 +24,7 @@
       ],
       "boot_wait": "5s",
       "boot_command": [
-        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-6-x86_64-kickstart.cfg<enter><wait>"
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-30-kickstart.cfg<enter><wait>"
       ]
     }
   ],
@@ -38,7 +38,7 @@
         "--ssh-extra-args",
         "-o IdentitiesOnly=yes",
         "--extra-vars",
-        "image_build_dir='{{pwd}}/output-{{build_name}}'"
+        "ansible_python_interpreter=/usr/bin/python3 image_build_dir='{{pwd}}/output-{{build_name}}'"
       ],
       "playbook_file": "ansible/playbook.yml"
     },

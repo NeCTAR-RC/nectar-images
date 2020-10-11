@@ -2,15 +2,15 @@
   "builders": [
     {
       "type": "qemu",
-      "name": "debian-8-x86_64",
-      "vm_name": "debian-8-x86_64",
+      "name": "ubuntu-20.04",
+      "vm_name": "ubuntu-20.04",
       "accelerator": "kvm",
       "disk_size": 2048,
       "format": "raw",
       "headless": true,
       "http_directory": "http",
-      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/debian-8.11.1-amd64-netinst.iso",
-      "iso_checksum": "ea444d6f8ac95fd51d2aedb8015c57410d1ad19b494cedec6914c17fda02733c",
+      "iso_url": "http://mirror.aarnet.edu.au/ubuntu/dists/focal/main/installer-amd64/current/legacy-images/netboot/mini.iso",
+      "iso_checksum": "0e79e00bf844929d40825b1f0e8634415cda195ba23bae0b041911fde4dfe018",
       "iso_checksum_type": "sha256",
       "ssh_password": "not_a_real_password",
       "ssh_port": 22,
@@ -24,9 +24,11 @@
       ],
       "boot_wait": "5s",
       "boot_command": [
-        "<esc><wait5><tab>",
-        "auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-8-x86_64-preseed.cfg keymap=us ",
-        "debian-installer/keymap=us net.ifnames=0 biosdevname=0<enter><wait>"
+        "<tab><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "net.ifnames=0 biosdevname=0 fb=false hostname=ubuntu locale=en_AU ",
+        "console-keymaps-at/keymap=us console-setup/ask_detect=false ",
+        "console-setup/layoutcode=us keyboard-configuration/layout=USA keyboard-configuration/variant=USA ",
+        "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu-20.04-preseed.cfg <enter><wait>"
       ]
     }
   ],
@@ -40,7 +42,7 @@
         "--ssh-extra-args",
         "-o IdentitiesOnly=yes",
         "--extra-vars",
-        "image_build_dir='{{pwd}}/output-{{build_name}}'"
+        "ansible_python_interpreter=/usr/bin/python3 image_build_dir='{{pwd}}/output-{{build_name}}'"
       ],
       "playbook_file": "ansible/playbook.yml"
     },

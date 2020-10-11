@@ -2,15 +2,15 @@
   "builders": [
     {
       "type": "qemu",
-      "name": "ubuntu-19.04-x86_64",
-      "vm_name": "ubuntu-19.04-x86_64",
+      "name": "ubuntu-19.10",
+      "vm_name": "ubuntu-19.10",
       "accelerator": "kvm",
       "disk_size": 2048,
       "format": "raw",
       "headless": true,
       "http_directory": "http",
-      "iso_url": "http://mirror.aarnet.edu.au/ubuntu/dists/disco/main/installer-amd64/current/images/netboot/mini.iso",
-      "iso_checksum": "9c80874dbd5f583b32819921c2f44c0fe96050cfd77be1ed38738cb2ea3339eb",
+      "iso_url": "http://mirror.aarnet.edu.au/ubuntu/dists/eoan/main/installer-amd64/current/images/netboot/mini.iso",
+      "iso_checksum": "03d3ec50bce69eb13a406ac2cf8a4c3cb2b2e1fa58d257ea4f366469cbf091eb",
       "iso_checksum_type": "sha256",
       "ssh_password": "not_a_real_password",
       "ssh_port": 22,
@@ -28,7 +28,7 @@
         "net.ifnames=0 biosdevname=0 fb=false hostname=ubuntu locale=en_AU ",
         "console-keymaps-at/keymap=us console-setup/ask_detect=false ",
         "console-setup/layoutcode=us keyboard-configuration/layout=USA keyboard-configuration/variant=USA ",
-        "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu-19.04-x86_64-preseed.cfg <enter><wait>"
+        "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu-19.10-preseed.cfg <enter><wait>"
       ]
     }
   ],

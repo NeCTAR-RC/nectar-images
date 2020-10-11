@@ -2,17 +2,17 @@
   "builders": [
     {
       "type": "qemu",
-      "name": "fedora-32-x86_64",
-      "vm_name": "fedora-32-x86_64",
+      "name": "debian-9",
+      "vm_name": "debian-9",
       "accelerator": "kvm",
-      "disk_size": 4096,
+      "disk_size": 2048,
       "format": "raw",
       "headless": true,
       "http_directory": "http",
-      "iso_url": "http://mirror.aarnet.edu.au/pub/fedora/linux/releases/32/Server/x86_64/iso/Fedora-Server-netinst-x86_64-32-1.6.iso",
-      "iso_checksum": "7f4afd2a26c718f9f15e4bbfd9c2e8849f81036d2a82a4e81fa4a313a833da9c",
+      "iso_url": "https://cdimage.debian.org/mirror/cdimage/archive/9.12.0/amd64/iso-cd/debian-9.12.0-amd64-netinst.iso",
+      "iso_checksum": "3c47f64693435b0b42b6ef59624edbffa7c4004317d9f9a3f04ecb6a4e30f191",
       "iso_checksum_type": "sha256",
-      "ssh_private_key_file": "packer-ssh-key",
+      "ssh_password": "not_a_real_password",
       "ssh_port": 22,
       "ssh_username": "root",
       "ssh_wait_timeout": "10000s",
@@ -24,23 +24,32 @@
       ],
       "boot_wait": "5s",
       "boot_command": [
-        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-32-x86_64-kickstart.cfg<enter><wait>"
+        "<esc><wait5><tab>",
+        "auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-9-preseed.cfg keymap=us ",
+        "debian-installer/keymap=us net.ifnames=0 biosdevname=0<enter><wait>"
       ]
     }
   ],
   "provisioners": [
     {
+      "type": "shell",
+      "inline": [
+        "apt-get -q -y update",
+        "apt-get -q -y install python3 sudo"
+      ]
+    },
+    {
       "type": "ansible",
       "ansible_env_vars": [
         "ANSIBLE_CONFIG=ansible/ansible.cfg"
       ],
+      "playbook_file": "ansible/playbook.yml",
       "extra_arguments": [
         "--ssh-extra-args",
         "-o IdentitiesOnly=yes",
         "--extra-vars",
         "ansible_python_interpreter=/usr/bin/python3 image_build_dir='{{pwd}}/output-{{build_name}}'"
-      ],
-      "playbook_file": "ansible/playbook.yml"
+      ]
     },
     {
       "type": "shell",

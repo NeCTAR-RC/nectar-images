@@ -2,15 +2,15 @@
   "builders": [
     {
       "type": "qemu",
-      "name": "ubuntu-16.04-x86_64",
-      "vm_name": "ubuntu-16.04-x86_64",
+      "name": "opensuse-leap-42.3",
+      "vm_name": "opensuse-leap-42.3",
       "accelerator": "kvm",
       "disk_size": 2048,
       "format": "raw",
       "headless": true,
       "http_directory": "http",
-      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/ubuntu-16.04-x86_64-mini.iso",
-      "iso_checksum": "271a268f92604732d638ec4529e0e843787b3a9407800e14663a47b28a697d96",
+      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/openSUSE-Leap-42.3-NET-x86_64.iso",
+      "iso_checksum": "d1a17116cf33a5582b83ef479d7b151b33938e60f07eebc544abf162e2aa5c12",
       "iso_checksum_type": "sha256",
       "ssh_password": "not_a_real_password",
       "ssh_port": 22,
@@ -22,13 +22,12 @@
         [ "-cpu", "host" ],
         [ "-smp", "2" ]
       ],
-      "boot_wait": "5s",
+      "boot_wait": "10s",
       "boot_command": [
-        "<tab><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
-        "net.ifnames=0 biosdevname=0 fb=false hostname=ubuntu locale=en_AU ",
-        "console-keymaps-at/keymap=us console-setup/ask_detect=false ",
-        "console-setup/layoutcode=us keyboard-configuration/layout=USA keyboard-configuration/variant=USA ",
-        "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu-16.04-x86_64-preseed.cfg <enter><wait>"
+        "<esc><enter><wait>linux net.ifnames=0 biosdevname=0 netdevice=eth0 netsetup=dhcp ",
+        "install=http://mirror.aarnet.edu.au/pub/opensuse/opensuse/distribution/leap/42.3/repo/oss/ insecure=1 ",
+        "lang=en_US autoyast=http://{{ .HTTPIP }}:{{ .HTTPPort }}/opensuse-leap-42.3-autoyast.xml ",
+        "textmode=1<enter><wait>"
       ]
     }
   ],
@@ -42,7 +41,7 @@
         "--ssh-extra-args",
         "-o IdentitiesOnly=yes",
         "--extra-vars",
-        "ansible_python_interpreter=/usr/bin/python3 image_build_dir='{{pwd}}/output-{{build_name}}'"
+        "image_build_dir='{{pwd}}/output-{{build_name}}'"
       ],
       "playbook_file": "ansible/playbook.yml"
     },

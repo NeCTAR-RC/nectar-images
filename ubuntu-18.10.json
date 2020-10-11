@@ -2,15 +2,15 @@
   "builders": [
     {
       "type": "qemu",
-      "name": "debian-10-x86_64",
-      "vm_name": "debian-10-x86_64",
+      "name": "ubuntu-18.10",
+      "vm_name": "ubuntu-18.10",
       "accelerator": "kvm",
       "disk_size": 2048,
       "format": "raw",
       "headless": true,
       "http_directory": "http",
-      "iso_url": "http://mirror.aarnet.edu.au/pub/debian-cd/10.2.0/amd64/iso-cd/debian-10.2.0-amd64-netinst.iso",
-      "iso_checksum": "e43fef979352df15056ac512ad96a07b515cb8789bf0bfd86f99ed0404f885f5",
+      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/ubuntu-18.10-mini.iso",
+      "iso_checksum": "b0bbeca78e7e8a2c4d20d830c015ed12cdb30f6cbedd0f63e7d686c00378953e",
       "iso_checksum_type": "sha256",
       "ssh_password": "not_a_real_password",
       "ssh_port": 22,
@@ -24,32 +24,27 @@
       ],
       "boot_wait": "5s",
       "boot_command": [
-        "<esc><wait5><tab>",
-        "auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-10-x86_64-preseed.cfg keymap=us ",
-        "debian-installer/keymap=us net.ifnames=0 biosdevname=0<enter><wait>"
+        "<tab><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "net.ifnames=0 biosdevname=0 fb=false hostname=ubuntu locale=en_AU ",
+        "console-keymaps-at/keymap=us console-setup/ask_detect=false ",
+        "console-setup/layoutcode=us keyboard-configuration/layout=USA keyboard-configuration/variant=USA ",
+        "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu-18.10-preseed.cfg <enter><wait>"
       ]
     }
   ],
   "provisioners": [
     {
-      "type": "shell",
-      "inline": [
-        "apt-get -q -y update",
-        "apt-get -q -y install python3 sudo"
-      ]
-    },
-    {
       "type": "ansible",
       "ansible_env_vars": [
         "ANSIBLE_CONFIG=ansible/ansible.cfg"
       ],
-      "playbook_file": "ansible/playbook.yml",
       "extra_arguments": [
         "--ssh-extra-args",
         "-o IdentitiesOnly=yes",
         "--extra-vars",
         "ansible_python_interpreter=/usr/bin/python3 image_build_dir='{{pwd}}/output-{{build_name}}'"
-      ]
+      ],
+      "playbook_file": "ansible/playbook.yml"
     },
     {
       "type": "shell",
