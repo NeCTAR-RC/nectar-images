@@ -9,7 +9,7 @@
       "format": "raw",
       "headless": true,
       "http_directory": "http",
-      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/ubuntu-18.10-mini.iso",
+      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/ubuntu-18.10-x86_64-mini.iso",
       "iso_checksum": "b0bbeca78e7e8a2c4d20d830c015ed12cdb30f6cbedd0f63e7d686c00378953e",
       "iso_checksum_type": "sha256",
       "ssh_password": "not_a_real_password",
