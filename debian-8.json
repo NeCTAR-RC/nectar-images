@@ -2,17 +2,17 @@
   "builders": [
     {
       "type": "qemu",
-      "name": "fedora-31-x86_64",
-      "vm_name": "fedora-31-x86_64",
+      "name": "debian-8",
+      "vm_name": "debian-8",
       "accelerator": "kvm",
-      "disk_size": 4096,
+      "disk_size": 2048,
       "format": "raw",
       "headless": true,
       "http_directory": "http",
-      "iso_url": "http://mirror.aarnet.edu.au/pub/fedora/linux/releases/31/Server/x86_64/iso/Fedora-Server-netinst-x86_64-31-1.9.iso",
-      "iso_checksum": "5be8debd3e8fb4e86b9fbf67c7eb66ea598d2b7ad0c7ba8d505ce88067b43444",
+      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/debian-8.11.1-amd64-netinst.iso",
+      "iso_checksum": "ea444d6f8ac95fd51d2aedb8015c57410d1ad19b494cedec6914c17fda02733c",
       "iso_checksum_type": "sha256",
-      "ssh_private_key_file": "packer-ssh-key",
+      "ssh_password": "not_a_real_password",
       "ssh_port": 22,
       "ssh_username": "root",
       "ssh_wait_timeout": "10000s",
@@ -24,7 +24,9 @@
       ],
       "boot_wait": "5s",
       "boot_command": [
-        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-31-x86_64-kickstart.cfg<enter><wait>"
+        "<esc><wait5><tab>",
+        "auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-8-preseed.cfg keymap=us ",
+        "debian-installer/keymap=us net.ifnames=0 biosdevname=0<enter><wait>"
       ]
     }
   ],
@@ -38,7 +40,7 @@
         "--ssh-extra-args",
         "-o IdentitiesOnly=yes",
         "--extra-vars",
-        "ansible_python_interpreter=/usr/bin/python3 image_build_dir='{{pwd}}/output-{{build_name}}'"
+        "image_build_dir='{{pwd}}/output-{{build_name}}'"
       ],
       "playbook_file": "ansible/playbook.yml"
     },

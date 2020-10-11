@@ -2,15 +2,15 @@
   "builders": [
     {
       "type": "qemu",
-      "name": "fedora-30-x86_64",
-      "vm_name": "fedora-30-x86_64",
+      "name": "opensuse-leap-15",
+      "vm_name": "opensuse-leap-15",
       "accelerator": "kvm",
-      "disk_size": 4096,
+      "disk_size": 2048,
       "format": "raw",
       "headless": true,
       "http_directory": "http",
-      "iso_url": "http://mirror.aarnet.edu.au/pub/fedora/linux/releases/30/Server/x86_64/iso/Fedora-Server-netinst-x86_64-30-1.2.iso",
-      "iso_checksum": "5e4eac4566d8c572bfb3bcf54b7d6c82006ec3c6c882a2c9235c6d3494d7b100",
+      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/openSUSE-Leap-15.0-NET-x86_64.iso",
+      "iso_checksum": "1a322de7c215da96fdbad4c247d218eb79073c5620a332a759c0291b44746fbc",
       "iso_checksum_type": "sha256",
       "ssh_password": "not_a_real_password",
       "ssh_port": 22,
@@ -22,9 +22,12 @@
         [ "-cpu", "host" ],
         [ "-smp", "2" ]
       ],
-      "boot_wait": "5s",
+      "boot_wait": "10s",
       "boot_command": [
-        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-30-x86_64-kickstart.cfg<enter><wait>"
+        "<esc><enter><wait>linux net.ifnames=0 biosdevname=0 netdevice=eth0 netsetup=dhcp ",
+        "install=http://mirror.aarnet.edu.au/pub/opensuse/opensuse/distribution/leap/15.0/repo/oss/ insecure=1 ",
+        "lang=en_US autoyast=http://{{ .HTTPIP }}:{{ .HTTPPort }}/opensuse-leap-15.0-autoyast.xml ",
+        "textmode=1<enter><wait>"
       ]
     }
   ],
@@ -38,7 +41,7 @@
         "--ssh-extra-args",
         "-o IdentitiesOnly=yes",
         "--extra-vars",
-        "ansible_python_interpreter=/usr/bin/python3 image_build_dir='{{pwd}}/output-{{build_name}}'"
+        "image_build_dir='{{pwd}}/output-{{build_name}}'"
       ],
       "playbook_file": "ansible/playbook.yml"
     },

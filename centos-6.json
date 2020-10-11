@@ -2,15 +2,15 @@
   "builders": [
     {
       "type": "qemu",
-      "name": "debian-9-x86_64",
-      "vm_name": "debian-9-x86_64",
+      "name": "centos-6",
+      "vm_name": "centos-6",
       "accelerator": "kvm",
-      "disk_size": 2048,
+      "disk_size": 4096,
       "format": "raw",
       "headless": true,
       "http_directory": "http",
-      "iso_url": "https://cdimage.debian.org/mirror/cdimage/archive/9.12.0/amd64/iso-cd/debian-9.12.0-amd64-netinst.iso",
-      "iso_checksum": "3c47f64693435b0b42b6ef59624edbffa7c4004317d9f9a3f04ecb6a4e30f191",
+      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/CentOS-6.9-x86_64-minimal.iso",
+      "iso_checksum": "422af57b493b8af49d485885a730c5a1d955f803fac85aa51311c393168b9080",
       "iso_checksum_type": "sha256",
       "ssh_password": "not_a_real_password",
       "ssh_port": 22,
@@ -24,32 +24,23 @@
       ],
       "boot_wait": "5s",
       "boot_command": [
-        "<esc><wait5><tab>",
-        "auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-9-x86_64-preseed.cfg keymap=us ",
-        "debian-installer/keymap=us net.ifnames=0 biosdevname=0<enter><wait>"
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-6-kickstart.cfg<enter><wait>"
       ]
     }
   ],
   "provisioners": [
     {
-      "type": "shell",
-      "inline": [
-        "apt-get -q -y update",
-        "apt-get -q -y install python3 sudo"
-      ]
-    },
-    {
       "type": "ansible",
       "ansible_env_vars": [
         "ANSIBLE_CONFIG=ansible/ansible.cfg"
       ],
-      "playbook_file": "ansible/playbook.yml",
       "extra_arguments": [
         "--ssh-extra-args",
         "-o IdentitiesOnly=yes",
         "--extra-vars",
-        "ansible_python_interpreter=/usr/bin/python3 image_build_dir='{{pwd}}/output-{{build_name}}'"
-      ]
+        "image_build_dir='{{pwd}}/output-{{build_name}}'"
+      ],
+      "playbook_file": "ansible/playbook.yml"
     },
     {
       "type": "shell",
