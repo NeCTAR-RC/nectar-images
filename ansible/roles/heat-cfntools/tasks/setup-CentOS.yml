@@ -13,9 +13,9 @@
   yum_repository:
     name: openstack
     description: "CentOS OpenStack"
-    baseurl: "{{ openstack_repo }}"
+    baseurl: "http://mirror.aarnet.edu.au/pub/centos/{{ ansible_distribution_major_version }}/cloud/x86_64/openstack-{{ openstack_version }}/"
     gpgcheck: no
-  when: openstack_repo is defined
+  when: openstack_version is defined
 
 - name: Install package
   package:

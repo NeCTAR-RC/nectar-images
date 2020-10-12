@@ -1,5 +1,5 @@
 ---
-openstack_repo: "https://cbs.centos.org/repos/cloud8-openstack-train-candidate/x86_64/os/"
+openstack_version: ussuri
 
 heat_cfntools_packages:
   - heat-cfntools
