@@ -1,0 +1,9 @@
+---
+- name: Install pgsql-server
+  package:
+    name:
+      - libpq-dev
+      - postgresql-13
+      - postgresql-server-dev-13
+      - python-psycopg2
+    state: present
