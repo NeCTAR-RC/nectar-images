@@ -7,5 +7,4 @@
       - postgresql-contrib-9.6
       - postgresql-server-dev-9.6
       - python-psycopg2
-      - patch
     state: present
