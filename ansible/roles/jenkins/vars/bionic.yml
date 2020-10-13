@@ -56,3 +56,17 @@ gem_packages:
 
 pip_packages:
   - { name: tox, version: 3.14.0}
+
+vagrant_plugins:
+  - vagrant-libvirt
+
+vagrant_packages:
+  - qemu
+  - libvirt-bin
+  - ebtables
+  - dnsmasq-base
+  - libxslt-dev
+  - libxml2-dev
+  - libvirt-dev
+  - zlib1g-dev
+  - ruby-dev

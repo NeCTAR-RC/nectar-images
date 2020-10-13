@@ -103,3 +103,6 @@
     update_cache: yes
     dpkg_options: 'force-confold,force-confdef'
   when: nectar_test_build is not defined
+
+- include: setup-vagrant.yml
+  when: vagrant_packages is defined

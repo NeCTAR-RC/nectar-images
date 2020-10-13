@@ -1,0 +1,39 @@
+---
+- name: Include OS-specific variables
+  include_vars: "{{ item }}"
+  with_items:
+    - "{{ ansible_distribution_release }}.yml"
+    - "common.yml"
+
+- name: Install dependency packages
+  package:
+    name: "{{ vagrant_packages }}"
+    state: present
+
+- name: Download Vagrant package
+  get_url:
+    url: https://releases.hashicorp.com/vagrant/2.2.10/vagrant_2.2.10_x86_64.deb
+    dest: /tmp
+
+- name: Install Vagrant package
+  apt:
+    deb: /tmp/vagrant_2.2.10_x86_64.deb
+
+- name: List installed Vagrant plugins
+  shell: vagrant plugin list
+  changed_when: False
+  register: vagrant_plugins_list
+
+# This is installed in root's .vagrant.d directory as the Jenkins user doesn't
+# exist yet. After cloud-init has finished, we move this directory and chown it
+# to the Jenkins user
+- name: Install Vagrant plugins
+  shell: "vagrant plugin install {{ item }}"
+  when:
+    - item not in vagrant_plugins_list.stdout
+  with_items: "{{ vagrant_plugins }}"
+
+- name: Enable libvirtd service
+  service:
+    name: libvirtd
+    enabled: yes
