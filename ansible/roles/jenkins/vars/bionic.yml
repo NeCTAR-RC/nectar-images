@@ -49,6 +49,9 @@ packages:
   - python3-troveclient
   - twine
 
+backport_packages:
+  - debhelper
+
 nodejs_repo: node_8.x
 
 gem_packages:

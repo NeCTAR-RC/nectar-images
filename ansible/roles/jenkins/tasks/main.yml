@@ -65,16 +65,27 @@
     cmd: dpkg-divert --quiet --package python-cinderclient --divert /usr/share/bash-completion/completions/python2-cinder.bash_completion --rename /usr/share/bash-completion/completions/cinder.bash_completion
     creates: /usr/share/bash-completion/completions/python2-cinder.bash_completion
 
+- name: Perform an apt-update
+  apt:
+    update_cache: yes
+
 - name: Install common packages
-  package:
+  apt:
     name: "{{ common_packages }}"
     state: present
 
 - name: Install distrubution specific packages
-  package:
+  apt:
     name: "{{ packages }}"
     state: present
   when: packages is defined
+
+- name: Install distrubution specific backport packages
+  apt:
+    name: "{{ backport_packages }}"
+    state: present
+    default_release: "{{ ansible_distribution_release }}-backports"
+  when: backport_packages is defined
 
 - name: Install pip packages
   pip:
@@ -100,6 +111,5 @@
 - name: Perform a full upgrade
   apt:
     upgrade: dist
-    update_cache: yes
     dpkg_options: 'force-confold,force-confdef'
   when: nectar_test_build is not defined
