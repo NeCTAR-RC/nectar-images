@@ -1,0 +1,50 @@
+---
+- name: Include OS-specific variables
+  include_vars: "{{ var_item }}"
+  with_first_found:
+    - "{{ ansible_distribution | lower }}_{{ ansible_distribution_release }}.yml"
+    - "{{ ansible_distribution | lower }}.yml"
+    - "{{ ansible_os_family | lower }}.yml"
+  loop_control:
+    loop_var: var_item
+
+- name: Install dependency packages
+  package:
+    name: "{{ vagrant_packages }}"
+    state: present
+
+- name: Download Vagrant package
+  get_url:
+    url: "https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/{{ vagrant_package_filename }}"
+    dest: /tmp
+
+- name: Install Vagrant package
+  apt:
+    deb: "/tmp/{{ vagrant_package_filename }}"
+
+- name: Delete package file
+  file:
+    dest: "/tmp/{{ vagrant_package_filename }}"
+    state: absent
+
+- name: List installed Vagrant plugins
+  become: yes
+  become_user: "{{ vagrant_plugin_user }}"
+  shell: vagrant plugin list
+  changed_when: False
+  register: vagrant_plugins_list
+  when: vagrant_plugin_user is defined
+
+- name: Install Vagrant plugins
+  become: yes
+  become_user: "{{ vagrant_plugin_user }}"
+  shell: "vagrant plugin install {{ item }}"
+  with_items: "{{ vagrant_plugins }}"
+  when:
+    - item not in vagrant_plugins_list.stdout
+    - vagrant_plugin_user is defined
+
+- name: Enable libvirtd service
+  service:
+    name: libvirtd
+    enabled: yes
