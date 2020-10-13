@@ -19,7 +19,7 @@
 
 - name: Install Podman
   apt:
-    name: "podman={{ podman_version }}"
+    name: podman
     state: present
     update_cache: True
     install_recommends: False
@@ -27,7 +27,7 @@
 
 - name: Install Buildah
   apt:
-    name: "buildah={{ buildah_version }}"
+    name: buildah
     state: present
     update_cache: True
     install_recommends: False
@@ -35,7 +35,7 @@
 
 - name: Install Skopeo
   apt:
-    name: "skopeo={{ skopeo_version }}"
+    name: skopeo
     state: present
     update_cache: True
     install_recommends: False
