@@ -5,5 +5,5 @@
       - libpq-dev
       - postgresql-13
       - postgresql-server-dev-13
-      - python-psycopg2
+      - python3-psycopg2
     state: present
