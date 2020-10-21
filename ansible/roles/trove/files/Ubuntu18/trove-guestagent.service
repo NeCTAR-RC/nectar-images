@@ -2,6 +2,8 @@
 Description=Trove Guest
 After=syslog.target
 After=network.target
+After=postgresql.service
+After=mysql.service
 
 [Service]
 Type=simple
