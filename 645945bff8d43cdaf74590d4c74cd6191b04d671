@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e40e73e9_e311cae0",
+        "filename": "build_local.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2020-10-22T05:00:09Z",
+      "side": 1,
+      "message": "How about a t3?",
+      "range": {
+        "startLine": 11,
+        "startChar": 13,
+        "endLine": 11,
+        "endChar": 21
+      },
+      "revId": "645945bff8d43cdaf74590d4c74cd6191b04d671",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": true
+    }
+  ]
+}
