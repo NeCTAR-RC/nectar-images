@@ -15,6 +15,18 @@
     - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }}-{{ trove_openstack_version }} main"
     - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }}-{{ trove_openstack_version }}-testing main"
 
+- name: Add Ubuntu cloud archive key
+  apt_key:
+    id: 391A9AA2147192839E9DB0315EDB1B62EC4926EA
+    keyserver: keyserver.ubuntu.com
+
+- name: Add Ubuntu cloud archive repository
+  apt_repository:
+    repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_distribution_release }}-updates/{{ trove_openstack_version }} main"
+    update_cache: yes
+  when:
+    {{ trove_openstack_version }} != ussuri
+
 - name: Install Trove Guest agent
   package:
     name:
