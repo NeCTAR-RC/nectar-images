@@ -63,7 +63,7 @@ delete_image() {
 
 delete_instance() {
     echo "Saving log to ${OUTPUT_DIR}/${BUILD_NAME}-console.txt"
-    openstack server show $1 > ${OUTPUT_DIR}/${BUILD_NAME}-console.txt
+    openstack server show $1 > ${OUTPUT_DIR}/${BUILD_NAME}-server.txt
     openstack console log show $1 >> ${OUTPUT_DIR}/${BUILD_NAME}-console.txt
 
 	DELETE=1
