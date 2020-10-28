@@ -4,28 +4,28 @@
   args:
     warn: no
   with_items:
-    - 'find /var/log -type f -exec bash -c ''cat /dev/null > {}'' \;'
+    - 'find /var/log -type f -exec -exec truncate -s0 {} \;'
     - 'rm -fr /var/log/journal/*'
     - 'rm -fr /var/lib/cloud/*'
     - 'rm -fr /home/{{ default_user }}/.ssh/*'
     - 'rm -fr /etc/ssh/*key'
     - 'rm -fr /root/.ssh'
     - 'rm -fr /root/*.cfg'
+    - truncate -s 0 /etc/machine-id
   when: nectar_test_build is not defined
 
-- name: Lock and disable root account
-  shell: "{{ item }}"
-  args:
-    warn: no
-  with_items:
-    - passwd -d root
-    - passwd -l root
-
-# Left over from a server install. Cloud-init will generate a new one
-- name: Remove initial netplan config
+# These are mostly from Ubuntu's subiquity installer
+- name: Clean up cloud-init configs
   file:
-    name: /etc/netplan/01-netcfg.yaml
+    name: "{{ item }}"
     state: absent
+  with_items:
+    - /etc/cloud/cloud.cfg.d/99-installer.cfg
+    - /etc/cloud/cloud.cfg.d/curtin-preserve-sources.cfg
+    - /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg
+    - /etc/netplan/01-netcfg.yaml
+    - /var/lib/dbus/machine-id
+    - /var/lib/systemd/random-seed  # recommended by systemd for base images
 
 - include: cleanup-RedHat.yml
   when: ansible_os_family == 'RedHat'
@@ -36,28 +36,18 @@
 - include: cleanup-openSUSE.yml
   when: ansible_distribution == 'openSUSE Leap'
 
+- name: Lock and disable root account
+  shell: "{{ item }}"
+  args:
+    warn: no
+  with_items:
+    - passwd -d root
+    - passwd -l root
+
 - name: Remove the default user
   user:
     name: "{{ default_user }}"
     state: absent
     remove: yes
   when: default_user != "vagrant"
-
-- name: remove /var/lib/dbus/machine-id
-  file:
-    path: /var/lib/dbus/machine-id
-    state: absent
-
-- name: check if /etc/machine-id exists
-  stat:
-    path: /etc/machine-id
-  register: etc_machine_id
-
-# machine-id should be empty for systemd to regenerate
-# ignore errors because some distros have this tmpfs mounted
-- name: empty /etc/machine-id
-  copy:
-    dest: /etc/machine-id
-    content: ''
-  when: etc_machine_id.stat.exists == True
   ignore_errors: yes
