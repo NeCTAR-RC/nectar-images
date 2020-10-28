@@ -1,22 +1,5 @@
 Vagrant.configure("2") do |config|
 
-  # Debian 8 (jessie)
-  config.vm.define "debian8" do |c|
-    c.vm.box = "debian/jessie64"
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
   # Debian 9 (stretch)
   config.vm.define "debian9" do |c|
     c.vm.box = "debian/stretch64"
@@ -118,48 +101,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Ubuntu 18.10 (cosmic)
-  config.vm.define "ubuntu1810" do |c|
-    c.vm.box = "roboxes/ubuntu1810"
-    c.vm.provider " virtualbox" do |v, override|
-      override.vm.box = "ubuntu/cosmic64"
-    end
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             ansible_python_interpreter: "/usr/bin/python3" }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
-  # Ubuntu 19.10 (eoan)
-  config.vm.define "ubuntu1910" do |c|
-    c.vm.box = "roboxes/ubuntu1910"
-    c.vm.provider " virtualbox" do |v, override|
-      override.vm.box = "ubuntu/eoan64"
-    end
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             ansible_python_interpreter: "/usr/bin/python3" }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
   # Ubuntu 20.04 (focal)
   config.vm.define "ubuntu2004" do |c|
     c.vm.box = "peru/ubuntu-20.04-server-amd64"
@@ -180,11 +121,9 @@ Vagrant.configure("2") do |config|
     end
   end
 
-
- # CentOS 6
-  config.vm.define "centos6" do |c|
-    c.vm.box = "centos/6"
-    c.vm.provision "shell", inline: "sudo yum -q -y install libselinux-python"
+  # Ubuntu 20.10 (groovy)
+  config.vm.define "ubuntu2010" do |c|
+    c.vm.box = "generic/ubuntu2010"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
@@ -220,46 +159,9 @@ Vagrant.configure("2") do |config|
   # CentOS 8
   config.vm.define "centos8" do |c|
     c.vm.box = "centos/8"
-    #c.vm.provision "shell", inline: "sudo yum -q -y install libselinux-python"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
-  # Fedora 30
-  config.vm.define "fedora30" do |c|
-    c.vm.box = "fedora/30-cloud-base"
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             ansible_python_interpreter: "/usr/bin/python3" }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
-  # Fedora 31
-  config.vm.define "fedora31" do |c|
-    c.vm.box = "fedora/31-cloud-base"
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             ansible_python_interpreter: "/usr/bin/python3" }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
@@ -289,29 +191,13 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # openSUSE Leap 42
-  config.vm.define "opensuse42" do |c|
-    c.vm.box = "generic/opensuse42"
+  # Fedora 33
+  config.vm.define "fedora33" do |c|
+    c.vm.box = "fedora/33-cloud-base"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
-  # openSUSE Leap 15
-  config.vm.define "opensuse15" do |c|
-    c.vm.box = "generic/opensuse15"
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
+      ansible.extra_vars = { nectar_test_build: true,
+                             ansible_python_interpreter: "/usr/bin/python3" }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true
@@ -494,7 +380,7 @@ Vagrant.configure("2") do |config|
 
   # Undercloud Ubuntu 20.04 (focal)
   config.vm.define "undercloud-ubuntu2004" do |c|
-    c.vm.box = "peru/ubuntu-20.04-server-amd64"
+    c.vm.box = "generic/ubuntu2004"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/focal64"
     end
