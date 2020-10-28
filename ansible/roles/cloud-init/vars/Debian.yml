@@ -28,7 +28,6 @@ cloud_init_modules:
 
 cloud_config_modules:
  - emit_upstart
- - snap_config
  - ssh-import-id
  - locale
  - set-passwords
@@ -42,7 +41,6 @@ cloud_config_modules:
  - byobu
 
 cloud_final_modules:
- - snappy
  - package-update-upgrade-install
  - landscape
  - puppet
