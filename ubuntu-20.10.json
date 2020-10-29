@@ -23,12 +23,13 @@
       "boot_wait": "5s",
       "boot_command": [
         "c",
+        "<wait>",
         "set gfxpayload=keep",
-        "<enter>",
+        "<enter><wait>",
         "linux /casper/vmlinuz quiet net.ifnames=0 biosdevname=0 autoinstall ds=nocloud-net\\;s=http://{{.HTTPIP}}:{{.HTTPPort}}/ ---",
-        "<enter>",
+        "<enter><wait5>",
         "initrd /casper/initrd",
-        "<enter>",
+        "<enter><wait10>",
         "boot",
         "<enter>"
       ]
