@@ -52,7 +52,7 @@ delete_image() {
 		read -r -p "Would you like to clean up the image $1? [y/N] " response
 		[[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]] || DELETE=0
 	fi
-    if [ $DELETE ]; then
+    if [ $DELETE -eq 1 ]; then
         echo "Deleting image $1..."
         echo "--> openstack image delete $1"
         openstack image delete $1
@@ -71,7 +71,7 @@ delete_instance() {
 		read -r -p "Would you like to clean up the instance $1? [y/N] " response
 		[[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]] || DELETE=0
 	fi
-    if [ $DELETE ]; then
+    if [ $DELETE -eq 1 ]; then
         echo "Deleting instance $1..."
         echo "--> openstack server delete $1"
         openstack server delete $1
