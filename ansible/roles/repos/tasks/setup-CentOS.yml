@@ -20,19 +20,19 @@
   delay: 10
   when: not epel_repofile_result.stat.exists
 
-- name: Find all repo files
-  raw: find /etc/yum.repos.d -type f -name "*.repo"
-  register: repo_files
+- name: Find PowerTools repo file
+  find:
+    paths: /etc/yum.repos.d
+    patterns: "CentOS-*-PowerTools.repo"
+  register: powertools_repo_file
 
 - name: Enable PowerTools repo on CentOS 8
   ini_file:
-    dest: /etc/yum.repos.d/CentOS-Linux-PowerTools.repo
+    path: "{{ item.path }}"
     section: powertools
     option: enabled
     value: '1'
-  when:
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == '8'
+  with_items: "{{ powertools_repo_file.files }}"
 
 - name: Perform a full upgrade
   yum:

@@ -173,6 +173,23 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # CentOS Stream 8
+  config.vm.define "centosstream8" do |c|
+    c.vm.box = "centos/stream8"
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true }
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook.yml"
+      ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
+    end
+  end
+
   # Fedora 32
   config.vm.define "fedora32" do |c|
     c.vm.box = "fedora/32-cloud-base"
