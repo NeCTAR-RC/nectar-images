@@ -1,0 +1,10 @@
+---
+- include: setup-apt.yml
+  when: ansible_pkg_mgr == 'apt'
+
+- include: setup-yum.yml
+  when: ansible_pkg_mgr == 'yum'
+
+- include: setup-dnf.yml
+  when: ansible_pkg_mgr == 'dnf'
+
