@@ -1,0 +1,31 @@
+---
+- name: Include OS-specific variables
+  include_vars: "{{ var_item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}_{{ ansible_distribution_version }}.yml"
+    - "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+    - default.yml
+  loop_control:
+    loop_var: var_item
+
+- name: Install yum-cron
+  yum:
+    name: yum-cron
+    state: present
+
+- name: Copy yum-cron.conf
+  template:
+    src: yum-cron.conf.j2
+    dest: /etc/yum/yum-cron.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart yum-cron
+
+- name: Start yum-cron service and enable at boot time
+  service:
+    name: yum-cron
+    state: started
+    enabled: yes

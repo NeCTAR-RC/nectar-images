@@ -1,0 +1,27 @@
+---
+- name: Include OS-specific variables
+  include_vars: "{{ var_item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}_{{ ansible_distribution_version }}.yml"
+    - "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+    - default.yml
+  loop_control:
+    loop_var: var_item
+
+- name: Install dnf-automatic package
+  package:
+    name: dnf-automatic
+    state: present
+
+- name: Deploy dnf-automatic configuration file
+  template:
+    src: automatic.conf.j2
+    dest: /etc/dnf/automatic.conf
+
+- name: Start and enable systemd timer for dnf-automatic
+  service:
+    name: dnf-automatic-install.timer
+    state: started
+    enabled: yes

@@ -1,0 +1,20 @@
+---
+# Enable unattended updates
+enable_unattended_updates: true
+
+# Unattended upgrades
+unattended_update_package_list: yes
+
+# DNF automatic
+dnf_automatic_upgrade_type: security
+dnf_automatic_download_updates: yes
+dnf_automatic_apply_updates: yes
+
+# Yum cron
+yum_cron_update_cmd: security
+yum_cron_update_messages: yes
+yum_cron_download_updates: yes
+yum_cron_apply_updates: yes
+
+# Label for the resulting image property
+automatic_updates_channel: security
