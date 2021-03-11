@@ -14,6 +14,7 @@
             (ansible_distribution == 'Fedora' and ansible_distribution_version < '30')
     - role: testing
     - role: repos
+    - role: unattended-upgrades
     - role: cloud-init
     - role: heat-cfntools
     - role: murano-agent

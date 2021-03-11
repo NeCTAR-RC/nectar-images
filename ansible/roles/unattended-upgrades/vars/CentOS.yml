@@ -1,0 +1,8 @@
+---
+# For CentOS, we use the default channel because we don't have
+# security classification in the yum/dnf repo.
+dnf_automatic_upgrade_type: default
+yum_cron_update_cmd: default
+
+# Reflect that we're using the default channel, meaning all packages
+automatic_updates_channel: all
