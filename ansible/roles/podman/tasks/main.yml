@@ -5,6 +5,9 @@
       - apt-transport-https
       - ca-certificates
       - software-properties-common
+      # Required to avoid podman using vfs storage driver,
+      # which eats disk space: https://github.com/containers/buildah/issues/1040
+      - fuse-overlayfs
     install_recommends: False
 
 - name: Add Podman apt key
