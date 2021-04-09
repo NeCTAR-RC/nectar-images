@@ -5,9 +5,6 @@
       - apt-transport-https
       - ca-certificates
       - software-properties-common
-      # Required to avoid podman using vfs storage driver,
-      # which eats disk space: https://github.com/containers/buildah/issues/1040
-      - fuse-overlayfs
     install_recommends: False
 
 - name: Add Podman apt key
@@ -20,26 +17,14 @@
     repo: "{{ podman_repository }}"
     update_cache: True
 
-- name: Install Podman
+- name: Install Podman and friends
   apt:
-    name: podman
-    state: present
-    update_cache: True
-    install_recommends: False
-    cache_valid_time: 86400
-
-- name: Install Buildah
-  apt:
-    name: buildah
-    state: present
-    update_cache: True
-    install_recommends: False
-    cache_valid_time: 86400
-
-- name: Install Skopeo
-  apt:
-    name: skopeo
-    state: present
+    pkg:
+    - podman
+    - buildah
+    - skopeo
+    - fuse-overlayfs
+    state: latest
     update_cache: True
     install_recommends: False
     cache_valid_time: 86400
