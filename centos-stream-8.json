@@ -23,7 +23,7 @@
       ],
       "boot_wait": "5s",
       "boot_command": [
-        "<tab> text net.ifnames=0 biosdevname=0 ",
+        "<tab> inst.text net.ifnames=0 biosdevname=0 ",
         "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-stream-8-kickstart.cfg<enter><wait>"
       ]
     }

@@ -126,7 +126,7 @@ packer build $PACKER_WORKING_FILE
 rm -f $PACKER_WORKING_FILE
 
 IMAGE_NAME="$(read_fact nectar_name)"
-if [ ! -z $ORGANISATION ]; then
+if [ ! -z "$ORGANISATION" ]; then
     IMAGE_NAME="${ORGANISATION} ${IMAGE_NAME}"
 fi
 
