@@ -104,7 +104,7 @@ Vagrant.configure("2") do |config|
   # Ubuntu 20.04 (focal)
   config.vm.define "ubuntu2004" do |c|
     c.vm.box = "peru/ubuntu-20.04-server-amd64"
-    c.vm.provider " virtualbox" do |v, override|
+    c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/focal64"
     end
     c.vm.provision "ansible" do |ansible|
@@ -124,6 +124,23 @@ Vagrant.configure("2") do |config|
   # Ubuntu 20.10 (groovy)
   config.vm.define "ubuntu2010" do |c|
     c.vm.box = "generic/ubuntu2010"
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true }
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook.yml"
+      ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
+    end
+  end
+
+  # Ubuntu 21.04 (hirsute)
+  config.vm.define "ubuntu2104" do |c|
+    c.vm.box = "ubuntu/hirsute64"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
