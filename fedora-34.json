@@ -13,7 +13,7 @@
       "iso_checksum": "sha256:e1a38b9faa62f793ad4561b308c31f32876cfaaee94457a7a9108aaddaeec406",
       "ssh_username": "root",
       "ssh_private_key_file": "packer-ssh-key",
-      "ssh_timeout": "30m",
+      "ssh_timeout": "60m",
       "ssh_handshake_attempts": 100,
       "vnc_bind_address": "0.0.0.0",
       "qemuargs": [
@@ -23,7 +23,7 @@
       ],
       "boot_wait": "5s",
       "boot_command": [
-        "<tab> text net.ifnames=0 inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-34-kickstart.cfg<enter><wait>"
+        "<tab> inst.text net.ifnames=0 inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-cloud-base.ks<enter><wait>"
       ]
     }
   ],
