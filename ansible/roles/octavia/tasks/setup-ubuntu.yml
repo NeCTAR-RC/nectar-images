@@ -14,10 +14,9 @@
 
 - name: Add Nectar archive keys
   apt_key:
-    url: "{{ item }}"
-  with_items:
-    - http://download.rc.nectar.org.au/nectar-archive-key-2016.gpg
-    - http://download.rc.nectar.org.au/nectar-custom.gpg
+    id: ABC968C25CDB0CDD6254F46A129CF4A68FA8FC77
+    url: http://download.rc.nectar.org.au/nectar-archive-key-2016.gpg
+    state: present
 
 - name: Add Nectar repositories
   apt_repository:
