@@ -31,3 +31,8 @@
     dest: "{{ tag_dir }}/{{ item | regex_replace('^nectar_image_tag_', '') }}"
   become: False
   with_items: "{{ vars | select('match', '^nectar_image_tag_.*') | list }}"
+
+- name: Print image properties
+  debug:
+    msg: "{{ item | regex_replace('^nectar_image_property_', '') }} = {{ vars[item] }}"
+  with_items: "{{ vars | select('match', '^nectar_image_property_.*') | list }}"
