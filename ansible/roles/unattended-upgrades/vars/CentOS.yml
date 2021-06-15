@@ -1,0 +1,19 @@
+---
+# Don't apply updates automatically for CentOS Stream, but yes for CentOS
+enable_unattended_updates: "{{ 'Stream' not in ansible_distribution_release }}"
+
+# For CentOS, we use the default channel because we don't have
+# security classification in the yum/dnf repo.
+centos_updates_channel: default
+
+# Settings for DNF Automatic
+dnf_automatic_upgrade_type: "{{ centos_updates_channel }}"
+dnf_automatic_download_updates: "{{ enable_unattended_updates }}"
+dnf_automatic_apply_updates: "{{ enable_unattended_updates }}"
+
+# Settings for YUM Cron
+yum_cron_update_cmd: "{{ centos_updates_channel }}"
+yum_cron_download_updates: "{{ enable_unattended_updates }}"
+yum_cron_apply_updates: "{{ enable_unattended_updates }}"
+
+automatic_updates_channel: "{{ (centos_updates_channel == 'default') | ternary('all', centos_updates_channel) }}"

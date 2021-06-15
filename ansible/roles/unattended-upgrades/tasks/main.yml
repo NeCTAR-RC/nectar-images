@@ -1,0 +1,18 @@
+---
+- include: setup-apt.yml
+  when: ansible_pkg_mgr == 'apt'
+
+- include: setup-yum.yml
+  when: ansible_pkg_mgr == 'yum'
+
+- include: setup-dnf.yml
+  when: ansible_pkg_mgr == 'dnf'
+
+- name: Set automatic_updates image property
+  set_fact:
+    nectar_image_property_automatic_updates: |-
+      {%- if enable_unattended_updates | default('true') -%}
+      {{ (automatic_updates_channel == 'default') | ternary('all', automatic_updates_channel) }}
+      {%- else -%}
+      disabled
+      {%- endif -%}
