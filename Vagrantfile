@@ -207,9 +207,9 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Fedora 32
-  config.vm.define "fedora32" do |c|
-    c.vm.box = "fedora/32-cloud-base"
+  # Fedora 33
+  config.vm.define "fedora33" do |c|
+    c.vm.box = "fedora/33-cloud-base"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
@@ -225,9 +225,9 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Fedora 33
-  config.vm.define "fedora33" do |c|
-    c.vm.box = "fedora/33-cloud-base"
+  # Fedora 34
+  config.vm.define "fedora34" do |c|
+    c.vm.box = "fedora/34-cloud-base"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
