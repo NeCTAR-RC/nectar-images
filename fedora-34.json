@@ -23,7 +23,7 @@
       ],
       "boot_wait": "5s",
       "boot_command": [
-        "<tab> inst.text net.ifnames=0 inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-cloud-base.ks<enter><wait>"
+        "<tab> inst.text net.ifnames=0 inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-34-kickstart.cfg<enter><wait>"
       ]
     }
   ],
