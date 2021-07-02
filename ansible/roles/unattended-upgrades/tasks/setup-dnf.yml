@@ -25,3 +25,9 @@
     name: dnf-automatic-install.timer
     state: started
     enabled: yes
+
+- name: Install testing script
+  copy:
+    src: 100-dnf-automatic.sh
+    dest: /usr/nectar/tests.d
+    mode: 0755

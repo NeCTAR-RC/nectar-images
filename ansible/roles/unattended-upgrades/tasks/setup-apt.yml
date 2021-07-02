@@ -2,8 +2,7 @@
 - name: Include OS-specific variables
   include_vars: "{{ var_item }}"
   with_first_found:
-    - "{{ ansible_distribution }}_{{ ansible_distribution_version }}.yml"
-    - "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
     - "{{ ansible_distribution }}.yml"
     - "{{ ansible_os_family }}.yml"
     - default.yml
@@ -27,8 +26,14 @@
 
 - name: Create unattended-upgrades configuration
   template:
-    src: unattended-upgrades.j2
+    src: "unattended-upgrades.{{ ansible_distribution_release }}.j2"
     dest: /etc/apt/apt.conf.d/50unattended-upgrades
     owner: root
     group: root
     mode: 0644
+
+- name: Install testing script
+  copy:
+    src: 100-unattended-upgrades.sh
+    dest: /usr/nectar/tests.d
+    mode: 0755
