@@ -75,6 +75,9 @@
     src: certs-ramfs.service
     dest: /etc/systemd/system/certs-ramfs.service
 
+- name: Reload systemd daemon certs-ramfs
+  command: systemctl daemon-reload
+
 - name: Enable certs-ramfs service
   service:
     name: certs-ramfs
@@ -93,6 +96,12 @@
     src: rebind-ssh
     dest: /etc/dhcp/dhclient-enter-hooks.d/rebind-ssh
     mode: 0755
+
+- name: Install udp-masquerade.sh
+  copy:
+    src: udp-masquerade.sh
+    dest: /usr/local/bin/udp-masquerade.sh
+    mode: 755
 
 - name: Install rsyslog config
   copy:
