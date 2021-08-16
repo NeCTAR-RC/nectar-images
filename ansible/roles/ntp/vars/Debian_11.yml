@@ -1,0 +1,4 @@
+---
+# Chrony is default in Debian 11
+ntp_service: chrony
+ntp_daemon: chrony
