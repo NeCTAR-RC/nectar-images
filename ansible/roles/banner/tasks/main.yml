@@ -1,4 +1,8 @@
 ---
+# https://github.com/ansible/ansible/issues/70304 and https://github.com/konstruktoid/ansible-docker-rootless/commit/8a7cd7b2371229a8d857d5896cd5c132b679afc3
+- name: Force an update of facts
+  setup: ~
+
 - name: Include OS-specific variables
   include_vars: "{{ item }}"
   with_first_found:
