@@ -9,7 +9,51 @@
   loop_control:
     loop_var: vars_item
 
-- name: Install packages
+- name: Install heat-cfntools package
   package:
     name: "{{ heat_cfntools_packages }}"
     state: present
+  when: ansible_python.version.major == 2
+
+# The python3 version of the package is broken and doesn't include
+# any of the required python files, so on platforms where we're using
+# python3 for ansible, we'll install this package from source
+- block:
+  - name: Install heat-cfntools deps
+    package:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - python3-boto
+      - python3-psutil
+      - python3-six
+      - python3-pbr
+
+  - name: Download heat-cfntools source
+    get_url:
+      url: https://github.com/openstack/heat-cfntools/archive/refs/tags/1.4.2.tar.gz
+      dest: /tmp/heat-cfntools-1.4.2.tar.gz
+
+  - name: Extract heat-cfntools source
+    unarchive:
+      src: /tmp/heat-cfntools-1.4.2.tar.gz
+      copy: no
+      dest: /tmp
+
+  - name: Install heat-cfntools
+    shell: |
+      export PBR_VERSION=1.4.2
+      python3 setup.py install
+    args:
+      chdir: /tmp/heat-cfntools-1.4.2
+      creates: /usr/local/bin/cfn-init
+
+  - name: Clean up
+    file:
+      name: "{{ item }}"
+      state: absent
+    with_items:
+      - /tmp/heat-cfntools-1.4.2
+      - /tmp/heat-cfntools-1.4.2.tar.gz
+
+  when: ansible_python.version.major == 3

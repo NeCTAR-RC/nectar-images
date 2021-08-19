@@ -1,0 +1,4 @@
+---
+heat_cfntools_packages:
+  - heat-cfntools
+  - curl
