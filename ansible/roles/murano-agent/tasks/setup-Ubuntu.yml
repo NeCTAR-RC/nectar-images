@@ -50,4 +50,10 @@
     src: systemd-murano-agent.service.j2
     dest: /etc/systemd/system/murano-agent.service
 
+# This is a temp fix, until ubuntu upstream will fix the typo in the logrotate file
+- name: Replace /etc/logrotate.d/murano-agent
+  copy:
+    src: murano-agent
+    dest: /etc/logrotate.d/murano-agent
+
 
