@@ -1,5 +1,6 @@
 ---
-openstack_repo: "http://mirror.centos.org/centos/{{ ansible_distribution_major_version }}/cloud/x86_64/openstack-train/"
+openstack_version: train
+openstack_repo: "http://mirror.centos.org/centos/{{ ansible_distribution_major_version }}/cloud/x86_64/openstack-{{ openstack_version }}/"
 
 cloud_init_packages:
   - cloud-init

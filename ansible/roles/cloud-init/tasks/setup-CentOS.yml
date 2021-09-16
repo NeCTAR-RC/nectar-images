@@ -12,8 +12,8 @@
 
 - name: Add cloud repository for CentOS
   yum_repository:
-    name: "centos-openstack"
-    description: "CentOS OpenStack"
+    name: "CentOS-OpenStack-{{ openstack_version }}"
+    description: "CentOS-$releasever - OpenStack"
     baseurl: "{{ openstack_repo }}"
     gpgcheck: no
   when: openstack_repo is defined
@@ -22,8 +22,9 @@
 
 - name: Remove cloud repository for CentOS
   yum_repository:
-    name: "centos-openstack"
+    name: "CentOS-OpenStack-{{ openstack_version }}"
     state: absent
+  when: openstack_repo is defined
 
 - include: config.yml
 
@@ -45,8 +46,3 @@
   when: ansible_distribution_major_version == '7'
 
 - include: services.yml
-
-# http://blog.backslasher.net/growroot-centos.html
-- name: Rebuild initramfs with growroot for CentOS 6
-  shell: 'dracut -f'
-  when: ansible_distribution_major_version == '6'
