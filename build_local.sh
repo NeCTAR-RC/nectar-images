@@ -125,10 +125,11 @@ echo "Building image ${NAME}..."
 packer build $PACKER_WORKING_FILE
 rm -f $PACKER_WORKING_FILE
 
-IMAGE_NAME="$(read_fact nectar_name)"
-if [ ! -z "$ORGANISATION" ]; then
-    IMAGE_NAME="${ORGANISATION} ${IMAGE_NAME}"
-fi
+#IMAGE_NAME="$(read_fact nectar_name)"
+#if [ ! -z "$ORGANISATION" ]; then
+#    IMAGE_NAME="${ORGANISATION} ${IMAGE_NAME}"
+#fi
+IMAGE_NAME="octavia-focal-v3"
 
 if [ "${BUILDER_TYPE}" == "openstack" ]; then
     echo "Downloading image ${NAME}..."
