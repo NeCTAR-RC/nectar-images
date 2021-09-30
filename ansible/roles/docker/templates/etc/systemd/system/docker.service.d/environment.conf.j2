@@ -1,0 +1,6 @@
+# {{ ansible_managed }}
+
+[Service]
+{% for env in docker__daemon_environment %}
+Environment="{{ env }}"
+{% endfor %}
