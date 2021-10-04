@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27154a5f_ea35900f",
+        "filename": "README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2021-10-04T02:26:09Z",
+      "side": 1,
+      "message": "Have a look at the build_local.sh script. There\u0027s way more that needs to be done than just the packer stuff",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 35
+      },
+      "revId": "28cd1181b4c55165b0f5756eff6f9cfeb55689ef",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5"
+    }
+  ]
+}
