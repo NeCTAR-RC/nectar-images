@@ -151,8 +151,9 @@ rm -f ${OUTPUT_DIR}/${BUILD_NAME}.qcow2
 
 # Set extra properties from Ansible facts (see Ansible facts role)
 if [ -d $FACT_DIR ]; then
-    for FACT in $(ls $FACT_DIR); do
-        VAL=$(cat $FACT_DIR/$FACT)
+    find $FACT_DIR -type f -printf "%f\n" \
+    | while read FACT; do
+        read VAL < $FACT_DIR/$FACT
         echo "Setting property $FACT=$VAL"
         openstack image set --property $FACT=$"$VAL" $IMAGE_ID || true
     done
@@ -160,7 +161,8 @@ fi
 
 # Set tags from Ansible facts (see Ansible facts role)
 if [ -d $TAG_DIR ]; then
-    for TAG in $(ls $TAG_DIR); do
+    find $TAG_DIR -type f -printf "%f\n" \
+    | while read TAG; do
         echo "Setting tag $TAG"
         openstack image set --tag $TAG $IMAGE_ID || true
     done
