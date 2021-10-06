@@ -1,0 +1,2 @@
+---
+nectar_image_name: "{{ ansible_distribution }} Linux {{ ansible_distribution_major_version }} {{ ansible_architecture }}"

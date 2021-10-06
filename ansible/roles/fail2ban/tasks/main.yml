@@ -4,25 +4,18 @@
   with_first_found:
     - "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
     - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
     - "default.yml"
 
-- include: setup-CentOS6.yml
-  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '6'
-
-- include: setup-CentOS.yml
-  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version > '6'
-
-- include: setup-Fedora.yml
-  when: ansible_distribution == 'Fedora'
-
-- include: setup-Ubuntu.yml
-  when: ansible_distribution == 'Ubuntu'
-
-- include: setup-Debian.yml
-  when: ansible_distribution == 'Debian'
-
-- include: setup-openSUSE.yml
-  when: ansible_distribution == 'openSUSE Leap'
+- name: Include OS-specific tasks
+  include: "{{ tasks_item }}"
+  with_first_found:
+    - files:
+      - "setup-{{ ansible_distribution }}.yml"
+      - "setup-{{ ansible_os_family }}.yml"
+      skip: true
+  loop_control:
+    loop_var: tasks_item
 
 # Fix bug https://github.com/fail2ban/fail2ban/issues/2080
 - name: Install updated SSH filter
