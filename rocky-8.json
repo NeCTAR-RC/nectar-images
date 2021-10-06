@@ -1,0 +1,50 @@
+{
+  "builders": [
+    {
+      "type": "qemu",
+      "name": "rocky-8",
+      "vm_name": "rocky-8",
+      "accelerator": "kvm",
+      "disk_size": "4096",
+      "format": "raw",
+      "headless": true,
+      "http_directory": "http",
+      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/Rocky-8.4-x86_64-boot.iso",
+      "iso_checksum": "sha256:53a62a72881b931bdad6b13bcece7c3a2d4ca9c4a2f1e1a8029d081dd25ea61f",
+      "ssh_password": "not_a_real_password",
+      "ssh_port": 22,
+      "ssh_username": "root",
+      "ssh_timeout": "30m",
+      "vnc_bind_address": "0.0.0.0",
+      "qemuargs": [
+        [ "-m", "2048M" ],
+        [ "-cpu", "host" ],
+        [ "-smp", "2" ]
+      ],
+      "boot_wait": "5s",
+      "boot_command": [
+        "<tab> text net.ifnames=0 biosdevname=0 ",
+        "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/rocky-8-kickstart.cfg<enter><wait>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "ansible_env_vars": [
+        "ANSIBLE_CONFIG=ansible/ansible.cfg"
+      ],
+      "extra_arguments": [
+        "--ssh-extra-args",
+        "-o IdentitiesOnly=yes",
+        "--extra-vars",
+        "image_build_dir='{{pwd}}/output-{{build_name}}'"
+      ],
+      "playbook_file": "ansible/playbook.yml"
+    },
+    {
+      "type": "shell",
+      "script": "scripts/cleanup.sh"
+    }
+  ]
+}
