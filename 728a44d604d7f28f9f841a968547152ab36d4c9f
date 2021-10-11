@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad9bf59d_9f65db36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000177
+      },
+      "writtenOn": "2021-10-11T20:53:37Z",
+      "side": 1,
+      "message": "haven\u0027t tested build but lgtm",
+      "revId": "728a44d604d7f28f9f841a968547152ab36d4c9f",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5"
+    }
+  ]
+}
