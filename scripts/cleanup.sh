@@ -10,6 +10,7 @@ userdel -rf ec2-user || true
 userdel -rf debian || true
 userdel -rf fedora || true
 userdel -rf ubuntu || true
+userdel -rf rocky || true
 
 # Truncate any log files
 find /var/log -type f -print0 | xargs -0 truncate -s0
