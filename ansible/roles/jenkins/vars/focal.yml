@@ -23,3 +23,6 @@ packages:
   - twine
 #  - python3-hivemind-contrib
 #  - python3-hivemind
+
+gem_packages:
+  - puppet
