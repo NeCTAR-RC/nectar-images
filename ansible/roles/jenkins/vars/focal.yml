@@ -1,7 +1,7 @@
 ---
 openstack_version: ussuri
 
-puppet_repo: "deb http://apt.puppetlabs.com {{ ansible_distribution_release }} puppet6"
+puppet_repo: "deb http://apt.puppetlabs.com {{ ansible_distribution_release }} puppet7"
 
 packages:
   - libpng-dev
