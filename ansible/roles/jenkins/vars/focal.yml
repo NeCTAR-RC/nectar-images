@@ -3,6 +3,8 @@ openstack_version: ussuri
 
 puppet_repo: "deb http://apt.puppetlabs.com {{ ansible_distribution_release }} puppet7"
 
+ansible_ppa: True
+
 packages:
   - libpng-dev
   - python3-ceilometerclient
