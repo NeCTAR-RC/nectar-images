@@ -97,10 +97,10 @@
     dest: /etc/dhcp/dhclient-enter-hooks.d/rebind-ssh
     mode: 0755
 
-- name: Install udp-masquerade.sh
+- name: Install lvs-masquerade.sh
   copy:
-    src: udp-masquerade.sh
-    dest: /usr/local/bin/udp-masquerade.sh
+    src: lvs-masquerade.sh
+    dest: /usr/local/bin/lvs-masquerade.sh
     mode: 755
 
 - name: Install rsyslog config
