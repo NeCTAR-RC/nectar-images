@@ -1,0 +1,65 @@
+---
+- name: Add Nectar archive keys
+  apt_key:
+    id: ABC968C25CDB0CDD6254F46A129CF4A68FA8FC77
+    url: http://download.rc.nectar.org.au/nectar-archive-key-2016.gpg
+    state: present
+
+- name: Add Nectar repositories
+  apt_repository:
+    repo: "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }} main"
+    update_cache: yes
+
+- name: Add Ubuntu cloud archive key
+  apt_key:
+    id: 391A9AA2147192839E9DB0315EDB1B62EC4926EA
+    keyserver: keyserver.ubuntu.com
+
+- name: Install packages
+  package:
+    name:
+      - openssh-server
+      - sudo
+      - rpcbind
+      - vim
+      - iptables
+      - inetutils-ping
+      - net-tools
+      - python
+      - qemu-guest-agent
+      - curl
+    state: present
+
+- name: Install nfs packages
+  package:
+    name:
+      - nfs-common
+      - nfs-kernel-server
+      - portmap
+    state: present
+
+# Create dummy share to allow running nfs-kernel-server before creating user shares
+# NB: Upstream use different method to patch init script instead.
+# See: https://github.com/openstack/manila-image-elements/blob/master/elements/ubuntu-nfs/post-install.d/50-manila-nfs-patch-config
+- name: dummy share in /etc/exports file
+  ansible.builtin.lineinfile:
+    path: /etc/exports
+    state: present
+    line: '/mnt localhost(ro)'
+
+- name: Install cifs packages
+  package:
+    name:
+      - samba
+      - samba-common
+      - samba-common-bin
+      - cifs-utils
+    state: present
+
+- name: Enable registry in samba config
+  ini_file:
+    path: /etc/samba/smb.conf
+    section: global
+    option: include
+    value: registry
+    mode: 0644

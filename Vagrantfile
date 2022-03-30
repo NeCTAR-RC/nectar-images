@@ -370,6 +370,22 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # Manila Share Server (Ubuntu 20.04 focal)
+  config.vm.define "manila-share-server-ubuntu2004" do |c|
+    c.vm.box = "generic/ubuntu2004"
+    c.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/focal64"
+    end
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true,
+                             ansible_python_interpreter: "/usr/bin/python3"}
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook-manila.yml"
+      ansible.become = true
+    end
+  end
+
   # Ubuntu 16.04 (xenial) Jenkins slave
   config.vm.define "ubuntu1604-jenkins" do |c|
     c.vm.box = "peru/ubuntu-20.04-server-amd64"
