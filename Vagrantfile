@@ -124,7 +124,7 @@ Vagrant.configure("2") do |config|
 
   # Ubuntu 20.04 (focal)
   config.vm.define "ubuntu2004" do |c|
-    c.vm.box = "peru/ubuntu-20.04-server-amd64"
+    c.vm.box = "generic/ubuntu2004"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/focal64"
     end
@@ -142,26 +142,12 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Ubuntu 20.10 (groovy)
-  config.vm.define "ubuntu2010" do |c|
-    c.vm.box = "generic/ubuntu2010"
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
-      ansible.become = true
+  # Ubuntu 22.04 (jammy)
+  config.vm.define "ubuntu2204" do |c|
+    c.vm.box = "generic/ubuntu2204"  # doesn't exist yet
+    c.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/jammy64"
     end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
-  # Ubuntu 21.04 (hirsute)
-  config.vm.define "ubuntu2104" do |c|
-    c.vm.box = "ubuntu/hirsute64"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
@@ -245,9 +231,9 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Fedora 33
-  config.vm.define "fedora33" do |c|
-    c.vm.box = "fedora/33-cloud-base"
+  # Fedora 34
+  config.vm.define "fedora34" do |c|
+    c.vm.box = "fedora/34-cloud-base"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
@@ -263,9 +249,9 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Fedora 34
-  config.vm.define "fedora34" do |c|
-    c.vm.box = "fedora/34-cloud-base"
+  # Fedora 35
+  config.vm.define "fedora35" do |c|
+    c.vm.box = "fedora/35-cloud-base"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
