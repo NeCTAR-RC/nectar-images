@@ -1,0 +1,14 @@
+/var/log/postgresql/*.log {
+       weekly
+       size 512M
+       rotate 5
+       copytruncate
+       delaycompress
+       compress
+       notifempty
+       missingok
+       su root root
+       postrotate
+       sudo -u postgres /usr/lib/postgresql/13/bin/pg_ctl logrotate -D /var/lib/postgresql/13/main
+       endscript
+}
