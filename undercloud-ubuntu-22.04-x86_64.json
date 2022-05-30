@@ -1,0 +1,58 @@
+{
+  "builders": [
+    {
+      "type": "qemu",
+      "name": "undercloud-ubuntu-22.04-x86_64",
+      "vm_name": "undercloud-ubuntu-22.04-x86_64",
+      "accelerator": "kvm",
+      "disk_size": "4096",
+      "format": "raw",
+      "headless": true,
+      "http_directory": "http/ubuntu-22.04",
+      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/ubuntu-22.04-live-server-amd64.iso",
+      "iso_checksum": "sha256:84aeaf7823c8c61baa0ae862d0a06b03409394800000b3235854a6b38eb4856f",
+      "ssh_username": "root",
+      "ssh_password": "not_a_real_password",
+      "ssh_timeout": "30m",
+      "vnc_bind_address": "0.0.0.0",
+      "qemuargs": [
+        [ "-m", "2048M" ],
+        [ "-cpu", "host" ],
+        [ "-smp", "2" ]
+      ],
+      "boot_wait": "5s",
+      "boot_command": [
+        "c",
+        "<wait>",
+        "set gfxpayload=keep",
+        "<enter><wait>",
+        "linux /casper/vmlinuz quiet net.ifnames=0 biosdevname=0 autoinstall ds=nocloud-net\\;s=http://{{.HTTPIP}}:{{.HTTPPort}}/ ---",
+        "<enter><wait5>",
+        "initrd /casper/initrd",
+        "<enter><wait10>",
+        "boot",
+        "<enter>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "ansible_env_vars": [
+        "ANSIBLE_CONFIG=ansible/ansible.cfg"
+      ],
+      "extra_arguments": [
+        "--ssh-extra-args",
+        "-o IdentitiesOnly=yes",
+        "--extra-vars",
+        "ansible_python_interpreter=/usr/bin/python3 image_build_dir='{{pwd}}/output-{{build_name}}'"
+      ],
+      "playbook_file": "ansible/playbook-undercloud.yml"
+    },
+    {
+      "type": "shell",
+      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/cleanup.sh"
+    }
+  ]
+}

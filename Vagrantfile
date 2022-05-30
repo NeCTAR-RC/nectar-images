@@ -468,6 +468,22 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # Undercloud Ubuntu 22.04 (jammy)
+  config.vm.define "undercloud-ubuntu2204" do |c|
+    c.vm.box = "generic/ubuntu2204"
+    c.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/jammy64"
+    end
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true,
+                             ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook-undercloud.yml"
+      ansible.become = true
+    end
+  end
+
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
   config.vm.provider :libvirt do |v|
