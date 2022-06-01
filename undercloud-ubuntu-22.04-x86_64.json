@@ -12,7 +12,7 @@
       "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/ubuntu-22.04-live-server-amd64.iso",
       "iso_checksum": "sha256:84aeaf7823c8c61baa0ae862d0a06b03409394800000b3235854a6b38eb4856f",
       "ssh_username": "root",
-      "ssh_password": "not_a_real_password",
+      "ssh_private_key_file": "packer-ssh-key",
       "ssh_timeout": "30m",
       "vnc_bind_address": "0.0.0.0",
       "qemuargs": [
@@ -42,10 +42,9 @@
         "ANSIBLE_CONFIG=ansible/ansible.cfg"
       ],
       "extra_arguments": [
-        "--ssh-extra-args",
-        "-o IdentitiesOnly=yes",
-        "--extra-vars",
-        "ansible_python_interpreter=/usr/bin/python3 image_build_dir='{{pwd}}/output-{{build_name}}'"
+        "--scp-extra-args", "'-O'",
+        "--ssh-extra-args", "-o IdentitiesOnly=yes",
+        "--extra-vars", "ansible_python_interpreter=/usr/bin/python3 image_build_dir='{{pwd}}/output-{{build_name}}'"
       ],
       "playbook_file": "ansible/playbook-undercloud.yml"
     },
