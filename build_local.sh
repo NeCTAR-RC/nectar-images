@@ -122,6 +122,7 @@ else
 fi
 
 echo "Building image ${NAME}..."
+chmod 600 packer-ssh-key
 packer build -on-error=ask $PACKER_WORKING_FILE || exit $?
 rm -f $PACKER_WORKING_FILE
 
