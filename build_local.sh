@@ -122,7 +122,7 @@ else
 fi
 
 echo "Building image ${NAME}..."
-packer build $PACKER_WORKING_FILE
+packer build -on-error=ask $PACKER_WORKING_FILE || exit $?
 rm -f $PACKER_WORKING_FILE
 
 IMAGE_NAME="$(read_fact nectar_name)"
