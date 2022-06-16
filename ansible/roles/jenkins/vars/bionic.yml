@@ -6,6 +6,10 @@ puppet_repo: "deb http://apt.puppetlabs.com {{ ansible_distribution_release }} p
 ansible_ppa: True
 
 packages:
+  - ruby-puppetlabs-spec-helper
+  - ruby-puppet-syntax
+  - dh-systemd
+  - python-dev
   - libcurl4
   - libpng-dev
   - python-pip

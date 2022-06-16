@@ -4,6 +4,10 @@ openstack_version: mitaka
 puppet_repo: "deb http://apt.puppetlabs.com {{ ansible_distribution_release }} PC1"
 
 packages:
+  - ruby-puppetlabs-spec-helper
+  - ruby-puppet-syntax
+  - dh-systemd
+  - python-dev
   - python-pip
   - python-sphinx
   - libpng12-dev

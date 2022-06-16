@@ -1,17 +1,14 @@
 ---
-openstack_version: ussuri
+openstack_version: yoga
 
-puppet_repo: "deb http://apt.puppetlabs.com {{ ansible_distribution_release }} puppet7"
+# apt.puppetlabs.com don't have a jammy repo yet, for now the focal one works well.
+puppet_repo: "deb http://apt.puppetlabs.com focal puppet7"
 
 ansible_ppa: True
 
 packages:
-  - ruby-puppetlabs-spec-helper
-  - ruby-puppet-syntax
-  - dh-systemd
-  - python-dev
   - libpng-dev
-  - python3-ceilometerclient
+#  - python3-ceilometerclient
   - python3-cinderclient
   - python3-designateclient
   - python3-glanceclient
@@ -32,3 +29,4 @@ packages:
 
 gem_packages:
   - puppet
+  - puppetlabs_spec_helper

@@ -2,11 +2,9 @@
 common_packages:
   - default-jdk
   - rake
-  - ruby-puppetlabs-spec-helper
   - puppet-lint
   - git
   - bundler
-  - python-dev
   - python3-dev
   - jq
   - libssl-dev
@@ -31,7 +29,6 @@ common_packages:
   - python3-pip
   - git-review
   - dh-apache2
-  - dh-systemd
   - openstack-pkg-tools
   - puppet-agent
   - python3-setuptools
@@ -45,7 +42,6 @@ common_packages:
   - tox
   - virtualenv
   - nodejs
-  - ruby-puppet-syntax
   - shellcheck
   - yamllint
   - cmake
