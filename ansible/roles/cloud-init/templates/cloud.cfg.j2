@@ -7,8 +7,6 @@ disable_root: true
 
 {% if ansible_os_family == "RedHat" %}
 resize_rootfs_tmp: /dev
-ssh_deletekeys:   0
-ssh_genkeytypes:  ~
 ssh_pwauth:   0
 
 {% elif ansible_os_family == "Suse" %}
