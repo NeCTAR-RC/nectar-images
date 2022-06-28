@@ -1,0 +1,50 @@
+{
+  "builders": [
+    {
+      "type": "qemu",
+      "name": "centos-stream-9",
+      "vm_name": "centos-stream-9",
+      "accelerator": "kvm",
+      "disk_size": "4096",
+      "format": "raw",
+      "headless": true,
+      "http_directory": "http",
+      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/CentOS-Stream-9-20220621.1-x86_64-boot.iso",
+      "iso_checksum": "sha256:5da9f5ea6af6ee5c7319bd439b20484184b80395960b965119f25a98caf95d99",
+      "ssh_username": "root",
+      "ssh_private_key_file": "packer-ssh-key",
+      "ssh_timeout": "30m",
+      "vnc_bind_address": "0.0.0.0",
+      "qemuargs": [
+        [ "-m", "2048M" ],
+        [ "-cpu", "host" ],
+        [ "-smp", "2" ]
+      ],
+      "boot_wait": "5s",
+      "boot_command": [
+        "<tab> inst.text net.ifnames=0 biosdevname=0 ",
+        "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-stream-9-kickstart.cfg<enter><wait>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "use_proxy": "false",
+      "ansible_env_vars": [
+        "ANSIBLE_CONFIG=ansible/ansible.cfg"
+      ],
+      "extra_arguments": [
+        "--ssh-extra-args",
+        "-o IdentitiesOnly=yes",
+        "--extra-vars",
+        "image_build_dir='{{pwd}}/output-{{build_name}}' nectar_image_name='CentOS Stream 9 x86_64'"
+      ],
+      "playbook_file": "ansible/playbook.yml"
+    },
+    {
+      "type": "shell",
+      "script": "scripts/cleanup.sh"
+    }
+  ]
+}
