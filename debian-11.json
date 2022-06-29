@@ -11,9 +11,8 @@
       "http_directory": "http",
       "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/debian-11.0.0-amd64-netinst.iso",
       "iso_checksum": "sha256:ae6d563d2444665316901fe7091059ac34b8f67ba30f9159f7cef7d2fdc5bf8a",
-      "ssh_password": "not_a_real_password",
-      "ssh_port": 22,
       "ssh_username": "root",
+      "ssh_private_key_file": "packer-ssh-key",
       "ssh_timeout": "30m",
       "vnc_bind_address": "0.0.0.0",
       "qemuargs": [
@@ -39,6 +38,7 @@
     },
     {
       "type": "ansible",
+      "use_proxy": "false",
       "ansible_env_vars": [
         "ANSIBLE_CONFIG=ansible/ansible.cfg"
       ],
