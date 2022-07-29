@@ -1,0 +1,75 @@
+# /etc/nvidia/gridd.conf - Configuration file for vGPU Licensing Daemon
+
+# This is a template for the configuration file for vGPU Licensing Daemon.
+# For details on the file format, please refer to the nvidia-gridd(1)
+# man page.
+
+# Description: Set License Server Address
+# Data type: string
+# Format:  "<address>"
+ServerAddress={{ nvidia_grid_license_server_address }}
+
+# Description: Set License Server port number
+# Data type: integer
+# Format:  <port>, default is 7070
+ServerPort={{ nvidia_grid_license_server_port | default('7070') }}
+
+# Description: Set Backup License Server Address
+# Data type: string
+# Format:  "<address>"
+{% if nvidia_grid_backup_license_server_address is defined %}
+BackupServerAddress={{ nvidia_grid_backup_license_server_address }}
+{% else %}
+#BackupServerAddress=
+{% endif %}
+
+# Description: Set Backup License Server port number
+# Data type: integer
+# Format:  <port>, default is 7070
+{% if nvidia_grid_backup_license_server_port is defined %}
+BackupServerPort={{ nvidia_grid_backup_license_server_port }}
+{% else %}
+#BackupServerPort=
+{% endif %}
+
+# Description: Set Feature to be enabled
+# Data type: integer
+# Possible values:
+#    0 => for unlicensed state
+#    1 => for NVIDIA vGPU (Optional, autodetected as per vGPU type)
+#    2 => for NVIDIA RTX Virtual Workstation
+#    4 => for NVIDIA Virtual Compute Server
+# All other values reserved
+FeatureType={{ nvidia_grid_feature_type | default('1') }}
+
+# Description: Parameter to enable or disable vGPU Licensing tab in nvidia-settings
+# Data type: boolean
+# Possible values: TRUE or FALSE, default is FALSE
+#EnableUI=TRUE
+
+# Description: Set license borrow period in minutes
+# Data type: integer
+# Possible values: 10 to 10080 mins(7 days), default is 1440 mins(1 day)
+{% if nvidia_grid_license_interval is defined %}
+LicenseInterval={{ nvidia_grid_license_interval }}
+{% else %}
+#LicenseInterval=1440
+{% endif %}
+
+# Description: Set license linger period in minutes
+# Data type: integer
+# Possible values: 0 to 10080 mins(7 days), default is 0 mins
+{% if nvidia_grid_linger_interval is defined %}
+LingerInterval={{ nvidia_grid_linger_interval }}
+{% else %}
+#LingerInterval=10
+{% endif %}
+
+# Description: Set license client configuration token path
+# Data type: string
+# Format:  "<path>", default is /etc/nvidia/ClientConfigToken/
+{% if nvidia_grid_client_config_token_path is defined %}
+ClientConfigTokenPath={{ nvidia_grid_client_config_token_path }}
+{% else %}
+#ClientConfigTokenPath=/etc/nvidia/ClientConfigToken/
+{% endif %}

@@ -1,0 +1,8 @@
+---
+- name: Install pre-requisites
+  apt:
+    name: "{{ nvidia_grid_dependencies }}"
+
+- name: Install grid driver package
+  yum:
+    deb: "{{ nvidia_grid_driver_url_path }}/grid-drivers/nvidia-linux-grid-{{ nvidia_grid_driver_version.split('.')[0] }}_{{ nvidia_grid_driver_version }}_x86_64.rpm"

@@ -1,0 +1,6 @@
+---
+nvidia_grid_dependencies:
+- build-essential
+- unzip
+- dkms
+- jq

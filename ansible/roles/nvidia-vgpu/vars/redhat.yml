@@ -1,0 +1,11 @@
+---
+nvidia_grid_dependencies:
+- wget
+- libstdc++.i686
+- gcc
+- gcc-c++
+- kernel-devel
+- elfutils-libelf-devel
+- unzip
+- make
+- jq

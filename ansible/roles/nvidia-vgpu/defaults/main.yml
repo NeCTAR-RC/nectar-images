@@ -1,0 +1,56 @@
+---
+nvidia_grid_driver_version: 510.73.08
+
+nvidia_grid_driver_url_path: https://object-store.rc.nectar.org.au/v1/AUTH_2f6f7e75fc0f453d9c127b490b02e9e3/nvidia-vgpu-repo
+
+nvidia_grid_token_filename: license_token.tok
+
+# License token is delivered via OpenStack dynamic vendordata
+nvidia_grid_vendordata_url: http://169.254.169.254/openstack/latest/vendor_data2.json
+
+# JSON path to extract token from vendordata (using jq)
+nvidia_grid_token_json_path: '.nectar.nvidia_vgpu.license_token'
+
+# Description: Set License Server Address
+# Data type: string
+# Format:  "<address>"
+nvidia_grid_license_server_address: api.cls.licensing.nvidia.com
+
+# Description: Set License Server port number
+# Data type: integer
+# Format:  <port>, default is 7070
+#nvidia_grid_license_server_port: 7070
+
+# Description: Set Backup License Server Address
+# Data type: string
+# Format:  "<address>"
+#nvidia_grid_backup_license_server_address:
+
+# Description: Set Backup License Server port number
+# Data type: integer
+# Format:  <port>, default is 7070
+#nvidia_grid_backup_license_server_port:
+
+# Description: Set Feature to be enabled
+# Data type: integer
+# Possible values:
+#    0 => for unlicensed state
+#    1 => for NVIDIA vGPU (Optional, autodetected as per vGPU type)
+#    2 => for NVIDIA RTX Virtual Workstation
+#    4 => for NVIDIA Virtual Compute Server
+nvidia_grid_feature_type: 1
+
+# Description: Set license borrow period in minutes
+# Data type: integer
+# Possible values: 10 to 10080 mins(7 days), default is 1440 mins(1 day)
+#nvidia_grid_license_interval:
+
+# Description: Set license linger period in minutes
+# Data type: integer
+# Possible values: 0 to 10080 mins(7 days), default is 0 mins
+#nvidia_grid_linger_interval:
+
+# Description: Set license client configuration token path
+# Data type: string
+# Format:  "<path>", default is /etc/nvidia/ClientConfigToken/
+nvidia_grid_client_config_token_path: /run/nvidia-gridd/ClientConfigToken/

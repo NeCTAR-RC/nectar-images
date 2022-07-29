@@ -1,0 +1,26 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: yes
+
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    - role: image-name
+    - role: default-user
+    - role: systemd-networkd
+    - role: testing
+    - role: repos
+    - role: unattended-upgrades
+    - role: cloud-init
+    - role: heat-cfntools
+    - role: qemu-guest-agent
+    - role: ssh
+    - role: fail2ban
+    - role: ntp
+    - role: cloudstor
+    - role: nvidia-vgpu
+    - role: banner
+    - role: facts
+    - role: cleanup

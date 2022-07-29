@@ -1,0 +1,14 @@
+#!/bin/sh -e
+
+#
+# NVIDIA GRID (vGPU) driver setup script for ARDC Nectar Research Cloud
+#
+# Andy Botting <andy.botting@ardc.edu.au>
+#
+
+logger -t nvidia-grid-setup "Fetching license token"
+if [ ! -f "{{ nvidia_grid_client_config_token_path }}/{{ nvidia_grid_token_filename }}" ]; then
+	mkdir -p "{{ nvidia_grid_client_config_token_path }}"
+	curl -s -S -f "{{ nvidia_grid_vendordata_url }}" | jq -j '{{ nvidia_grid_token_json_path }}' > "{{ nvidia_grid_client_config_token_path }}/{{ nvidia_grid_token_filename }}"
+    logger -t nvidia-grid-setup "Successfully fetched license token"
+fi
