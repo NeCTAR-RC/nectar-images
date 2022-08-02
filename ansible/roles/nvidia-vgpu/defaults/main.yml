@@ -52,5 +52,5 @@ nvidia_grid_feature_type: 1
 
 # Description: Set license client configuration token path
 # Data type: string
-# Format:  "<path>", default is /etc/nvidia/ClientConfigToken/
-nvidia_grid_client_config_token_path: /run/nvidia-gridd/ClientConfigToken/
+# Format:  "<path>", default is /etc/nvidia/ClientConfigToken
+nvidia_grid_client_config_token_path: /run/nvidia-gridd/ClientConfigToken
