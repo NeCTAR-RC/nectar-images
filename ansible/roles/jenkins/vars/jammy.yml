@@ -1,8 +1,7 @@
 ---
 openstack_version: yoga
 
-# apt.puppetlabs.com don't have a jammy repo yet, for now the focal one works well.
-puppet_repo: "deb http://apt.puppetlabs.com focal puppet7"
+puppet_repo: "deb http://apt.puppetlabs.com jammy puppet7"
 
 ansible_ppa: True
 
