@@ -1,4 +1,6 @@
 ---
+# See docs at https://docs.nvidia.com/grid/
+nvidia_vgpu_software_version: 14.1
 nvidia_grid_driver_version: 510.73.08
 
 nvidia_grid_driver_url_path: https://object-store.rc.nectar.org.au/v1/AUTH_2f6f7e75fc0f453d9c127b490b02e9e3/nvidia-vgpu-repo

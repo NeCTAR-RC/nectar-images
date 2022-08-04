@@ -5,4 +5,4 @@
 
 - name: Install Ubuntu grid driver package
   apt:
-    deb: "{{ nvidia_grid_driver_url_path }}/grid-drivers/nvidia-linux-grid-{{ nvidia_grid_driver_version.split('.')[0] }}_{{ nvidia_grid_driver_version }}_amd64.deb"
+    deb: "{{ nvidia_grid_driver_url_path }}/grid-drivers/{{ nvidia_vgpu_software_version }}/nvidia-linux-grid-{{ nvidia_grid_driver_version.split('.')[0] }}_{{ nvidia_grid_driver_version }}_amd64.deb"
