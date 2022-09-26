@@ -30,7 +30,7 @@ fi
 
 if [ "$1" == "add" ]; then
 
-    if [ -x "$(sudo bash -c 'command -v nft')" ]; then
+    if [ -x "$(command -v nft)" ]; then
         # Note: inet for nat requires a 5.2 or newer kernel.
         if [ "$2" == "ipv4" ]; then
             nft add table ip octavia-ipv4
@@ -38,9 +38,9 @@ if [ "$1" == "add" ]; then
             nft add rule ip octavia-ipv4 ip-udp-masq oifname "$3" meta l4proto udp masquerade
             nft add chain ip octavia-ipv4 ip-sctp-masq { type nat hook postrouting priority 100\;}
             nft add rule ip octavia-ipv4 ip-sctp-masq oifname "$3" meta l4proto sctp masquerade
-            nft add chain ip octavia-ipv4 prerouting { type filter hook prerouting priority -300 \; }
+            nft -- add chain ip octavia-ipv4 prerouting { type filter hook prerouting priority -300 \; }
             nft add rule ip octavia-ipv4 prerouting iifname "$3" meta l4proto tcp notrack
-            nft add chain ip octavia-ipv4 output { type filter hook output priority -300 \; }
+            nft -- add chain ip octavia-ipv4 output { type filter hook output priority -300 \; }
             nft add rule ip octavia-ipv4 output oifname "$3" meta l4proto tcp notrack
 
         elif [ "$2" == "ipv6" ]; then
@@ -49,9 +49,9 @@ if [ "$1" == "add" ]; then
             nft add rule ip6 octavia-ipv6 ip6-udp-masq oifname "$3" meta l4proto udp masquerade
             nft add chain ip6 octavia-ipv6 ip6-sctp-masq { type nat hook postrouting priority 100\;}
             nft add rule ip6 octavia-ipv6 ip6-sctp-masq oifname "$3" meta l4proto sctp masquerade
-            nft add chain ip6 octavia-ipv6 prerouting { type filter hook prerouting priority -300 \; }
+            nft -- add chain ip6 octavia-ipv6 prerouting { type filter hook prerouting priority -300 \; }
             nft add rule ip6 octavia-ipv6 prerouting iifname "$3" meta l4proto tcp notrack
-            nft add chain ip6 octavia-ipv6 output { type filter hook output priority -300 \; }
+            nft -- add chain ip6 octavia-ipv6 output { type filter hook output priority -300 \; }
             nft add rule ip6 octavia-ipv6 output oifname "$3" meta l4proto tcp notrack
         else
             usage
@@ -77,7 +77,7 @@ if [ "$1" == "add" ]; then
 
 elif [ "$1" == "delete" ]; then
 
-    if [ -x "$(sudo bash -c 'command -v nft')" ]; then
+    if [ -x "$(command -v nft)" ]; then
         if [ "$2" == "ipv4" ]; then
             nft flush chain ip octavia-ipv4 ip-udp-masq
             nft delete chain ip octavia-ipv4 ip-udp-masq
