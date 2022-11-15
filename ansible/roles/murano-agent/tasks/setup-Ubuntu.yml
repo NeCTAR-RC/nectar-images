@@ -36,6 +36,13 @@
     name: murano-agent
     state: present
 
+# https://review.opendev.org/c/openstack/murano-agent/+/864461
+- name: Fix execution_plan_queue bytes error
+  ansible.builtin.lineinfile:
+    path: /usr/lib/python3/dist-packages/muranoagent/execution_plan_queue.py
+    regexp: "        with open(plan_file_path, 'wb') as out_file:"
+    line: "        with open(plan_file_path, 'w') as out_file:"
+
 - name: Remove Nectar apt repositories
   apt_repository:
     repo: "{{ item }}"
