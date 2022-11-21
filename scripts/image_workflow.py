@@ -116,7 +116,7 @@ class ImageWorkflow(object):
             m_check, gc.images.list(filters={'owner': img.owner}))
 
         for i in matchingimages:
-            self.archive(image=i, archive_project=archive_project)
+            self.archive(image=i)
 
         if self.dry_run:
             LOG.info(f"Would promote image {img.name} ({img.id})")
