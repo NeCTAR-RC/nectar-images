@@ -12,9 +12,13 @@ import prettytable
 
 import glanceclient
 from glanceclient import exc
-from gnocchiclient.v1 import client as gnocchi_client
 from keystoneclient import exceptions as ks_exc
 
+# Make Gnocchi optional
+try:
+    from gnocchiclient.v1 import client as gnocchi_client
+except:
+    pass
 
 logging.basicConfig(
     format='%(message)s',
