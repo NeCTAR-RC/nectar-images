@@ -98,6 +98,7 @@ class ImageWorkflow(object):
     def promote(self, *args, **kwargs):
         image = kwargs['image']
         project = get_project(kwargs, 'project')
+        archive_project = get_project(kwargs, 'archive_project')
         gc = self.get_glanceclient()
 
         try:
@@ -116,7 +117,7 @@ class ImageWorkflow(object):
             m_check, gc.images.list(filters={'owner': img.owner}))
 
         for i in matchingimages:
-            self.archive(image=i)
+            self.archive(image=i, archive_project=archive_project)
 
         if self.dry_run:
             LOG.info(f"Would promote image {img.name} ({img.id})")
