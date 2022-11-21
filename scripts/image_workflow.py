@@ -83,7 +83,7 @@ class ImageWorkflow(object):
     def get_glanceclient(self):
         return glanceclient.Client('2', session=self.session)
 
-    def match(name, build, image):
+    def match(self, name, build, image):
         """return true if image's name == name, and nectar_build < build"""
         if image.get('nectar_name') != name:
             return False
