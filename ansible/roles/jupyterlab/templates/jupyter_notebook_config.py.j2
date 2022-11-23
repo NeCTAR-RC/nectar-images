@@ -1,0 +1,1561 @@
+# Configuration file for jupyter-notebook.
+
+#------------------------------------------------------------------------------
+# Application(SingletonConfigurable) configuration
+#------------------------------------------------------------------------------
+
+## This is an application.
+
+## The date format used by logging formatters for %(asctime)s
+{% if jupyter_lab_application_log_datefmt is defined %}
+c.Application.log_datefmt = '{{ jupyter_lab_application_log_datefmt }}'
+{% else %}
+#c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
+{% endif %}
+
+## The Logging format template
+{% if jupyter_lab_application_log_format is defined %}
+c.Application.log_format = '{{ jupyter_lab_application_log_format }}'
+{% else %}
+#c.Application.log_format = '[%(name)s]%(highlevel)s %(message)s'
+{% endif %}
+
+## Set the log level by value or name.
+{% if jupyter_lab_application_log_level is defined %}
+c.Application.log_level = {{ jupyter_lab_application_log_level }}
+{% else %}
+#c.Application.log_level = 30
+{% endif %}
+
+#------------------------------------------------------------------------------
+# JupyterApp(Application) configuration
+#------------------------------------------------------------------------------
+
+## Base class for Jupyter applications
+
+## Answer yes to any prompts.
+{% if jupyter_lab_jupyterapp_answer_yes is defined %}
+c.JupyterApp.answer_yes = {{ jupyter_lab_jupyterapp_answer_yes | bool }}
+{% else %}
+#c.JupyterApp.answer_yes = False
+{% endif %}
+
+## Full path of a config file.
+{% if jupyter_lab_jupyterapp_config_file is defined %}
+c.JupyterApp.config_file = '{{ jupyter_lab_jupyterapp_config_file }}'
+{% else %}
+#c.JupyterApp.config_file = ''
+{% endif %}
+
+## Specify a config file to load.
+{% if jupyter_lab_jupyterapp_config_file_name is defined %}
+c.JupyterApp.config_file_name = '{{ jupyter_lab_jupyterapp_config_file_name }}'
+{% else %}
+#c.JupyterApp.config_file_name = ''
+{% endif %}
+
+## Generate default config file.
+{% if jupyter_lab_jupyterapp_generate_config is defined %}
+c.JupyterApp.generate_config = {{ jupyter_lab_jupyterapp_generate_config | bool }}
+{% else %}
+#c.JupyterApp.generate_config = False
+{% endif %}
+
+#------------------------------------------------------------------------------
+# NotebookApp(JupyterApp) configuration
+#------------------------------------------------------------------------------
+
+## Set the Access-Control-Allow-Credentials: true header
+{% if jupyter_lab_notebookapp_allow_credentials is defined %}
+c.NotebookApp.allow_credentials = {{ jupyter_lab_notebookapp_allow_credentials | bool }}
+{% else %}
+#c.NotebookApp.allow_credentials = False
+{% endif %}
+
+## Set the Access-Control-Allow-Origin header
+#  
+#  Use '*' to allow any origin to access your server.
+#  
+#  Takes precedence over allow_origin_pat.
+{% if jupyter_lab_notebookapp_allow_origin is defined %}
+c.NotebookApp.allow_origin = '{{ jupyter_lab_notebookapp_allow_origin }}'
+{% else %}
+#c.NotebookApp.allow_origin = ''
+{% endif %}
+
+## Use a regular expression for the Access-Control-Allow-Origin header
+#  
+#  Requests from an origin matching the expression will get replies with:
+#  
+#      Access-Control-Allow-Origin: origin
+#  
+#  where `origin` is the origin of the request.
+#  
+#  Ignored if allow_origin is set.
+{% if jupyter_lab_notebookapp_allow_origin_pat is defined %}
+c.NotebookApp.allow_origin_pat = '{{ jupyter_lab_notebookapp_allow_origin_pat }}'
+{% else %}
+#c.NotebookApp.allow_origin_pat = ''
+{% endif %}
+
+## Allow password to be changed at login for the notebook server.
+#  
+#  While loggin in with a token, the notebook server UI will give the opportunity
+#  to the user to enter a new password at the same time that will replace the
+#  token login mechanism.
+#  
+#  This can be set to false to prevent changing password from the UI/API.
+{% if jupyter_lab_notebookapp_allow_password_change is defined %}
+c.NotebookApp.allow_password_change = {{ jupyter_lab_notebookapp_allow_password_change | bool }}
+{% else %}
+#c.NotebookApp.allow_password_change = True
+{% endif %}
+
+## Allow requests where the Host header doesn't point to a local server
+#  
+#  By default, requests get a 403 forbidden response if the 'Host' header shows
+#  that the browser thinks it's on a non-local domain. Setting this option to
+#  True disables this check.
+#  
+#  This protects against 'DNS rebinding' attacks, where a remote web server
+#  serves you a page and then changes its DNS to send later requests to a local
+#  IP, bypassing same-origin checks.
+#  
+#  Local IP addresses (such as 127.0.0.1 and ::1) are allowed as local, along
+#  with hostnames configured in local_hostnames.
+{% if jupyter_lab_notebookapp_allow_remote_access is defined %}
+c.NotebookApp.allow_remote_access = {{ jupyter_lab_notebookapp_allow_remote_access | bool }}
+{% else %}
+#c.NotebookApp.allow_remote_access = False
+{% endif %}
+
+## Whether to allow the user to run the notebook as root.
+{% if jupyter_lab_notebookapp_allow_root is defined %}
+c.NotebookApp.allow_root = {{ jupyter_lab_notebookapp_allow_root | bool }}
+{% else %}
+#c.NotebookApp.allow_root = False
+{% endif %}
+
+## DEPRECATED use base_url
+{% if jupyter_lab_notebookapp_base_project_url is defined %}
+c.NotebookApp.base_project_url = '{{ jupyter_lab_notebookapp_base_project_url }}'
+{% else %}
+#c.NotebookApp.base_project_url = '/'
+{% endif %}
+
+## The base URL for the notebook server.
+#  
+#  Leading and trailing slashes can be omitted, and will automatically be added.
+{% if jupyter_lab_notebookapp_base_url is defined %}
+c.NotebookApp.base_url = '{{ jupyter_lab_notebookapp_base_url }}'
+{% else %}
+#c.NotebookApp.base_url = '/'
+{% endif %}
+
+## Specify what command to use to invoke a web browser when opening the notebook.
+#  If not specified, the default browser will be determined by the `webbrowser`
+#  standard library module, which allows setting of the BROWSER environment
+#  variable to override it.
+{% if jupyter_lab_notebookapp_browser is defined %}
+c.NotebookApp.browser = '{{ jupyter_lab_notebookapp_browser }}'
+{% else %}
+#c.NotebookApp.browser = ''
+{% endif %}
+
+## The full path to an SSL/TLS certificate file.
+{% if jupyter_lab_notebookapp_certfile is defined %}
+c.NotebookApp.certfile = '{{ jupyter_lab_notebookapp_certfile }}'
+{% else %}
+#c.NotebookApp.certfile = ''
+{% endif %}
+
+## The full path to a certificate authority certificate for SSL/TLS client
+#  authentication.
+{% if jupyter_lab_notebookapp_client_ca is defined %}
+c.NotebookApp.client_ca = '{{ jupyter_lab_notebookapp_client_ca }}'
+{% else %}
+#c.NotebookApp.client_ca = ''
+{% endif %}
+
+## The config manager class to use
+{% if jupyter_lab_notebookapp_config_manager_class is defined %}
+c.NotebookApp.config_manager_class = '{{ jupyter_lab_notebookapp_config_manager_class }}'
+{% else %}
+#c.NotebookApp.config_manager_class = 'notebook.services.config.manager.ConfigManager'
+{% endif %}
+
+## The notebook manager class to use.
+{% if jupyter_lab_notebookapp_contents_manager_class is defined %}
+c.NotebookApp.contents_manager_class = '{{ jupyter_lab_notebookapp_contents_manager_class }}'
+{% else %}
+#c.NotebookApp.contents_manager_class = 'notebook.services.contents.largefilemanager.LargeFileManager'
+{% endif %}
+
+## Extra keyword arguments to pass to `set_secure_cookie`. See tornado's
+#  set_secure_cookie docs for details.
+{% if jupyter_lab_notebookapp_cookie_options is defined %}
+c.NotebookApp.cookie_options = {{ jupyter_lab_notebookapp_cookie_options }}
+{% else %}
+#c.NotebookApp.cookie_options = {}
+{% endif %}
+
+## The random bytes used to secure cookies. By default this is a new random
+#  number every time you start the Notebook. Set it to a value in a config file
+#  to enable logins to persist across server sessions.
+#  
+#  Note: Cookie secrets should be kept private, do not share config files with
+#  cookie_secret stored in plaintext (you can read the value from a file).
+{% if jupyter_lab_notebookapp_cookie_secret is defined %}
+c.NotebookApp.cookie_secret = {{ jupyter_lab_notebookapp_cookie_secret }}
+{% else %}
+#c.NotebookApp.cookie_secret = b''
+{% endif %}
+
+## The file where the cookie secret is stored.
+{% if jupyter_lab_notebookapp_cookie_secret_file is defined %}
+c.NotebookApp.cookie_secret_file = '{{ jupyter_lab_notebookapp_cookie_secret_file }}'
+{% else %}
+#c.NotebookApp.cookie_secret_file = ''
+{% endif %}
+
+## Override URL shown to users.
+#  
+#  Replace actual URL, including protocol, address, port and base URL, with the
+#  given value when displaying URL to the users. Do not change the actual
+#  connection URL. If authentication token is enabled, the token is added to the
+#  custom URL automatically.
+#  
+#  This option is intended to be used when the URL to display to the user cannot
+#  be determined reliably by the Jupyter notebook server (proxified or
+#  containerized setups for example).
+{% if jupyter_lab_notebookapp_custom_display_url is defined %}
+c.NotebookApp.custom_display_url = '{{ jupyter_lab_notebookapp_custom_display_url }}'
+{% else %}
+#c.NotebookApp.custom_display_url = ''
+{% endif %}
+
+## The default URL to redirect to from `/`
+{% if jupyter_lab_notebookapp_default_url is defined %}
+c.NotebookApp.default_url = '{{ jupyter_lab_notebookapp_default_url }}'
+{% else %}
+#c.NotebookApp.default_url = '/tree'
+{% endif %}
+
+## Disable cross-site-request-forgery protection
+#  
+#  Jupyter notebook 4.3.1 introduces protection from cross-site request
+#  forgeries, requiring API requests to either:
+#  
+#  - originate from pages served by this server (validated with XSRF cookie and
+#  token), or - authenticate with a token
+#  
+#  Some anonymous compute resources still desire the ability to run code,
+#  completely without authentication. These services can disable all
+#  authentication and security checks, with the full knowledge of what that
+#  implies.
+{% if jupyter_lab_notebookapp_disable_check_xsrf is defined %}
+c.NotebookApp.disable_check_xsrf = {{ jupyter_lab_notebookapp_disable_check_xsrf | bool }}
+{% else %}
+#c.NotebookApp.disable_check_xsrf = False
+{% endif %}
+
+## Whether to enable MathJax for typesetting math/TeX
+#  
+#  MathJax is the javascript library Jupyter uses to render math/LaTeX. It is
+#  very large, so you may want to disable it if you have a slow internet
+#  connection, or for offline use of the notebook.
+#  
+#  When disabled, equations etc. will appear as their untransformed TeX source.
+{% if jupyter_lab_notebookapp_enable_mathjax is defined %}
+c.NotebookApp.enable_mathjax = {{ jupyter_lab_notebookapp_enable_mathjax | bool }}
+{% else %}
+#c.NotebookApp.enable_mathjax = True
+{% endif %}
+
+## extra paths to look for Javascript notebook extensions
+{% if jupyter_lab_notebookapp_extra_nbextensions_path is defined %}
+c.NotebookApp.extra_nbextensions_path = {{ jupyter_lab_notebookapp_extra_nbextensions_path }}
+{% else %}
+#c.NotebookApp.extra_nbextensions_path = []
+{% endif %}
+
+## handlers that should be loaded at higher priority than the default services
+{% if jupyter_lab_notebookapp_extra_services is defined %}
+c.NotebookApp.extra_services = {{ jupyter_lab_notebookapp_extra_services }}
+{% else %}
+#c.NotebookApp.extra_services = []
+{% endif %}
+
+## Extra paths to search for serving static files.
+#  
+#  This allows adding javascript/css to be available from the notebook server
+#  machine, or overriding individual files in the IPython
+{% if jupyter_lab_notebookapp_extra_static_paths is defined %}
+c.NotebookApp.extra_static_paths = {{ jupyter_lab_notebookapp_extra_static_paths }}
+{% else %}
+#c.NotebookApp.extra_static_paths = []
+{% endif %}
+
+## Extra paths to search for serving jinja templates.
+#  
+#  Can be used to override templates from notebook.templates.
+{% if jupyter_lab_notebookapp_extra_template_paths is defined %}
+c.NotebookApp.extra_template_paths = {{ jupyter_lab_notebookapp_extra_template_paths }}
+{% else %}
+#c.NotebookApp.extra_template_paths = []
+{% endif %}
+
+## 
+{% if jupyter_lab_notebookapp_file_to_run is defined %}
+c.NotebookApp.file_to_run = '{{ jupyter_lab_notebookapp_file_to_run }}'
+{% else %}
+#c.NotebookApp.file_to_run = ''
+{% endif %}
+
+## Extra keyword arguments to pass to `get_secure_cookie`. See tornado's
+#  get_secure_cookie docs for details.
+{% if jupyter_lab_notebookapp_get_secure_cookie_kwargs is defined %}
+c.NotebookApp.get_secure_cookie_kwargs = {{ jupyter_lab_notebookapp_get_secure_cookie_kwargs }}
+{% else %}
+#c.NotebookApp.get_secure_cookie_kwargs = {}
+{% endif %}
+
+## Deprecated: Use minified JS file or not, mainly use during dev to avoid JS
+#  recompilation
+{% if jupyter_lab_notebookapp_ignore_minified_js is defined %}
+c.NotebookApp.ignore_minified_js = {{ jupyter_lab_notebookapp_ignore_minified_js | bool }}
+{% else %}
+#c.NotebookApp.ignore_minified_js = False
+{% endif %}
+
+## (bytes/sec) Maximum rate at which stream output can be sent on iopub before
+#  they are limited.
+{% if jupyter_lab_notebookapp_iopub_data_rate_limit is defined %}
+c.NotebookApp.iopub_data_rate_limit = {{ jupyter_lab_notebookapp_iopub_data_rate_limit }}
+{% else %}
+#c.NotebookApp.iopub_data_rate_limit = 1000000
+{% endif %}
+
+## (msgs/sec) Maximum rate at which messages can be sent on iopub before they are
+#  limited.
+{% if jupyter_lab_notebookapp_iopub_msg_rate_limit is defined %}
+c.NotebookApp.iopub_msg_rate_limit = {{ jupyter_lab_notebookapp_iopub_msg_rate_limit }}
+{% else %}
+#c.NotebookApp.iopub_msg_rate_limit = 1000
+{% endif %}
+
+## The IP address the notebook server will listen on.
+{% if jupyter_lab_notebookapp_ip is defined %}
+c.NotebookApp.ip = '{{ jupyter_lab_notebookapp_ip }}'
+{% else %}
+#c.NotebookApp.ip = 'localhost'
+{% endif %}
+
+## Supply extra arguments that will be passed to Jinja environment.
+{% if jupyter_lab_notebookapp_jinja_environment_options is defined %}
+c.NotebookApp.jinja_environment_options = {{ jupyter_lab_notebookapp_jinja_environment_options }}
+{% else %}
+#c.NotebookApp.jinja_environment_options = {}
+{% endif %}
+
+## Extra variables to supply to jinja templates when rendering.
+{% if jupyter_lab_notebookapp_jinja_template_vars is defined %}
+c.NotebookApp.jinja_template_vars = {{ jupyter_lab_notebookapp_jinja_template_vars }}
+{% else %}
+#c.NotebookApp.jinja_template_vars = {}
+{% endif %}
+
+## The kernel manager class to use.
+{% if jupyter_lab_notebookapp_kernel_manager_class is defined %}
+c.NotebookApp.kernel_manager_class = '{{ jupyter_lab_notebookapp_kernel_manager_class }}'
+{% else %}
+#c.NotebookApp.kernel_manager_class = 'notebook.services.kernels.kernelmanager.MappingKernelManager'
+{% endif %}
+
+## The kernel spec manager class to use. Should be a subclass of
+#  `jupyter_client.kernelspec.KernelSpecManager`.
+#  
+#  The Api of KernelSpecManager is provisional and might change without warning
+#  between this version of Jupyter and the next stable one.
+{% if jupyter_lab_notebookapp_kernel_spec_manager_class is defined %}
+c.NotebookApp.kernel_spec_manager_class = '{{ jupyter_lab_notebookapp_kernel_spec_manager_class }}'
+{% else %}
+#c.NotebookApp.kernel_spec_manager_class = 'jupyter_client.kernelspec.KernelSpecManager'
+{% endif %}
+
+## The full path to a private key file for usage with SSL/TLS.
+{% if jupyter_lab_notebookapp_keyfile is defined %}
+c.NotebookApp.keyfile = '{{ jupyter_lab_notebookapp_keyfile }}'
+{% else %}
+#c.NotebookApp.keyfile = ''
+{% endif %}
+
+## Hostnames to allow as local when allow_remote_access is False.
+#  
+#  Local IP addresses (such as 127.0.0.1 and ::1) are automatically accepted as
+#  local as well.
+{% if jupyter_lab_notebookapp_local_hostnames is defined %}
+c.NotebookApp.local_hostnames = {{ jupyter_lab_notebookapp_local_hostnames }}
+{% else %}
+#c.NotebookApp.local_hostnames = ['localhost']
+{% endif %}
+
+## The login handler class to use.
+{% if jupyter_lab_notebookapp_login_handler_class is defined %}
+c.NotebookApp.login_handler_class = '{{ jupyter_lab_notebookapp_login_handler_class }}'
+{% else %}
+#c.NotebookApp.login_handler_class = 'notebook.auth.login.LoginHandler'
+{% endif %}
+
+## The logout handler class to use.
+{% if jupyter_lab_notebookapp_logout_handler_class is defined %}
+c.NotebookApp.logout_handler_class = '{{ jupyter_lab_notebookapp_logout_handler_class }}'
+{% else %}
+#c.NotebookApp.logout_handler_class = 'notebook.auth.logout.LogoutHandler'
+{% endif %}
+
+## The MathJax.js configuration file that is to be used.
+{% if jupyter_lab_notebookapp_mathjax_config is defined %}
+c.NotebookApp.mathjax_config = '{{ jupyter_lab_notebookapp_mathjax_config }}'
+{% else %}
+#c.NotebookApp.mathjax_config = 'TeX-AMS-MML_HTMLorMML-full,Safe'
+{% endif %}
+
+## A custom url for MathJax.js. Should be in the form of a case-sensitive url to
+#  MathJax, for example:  /static/components/MathJax/MathJax.js
+{% if jupyter_lab_notebookapp_mathjax_url is defined %}
+c.NotebookApp.mathjax_url = '{{ jupyter_lab_notebookapp_mathjax_url }}'
+{% else %}
+#c.NotebookApp.mathjax_url = ''
+{% endif %}
+
+## Sets the maximum allowed size of the client request body, specified in  the
+#  Content-Length request header field. If the size in a request  exceeds the
+#  configured value, a malformed HTTP message is returned to the client.
+#  
+#  Note: max_body_size is applied even in streaming mode.
+{% if jupyter_lab_notebookapp_max_body_size is defined %}
+c.NotebookApp.max_body_size = {{ jupyter_lab_notebookapp_max_body_size }}
+{% else %}
+#c.NotebookApp.max_body_size = 536870912
+{% endif %}
+
+## Gets or sets the maximum amount of memory, in bytes, that is allocated  for
+#  use by the buffer manager.
+{% if jupyter_lab_notebookapp_max_buffer_size is defined %}
+c.NotebookApp.max_buffer_size = {{ jupyter_lab_notebookapp_max_buffer_size }}
+{% else %}
+#c.NotebookApp.max_buffer_size = 536870912
+{% endif %}
+
+## Gets or sets a lower bound on the open file handles process resource limit.
+#  This may need to be increased if you run into an OSError: [Errno 24] Too many
+#  open files. This is not applicable when running on Windows.
+{% if jupyter_lab_notebookapp_min_open_files_limit is defined %}
+c.NotebookApp.min_open_files_limit = {{ jupyter_lab_notebookapp_min_open_files_limit }}
+{% else %}
+#c.NotebookApp.min_open_files_limit = 0
+{% endif %}
+
+## Dict of Python modules to load as notebook server extensions.Entry values can
+#  be used to enable and disable the loading ofthe extensions. The extensions
+#  will be loaded in alphabetical order.
+{% if jupyter_lab_notebookapp_nbserver_extensions is defined %}
+c.NotebookApp.nbserver_extensions = {{ jupyter_lab_notebookapp_nbserver_extensions }}
+{% else %}
+#c.NotebookApp.nbserver_extensions = {}
+{% endif %}
+
+## The directory to use for notebooks and kernels.
+{% if jupyter_lab_notebookapp_notebook_dir is defined %}
+c.NotebookApp.notebook_dir = '{{ jupyter_lab_notebookapp_notebook_dir }}'
+{% else %}
+#c.NotebookApp.notebook_dir = ''
+{% endif %}
+
+## Whether to open in a browser after starting. The specific browser used is
+#  platform dependent and determined by the python standard library `webbrowser`
+#  module, unless it is overridden using the --browser (NotebookApp.browser)
+#  configuration option.
+{% if jupyter_lab_notebookapp_open_browser is defined %}
+c.NotebookApp.open_browser = {{ jupyter_lab_notebookapp_open_browser | bool }}
+{% else %}
+#c.NotebookApp.open_browser = True
+{% endif %}
+
+## Hashed password to use for web authentication.
+#  
+#  To generate, type in a python/IPython shell:
+#  
+#    from notebook.auth import passwd; passwd()
+#  
+#  The string should be of the form type:salt:hashed-password.
+{% if jupyter_lab_notebookapp_password is defined %}
+c.NotebookApp.password = '{{ jupyter_lab_notebookapp_password }}'
+{% else %}
+#c.NotebookApp.password = ''
+{% endif %}
+
+## Forces users to use a password for the Notebook server. This is useful in a
+#  multi user environment, for instance when everybody in the LAN can access each
+#  other's machine through ssh.
+#  
+#  In such a case, server the notebook server on localhost is not secure since
+#  any user can connect to the notebook server via ssh.
+{% if jupyter_lab_notebookapp_password_required is defined %}
+c.NotebookApp.password_required = {{ jupyter_lab_notebookapp_password_required | bool }}
+{% else %}
+#c.NotebookApp.password_required = False
+{% endif %}
+
+## The port the notebook server will listen on.
+{% if jupyter_lab_notebookapp_port is defined %}
+c.NotebookApp.port = {{ jupyter_lab_notebookapp_port }}
+{% else %}
+#c.NotebookApp.port = 8888
+{% endif %}
+
+## The number of additional ports to try if the specified port is not available.
+{% if jupyter_lab_notebookapp_port_retries is defined %}
+c.NotebookApp.port_retries = {{ jupyter_lab_notebookapp_port_retries }}
+{% else %}
+#c.NotebookApp.port_retries = 50
+{% endif %}
+
+## DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.
+{% if jupyter_lab_notebookapp_pylab is defined %}
+c.NotebookApp.pylab = '{{ jupyter_lab_notebookapp_pylab }}'
+{% else %}
+#c.NotebookApp.pylab = 'disabled'
+{% endif %}
+
+## If True, display a button in the dashboard to quit (shutdown the notebook
+#  server).
+{% if jupyter_lab_notebookapp_quit_button is defined %}
+c.NotebookApp.quit_button = {{ jupyter_lab_notebookapp_quit_button | bool }}
+{% else %}
+#c.NotebookApp.quit_button = True
+{% endif %}
+
+## (sec) Time window used to  check the message and data rate limits.
+{% if jupyter_lab_notebookapp_rate_limit_window is defined %}
+c.NotebookApp.rate_limit_window = {{ jupyter_lab_notebookapp_rate_limit_window }}
+{% else %}
+#c.NotebookApp.rate_limit_window = 3
+{% endif %}
+
+## Reraise exceptions encountered loading server extensions?
+{% if jupyter_lab_notebookapp_reraise_server_extension_failures is defined %}
+c.NotebookApp.reraise_server_extension_failures = {{ jupyter_lab_notebookapp_reraise_server_extension_failures | bool }}
+{% else %}
+#c.NotebookApp.reraise_server_extension_failures = False
+{% endif %}
+
+## DEPRECATED use the nbserver_extensions dict instead
+{% if jupyter_lab_notebookapp_server_extensions is defined %}
+c.NotebookApp.server_extensions = {{ jupyter_lab_notebookapp_server_extensions }}
+{% else %}
+#c.NotebookApp.server_extensions = []
+{% endif %}
+
+## The session manager class to use.
+{% if jupyter_lab_notebookapp_session_manager_class is defined %}
+c.NotebookApp.session_manager_class = '{{ jupyter_lab_notebookapp_session_manager_class }}'
+{% else %}
+#c.NotebookApp.session_manager_class = 'notebook.services.sessions.sessionmanager.SessionManager'
+{% endif %}
+
+## Shut down the server after N seconds with no kernels or terminals running and
+#  no activity. This can be used together with culling idle kernels
+#  (MappingKernelManager.cull_idle_timeout) to shutdown the notebook server when
+#  it's not in use. This is not precisely timed: it may shut down up to a minute
+#  later. 0 (the default) disables this automatic shutdown.
+{% if jupyter_lab_notebookapp_shutdown_no_activity_timeout is defined %}
+c.NotebookApp.shutdown_no_activity_timeout = {{ jupyter_lab_notebookapp_shutdown_no_activity_timeout }}
+{% else %}
+#c.NotebookApp.shutdown_no_activity_timeout = 0
+{% endif %}
+
+## Supply SSL options for the tornado HTTPServer. See the tornado docs for
+#  details.
+{% if jupyter_lab_notebookapp_ssl_options is defined %}
+c.NotebookApp.ssl_options = {{ jupyter_lab_notebookapp_ssl_options }}
+{% else %}
+#c.NotebookApp.ssl_options = {}
+{% endif %}
+
+## Supply overrides for terminado. Currently only supports "shell_command".
+{% if jupyter_lab_notebookapp_terminado_settings is defined %}
+c.NotebookApp.terminado_settings = {{ jupyter_lab_notebookapp_terminado_settings }}
+{% else %}
+#c.NotebookApp.terminado_settings = {}
+{% endif %}
+
+## Set to False to disable terminals.
+#  
+#  This does *not* make the notebook server more secure by itself. Anything the
+#  user can in a terminal, they can also do in a notebook.
+#  
+#  Terminals may also be automatically disabled if the terminado package is not
+#  available.
+{% if jupyter_lab_notebookapp_terminals_enabled is defined %}
+c.NotebookApp.terminals_enabled = {{ jupyter_lab_notebookapp_terminals_enabled | bool }}
+{% else %}
+#c.NotebookApp.terminals_enabled = True
+{% endif %}
+
+## Token used for authenticating first-time connections to the server.
+#  
+#  When no password is enabled, the default is to generate a new, random token.
+#  
+#  Setting to an empty string disables authentication altogether, which is NOT
+#  RECOMMENDED.
+{% if jupyter_lab_notebookapp_token is defined %}
+c.NotebookApp.token = '{{ jupyter_lab_notebookapp_token }}'
+{% else %}
+#c.NotebookApp.token = '<generated>'
+{% endif %}
+
+## Supply overrides for the tornado.web.Application that the Jupyter notebook
+#  uses.
+{% if jupyter_lab_notebookapp_tornado_settings is defined %}
+c.NotebookApp.tornado_settings = {{ jupyter_lab_notebookapp_tornado_settings }}
+{% else %}
+#c.NotebookApp.tornado_settings = {}
+{% endif %}
+
+## Whether to trust or not X-Scheme/X-Forwarded-Proto and X-Real-Ip/X-Forwarded-
+#  For headerssent by the upstream reverse proxy. Necessary if the proxy handles
+#  SSL
+{% if jupyter_lab_notebookapp_trust_xheaders is defined %}
+c.NotebookApp.trust_xheaders = {{ jupyter_lab_notebookapp_trust_xheaders | bool }}
+{% else %}
+#c.NotebookApp.trust_xheaders = False
+{% endif %}
+
+## Disable launching browser by redirect file
+#  
+#  For versions of notebook > 5.7.2, a security feature measure was added that
+#  prevented the authentication token used to launch the browser from being
+#  visible. This feature makes it difficult for other users on a multi-user
+#  system from running code in your Jupyter session as you.
+#  
+#  However, some environments (like Windows Subsystem for Linux (WSL) and
+#  Chromebooks), launching a browser using a redirect file can lead the browser
+#  failing to load.  This is because of the difference in file structures/paths
+#  between the runtime and  the browser.
+#  
+#  Disabling this setting to False will disable this behavior, allowing the
+#  browser  to launch by using a URL and visible token (as before).
+{% if jupyter_lab_notebookapp_use_redirect_file is defined %}
+c.NotebookApp.use_redirect_file = {{ jupyter_lab_notebookapp_use_redirect_file | bool }}
+{% else %}
+#c.NotebookApp.use_redirect_file = True
+{% endif %}
+
+## DEPRECATED, use tornado_settings
+{% if jupyter_lab_notebookapp_webapp_settings is defined %}
+c.NotebookApp.webapp_settings = {{ jupyter_lab_notebookapp_webapp_settings }}
+{% else %}
+#c.NotebookApp.webapp_settings = {}
+{% endif %}
+
+## Specify Where to open the notebook on startup. This is the `new` argument
+#  passed to the standard library method `webbrowser.open`. The behaviour is not
+#  guaranteed, but depends on browser support. Valid values are:
+#  
+#   - 2 opens a new tab,
+#   - 1 opens a new window,
+#   - 0 opens in an existing window.
+#  
+#  See the `webbrowser.open` documentation for details.
+{% if jupyter_lab_notebookapp_webbrowser_open_new is defined %}
+c.NotebookApp.webbrowser_open_new = {{ jupyter_lab_notebookapp_webbrowser_open_new }}
+{% else %}
+#c.NotebookApp.webbrowser_open_new = 2
+{% endif %}
+
+## Set the tornado compression options for websocket connections.
+#  
+#  This value will be returned from
+#  :meth:`WebSocketHandler.get_compression_options`. None (default) will disable
+#  compression. A dict (even an empty one) will enable compression.
+#  
+#  See the tornado docs for WebSocketHandler.get_compression_options for details.
+{% if jupyter_lab_notebookapp_websocket_compression_options is defined %}
+c.NotebookApp.websocket_compression_options = '{{ jupyter_lab_notebookapp_websocket_compression_options }}'
+{% else %}
+#c.NotebookApp.websocket_compression_options = None
+{% endif %}
+
+## The base URL for websockets, if it differs from the HTTP server (hint: it
+#  almost certainly doesn't).
+#  
+#  Should be in the form of an HTTP origin: ws[s]://hostname[:port]
+{% if jupyter_lab_notebookapp_websocket_url is defined %}
+c.NotebookApp.websocket_url = '{{ jupyter_lab_notebookapp_websocket_url }}'
+{% else %}
+#c.NotebookApp.websocket_url = ''
+{% endif %}
+
+#------------------------------------------------------------------------------
+# LabApp(NotebookApp) configuration
+#------------------------------------------------------------------------------
+
+## The app directory to launch JupyterLab from.
+{% if jupyter_lab_labapp_app_dir is defined %}
+c.LabApp.app_dir = '{{ jupyter_lab_labapp_app_dir }}'
+{% else %}
+#c.LabApp.app_dir = '/usr/local/Anaconda3-2020.02-Linux-x86_64/share/jupyter/lab'
+{% endif %}
+
+## Whether to start the app in core mode. In this mode, JupyterLab will run using
+#  the JavaScript assets that are within the installed JupyterLab Python package.
+#  In core mode, third party extensions are disabled. The `--dev-mode` flag is an
+#  alias to this to be used when the Python package itself is installed in
+#  development mode (`pip install -e .`).
+{% if jupyter_lab_labapp_core_mode is defined %}
+c.LabApp.core_mode = {{ jupyter_lab_labapp_core_mode | bool }}
+{% else %}
+#c.LabApp.core_mode = False
+{% endif %}
+
+## The default URL to redirect to from `/`
+{% if jupyter_lab_labapp_default_url is defined %}
+c.LabApp.default_url = '{{ jupyter_lab_labapp_default_url }}'
+{% else %}
+#c.LabApp.default_url = '/lab'
+{% endif %}
+
+## Whether to start the app in dev mode. Uses the unpublished local JavaScript
+#  packages in the `dev_mode` folder.  In this case JupyterLab will show a red
+#  stripe at the top of the page.  It can only be used if JupyterLab is installed
+#  as `pip install -e .`.
+{% if jupyter_lab_labapp_dev_mode is defined %}
+c.LabApp.dev_mode = {{ jupyter_lab_labapp_dev_mode | bool }}
+{% else %}
+#c.LabApp.dev_mode = False
+{% endif %}
+
+## The override url for static lab assets, typically a CDN.
+{% if jupyter_lab_labapp_override_static_url is defined %}
+c.LabApp.override_static_url = '{{ jupyter_lab_labapp_override_static_url }}'
+{% else %}
+#c.LabApp.override_static_url = ''
+{% endif %}
+
+## The override url for static lab theme assets, typically a CDN.
+{% if jupyter_lab_labapp_override_theme_url is defined %}
+c.LabApp.override_theme_url = '{{ jupyter_lab_labapp_override_theme_url }}'
+{% else %}
+#c.LabApp.override_theme_url = ''
+{% endif %}
+
+## The directory for user settings.
+{% if jupyter_lab_labapp_user_settings_dir is defined %}
+c.LabApp.user_settings_dir = '{{ jupyter_lab_labapp_user_settings_dir }}'
+{% else %}
+#c.LabApp.user_settings_dir = '/home/vagrant/.jupyter/lab/user-settings'
+{% endif %}
+
+## Whether to serve the app in watch mode
+{% if jupyter_lab_labapp_watch is defined %}
+c.LabApp.watch = {{ jupyter_lab_labapp_watch | bool }}
+{% else %}
+#c.LabApp.watch = False
+{% endif %}
+
+## The directory for workspaces
+{% if jupyter_lab_labapp_workspaces_dir is defined %}
+c.LabApp.workspaces_dir = '{{ jupyter_lab_labapp_workspaces_dir }}'
+{% else %}
+#c.LabApp.workspaces_dir = '/home/vagrant/.jupyter/lab/workspaces'
+{% endif %}
+
+#------------------------------------------------------------------------------
+# ConnectionFileMixin(LoggingConfigurable) configuration
+#------------------------------------------------------------------------------
+
+## Mixin for configurable classes that work with connection files
+
+## JSON file in which to store connection info [default: kernel-<pid>.json]
+#  
+#  This file will contain the IP, ports, and authentication key needed to connect
+#  clients to this kernel. By default, this file will be created in the security
+#  dir of the current profile, but can be specified by absolute path.
+{% if jupyter_lab_connectionfilemixin_connection_file is defined %}
+c.ConnectionFileMixin.connection_file = '{{ jupyter_lab_connectionfilemixin_connection_file }}'
+{% else %}
+#c.ConnectionFileMixin.connection_file = ''
+{% endif %}
+
+## set the control (ROUTER) port [default: random]
+{% if jupyter_lab_connectionfilemixin_control_port is defined %}
+c.ConnectionFileMixin.control_port = {{ jupyter_lab_connectionfilemixin_control_port }}
+{% else %}
+#c.ConnectionFileMixin.control_port = 0
+{% endif %}
+
+## set the heartbeat port [default: random]
+{% if jupyter_lab_connectionfilemixin_hb_port is defined %}
+c.ConnectionFileMixin.hb_port = {{ jupyter_lab_connectionfilemixin_hb_port }}
+{% else %}
+#c.ConnectionFileMixin.hb_port = 0
+{% endif %}
+
+## set the iopub (PUB) port [default: random]
+{% if jupyter_lab_connectionfilemixin_iopub_port is defined %}
+c.ConnectionFileMixin.iopub_port = {{ jupyter_lab_connectionfilemixin_iopub_port }}
+{% else %}
+#c.ConnectionFileMixin.iopub_port = 0
+{% endif %}
+
+## Set the kernel's IP address [default localhost]. If the IP address is
+#  something other than localhost, then Consoles on other machines will be able
+#  to connect to the Kernel, so be careful!
+{% if jupyter_lab_connectionfilemixin_ip is defined %}
+c.ConnectionFileMixin.ip = '{{ jupyter_lab_connectionfilemixin_ip }}'
+{% else %}
+#c.ConnectionFileMixin.ip = ''
+{% endif %}
+
+## set the shell (ROUTER) port [default: random]
+{% if jupyter_lab_connectionfilemixin_shell_port is defined %}
+c.ConnectionFileMixin.shell_port = {{ jupyter_lab_connectionfilemixin_shell_port }}
+{% else %}
+#c.ConnectionFileMixin.shell_port = 0
+{% endif %}
+
+## set the stdin (ROUTER) port [default: random]
+{% if jupyter_lab_connectionfilemixin_stdin_port is defined %}
+c.ConnectionFileMixin.stdin_port = {{ jupyter_lab_connectionfilemixin_stdin_port }}
+{% else %}
+#c.ConnectionFileMixin.stdin_port = 0
+{% endif %}
+
+## 
+{% if jupyter_lab_connectionfilemixin_transport is defined %}
+c.ConnectionFileMixin.transport = '{{ jupyter_lab_connectionfilemixin_transport }}'
+{% else %}
+#c.ConnectionFileMixin.transport = 'tcp'
+{% endif %}
+
+#------------------------------------------------------------------------------
+# KernelManager(ConnectionFileMixin) configuration
+#------------------------------------------------------------------------------
+
+## Manages a single kernel in a subprocess on this host.
+#  
+#  This version starts kernels with Popen.
+
+## Should we autorestart the kernel if it dies.
+{% if jupyter_lab_kernelmanager_autorestart is defined %}
+c.KernelManager.autorestart = {{ jupyter_lab_kernelmanager_autorestart | bool }}
+{% else %}
+#c.KernelManager.autorestart = True
+{% endif %}
+
+## DEPRECATED: Use kernel_name instead.
+#  
+#  The Popen Command to launch the kernel. Override this if you have a custom
+#  kernel. If kernel_cmd is specified in a configuration file, Jupyter does not
+#  pass any arguments to the kernel, because it cannot make any assumptions about
+#  the arguments that the kernel understands. In particular, this means that the
+#  kernel does not receive the option --debug if it given on the Jupyter command
+#  line.
+{% if jupyter_lab_kernelmanager_kernel_cmd is defined %}
+c.KernelManager.kernel_cmd = {{ jupyter_lab_kernelmanager_kernel_cmd }}
+{% else %}
+#c.KernelManager.kernel_cmd = []
+{% endif %}
+
+## Time to wait for a kernel to terminate before killing it, in seconds.
+{% if jupyter_lab_kernelmanager_shutdown_wait_time is defined %}
+c.KernelManager.shutdown_wait_time = {{ jupyter_lab_kernelmanager_shutdown_wait_time }}
+{% else %}
+#c.KernelManager.shutdown_wait_time = 5.0
+{% endif %}
+
+#------------------------------------------------------------------------------
+# Session(Configurable) configuration
+#------------------------------------------------------------------------------
+
+## Object for handling serialization and sending of messages.
+#  
+#  The Session object handles building messages and sending them with ZMQ sockets
+#  or ZMQStream objects.  Objects can communicate with each other over the
+#  network via Session objects, and only need to work with the dict-based IPython
+#  message spec. The Session will handle serialization/deserialization, security,
+#  and metadata.
+#  
+#  Sessions support configurable serialization via packer/unpacker traits, and
+#  signing with HMAC digests via the key/keyfile traits.
+#  
+#  Parameters ----------
+#  
+#  debug : bool
+#      whether to trigger extra debugging statements
+#  packer/unpacker : str : 'json', 'pickle' or import_string
+#      importstrings for methods to serialize message parts.  If just
+#      'json' or 'pickle', predefined JSON and pickle packers will be used.
+#      Otherwise, the entire importstring must be used.
+#  
+#      The functions must accept at least valid JSON input, and output *bytes*.
+#  
+#      For example, to use msgpack:
+#      packer = 'msgpack.packb', unpacker='msgpack.unpackb'
+#  pack/unpack : callables
+#      You can also set the pack/unpack callables for serialization directly.
+#  session : bytes
+#      the ID of this Session object.  The default is to generate a new UUID.
+#  username : unicode
+#      username added to message headers.  The default is to ask the OS.
+#  key : bytes
+#      The key used to initialize an HMAC signature.  If unset, messages
+#      will not be signed or checked.
+#  keyfile : filepath
+#      The file containing a key.  If this is set, `key` will be initialized
+#      to the contents of the file.
+
+## Threshold (in bytes) beyond which an object's buffer should be extracted to
+#  avoid pickling.
+{% if jupyter_lab_session_buffer_threshold is defined %}
+c.Session.buffer_threshold = {{ jupyter_lab_session_buffer_threshold }}
+{% else %}
+#c.Session.buffer_threshold = 1024
+{% endif %}
+
+## Whether to check PID to protect against calls after fork.
+#  
+#  This check can be disabled if fork-safety is handled elsewhere.
+{% if jupyter_lab_session_check_pid is defined %}
+c.Session.check_pid = {{ jupyter_lab_session_check_pid | bool }}
+{% else %}
+#c.Session.check_pid = True
+{% endif %}
+
+## Threshold (in bytes) beyond which a buffer should be sent without copying.
+{% if jupyter_lab_session_copy_threshold is defined %}
+c.Session.copy_threshold = {{ jupyter_lab_session_copy_threshold }}
+{% else %}
+#c.Session.copy_threshold = 65536
+{% endif %}
+
+## Debug output in the Session
+{% if jupyter_lab_session_debug is defined %}
+c.Session.debug = {{ jupyter_lab_session_debug | bool }}
+{% else %}
+#c.Session.debug = False
+{% endif %}
+
+## The maximum number of digests to remember.
+#  
+#  The digest history will be culled when it exceeds this value.
+{% if jupyter_lab_session_digest_history_size is defined %}
+c.Session.digest_history_size = {{ jupyter_lab_session_digest_history_size }}
+{% else %}
+#c.Session.digest_history_size = 65536
+{% endif %}
+
+## The maximum number of items for a container to be introspected for custom
+#  serialization. Containers larger than this are pickled outright.
+{% if jupyter_lab_session_item_threshold is defined %}
+c.Session.item_threshold = {{ jupyter_lab_session_item_threshold }}
+{% else %}
+#c.Session.item_threshold = 64
+{% endif %}
+
+## execution key, for signing messages.
+{% if jupyter_lab_session_key is defined %}
+c.Session.key = {{ jupyter_lab_session_key }}
+{% else %}
+#c.Session.key = b''
+{% endif %}
+
+## path to file containing execution key.
+{% if jupyter_lab_session_keyfile is defined %}
+c.Session.keyfile = '{{ jupyter_lab_session_keyfile }}'
+{% else %}
+#c.Session.keyfile = ''
+{% endif %}
+
+## Metadata dictionary, which serves as the default top-level metadata dict for
+#  each message.
+{% if jupyter_lab_session_metadata is defined %}
+c.Session.metadata = {{ jupyter_lab_session_metadata }}
+{% else %}
+#c.Session.metadata = {}
+{% endif %}
+
+## The name of the packer for serializing messages. Should be one of 'json',
+#  'pickle', or an import name for a custom callable serializer.
+{% if jupyter_lab_session_packer is defined %}
+c.Session.packer = '{{ jupyter_lab_session_packer }}'
+{% else %}
+#c.Session.packer = 'json'
+{% endif %}
+
+## The UUID identifying this session.
+{% if jupyter_lab_session_session is defined %}
+c.Session.session = '{{ jupyter_lab_session_session }}'
+{% else %}
+#c.Session.session = ''
+{% endif %}
+
+## The digest scheme used to construct the message signatures. Must have the form
+#  'hmac-HASH'.
+{% if jupyter_lab_session_signature_scheme is defined %}
+c.Session.signature_scheme = '{{ jupyter_lab_session_signature_scheme }}'
+{% else %}
+#c.Session.signature_scheme = 'hmac-sha256'
+{% endif %}
+
+## The name of the unpacker for unserializing messages. Only used with custom
+#  functions for `packer`.
+{% if jupyter_lab_session_unpacker is defined %}
+c.Session.unpacker = '{{ jupyter_lab_session_unpacker }}'
+{% else %}
+#c.Session.unpacker = 'json'
+{% endif %}
+
+## Username for the Session. Default is your system username.
+{% if jupyter_lab_session_username is defined %}
+c.Session.username = '{{ jupyter_lab_session_username }}'
+{% else %}
+#c.Session.username = 'vagrant'
+{% endif %}
+
+#------------------------------------------------------------------------------
+# MultiKernelManager(LoggingConfigurable) configuration
+#------------------------------------------------------------------------------
+
+## A class for managing multiple kernels.
+
+## The name of the default kernel to start
+{% if jupyter_lab_multikernelmanager_default_kernel_name is defined %}
+c.MultiKernelManager.default_kernel_name = '{{ jupyter_lab_multikernelmanager_default_kernel_name }}'
+{% else %}
+#c.MultiKernelManager.default_kernel_name = 'python3'
+{% endif %}
+
+## The kernel manager class.  This is configurable to allow subclassing of the
+#  KernelManager for customized behavior.
+{% if jupyter_lab_multikernelmanager_kernel_manager_class is defined %}
+c.MultiKernelManager.kernel_manager_class = '{{ jupyter_lab_multikernelmanager_kernel_manager_class }}'
+{% else %}
+#c.MultiKernelManager.kernel_manager_class = 'jupyter_client.ioloop.IOLoopKernelManager'
+{% endif %}
+
+## Share a single zmq.Context to talk to all my kernels
+{% if jupyter_lab_multikernelmanager_shared_context is defined %}
+c.MultiKernelManager.shared_context = {{ jupyter_lab_multikernelmanager_shared_context | bool }}
+{% else %}
+#c.MultiKernelManager.shared_context = True
+{% endif %}
+
+#------------------------------------------------------------------------------
+# MappingKernelManager(MultiKernelManager) configuration
+#------------------------------------------------------------------------------
+
+## A KernelManager that handles notebook mapping and HTTP error handling
+
+## White list of allowed kernel message types. When the list is empty, all
+#  message types are allowed.
+{% if jupyter_lab_mappingkernelmanager_allowed_message_types is defined %}
+c.MappingKernelManager.allowed_message_types = {{ jupyter_lab_mappingkernelmanager_allowed_message_types }}
+{% else %}
+#c.MappingKernelManager.allowed_message_types = []
+{% endif %}
+
+## Whether messages from kernels whose frontends have disconnected should be
+#  buffered in-memory.
+#  
+#  When True (default), messages are buffered and replayed on reconnect, avoiding
+#  lost messages due to interrupted connectivity.
+#  
+#  Disable if long-running kernels will produce too much output while no
+#  frontends are connected.
+{% if jupyter_lab_mappingkernelmanager_buffer_offline_messages is defined %}
+c.MappingKernelManager.buffer_offline_messages = {{ jupyter_lab_mappingkernelmanager_buffer_offline_messages | bool }}
+{% else %}
+#c.MappingKernelManager.buffer_offline_messages = True
+{% endif %}
+
+## Whether to consider culling kernels which are busy. Only effective if
+#  cull_idle_timeout > 0.
+{% if jupyter_lab_mappingkernelmanager_cull_busy is defined %}
+c.MappingKernelManager.cull_busy = {{ jupyter_lab_mappingkernelmanager_cull_busy | bool }}
+{% else %}
+#c.MappingKernelManager.cull_busy = False
+{% endif %}
+
+## Whether to consider culling kernels which have one or more connections. Only
+#  effective if cull_idle_timeout > 0.
+{% if jupyter_lab_mappingkernelmanager_cull_connected is defined %}
+c.MappingKernelManager.cull_connected = {{ jupyter_lab_mappingkernelmanager_cull_connected | bool }}
+{% else %}
+#c.MappingKernelManager.cull_connected = False
+{% endif %}
+
+## Timeout (in seconds) after which a kernel is considered idle and ready to be
+#  culled. Values of 0 or lower disable culling. Very short timeouts may result
+#  in kernels being culled for users with poor network connections.
+{% if jupyter_lab_mappingkernelmanager_cull_idle_timeout is defined %}
+c.MappingKernelManager.cull_idle_timeout = {{ jupyter_lab_mappingkernelmanager_cull_idle_timeout }}
+{% else %}
+#c.MappingKernelManager.cull_idle_timeout = 0
+{% endif %}
+
+## The interval (in seconds) on which to check for idle kernels exceeding the
+#  cull timeout value.
+{% if jupyter_lab_mappingkernelmanager_cull_interval is defined %}
+c.MappingKernelManager.cull_interval = {{ jupyter_lab_mappingkernelmanager_cull_interval }}
+{% else %}
+#c.MappingKernelManager.cull_interval = 300
+{% endif %}
+
+## Timeout for giving up on a kernel (in seconds).
+#  
+#  On starting and restarting kernels, we check whether the kernel is running and
+#  responsive by sending kernel_info_requests. This sets the timeout in seconds
+#  for how long the kernel can take before being presumed dead. This affects the
+#  MappingKernelManager (which handles kernel restarts) and the
+#  ZMQChannelsHandler (which handles the startup).
+{% if jupyter_lab_mappingkernelmanager_kernel_info_timeout is defined %}
+c.MappingKernelManager.kernel_info_timeout = {{ jupyter_lab_mappingkernelmanager_kernel_info_timeout }}
+{% else %}
+#c.MappingKernelManager.kernel_info_timeout = 60
+{% endif %}
+
+## 
+{% if jupyter_lab_mappingkernelmanager_root_dir is defined %}
+c.MappingKernelManager.root_dir = '{{ jupyter_lab_mappingkernelmanager_root_dir }}'
+{% else %}
+#c.MappingKernelManager.root_dir = ''
+{% endif %}
+
+#------------------------------------------------------------------------------
+# KernelSpecManager(LoggingConfigurable) configuration
+#------------------------------------------------------------------------------
+
+## If there is no Python kernelspec registered and the IPython kernel is
+#  available, ensure it is added to the spec list.
+{% if jupyter_lab_kernelspecmanager_ensure_native_kernel is defined %}
+c.KernelSpecManager.ensure_native_kernel = {{ jupyter_lab_kernelspecmanager_ensure_native_kernel | bool }}
+{% else %}
+#c.KernelSpecManager.ensure_native_kernel = True
+{% endif %}
+
+## The kernel spec class.  This is configurable to allow subclassing of the
+#  KernelSpecManager for customized behavior.
+{% if jupyter_lab_kernelspecmanager_kernel_spec_class is defined %}
+c.KernelSpecManager.kernel_spec_class = '{{ jupyter_lab_kernelspecmanager_kernel_spec_class }}'
+{% else %}
+#c.KernelSpecManager.kernel_spec_class = 'jupyter_client.kernelspec.KernelSpec'
+{% endif %}
+
+## Whitelist of allowed kernel names.
+#  
+#  By default, all installed kernels are allowed.
+{% if jupyter_lab_kernelspecmanager_whitelist is defined %}
+c.KernelSpecManager.whitelist = {{ jupyter_lab_kernelspecmanager_whitelist }}
+{% else %}
+#c.KernelSpecManager.whitelist = set()
+{% endif %}
+
+#------------------------------------------------------------------------------
+# ContentsManager(LoggingConfigurable) configuration
+#------------------------------------------------------------------------------
+
+## Base class for serving files and directories.
+#  
+#  This serves any text or binary file, as well as directories, with special
+#  handling for JSON notebook documents.
+#  
+#  Most APIs take a path argument, which is always an API-style unicode path, and
+#  always refers to a directory.
+#  
+#  - unicode, not url-escaped
+#  - '/'-separated
+#  - leading and trailing '/' will be stripped
+#  - if unspecified, path defaults to '',
+#    indicating the root path.
+
+## Allow access to hidden files
+{% if jupyter_lab_contentsmanager_allow_hidden is defined %}
+c.ContentsManager.allow_hidden = {{ jupyter_lab_contentsmanager_allow_hidden | bool }}
+{% else %}
+#c.ContentsManager.allow_hidden = False
+{% endif %}
+
+## 
+{% if jupyter_lab_contentsmanager_checkpoints is defined %}
+c.ContentsManager.checkpoints = '{{ jupyter_lab_contentsmanager_checkpoints }}'
+{% else %}
+#c.ContentsManager.checkpoints = None
+{% endif %}
+
+## 
+{% if jupyter_lab_contentsmanager_checkpoints_class is defined %}
+c.ContentsManager.checkpoints_class = '{{ jupyter_lab_contentsmanager_checkpoints_class }}'
+{% else %}
+#c.ContentsManager.checkpoints_class = 'notebook.services.contents.checkpoints.Checkpoints'
+{% endif %}
+
+## 
+{% if jupyter_lab_contentsmanager_checkpoints_kwargs is defined %}
+c.ContentsManager.checkpoints_kwargs = {{ jupyter_lab_contentsmanager_checkpoints_kwargs }}
+{% else %}
+#c.ContentsManager.checkpoints_kwargs = {}
+{% endif %}
+
+## handler class to use when serving raw file requests.
+#  
+#  Default is a fallback that talks to the ContentsManager API, which may be
+#  inefficient, especially for large files.
+#  
+#  Local files-based ContentsManagers can use a StaticFileHandler subclass, which
+#  will be much more efficient.
+#  
+#  Access to these files should be Authenticated.
+{% if jupyter_lab_contentsmanager_files_handler_class is defined %}
+c.ContentsManager.files_handler_class = '{{ jupyter_lab_contentsmanager_files_handler_class }}'
+{% else %}
+#c.ContentsManager.files_handler_class = 'notebook.files.handlers.FilesHandler'
+{% endif %}
+
+## Extra parameters to pass to files_handler_class.
+#  
+#  For example, StaticFileHandlers generally expect a `path` argument specifying
+#  the root directory from which to serve files.
+{% if jupyter_lab_contentsmanager_files_handler_params is defined %}
+c.ContentsManager.files_handler_params = {{ jupyter_lab_contentsmanager_files_handler_params }}
+{% else %}
+#c.ContentsManager.files_handler_params = {}
+{% endif %}
+
+## Glob patterns to hide in file and directory listings.
+{% if jupyter_lab_contentsmanager_hide_globs is defined %}
+c.ContentsManager.hide_globs = {{ jupyter_lab_contentsmanager_hide_globs }}
+{% else %}
+#c.ContentsManager.hide_globs = ['__pycache__', '*.pyc', '*.pyo', '.DS_Store', '*.so', '*.dylib', '*~']
+{% endif %}
+
+## Python callable or importstring thereof
+#  
+#  To be called on a contents model prior to save.
+#  
+#  This can be used to process the structure, such as removing notebook outputs
+#  or other side effects that should not be saved.
+#  
+#  It will be called as (all arguments passed by keyword)::
+#  
+#      hook(path=path, model=model, contents_manager=self)
+#  
+#  - model: the model to be saved. Includes file contents.
+#    Modifying this dict will affect the file that is stored.
+#  - path: the API path of the save destination
+#  - contents_manager: this ContentsManager instance
+{% if jupyter_lab_contentsmanager_pre_save_hook is defined %}
+c.ContentsManager.pre_save_hook = '{{ jupyter_lab_contentsmanager_pre_save_hook }}'
+{% else %}
+#c.ContentsManager.pre_save_hook = None
+{% endif %}
+
+## 
+{% if jupyter_lab_contentsmanager_root_dir is defined %}
+c.ContentsManager.root_dir = '{{ jupyter_lab_contentsmanager_root_dir }}'
+{% else %}
+#c.ContentsManager.root_dir = '/'
+{% endif %}
+
+## The base name used when creating untitled directories.
+{% if jupyter_lab_contentsmanager_untitled_directory is defined %}
+c.ContentsManager.untitled_directory = '{{ jupyter_lab_contentsmanager_untitled_directory }}'
+{% else %}
+#c.ContentsManager.untitled_directory = 'Untitled Folder'
+{% endif %}
+
+## The base name used when creating untitled files.
+{% if jupyter_lab_contentsmanager_untitled_file is defined %}
+c.ContentsManager.untitled_file = '{{ jupyter_lab_contentsmanager_untitled_file }}'
+{% else %}
+#c.ContentsManager.untitled_file = 'untitled'
+{% endif %}
+
+## The base name used when creating untitled notebooks.
+{% if jupyter_lab_contentsmanager_untitled_notebook is defined %}
+c.ContentsManager.untitled_notebook = '{{ jupyter_lab_contentsmanager_untitled_notebook }}'
+{% else %}
+#c.ContentsManager.untitled_notebook = 'Untitled'
+{% endif %}
+
+#------------------------------------------------------------------------------
+# FileManagerMixin(Configurable) configuration
+#------------------------------------------------------------------------------
+
+## Mixin for ContentsAPI classes that interact with the filesystem.
+#  
+#  Provides facilities for reading, writing, and copying both notebooks and
+#  generic files.
+#  
+#  Shared by FileContentsManager and FileCheckpoints.
+#  
+#  Note ---- Classes using this mixin must provide the following attributes:
+#  
+#  root_dir : unicode
+#      A directory against against which API-style paths are to be resolved.
+#  
+#  log : logging.Logger
+
+## By default notebooks are saved on disk on a temporary file and then if
+#  successfully written, it replaces the old ones. This procedure, namely
+#  'atomic_writing', causes some bugs on file system without operation order
+#  enforcement (like some networked fs). If set to False, the new notebook is
+#  written directly on the old one which could fail (eg: full filesystem or quota
+#  )
+{% if jupyter_lab_filemanagermixin_use_atomic_writing is defined %}
+c.FileManagerMixin.use_atomic_writing = {{ jupyter_lab_filemanagermixin_use_atomic_writing | bool }}
+{% else %}
+#c.FileManagerMixin.use_atomic_writing = True
+{% endif %}
+
+#------------------------------------------------------------------------------
+# FileContentsManager(FileManagerMixin,ContentsManager) configuration
+#------------------------------------------------------------------------------
+
+## If True (default), deleting files will send them to the platform's
+#  trash/recycle bin, where they can be recovered. If False, deleting files
+#  really deletes them.
+{% if jupyter_lab_filecontentsmanager_delete_to_trash is defined %}
+c.FileContentsManager.delete_to_trash = {{ jupyter_lab_filecontentsmanager_delete_to_trash | bool }}
+{% else %}
+#c.FileContentsManager.delete_to_trash = True
+{% endif %}
+
+## Python callable or importstring thereof
+#  
+#  to be called on the path of a file just saved.
+#  
+#  This can be used to process the file on disk, such as converting the notebook
+#  to a script or HTML via nbconvert.
+#  
+#  It will be called as (all arguments passed by keyword)::
+#  
+#      hook(os_path=os_path, model=model, contents_manager=instance)
+#  
+#  - path: the filesystem path to the file just written - model: the model
+#  representing the file - contents_manager: this ContentsManager instance
+{% if jupyter_lab_filecontentsmanager_post_save_hook is defined %}
+c.FileContentsManager.post_save_hook = '{{ jupyter_lab_filecontentsmanager_post_save_hook }}'
+{% else %}
+#c.FileContentsManager.post_save_hook = None
+{% endif %}
+
+## 
+{% if jupyter_lab_filecontentsmanager_root_dir is defined %}
+c.FileContentsManager.root_dir = '{{ jupyter_lab_filecontentsmanager_root_dir }}'
+{% else %}
+#c.FileContentsManager.root_dir = ''
+{% endif %}
+
+## DEPRECATED, use post_save_hook. Will be removed in Notebook 5.0
+{% if jupyter_lab_filecontentsmanager_save_script is defined %}
+c.FileContentsManager.save_script = {{ jupyter_lab_filecontentsmanager_save_script | bool }}
+{% else %}
+#c.FileContentsManager.save_script = False
+{% endif %}
+
+#------------------------------------------------------------------------------
+# NotebookNotary(LoggingConfigurable) configuration
+#------------------------------------------------------------------------------
+
+## A class for computing and verifying notebook signatures.
+
+## The hashing algorithm used to sign notebooks.
+{% if jupyter_lab_notebooknotary_algorithm is defined %}
+c.NotebookNotary.algorithm = '{{ jupyter_lab_notebooknotary_algorithm }}'
+{% else %}
+#c.NotebookNotary.algorithm = 'sha256'
+{% endif %}
+
+## The sqlite file in which to store notebook signatures. By default, this will
+#  be in your Jupyter data directory. You can set it to ':memory:' to disable
+#  sqlite writing to the filesystem.
+{% if jupyter_lab_notebooknotary_db_file is defined %}
+c.NotebookNotary.db_file = '{{ jupyter_lab_notebooknotary_db_file }}'
+{% else %}
+#c.NotebookNotary.db_file = ''
+{% endif %}
+
+## The secret key with which notebooks are signed.
+{% if jupyter_lab_notebooknotary_secret is defined %}
+c.NotebookNotary.secret = {{ jupyter_lab_notebooknotary_secret }}
+{% else %}
+#c.NotebookNotary.secret = b''
+{% endif %}
+
+## The file where the secret key is stored.
+{% if jupyter_lab_notebooknotary_secret_file is defined %}
+c.NotebookNotary.secret_file = '{{ jupyter_lab_notebooknotary_secret_file }}'
+{% else %}
+#c.NotebookNotary.secret_file = ''
+{% endif %}
+
+## A callable returning the storage backend for notebook signatures. The default
+#  uses an SQLite database.
+{% if jupyter_lab_notebooknotary_store_factory is defined %}
+c.NotebookNotary.store_factory = {{ jupyter_lab_notebooknotary_store_factory }}
+{% else %}
+#c.NotebookNotary.store_factory = traitlets.Undefined
+{% endif %}
+
+#------------------------------------------------------------------------------
+# GatewayKernelManager(MappingKernelManager) configuration
+#------------------------------------------------------------------------------
+
+## Kernel manager that supports remote kernels hosted by Jupyter Kernel or
+#  Enterprise Gateway.
+
+#------------------------------------------------------------------------------
+# GatewayKernelSpecManager(KernelSpecManager) configuration
+#------------------------------------------------------------------------------
+
+#------------------------------------------------------------------------------
+# GatewayClient(SingletonConfigurable) configuration
+#------------------------------------------------------------------------------
+
+## This class manages the configuration.  It's its own singleton class so that we
+#  can share these values across all objects.  It also contains some helper methods
+#   to build request arguments out of the various config options.
+
+## The authorization token used in the HTTP headers.  (JUPYTER_GATEWAY_AUTH_TOKEN
+#  env var)
+{% if jupyter_lab_gatewayclient_auth_token is defined %}
+c.GatewayClient.auth_token = '{{ jupyter_lab_gatewayclient_auth_token }}'
+{% else %}
+#c.GatewayClient.auth_token = None
+{% endif %}
+
+## The filename of CA certificates or None to use defaults.
+#  (JUPYTER_GATEWAY_CA_CERTS env var)
+{% if jupyter_lab_gatewayclient_ca_certs is defined %}
+c.GatewayClient.ca_certs = '{{ jupyter_lab_gatewayclient_ca_certs }}'
+{% else %}
+#c.GatewayClient.ca_certs = None
+{% endif %}
+
+## The filename for client SSL certificate, if any.  (JUPYTER_GATEWAY_CLIENT_CERT
+#  env var)
+{% if jupyter_lab_gatewayclient_client_cert is defined %}
+c.GatewayClient.client_cert = '{{ jupyter_lab_gatewayclient_client_cert }}'
+{% else %}
+#c.GatewayClient.client_cert = None
+{% endif %}
+
+## The filename for client SSL key, if any.  (JUPYTER_GATEWAY_CLIENT_KEY env var)
+{% if jupyter_lab_gatewayclient_client_key is defined %}
+c.GatewayClient.client_key = '{{ jupyter_lab_gatewayclient_client_key }}'
+{% else %}
+#c.GatewayClient.client_key = None
+{% endif %}
+
+## The time allowed for HTTP connection establishment with the Gateway server.
+#  (JUPYTER_GATEWAY_CONNECT_TIMEOUT env var)
+{% if jupyter_lab_gatewayclient_connect_timeout is defined %}
+c.GatewayClient.connect_timeout = {{ jupyter_lab_gatewayclient_connect_timeout }}
+{% else %}
+#c.GatewayClient.connect_timeout = 60.0
+{% endif %}
+
+## A comma-separated list of environment variable names that will be included,
+#  along with their values, in the kernel startup request.  The corresponding
+#  `env_whitelist` configuration value must also be set on the Gateway server -
+#  since that configuration value indicates which environmental values to make
+#  available to the kernel. (JUPYTER_GATEWAY_ENV_WHITELIST env var)
+{% if jupyter_lab_gatewayclient_env_whitelist is defined %}
+c.GatewayClient.env_whitelist = '{{ jupyter_lab_gatewayclient_env_whitelist }}'
+{% else %}
+#c.GatewayClient.env_whitelist = ''
+{% endif %}
+
+## Additional HTTP headers to pass on the request.  This value will be converted
+#  to a dict. (JUPYTER_GATEWAY_HEADERS env var)
+{% if jupyter_lab_gatewayclient_headers is defined %}
+c.GatewayClient.headers = '{{ jupyter_lab_gatewayclient_headers }}'
+{% else %}
+#c.GatewayClient.headers = '{}'
+{% endif %}
+
+## The password for HTTP authentication.  (JUPYTER_GATEWAY_HTTP_PWD env var)
+{% if jupyter_lab_gatewayclient_http_pwd is defined %}
+c.GatewayClient.http_pwd = '{{ jupyter_lab_gatewayclient_http_pwd }}'
+{% else %}
+#c.GatewayClient.http_pwd = None
+{% endif %}
+
+## The username for HTTP authentication. (JUPYTER_GATEWAY_HTTP_USER env var)
+{% if jupyter_lab_gatewayclient_http_user is defined %}
+c.GatewayClient.http_user = '{{ jupyter_lab_gatewayclient_http_user }}'
+{% else %}
+#c.GatewayClient.http_user = None
+{% endif %}
+
+## The gateway API endpoint for accessing kernel resources
+#  (JUPYTER_GATEWAY_KERNELS_ENDPOINT env var)
+{% if jupyter_lab_gatewayclient_kernels_endpoint is defined %}
+c.GatewayClient.kernels_endpoint = '{{ jupyter_lab_gatewayclient_kernels_endpoint }}'
+{% else %}
+#c.GatewayClient.kernels_endpoint = '/api/kernels'
+{% endif %}
+
+## The gateway API endpoint for accessing kernelspecs
+#  (JUPYTER_GATEWAY_KERNELSPECS_ENDPOINT env var)
+{% if jupyter_lab_gatewayclient_kernelspecs_endpoint is defined %}
+c.GatewayClient.kernelspecs_endpoint = '{{ jupyter_lab_gatewayclient_kernelspecs_endpoint }}'
+{% else %}
+#c.GatewayClient.kernelspecs_endpoint = '/api/kernelspecs'
+{% endif %}
+
+## The gateway endpoint for accessing kernelspecs resources
+#  (JUPYTER_GATEWAY_KERNELSPECS_RESOURCE_ENDPOINT env var)
+{% if jupyter_lab_gatewayclient_kernelspecs_resource_endpoint is defined %}
+c.GatewayClient.kernelspecs_resource_endpoint = '{{ jupyter_lab_gatewayclient_kernelspecs_resource_endpoint }}'
+{% else %}
+#c.GatewayClient.kernelspecs_resource_endpoint = '/kernelspecs'
+{% endif %}
+
+## The time allowed for HTTP request completion. (JUPYTER_GATEWAY_REQUEST_TIMEOUT
+#  env var)
+{% if jupyter_lab_gatewayclient_request_timeout is defined %}
+c.GatewayClient.request_timeout = {{ jupyter_lab_gatewayclient_request_timeout }}
+{% else %}
+#c.GatewayClient.request_timeout = 60.0
+{% endif %}
+
+## The url of the Kernel or Enterprise Gateway server where kernel specifications
+#  are defined and kernel management takes place. If defined, this Notebook
+#  server acts as a proxy for all kernel management and kernel specification
+#  retrieval.  (JUPYTER_GATEWAY_URL env var)
+{% if jupyter_lab_gatewayclient_url is defined %}
+c.GatewayClient.url = '{{ jupyter_lab_gatewayclient_url }}'
+{% else %}
+#c.GatewayClient.url = None
+{% endif %}
+
+## For HTTPS requests, determines if server's certificate should be validated or
+#  not. (JUPYTER_GATEWAY_VALIDATE_CERT env var)
+{% if jupyter_lab_gatewayclient_validate_cert is defined %}
+c.GatewayClient.validate_cert = {{ jupyter_lab_gatewayclient_validate_cert | bool }}
+{% else %}
+#c.GatewayClient.validate_cert = True
+{% endif %}
+
+## The websocket url of the Kernel or Enterprise Gateway server.  If not
+#  provided, this value will correspond to the value of the Gateway url with 'ws'
+#  in place of 'http'.  (JUPYTER_GATEWAY_WS_URL env var)
+{% if jupyter_lab_gatewayclient_ws_url is defined %}
+c.GatewayClient.ws_url = '{{ jupyter_lab_gatewayclient_ws_url }}'
+{% else %}
+#c.GatewayClient.ws_url = None
+{% endif %}

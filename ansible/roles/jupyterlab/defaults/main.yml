@@ -1,0 +1,215 @@
+---
+jupyter_user: "{{ ansible_env.SUDO_USER }}"
+
+jupter_lab_port: 8888
+
+jupyter_lab_packages:
+  - notebook
+  - jupyterlab
+  - altair
+  - beautifulsoup4
+  - bokeh
+  - bottleneck
+  - cloudpickle
+  - cython
+  - dask
+  - dill
+  - h5py
+  - ipympl
+  - ipywidgets
+  - matplotlib-base
+  - numba
+  - numexpr
+  - openpyxl
+  - pandas
+  - patsy
+  - protobuf
+  - pytables
+  - scikit-image
+  - scikit-learn
+  - scipy
+  - seaborn
+  - sqlalchemy
+  - statsmodels
+  - sympy
+  - widgetsnbextension
+  - xlrd
+
+jupyter_lab_config_file: /etc/jupyter/jupyter_notebook_config.py
+jupyter_lab_password_hash: 'sha1:a1b627397e5d:8b82241b80f84032fd950cecdbffcbf2c9a4bb04'  # nectar
+
+#jupyter_lab_application_log_datefmt: '%Y-%m-%d %H:%M:%S'
+#jupyter_lab_application_log_format: '[%(name)s]%(highlevel)s %(message)s'
+#jupyter_lab_application_log_level: 30
+
+jupyter_lab_jupyterapp_answer_yes: True
+#jupyter_lab_jupyterapp_config_file: ''
+#jupyter_lab_jupyterapp_config_file_name: ''
+#jupyter_lab_jupyterapp_generate_config: False
+
+#jupyter_lab_notebookapp_allow_credentials: False
+#jupyter_lab_notebookapp_allow_origin: ''
+#jupyter_lab_notebookapp_allow_origin_pat: ''
+#jupyter_lab_notebookapp_allow_password_change: True
+jupyter_lab_notebookapp_allow_remote_access: True
+#jupyter_lab_notebookapp_allow_root: False
+#jupyter_lab_notebookapp_base_project_url: '/'
+#jupyter_lab_notebookapp_base_url: '/'
+#jupyter_lab_notebookapp_browser: ''
+#jupyter_lab_notebookapp_certfile: ''
+#jupyter_lab_notebookapp_client_ca: ''
+#jupyter_lab_notebookapp_config_manager_class: 'notebook.services.config.manager.ConfigManager'
+#jupyter_lab_notebookapp_contents_manager_class: 'notebook.services.contents.largefilemanager.LargeFileManager'
+#jupyter_lab_notebookapp_cookie_options: {}
+#jupyter_lab_notebookapp_cookie_secret: b''
+#jupyter_lab_notebookapp_cookie_secret_file: ''
+#jupyter_lab_notebookapp_custom_display_url: ''
+#jupyter_lab_notebookapp_default_url: '/tree'
+#jupyter_lab_notebookapp_disable_check_xsrf: False
+#jupyter_lab_notebookapp_enable_mathjax: True
+#jupyter_lab_notebookapp_extra_nbextensions_path: []
+#jupyter_lab_notebookapp_extra_services: []
+#jupyter_lab_notebookapp_extra_static_paths: []
+#jupyter_lab_notebookapp_extra_template_paths: []
+#jupyter_lab_notebookapp_file_to_run: ''
+#jupyter_lab_notebookapp_get_secure_cookie_kwargs: {}
+#jupyter_lab_notebookapp_ignore_minified_js: False
+#jupyter_lab_notebookapp_iopub_data_rate_limit: 1000000
+#jupyter_lab_notebookapp_iopub_msg_rate_limit: 1000
+#jupyter_lab_notebookapp_ip: 'localhost'
+#jupyter_lab_notebookapp_jinja_environment_options: {}
+#jupyter_lab_notebookapp_jinja_template_vars: {}
+#jupyter_lab_notebookapp_kernel_manager_class: 'notebook.services.kernels.kernelmanager.MappingKernelManager'
+#jupyter_lab_notebookapp_kernel_spec_manager_class: 'jupyter_client.kernelspec.KernelSpecManager'
+#jupyter_lab_notebookapp_keyfile: ''
+#jupyter_lab_notebookapp_local_hostnames: ['localhost']
+#jupyter_lab_notebookapp_login_handler_class: 'notebook.auth.login.LoginHandler'
+#jupyter_lab_notebookapp_logout_handler_class: 'notebook.auth.logout.LogoutHandler'
+#jupyter_lab_notebookapp_mathjax_config: 'TeX-AMS-MML_HTMLorMML-full,Safe'
+#jupyter_lab_notebookapp_mathjax_url: ''
+#jupyter_lab_notebookapp_max_body_size: 536870912
+#jupyter_lab_notebookapp_max_buffer_size: 536870912
+#jupyter_lab_notebookapp_min_open_files_limit: 0
+#jupyter_lab_notebookapp_nbserver_extensions: {}
+jupyter_lab_notebookapp_notebook_dir: 'Notebooks'
+#jupyter_lab_notebookapp_open_browser: True
+#jupyter_lab_notebookapp_password: ''
+#jupyter_lab_notebookapp_password_required: False
+#jupyter_lab_notebookapp_port: 8888
+#jupyter_lab_notebookapp_port_retries: 50
+#jupyter_lab_notebookapp_pylab: 'disabled'
+#jupyter_lab_notebookapp_quit_button: True
+#jupyter_lab_notebookapp_rate_limit_window: 3
+#jupyter_lab_notebookapp_reraise_server_extension_failures: False
+#jupyter_lab_notebookapp_server_extensions: []
+#jupyter_lab_notebookapp_session_manager_class: 'notebook.services.sessions.sessionmanager.SessionManager'
+#jupyter_lab_notebookapp_shutdown_no_activity_timeout: 0
+#jupyter_lab_notebookapp_ssl_options: {}
+#jupyter_lab_notebookapp_terminado_settings: {}
+#jupyter_lab_notebookapp_terminals_enabled: True
+#jupyter_lab_notebookapp_token: '<generated>'
+#jupyter_lab_notebookapp_tornado_settings: {}
+#jupyter_lab_notebookapp_trust_xheaders: False
+#jupyter_lab_notebookapp_use_redirect_file: True
+#jupyter_lab_notebookapp_webapp_settings: {}
+#jupyter_lab_notebookapp_webbrowser_open_new: 2
+#jupyter_lab_notebookapp_websocket_compression_options: None
+#jupyter_lab_notebookapp_websocket_url: ''
+
+#jupyter_lab_labapp_app_dir: '/usr/local/Anaconda3-2020.02-Linux-x86_64/share/jupyter/lab'
+#jupyter_lab_labapp_core_mode: False
+#jupyter_lab_labapp_default_url: '/lab'
+#jupyter_lab_labapp_dev_mode: False
+#jupyter_lab_labapp_override_static_url: ''
+#jupyter_lab_labapp_override_theme_url: ''
+#jupyter_lab_labapp_user_settings_dir: '/home/vagrant/.jupyter/lab/user-settings'
+#jupyter_lab_labapp_watch: False
+#jupyter_lab_labapp_workspaces_dir: '/home/vagrant/.jupyter/lab/workspaces'
+
+#jupyter_lab_connectionfilemixin_connection_file: ''
+#jupyter_lab_connectionfilemixin_control_port: 0
+#jupyter_lab_connectionfilemixin_hb_port: 0
+#jupyter_lab_connectionfilemixin_iopub_port: 0
+#jupyter_lab_connectionfilemixin_ip: ''
+#jupyter_lab_connectionfilemixin_shell_port: 0
+#jupyter_lab_connectionfilemixin_stdin_port: 0
+#jupyter_lab_connectionfilemixin_transport: 'tcp'
+
+#jupyter_lab_kernelmanager_autorestart: True
+#jupyter_lab_kernelmanager_kernel_cmd: []
+#jupyter_lab_kernelmanager_shutdown_wait_time: 5.0
+
+#jupyter_lab_session_buffer_threshold: 1024
+#jupyter_lab_session_check_pid: True
+#jupyter_lab_session_copy_threshold: 65536
+#jupyter_lab_session_debug: False
+#jupyter_lab_session_digest_history_size: 65536
+#jupyter_lab_session_item_threshold: 64
+#jupyter_lab_session_key: b''
+#jupyter_lab_session_keyfile: ''
+#jupyter_lab_session_metadata: {}
+#jupyter_lab_session_packer: 'json'
+#jupyter_lab_session_session: ''
+#jupyter_lab_session_signature_scheme: 'hmac-sha256'
+#jupyter_lab_session_unpacker: 'json'
+#jupyter_lab_session_username: 'vagrant'
+
+#jupyter_lab_multikernelmanager_default_kernel_name: 'python3'
+#jupyter_lab_multikernelmanager_kernel_manager_class: 'jupyter_client.ioloop.IOLoopKernelManager'
+#jupyter_lab_multikernelmanager_shared_context: True
+
+#jupyter_lab_mappingkernelmanager_allowed_message_types: []
+#jupyter_lab_mappingkernelmanager_buffer_offline_messages: True
+#jupyter_lab_mappingkernelmanager_cull_busy: False
+#jupyter_lab_mappingkernelmanager_cull_connected: False
+#jupyter_lab_mappingkernelmanager_cull_idle_timeout: 0
+#jupyter_lab_mappingkernelmanager_cull_interval: 300
+#jupyter_lab_mappingkernelmanager_kernel_info_timeout: 60
+#jupyter_lab_mappingkernelmanager_root_dir: ''
+
+#jupyter_lab_kernelspecmanager_ensure_native_kernel: True
+#jupyter_lab_kernelspecmanager_kernel_spec_class: 'jupyter_client.kernelspec.KernelSpec'
+#jupyter_lab_kernelspecmanager_whitelist: set()
+
+#jupyter_lab_contentsmanager_allow_hidden: False
+#jupyter_lab_contentsmanager_checkpoints: None
+#jupyter_lab_contentsmanager_checkpoints_class: 'notebook.services.contents.checkpoints.Checkpoints'
+#jupyter_lab_contentsmanager_checkpoints_kwargs: {}
+#jupyter_lab_contentsmanager_files_handler_class: 'notebook.files.handlers.FilesHandler'
+#jupyter_lab_contentsmanager_files_handler_params: {}
+#jupyter_lab_contentsmanager_hide_globs: ['__pycache__', '*.pyc', '*.pyo', '.DS_Store', '*.so', '*.dylib', '*~']
+#jupyter_lab_contentsmanager_pre_save_hook: None
+#jupyter_lab_contentsmanager_root_dir: '/'
+#jupyter_lab_contentsmanager_untitled_directory: 'Untitled Folder'
+#jupyter_lab_contentsmanager_untitled_file: 'untitled'
+#jupyter_lab_contentsmanager_untitled_notebook: 'Untitled'
+
+#jupyter_lab_filemanagermixin_use_atomic_writing: True
+
+#jupyter_lab_filecontentsmanager_delete_to_trash: True
+#jupyter_lab_filecontentsmanager_post_save_hook: None
+#jupyter_lab_filecontentsmanager_root_dir: ''
+#jupyter_lab_filecontentsmanager_save_script: False
+
+#jupyter_lab_notebooknotary_algorithm: 'sha256'
+#jupyter_lab_notebooknotary_db_file: ''
+#jupyter_lab_notebooknotary_secret: b''
+#jupyter_lab_notebooknotary_secret_file: ''
+#jupyter_lab_notebooknotary_store_factory: traitlets.Undefined
+
+#jupyter_lab_gatewayclient_auth_token: None
+#jupyter_lab_gatewayclient_ca_certs: None
+#jupyter_lab_gatewayclient_client_cert: None
+#jupyter_lab_gatewayclient_client_key: None
+#jupyter_lab_gatewayclient_connect_timeout: 60.0
+#jupyter_lab_gatewayclient_env_whitelist: ''
+#jupyter_lab_gatewayclient_headers: '{}'
+#jupyter_lab_gatewayclient_http_pwd: None
+#jupyter_lab_gatewayclient_http_user: None
+#jupyter_lab_gatewayclient_kernels_endpoint: '/api/kernels'
+#jupyter_lab_gatewayclient_kernelspecs_endpoint: '/api/kernelspecs'
+#jupyter_lab_gatewayclient_kernelspecs_resource_endpoint: '/kernelspecs'
+#jupyter_lab_gatewayclient_request_timeout: 60.0
+#jupyter_lab_gatewayclient_url: None
+#jupyter_lab_gatewayclient_validate_cert: True
+#jupyter_lab_gatewayclient_ws_url: None

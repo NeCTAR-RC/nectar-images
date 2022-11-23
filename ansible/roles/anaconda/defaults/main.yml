@@ -1,0 +1,34 @@
+---
+# main Anaconda download server
+anaconda_mirror: https://repo.anaconda.com/archive
+
+# version of python (2|3)
+anaconda_python_ver: 3
+
+# anaconda version
+anaconda_ver: '2022.10'
+
+# when downloading the anaconda binary it might take a while
+# don't let you less great network connection cause the role to falter
+anaconda_timeout_seconds: 600
+
+# add the anaconda python onto the front of your path.
+# Caveat Emptor: if your OS package manager is python based careful about jamming it
+anaconda_make_sys_default: False
+
+anaconda_parent_dir: '/usr/local'
+anaconda_link_subdir: anaconda
+
+anaconda_pkg_update: True
+
+# install a a list of packages into the root conda env. please consider using conda envs effectively!
+#anaconda_install_packages:
+#  - package1
+#  - package2
+
+# control the install channels
+#anaconda_install_channels: "defaults conda-forge bioconda"
+
+# additional control over windows-installer specific options
+win_anaconda_installation_type: JustMe
+win_anaconda_add_to_path: True

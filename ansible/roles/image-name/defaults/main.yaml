@@ -1,2 +1,2 @@
 ---
-nectar_image_name: "{{ ansible_distribution }} {{ ansible_distribution_version }}"
+nectar_image_name: "{{ nectar_default_image_name }}"

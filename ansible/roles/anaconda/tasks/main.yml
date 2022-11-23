@@ -1,0 +1,19 @@
+---
+
+- name: resolve platform specific vars
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - '{{ ansible_os_family }}.yml'
+        - 'default.yml'
+      paths:
+        - '{{ role_path }}/vars'
+
+- name: resolve platform specific tasks
+  include_tasks: "{{ item }}"
+  with_first_found:
+    - files:
+        - '{{ ansible_os_family }}.yml'
+        - 'default.yml'
+      paths:
+        - '{{ role_path }}/tasks'

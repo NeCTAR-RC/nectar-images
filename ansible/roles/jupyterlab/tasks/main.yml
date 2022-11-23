@@ -1,0 +1,59 @@
+---
+- name: Install Jupyter Lab packages
+  conda:
+    name: "{{ item }}"
+    state: present
+    executable: '{{ anaconda_conda_bin }}'
+    channels: conda-forge
+  with_items: "{{ jupyter_lab_packages }}"
+
+- name: Create /etc/jupyter
+  file:
+    path: /etc/jupyter
+    state: directory
+
+- name: Install Jupyter notebook config
+  template:
+    src: jupyter_notebook_config.py.j2
+    dest: /etc/jupyter/jupyter_notebook_config.py
+
+- name: "Create Jupyter Lab notebook directory (as {{ jupyter_user }})"
+  command: "mkdir -p ~/{{ jupyter_lab_notebookapp_notebook_dir }}"
+  args:
+    warn: false
+  become: false
+  when: jupyter_lab_notebookapp_notebook_dir is defined
+
+- name: "Allow systemd lingering for user {{ jupyter_user }}"
+  command: "loginctl enable-linger {{ jupyter_user }}"
+
+- name: Install Jupyter Lab systemd service
+  template:
+    src: jupyter-lab.service.j2
+    dest: /etc/systemd/user/jupyter-lab.service
+
+- name: "Create Jupyter Lab directory (as {{ jupyter_user }})"
+  file:
+    path: "/home/{{ jupyter_user }}/.jupyter"
+    state: directory
+  become: yes
+  become_user: "{{ jupyter_user }}"
+  when: nectar_test_build | default(False)
+
+- name: "Create Jupyter Lab password file (as {{ jupyter_user }})"
+  template:
+    src: jupyter_notebook_config.json.j2
+    dest: "/home/{{ jupyter_user }}/.jupyter/jupyter_notebook_config.json"
+  become: yes
+  become_user: "{{ jupyter_user }}"
+  when: nectar_test_build | default(False)
+
+- name: "Enable and start service (as {{ jupyter_user }})"
+  service:
+    name: jupyter-lab
+    enabled: yes
+    state: restarted
+    scope: user
+    daemon_reload: yes
+  become: yes
+  become_user: "{{ jupyter_user }}"

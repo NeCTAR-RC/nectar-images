@@ -1,22 +1,19 @@
 #!/bin/bash
 
+ERROR=0
 FILE=$1
 if [ -z ${FILE} ]; then
     echo "Usage: $0 [JSONFILE]"
-    exit 1
+    ERROR=1
 fi
 
-# Find packer
-if ! hash packer >/dev/null 2>&1; then
-    echo "You need packer installed to use this script"
-    exit 1
-fi
-
-# Find jq
-if ! hash jq >/dev/null 2>&1; then
-    echo "You need jq installed to use this script"
-    exit 1
-fi
+for tool in packer jq openstack; do
+    if ! hash $tool >/dev/null 2>&1; then
+        echo "You need $tool installed to use this script"
+        ERROR=1
+    fi
+done
+[ "$ERROR" -eq 1 ] && exit 1
 
 # Base defaults
 NAME=$(basename -s .json ${FILE})
@@ -27,10 +24,27 @@ PACKER_WORKING_FILE=$(mktemp)
 FACT_DIR=$OUTPUT_DIR/.facts
 TAG_DIR=$OUTPUT_DIR/.tags
 
+# Debugging
 DEBUG=1
 
+# Run tests?
+RUN_TESTS=true
+AVAILABILITY_ZONE=melbourne-qh2
+SECGROUP=image-build
+FLAVOR=m3.small
+SSH_KEY=jenkins-image-testing
+BUILD_PROPERTY=nectar_build
+ORGANISATION=NeCTAR
+
+# Override any options
 # Source build config
-. "$(basename $0 .sh).cfg"
+CONFIG_FILE="$(basename $0 .sh).cfg"
+if [ -f $CONFIG_FILE ]; then
+    echo "Loading config from $CONFIG_FILE..."
+    . "$CONFIG_FILE"
+else
+    echo "Config file $CONFIG_FILE not found."
+fi 
 
 read_packer_var() {
     jq -r ".builders[0].${1}" $PACKER_WORKING_FILE
@@ -89,12 +103,12 @@ if [ -z "$OS_USERNAME" ]; then
 fi
 
 # Test keypair is available
-if [ -n "$TEST_SSH_KEY" ]; then
-    KEY=$(openstack keypair show -f value -c name "$TEST_SSH_KEY")
+if [ -n "$SSH_KEY" ]; then
+    KEY=$(openstack keypair show -f value -c name "$SSH_KEY")
     if [ -n "$KEY" ]; then
-        echo "Found testing keypair: $KEY"
+        echo "Found keypair: $KEY"
     else
-        echo "Testing keypair $TEST_SSH_KEY not found"
+        echo "Testing keypair $SSH_KEY not found"
         exit 1
     fi
 fi
@@ -108,21 +122,20 @@ fi
 rm -fr $FACT_DIR $TAG_DIR
 
 if [ "${BUILDER_TYPE}" == "qemu" ]; then
+    write_packer_var vm_name "${BUILD_NAME}"
     if [ -n "${SSH_CLIENT}" ] || [ -n "${SSH_TTY}" ]; then
         write_packer_var headless true
     else
         write_packer_var headless false
-        #sed -i 's/console=ttyS0,115200n8//g' $PACKER_WORKING_FILE
     fi
-
-    write_packer_var vm_name "${BUILD_NAME}"
 else
+    # OpenStack builder
+    write_packer_var flavor "${FLAVOR}"
     write_packer_var image_name "${BUILD_NAME}"
-    write_packer_var flavor "${BUILD_FLAVOUR}"
 fi
 
 echo "Building image ${NAME}..."
-chmod 600 packer-ssh-key
+#chmod 600 packer-ssh-key
 packer build -on-error=ask $PACKER_WORKING_FILE || exit $?
 rm -f $PACKER_WORKING_FILE
 
@@ -172,15 +185,10 @@ if [ ! -z $BUILD_PROPERTY ]; then
     openstack image set --property $BUILD_PROPERTY="$BUILD_NUMBER" $IMAGE_ID || true
 fi
 
-if [ -z $TEST_SSH_KEY ]; then
-    echo "No keypair provided, so not running tests."
-    exit 0
-fi
-
 echo "Creating instance \"test_${NAME}_${BUILD_NUMBER}\"..."
-[ -z $TEST_AZ ] || AZ_OPT="--availability-zone $TEST_AZ"
-echo "--> openstack server create --image ${IMAGE_ID} --flavor ${TEST_FLAVOUR} ${AZ_OPT} --security-group ${TEST_SG} --key-name ${TEST_SSH_KEY} --wait \"${BUILD_NAME}\""
-INSTANCE_ID=$(openstack server create -f value -c id --image ${IMAGE_ID} --flavor ${TEST_FLAVOUR} ${AZ_OPT} --security-group ${TEST_SG} --key-name ${TEST_SSH_KEY} "${BUILD_NAME}")
+[ -z $AVAILABILITY_ZONE ] || AZ_OPT="--availability-zone $AVAILABILITY_ZONE"
+echo "--> openstack server create --image ${IMAGE_ID} --flavor ${FLAVOR} ${AZ_OPT} --security-group ${SECGROUP} --key-name ${SSH_KEY} --wait \"${BUILD_NAME}\""
+INSTANCE_ID=$(openstack server create -f value -c id --image ${IMAGE_ID} --flavor ${FLAVOR} ${AZ_OPT} --security-group ${SECGROUP} --key-name ${SSH_KEY} "${BUILD_NAME}")
 echo "Found instance ID: ${INSTANCE_ID}"
 
 set +e

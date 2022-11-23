@@ -1,0 +1,6 @@
+---
+- name: restart jupyter-lab
+  become: yes
+  service:
+    name: jupyterlab
+    state: restarted

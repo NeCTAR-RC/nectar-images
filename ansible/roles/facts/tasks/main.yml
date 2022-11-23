@@ -22,6 +22,16 @@
   become: False
   with_items: "{{ vars | select('match', '^nectar_image_property_.*') | list }}"
 
+# Any values given as part of the image_properties var we'll also write
+# as facts
+- name: Save image properties
+  local_action:
+    module: copy
+    content: "{{ image_properties[item] }}"
+    dest: "{{ fact_dir }}/{{ item }}"
+  become: False
+  with_items: "{{ image_properties }}"
+
 # We lookup any tags starting with nectar_image_tag_ and read those
 # into files, stripping off the prefix.
 - name: Save tags
