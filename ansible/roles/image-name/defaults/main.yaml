@@ -1,2 +1,1 @@
 ---
-nectar_image_name: "{{ nectar_default_image_name }}"

@@ -9,7 +9,7 @@
 
 - name: Set nectar_image_name fact
   set_fact:
-    nectar_image_name: "{{ nectar_image_name }}"
+    nectar_name: "{% if nectar_image_name is defined %}{{ nectar_image_name }}{% else %}{{ nectar_default_image_name }}{% endif %}"
 
 - debug:
-    msg: "Image name is {{ nectar_image_name }}"
+    msg: "Image name is {{ nectar_name }}"

@@ -14,4 +14,4 @@
 # Should be overridden by the packer config for non-standard images (e.g. trove)
 - name: Set nectar_name fact
   set_fact:
-    nectar_image_property_nectar_name: "{{ nectar_image_name }}"
+    nectar_image_property_nectar_name: "{{ nectar_name }}"

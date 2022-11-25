@@ -5,6 +5,3 @@ support_url: https://support.ehelp.edu.au/support/solutions/articles/6000106269
 
 # Any additional image properties
 image_properties: {}
-
-# We expect this to be overridden by a packer var
-nectar_image_name: "{{ ansible_distribution }} {{ ansible_distribution_version }}"
