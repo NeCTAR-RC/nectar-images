@@ -339,6 +339,27 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # JupyterLab
+  config.vm.define "jupyterlab" do |c|
+    c.vm.box = "generic/ubuntu2204"  # doesn't exist yet
+    c.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/jammy64"
+    end
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true }
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook-jupyterlab.yml"
+      ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
+    end
+  end
+
+
   # Trove MySQL (Ubuntu 16.04 xenial)
   config.vm.define "trove-mysql-ubuntu1604" do |c|
     c.vm.box = "generic/ubuntu1604"
