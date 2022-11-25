@@ -2,6 +2,6 @@
 # nectar_image_name should be set by packer
 # We hard code legacy NeCTAR prefix, but should switch to
 # origanisation fact
-murano_default_title: "NeCTAR {{ nectar_image_name }}"
+murano_default_title: "NeCTAR {{ nectar_name }}"
 
 murano_default_type: "{{ ansible_distribution | lower }}"
