@@ -5,3 +5,5 @@
 murano_default_title: "NeCTAR {{ nectar_name }}"
 
 murano_default_type: "{{ ansible_distribution | lower }}"
+
+murano_agent_config_file: /etc/murano/agent.conf

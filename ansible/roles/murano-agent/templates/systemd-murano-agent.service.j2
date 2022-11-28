@@ -3,7 +3,7 @@ Description=OpenStack Murano Agent
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/muranoagent --config-dir=/etc/murano-agent --config-file=/etc/murano-agent/muranoagent.conf --log-file=/var/log/murano-agent.log
+ExecStart=/usr/bin/muranoagent --config-file={{ murano_agent_config_file }}
 Restart=on-failure
 
 [Install]
