@@ -20,7 +20,7 @@ PROJECT_IDS = {
         'project': '28eadf5ad64b42a4929b2fb7df99275c',
         'archive_project': 'c9217cb583f24c7f96567a4d6530e405',
     },
-    'rctest': {
+    'testing': {
         'project': 'cef831fd182944e9848dc1ea9cd9d6a5',
         'archive_project': '41215d7761b945479c7f2d24bc1c8afa',
     }
@@ -117,7 +117,7 @@ def parse_args(argv):
     parser = argparse.ArgumentParser(
         description="Image workflow tool")
     parser.add_argument('-e', '--environment',
-                        choices=['production', 'rctest'],
+                        choices=['production', 'testing'],
                         default='production',
                         help='Cloud environment.\
                               Defaults to production.\
