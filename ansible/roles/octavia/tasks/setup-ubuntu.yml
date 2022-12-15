@@ -68,6 +68,7 @@
       - rsyslog
       - logrotate
       - net-tools
+      - socat
     state: present
 
 - name: Install certs-ramfs service
