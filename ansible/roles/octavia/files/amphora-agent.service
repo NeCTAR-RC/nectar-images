@@ -9,7 +9,7 @@ ExecStart=/usr/bin/amphora-agent --config-file /etc/octavia/amphora-agent.conf
 KillMode=mixed
 Restart=always
 ExecStartPost=/bin/sh -c "echo $MAINPID > /var/run/amphora-agent.pid"
-PIDFile=/var/run/amphora-agent.pid
+PIDFile=/run/amphora-agent.pid
 
 [Install]
 WantedBy=multi-user.target
