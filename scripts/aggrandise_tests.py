@@ -56,7 +56,7 @@ class AggrandiseTests(unittest.TestCase):
     def test_project_id_with_envrionment_arg(self, mock_iw):
         fake_iw = mock_iw.return_value
         fake_iw.promote = mock.Mock()
-        env = 'rctest'
+        env = 'testing'
         project = aggrandise.PROJECT_IDS[env]['project']
         archive_project = aggrandise.PROJECT_IDS[env]['archive_project']
         aggrandise.main(['promote', '--image', 'test_image_id',
