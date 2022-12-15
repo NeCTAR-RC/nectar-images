@@ -61,8 +61,6 @@
       value: '2600000'  # should allow HAProxy maxconn to be 1,000,000
     - name: 'fs.nr_open'
       value: '2600000'  # should allow HAProxy maxconn to be 1,000,000
-    - name: 'net.netfilter.nf_conntrack_buckets'
-      value: '125000'
     - name: 'net.netfilter.nf_conntrack_tcp_timeout_time_wait'
       value: '5'
     - name: 'net.netfilter.nf_conntrack_tcp_timeout_fin_wait'
