@@ -27,7 +27,6 @@ cloud_init_modules:
  - ssh
 
 cloud_config_modules:
- - emit_upstart
  - ssh-import-id
  - locale
  - set-passwords
