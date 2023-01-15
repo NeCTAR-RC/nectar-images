@@ -31,7 +31,6 @@ cloud_init_modules:
  - ssh
 
 cloud_config_modules:
- - emit_upstart
  - snap
  - ssh-import-id
  - locale
