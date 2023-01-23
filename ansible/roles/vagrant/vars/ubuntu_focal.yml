@@ -1,5 +1,5 @@
 ---
-vagrant_package_filename: "vagrant_{{ vagrant_version }}_x86_64.deb"
+vagrant_package_filename: "vagrant_{{ vagrant_version }}-1_amd64.deb"
 
 vagrant_plugins:
   - vagrant-libvirt

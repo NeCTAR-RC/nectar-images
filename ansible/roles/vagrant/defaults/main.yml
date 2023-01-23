@@ -1,5 +1,5 @@
 ---
-vagrant_version: 2.2.10
+vagrant_version: 2.3.4
 
 # Vagrant plugins can only be installed per user, not globally (reliably).
 vagrant_plugin_user: root
