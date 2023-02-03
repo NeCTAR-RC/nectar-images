@@ -9,8 +9,6 @@
 
 - name: Remove existing Murano config
   shell: "rm -fr {{ item }}"
-  args:
-    warn: no
   with_items:
     - /etc/murano-agent
     - /var/log/murano
@@ -36,12 +34,18 @@
     name: murano-agent
     state: present
 
+- name: Check if /usr/lib/python3/dist-packages/muranoagent/execution_plan_queue.py exists
+  stat:
+    path: /usr/lib/python3/dist-packages/muranoagent/execution_plan_queue.py
+  register: execution_plan_queue_py
+
 # https://review.opendev.org/c/openstack/murano-agent/+/864461
 - name: Fix execution_plan_queue bytes error
   replace:
     path: /usr/lib/python3/dist-packages/muranoagent/execution_plan_queue.py
     regexp: "plan_file_path, 'wb'"
     replace: "plan_file_path, 'w'"
+  when: execution_plan_queue_py.stat.exists
 
 - name: Remove Nectar apt repositories
   apt_repository:
