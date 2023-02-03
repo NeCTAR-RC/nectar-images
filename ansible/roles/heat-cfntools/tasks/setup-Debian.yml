@@ -24,6 +24,7 @@
       name: "{{ item }}"
       state: present
     with_items:
+      - python3-setuptools
       - python3-boto
       - python3-psutil
       - python3-six
