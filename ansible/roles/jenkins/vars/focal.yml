@@ -27,8 +27,10 @@ packages:
   - python3-swiftclient
   - python3-troveclient
   - twine
-#  - python3-hivemind-contrib
-#  - python3-hivemind
+  - python2
+
+hivemind_env: True
+
 
 gem_packages:
   - puppet
