@@ -19,8 +19,6 @@
 
 - name: "Create Jupyter Lab notebook directory (as {{ jupyter_user }})"
   command: "mkdir -p ~/{{ jupyter_lab_notebookapp_notebook_dir }}"
-  args:
-    warn: false
   become: false
   when: jupyter_lab_notebookapp_notebook_dir is defined
 

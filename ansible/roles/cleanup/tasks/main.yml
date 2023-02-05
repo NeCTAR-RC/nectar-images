@@ -1,8 +1,6 @@
 ---
 - name: Clean up logs keys and configs
   shell: "{{ item }}"
-  args:
-    warn: no
   with_items:
     - 'find /var/log -type f -exec -exec truncate -s0 {} \;'
     - 'rm -fr /var/log/journal/*'
@@ -38,8 +36,6 @@
 
 - name: Lock and disable root account
   shell: "{{ item }}"
-  args:
-    warn: no
   with_items:
     - passwd -d root
     - passwd -l root

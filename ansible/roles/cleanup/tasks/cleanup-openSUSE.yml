@@ -1,8 +1,6 @@
 ---
 - name: Clean up zypper
   command: zypper clean
-  args:
-    warn: no
 
 - name: Remove interface persistence
   file:
