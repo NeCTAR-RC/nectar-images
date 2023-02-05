@@ -132,6 +132,7 @@ else
     # OpenStack builder
     write_packer_var flavor "${FLAVOR}"
     write_packer_var image_name "${BUILD_NAME}"
+    write_packer_var availability_zone "${AVAILABILITY_ZONE}"
 fi
 
 echo "Building image ${NAME}..."
