@@ -32,6 +32,28 @@
     group: root
     mode: 0644
 
+- name: Create apt-daily/upgrade systemd timer overrride directories
+  file:
+    path: "/etc/systemd/system/{{ item }}.timer.d"
+    state: directory
+  with_items:
+    - apt-daily
+    - apt-daily-upgrade
+
+- name: Disable apt-daily/upgrade timers from running at boot
+  copy:
+    content: |
+      # {{ item }} configuration override
+      [Timer]
+      Persistent=false
+    dest: "/etc/systemd/system/{{ item }}.timer.d/override.conf"
+  with_items:
+    - apt-daily
+    - apt-daily-upgrade
+
+- name: Reload systemd daemon
+  command: systemctl daemon-reload
+
 - name: Install testing script
   copy:
     src: 100-unattended-upgrades.sh
