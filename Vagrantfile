@@ -432,11 +432,11 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Octavia Amphora (Ubuntu 20.04 focal)
-  config.vm.define "octavia-haproxy-ubuntu2004" do |c|
-    c.vm.box = "generic/ubuntu2004"
+  # Octavia Amphora (Ubuntu 22.04 focal)
+  config.vm.define "octavia-haproxy-ubuntu2204" do |c|
+    c.vm.box = "generic/ubuntu2204"
     c.vm.provider "virtualbox" do |v, override|
-      override.vm.box = "ubuntu/focal64"
+      override.vm.box = "ubuntu/jammy64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
