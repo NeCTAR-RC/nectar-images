@@ -24,6 +24,8 @@ packages:
   - python3-troveclient
   - twine
   - python2
+  - dh-python
+
 hivemind_env: True
 
 gem_packages:
