@@ -433,7 +433,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Octavia Amphora (Ubuntu 22.04 focal)
-  config.vm.define "octavia-haproxy-ubuntu2204" do |c|
+  config.vm.define "octavia-amphora" do |c|
     c.vm.box = "generic/ubuntu2204"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/jammy64"
@@ -444,7 +444,7 @@ Vagrant.configure("2") do |config|
                              ansible_python_interpreter: "/usr/bin/python3",
                              driver: "haproxy"}
       ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-octavia.yml"
+      ansible.playbook = "ansible/playbook-octavia-amphora.yml"
       ansible.become = true
     end
   end

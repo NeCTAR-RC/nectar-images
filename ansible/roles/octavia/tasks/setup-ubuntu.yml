@@ -11,12 +11,14 @@
   apt_repository:
     repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_distribution_release }}-updates/{{ octavia_openstack_version }} main"
     update_cache: true
+  when: (ansible_distribution_release == 'jammy' and octavia_openstack_version == 'yoga') is not true
 
 - name: Add Nectar archive keys
   apt_key:
     id: ABC968C25CDB0CDD6254F46A129CF4A68FA8FC77
     url: http://download.rc.nectar.org.au/nectar-archive-key-2016.gpg
     state: present
+  when: octavia_openstack_version is defined
 
 - name: Add Nectar repositories
   apt_repository:

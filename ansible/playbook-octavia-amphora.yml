@@ -5,6 +5,7 @@
 
   vars_files:
     - vars/main.yml
+    - vars/octavia-amphora.yml
 
   roles:
     - role: image-name
