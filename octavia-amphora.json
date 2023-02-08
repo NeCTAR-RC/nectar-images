@@ -48,7 +48,7 @@
         "--extra-vars",
         "ansible_python_interpreter=/usr/bin/python3 driver=haproxy nectar_image_name='Octavia Amphora' image_build_dir='{{pwd}}/output-{{build_name}}'"
       ],
-      "playbook_file": "ansible/playbook-octavia.yml"
+      "playbook_file": "ansible/playbook-octavia-amphora.yml"
     },
     {
       "type": "shell",
