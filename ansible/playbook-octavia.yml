@@ -9,7 +9,7 @@
   roles:
     - role: image-name
     - role: default-user
-    - role: ifupdown
+    - role: systemd-networkd
     - role: testing
     - role: repos
     - role: cloud-init
