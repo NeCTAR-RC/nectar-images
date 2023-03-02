@@ -28,6 +28,8 @@ packages:
   - python3-troveclient
   - twine
   - python2
+  - python-setuptools
+  - python-pbr
   - dh-python
 
 hivemind_env: True

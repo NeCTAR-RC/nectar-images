@@ -99,14 +99,29 @@
     virtualenv_python: python2.7
     name: pip
     state: latest
-  when: hivemind_env is defined and hivemind_env == True
+  when: hivemind_env | default(False)
 
 - name: Install Hivemind in a python2 environment
   pip:
      virtualenv: /opt/hivemind
      virtualenv_python: python2.7
      name: git+https://github.com/NeCTAR-RC/hivemind.git,git+https://github.com/NeCTAR-RC/hivemind_contrib.git
-  when: hivemind_env is defined and hivemind_env == True
+  when: hivemind_env | default(False)
+
+# This is a prerequisite for "Install pbr in python2"
+# This will automatically be replaced by python3-pip at a later stage
+- name: Install python2 pip2
+  apt:
+    name: python-pip
+    state: present
+  when: hivemind_env | default(False) and ansible_distribution_major_version >= '22'
+
+# In Jammy there is no python-pbr (python2) package
+- name: Install pbr in python2
+  pip:
+     executable: pip2
+     name: pbr
+  when: hivemind_env | default(False) and ansible_distribution_major_version >= '22'
 
 - name: Create a symbolic link for Hivemind python2 environment
   file:
@@ -115,7 +130,7 @@
     owner: root
     group: root
     state: link
-  when: hivemind_env is defined and hivemind_env == True
+  when: hivemind_env | default(False)
 
 - name: Install packer
   unarchive:
