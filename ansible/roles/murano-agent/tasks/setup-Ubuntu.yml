@@ -45,7 +45,7 @@
     path: /usr/lib/python3/dist-packages/muranoagent/execution_plan_queue.py
     regexp: "plan_file_path, 'wb'"
     replace: "plan_file_path, 'w'"
-  when: execution_plan_queue_py.stat.exists
+  when: execution_plan_queue_py.stat.exists and ansible_distribution_major_version == '22'
 
 - name: Remove Nectar apt repositories
   apt_repository:
