@@ -1,0 +1,22 @@
+---
+- name: Install required system packages
+  ansible.builtin.apt:
+    name: "{{ docker_dependency_packages }}"
+    state: latest
+    update_cache: true
+
+- name: Add Docker apt repository key
+  ansible.builtin.get_url:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    dest: /usr/share/keyrings/docker-archive-keyring.asc
+
+- name: Add Docker apt repository
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.asc] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    state: present
+    update_cache: true
+
+- name: Install Docker packages
+  ansible.builtin.apt:
+    name: "{{ docker_packages }}"
+    state: latest
