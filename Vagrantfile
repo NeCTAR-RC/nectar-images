@@ -182,6 +182,29 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # Ubuntu 22.04 (jammy) with Docker
+  config.vm.define "ubuntu2204-docker" do |c|
+    c.vm.box = "generic/ubuntu2204"
+    c.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/jammy64"
+    end
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true,
+                             murano_image_type: "Docker",
+                             nectar_image_name: "Ubuntu 22.04 LTS (Jammy) amd64 (with Docker)" }
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook-docker.yml"
+      ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
+    end
+  end
+
+
   # CentOS 7
   config.vm.define "centos7" do |c|
     c.vm.box = "centos/7"

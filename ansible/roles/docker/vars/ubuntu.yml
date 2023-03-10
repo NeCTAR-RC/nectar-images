@@ -1,0 +1,15 @@
+---
+# https://docs.docker.com/engine/install/ubuntu/
+
+docker_dependency_packages:
+- apt-transport-https
+- ca-certificates
+- curl
+- software-properties-common
+
+docker_packages:
+- docker-ce
+- docker-ce-cli
+- containerd.io
+- docker-buildx-plugin
+- docker-compose-plugin
