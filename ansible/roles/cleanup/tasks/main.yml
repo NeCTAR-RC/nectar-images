@@ -25,13 +25,13 @@
     - /var/lib/dbus/machine-id
     - /var/lib/systemd/random-seed  # recommended by systemd for base images
 
-- include: cleanup-RedHat.yml
+- include_tasks: cleanup-RedHat.yml
   when: ansible_os_family == 'RedHat'
 
-- include: cleanup-Debian.yml
+- include_tasks: cleanup-Debian.yml
   when: ansible_os_family == 'Debian'
 
-- include: cleanup-openSUSE.yml
+- include_tasks: cleanup-openSUSE.yml
   when: ansible_distribution == 'openSUSE Leap'
 
 - name: Lock and disable root account

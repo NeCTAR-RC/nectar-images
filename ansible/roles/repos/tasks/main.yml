@@ -8,7 +8,7 @@
     - "defaults.yml"
 
 - name: Include OS-specific tasks
-  include: "{{ tasks_item }}"
+  include_tasks: "{{ tasks_item }}"
   with_first_found:
     - files:
       - "setup-{{ ansible_distribution }}.yml"

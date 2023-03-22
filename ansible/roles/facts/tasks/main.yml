@@ -10,7 +10,7 @@
   become: False
 
 # Common facts we want to apply to all images
-- include: facts.yml
+- include_tasks: facts.yml
 
 # We lookup any facts starting with nectar_image_property_ and read those
 # into files, stripping off the prefix.

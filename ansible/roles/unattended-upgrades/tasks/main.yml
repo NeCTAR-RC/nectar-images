@@ -1,11 +1,11 @@
 ---
-- include: setup-apt.yml
+- include_tasks: setup-apt.yml
   when: ansible_pkg_mgr == 'apt'
 
-- include: setup-yum.yml
+- include_tasks: setup-yum.yml
   when: ansible_pkg_mgr == 'yum'
 
-- include: setup-dnf.yml
+- include_tasks: setup-dnf.yml
   when: ansible_pkg_mgr == 'dnf'
 
 - name: Set automatic_updates image property

@@ -24,13 +24,13 @@
   when: ansible_os_family == 'Debian'
 
 - name: Include chrony configuration
-  include: chrony.yml
+  include_tasks: chrony.yml
   when: ntp_service == 'chrony'
 
 - name: Include ntpd configuration
-  include: ntpd.yml
+  include_tasks: ntpd.yml
   when: ansible_service_mgr != 'systemd' or (ntp_service is undefined or ntp_service == 'ntpd')
 
 - name: Include systemd-timesyncd configuration
-  include: systemd-timesyncd.yml
+  include_tasks: systemd-timesyncd.yml
   when: ansible_service_mgr == 'systemd' and (ntp_service is undefined or ntp_service == 'systemd-timesyncd')

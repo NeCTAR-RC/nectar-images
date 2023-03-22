@@ -18,7 +18,7 @@
     gpgcheck: no
   when: openstack_repo is defined
 
-- include: install.yml
+- include_tasks: install.yml
 
 - name: Remove cloud repository for CentOS
   yum_repository:
@@ -26,7 +26,7 @@
     state: absent
   when: openstack_repo is defined
 
-- include: config.yml
+- include_tasks: config.yml
 
 # Ansible 2.4 breaks the config file. We'll handle it manually with regex
 - name: Disable SELinux
@@ -45,4 +45,4 @@
   notify: systemctl-daemon-reload
   when: ansible_distribution_major_version == '7'
 
-- include: services.yml
+- include_tasks: services.yml

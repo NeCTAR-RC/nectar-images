@@ -13,7 +13,7 @@
 # for distros that we have a specific config for
 - block:
     - name: Include OS-specific tasks
-      include: "{{ tasks_item }}"
+      include_tasks: "{{ tasks_item }}"
       with_first_found:
         - files:
           - "setup-{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
