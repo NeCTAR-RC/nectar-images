@@ -1,0 +1,18 @@
+---
+xrdp_packages:
+  - adduser
+  - init-system-helpers
+  - libfuse2
+  - libjpeg8
+  - libopus0
+  - libpam0g
+  - libx11-6
+  - libxfixes3
+  - libxrandr2
+  - xserver-xorg-core
+  - xrdp
+  - xorgxrdp
+
+xorg_path: /usr/lib/xorg/Xorg
+
+pulseaudio_modules_dir: /usr/lib/pulse-13.99.1/modules

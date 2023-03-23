@@ -1,0 +1,39 @@
+# tasks file for rstudio-server
+---
+- name: configure | update (server) configuration file
+  template:
+    src: etc/rstudio/rserver.conf.j2
+    dest: /etc/rstudio/rserver.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart rstudio-server
+
+- name: configure | update (session) configuration file
+  template:
+    src: etc/rstudio/rsession.conf.j2
+    dest: /etc/rstudio/rsession.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart rstudio-server
+
+- name: configure | loadbalancer configuration
+  template:
+    src: etc/rstudio/load-balancer.j2
+    dest: /etc/rstudio/load-balancer
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart rstudio-server
+  when: rstudio_server_load_balancer is defined
+
+- name: configure | create load balancer cookie file
+  copy:
+    content: "{{ rstudio_server_load_balancer_cookie }}"
+    dest: /etc/rstudio/secure-cookie-key
+    owner: root
+    group: root
+    mode: 0600
+  when: rstudio_server_load_balancer_cookie is defined
+  notify: restart rstudio-server

@@ -1,0 +1,8 @@
+---
+x2go_apt_repositories: ['ppa:x2go/stable']
+x2go_apt_packages:
+  - x2goserver
+  - x2goserver-xsession
+  - x2goserver-fmbindings
+  - x2golxdebindings
+  - x2gomatebindings

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unix-user-mapping serviceName="guacamole">
+    <config name="RDP Connection" protocol="rdp">
+        <param name="hostname" value="localhost" />
+        <param name="username" value="${GUAC_USERNAME}" />
+        <param name="password" value="${GUAC_PASSWORD}" />
+        <param name="security" value="nla" />
+        <param name="port" value="3389" />
+        <param name="color-depth" value="24" />
+        <param name="security" value="rdp" />
+        <param name="disable-audio" value="false" />
+        <param name="server-layout" value="en-us-qwerty" />
+    </config>
+
+    <group name="sudo">
+        <config-ref name="RDP Connection" />
+    </group>
+</unix-user-mapping>

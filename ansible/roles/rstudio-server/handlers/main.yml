@@ -1,0 +1,6 @@
+# handlers file for rstudio-server
+---
+- name: restart rstudio-server
+  service:
+    name: rstudio-server
+    state: restarted

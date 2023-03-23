@@ -1,0 +1,10 @@
+# test file for rstudio
+---
+- hosts: localhost
+  connection: local
+  sudo: true
+  roles:
+    - ../../
+  vars:
+    rstudio_install:
+      - r-base

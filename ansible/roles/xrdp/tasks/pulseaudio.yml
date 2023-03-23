@@ -1,0 +1,37 @@
+---
+- name: Include OS-specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}_{{ ansible_distribution_version }}.yml"
+    - "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+    - "default.yml"
+
+# To build, follow the instructions from
+#  https://github.com/neutrinolabs/pulseaudio-module-xrdp/wiki/README
+- name: Install XRDP PulseAudio modules
+  copy:
+    src: "xrdp-pulseaudio/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}/{{ item }}"
+    dest: "{{ pulseaudio_modules_dir }}/{{ item }}"
+  with_items:
+    - module-xrdp-sink.la
+    - module-xrdp-sink.so
+    - module-xrdp-source.la
+    - module-xrdp-source.so
+
+- name: Install pulseaudio-xrdp.desktop
+  copy:
+    src: "xrdp-pulseaudio/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}/pulseaudio-xrdp.desktop"
+    dest: /etc/xdg/autostart/pulseaudio-xrdp.desktop
+
+- name: Create xrdp-pulseaudio-installer directory
+  file:
+    path: /libexec/pulseaudio-module-xrdp
+    state: directory
+
+- name: Install load_pa_modules.sh
+  copy:
+    src: "xrdp-pulseaudio/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}/load_pa_modules.sh"
+    dest: /libexec/pulseaudio-module-xrdp/load_pa_modules.sh
+    mode: '0755'

@@ -1,0 +1,15 @@
+- name: Install required packages for Ubuntu
+  apt:
+    name: software-properties-common
+    state: present
+
+- name: Add x2go repository
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  with_items: "{{ x2go_apt_repositories }}"
+
+- name: Install x2go packages
+  apt:
+    name: "{{ x2go_apt_packages }}"
+    state: present

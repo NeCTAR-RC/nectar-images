@@ -1,0 +1,25 @@
+# Hostname and port of guacamole proxy
+guacd-hostname: {{ guacamole_guacd_hostname }}
+guacd-port: {{ guacamole_guacd_port }}
+
+{% if guacamole_auth is defined and guacamole_auth == 'oidc' %}
+# OpenID Connect Properties
+openid-authorization-endpoint: {{ guacamole_openid_authorization_endpoint }}
+openid-jwks-endpoint: {{ guacamole_jwks_endpoint }}
+openid-issuer: {{ guacamole_openid_issuer }}
+openid-client-id: {{ guacamole_openid_client_id }}
+openid-redirect-uri: {{ guacamole_openid_redirect_uri }}
+openid-username-claim-type: {{ guacamole_claim_type }}
+openid-scope: {{ guacamole_openid_scope }}
+openid-allowed-clock-skew: {{ guacamole_openid_allowed_clock_skew }}
+
+# Auth provider class
+auth-provider: {{ guacamole_auth_provider }}
+
+# MySQL properties
+mysql-hostname: {{ guacamole_mysql_hostname }}
+mysql-port: {{ guacamole_mysql_port }}
+mysql-database: {{ guacamole_mysql_database }}
+mysql-username: {{ guacamole_mysql_username }}
+mysql-password: {{ guacamole_mysql_password }}
+{% endif %}

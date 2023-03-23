@@ -1,0 +1,18 @@
+---
+- include_tasks: server.yml
+- include_tasks: client.yml
+
+- include_tasks: auth-pam.yml
+  when:
+  - guacamole_auth is defined
+  - guacamole_auth == 'pam'
+
+- include_tasks: "{{ item }}"
+  loop:
+  - auth-mysql.yml
+  - auth-openid.yml
+  when: 
+  - guacamole_auth is defined
+  - guacamole_auth == 'oidc'
+
+

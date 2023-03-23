@@ -1,0 +1,34 @@
+# {{ ansible_managed }}
+
+# Server Configuration File
+www-port={{ rstudio_server_www_port }}
+www-address={{ rstudio_server_www_address }}
+{% if rstudio_server_auth_required_user_group is defined %}
+auth-required-user-group={{ rstudio_server_auth_required_user_group }}
+{% endif %}
+
+{% if rstudio_server_admin_enabled is defined %}
+# Admin console
+admin-enabled=1
+{% if rstudio_server_admin_group is defined %}
+admin-group={{ rstudio_server_admin_group }}
+{% endif %}
+{% if rstudio_server_admin_superuser_group is defined %}
+admin-superuser-group={{ rstudio_server_admin_superuser_group }}
+{% endif %}
+{% endif %}
+
+{% if rstudio_server_auth_proxy_url is defined %}
+# Auth proxy config
+auth-proxy=1
+auth-proxy-sign-in-url={{ rstudio_server_auth_proxy_url }}
+{% endif %}
+
+{% if rstudio_server_logging_enabled is defined %}
+# Server logging
+server-access-log={{ rstudio_server_logging_enabled }}
+{% endif %}
+
+{% if rstudio_server_shared_storage_path is defined %}
+server-shared-storage-path={{ rstudio_server_shared_storage_path }}
+{% endif %}

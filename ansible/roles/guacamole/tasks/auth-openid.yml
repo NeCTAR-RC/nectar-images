@@ -1,0 +1,25 @@
+---
+- name: Download Guacamole OIDC auth plugin
+  get_url:
+    url: "https://archive.apache.org/dist/guacamole/{{ guacamole_version }}/binary/guacamole-auth-sso-{{ guacamole_version }}.tar.gz"
+    dest: /tmp
+
+- name: Extract Guacamole OIDC auth plugin
+  unarchive:
+    src: "/tmp/guacamole-auth-sso-{{ guacamole_version }}.tar.gz"
+    copy: no
+    dest: /tmp
+
+- name: Extract Guacamole OIDC auth plugin
+  copy:
+    src: "/tmp/guacamole-auth-sso-{{ guacamole_version }}/openid/guacamole-auth-sso-openid-{{ guacamole_version }}.jar"
+    dest: "/etc/guacamole/extensions/01-guacamole-auth-sso-openid-{{ guacamole_version }}.jar"
+    remote_src: yes
+
+- name: Clean up Guacamole OIDC auth plugin temp files
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "/tmp/guacamole-auth-sso-{{ guacamole_version }}.tar.gz"
+    - "/tmp/guacamole-auth-sso-{{ guacamole_version }}"

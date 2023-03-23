@@ -1,0 +1,56 @@
+[Globals]
+ListenAddress=127.0.0.1
+ListenPort=3350
+EnableUserWindowManager=true
+UserWindowManager=startwm.sh
+{% if ansible_distribution == 'CentOS' %}
+DefaultWindowManager=startwm-bash.sh
+{% else %}
+DefaultWindowManager=startwm.sh
+{% endif %}
+ReconnectScript=reconnectwm.sh
+
+[Security]
+AllowRootLogin=true
+MaxLoginRetry=4
+TerminalServerUsers=tsusers
+TerminalServerAdmins=tsadmins
+AlwaysGroupCheck=false
+RestrictOutboundClipboard=false
+
+[Sessions]
+X11DisplayOffset=10
+MaxSessions=50
+KillDisconnected=false
+DisconnectedTimeLimit=0
+IdleTimeLimit=0
+Policy=Default
+
+[Logging]
+LogFile=xrdp-sesman.log
+LogLevel=INFO
+EnableConsole=true
+
+[Xorg]
+{% if ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7' %}
+param=Xorg
+{% elif ansible_os_family == 'RedHat' %}
+param=/usr/libexec/Xorg
+{% elif ansible_os_family == 'Debian' %}
+param=/usr/lib/xorg/Xorg
+{% endif %}
+param=-config
+param=xrdp/xorg.conf
+param=-noreset
+param=-nolisten
+param=tcp
+param=-logfile
+param=.xorgxrdp.%s.log
+
+[Chansrv]
+FuseMountName=thinclient_drives
+FileUmask=077
+
+[ChansrvLogging]
+LogLevel=INFO
+EnableConsole=true

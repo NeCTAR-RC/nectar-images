@@ -1,0 +1,24 @@
+---
+# https://github.com/voegelas/guacamole-auth-pam
+- name: Download PAM Auth
+  copy:
+    src: files/auth-pam/guacamole-auth-pam-1.2.0.jar
+    dest: "{{ guacamole_home }}/extensions/"
+
+- name: Install Guacamole pam.d config
+  copy:
+    src: files/auth-pam/pamd-guacamole
+    dest: /etc/pam.d/guacamole
+
+- name: Install Guacamole PAM auth config
+  copy:
+    src: files/auth-pam/unix-user-mapping.xml
+    dest: "{{ guacamole_home }}/unix-user-mapping.xml"
+  notify: restart tomcat
+
+- name: Adding tomcat user to shadow group
+  user:
+    name: tomcat
+    groups: shadow
+    append: yes
+  notify: restart tomcat

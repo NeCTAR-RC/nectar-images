@@ -1,0 +1,10 @@
+# defaults file for rstudio
+---
+rstudio_version: 2023.03.0-386
+rstudio_install: []
+
+rstudio_disable_check_for_updates: 1
+
+# Yes, we use Bionic even for Focal
+rstudio_distro: "{% if ansible_distribution_major_version|int < 22 %}bionic{% else %}jammy{% endif %}"
+rstudio_package_url: "https://download1.rstudio.org/electron/{{ rstudio_distro }}/amd64/rstudio-{{ rstudio_version }}-amd64.deb"

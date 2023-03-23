@@ -1,0 +1,8 @@
+# vars file for r
+---
+r_repository: "{{ r_cran_mirror }}/bin/linux/ubuntu {{ ansible_distribution_release }}-cran40/"
+
+r_dependencies:
+  - r-base
+  - r-base-core
+  - "{{ 'r-base-dev' if r_install_dev else '' }}"

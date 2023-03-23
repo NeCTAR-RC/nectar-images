@@ -1,0 +1,15 @@
+- name: configure | Renviron.site
+  template:
+    src: Renviron.site.j2
+    dest: /etc/R/Renviron.site
+    owner: root
+    group: root
+    mode: 0644
+
+- name: configure | Rprofile.site
+  template:
+    src: Rprofile.site.j2
+    dest: /etc/R/Rprofile.site
+    owner: root
+    group: root
+    mode: 0644

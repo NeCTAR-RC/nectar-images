@@ -1,0 +1,3 @@
+# /etc/xdg/xfce4/kiosk/kioskrc
+[xfce4-session]
+Shutdown=root

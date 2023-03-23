@@ -1,0 +1,5 @@
+---
+desktop_common_packages:
+  - firefox
+  - rclone
+  - filezilla

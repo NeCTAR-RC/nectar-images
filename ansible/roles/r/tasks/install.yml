@@ -1,0 +1,28 @@
+# tasks file for r
+---
+- name: install dependencies
+  apt:
+    name: "{{ r_dependencies }}"
+    state: latest
+    update_cache: true
+    cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
+
+- name: install additional
+  apt:
+    name: "{{ r_install }}"
+    state: latest
+
+- name: Get R version
+  shell: "R --version | awk '/R version/ {print $3}'"
+  register: r_installed_version
+
+- debug:
+    msg: "R version is {{ r_installed_version.stdout }}"
+
+- name: Set R version fact
+  set_fact:
+    r_version: "{{ r_installed_version.stdout }}"
+
+- name: Set R version image property
+  set_fact:
+    nectar_image_property_r_version: "{{ r_installed_version.stdout }}"

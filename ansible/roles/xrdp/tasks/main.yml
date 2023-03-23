@@ -1,0 +1,60 @@
+---
+- name: Include OS-specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}_{{ ansible_distribution_version }}.yml"
+    - "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+    - "default.yml"
+
+# Add the https://launchpad.net/~johnmullen/+archive/ubuntu/xrdp PPA for newer XRDP
+# as 0.9.12 has broken RDP drive support
+- name: Add XRDP PPA for Ubuntu
+  apt_repository:
+    repo: 'ppa:johnmullen/xrdp'
+    state: present
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_major_version < '22'
+
+- name: Install XRDP
+  package:
+    name: '{{ xrdp_packages }}'
+    state: present
+
+- name: Add XRDP PPA for Ubuntu
+  apt_repository:
+    repo: 'ppa:johnmullen/xrdp'
+    state: absent
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_major_version < '22'
+
+# Without this, TLS negotiation fails as the XRDP user is unable to read
+# the self-signed cert/key
+- name: Adding xrdp user to the ssl-cert group
+  user:
+    name: xrdp
+    groups: ssl-cert
+    append: yes
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Allow non-root users to login with xwrapper
+  shell: 'echo "xserver-xorg-legacy xserver-xorg-legacy/xwrapper/allowed_users select Anybody" | debconf-set-selections'
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Add XRDP config files
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/xrdp/{{ item }}"
+  with_items:
+    - xrdp.ini
+    - sesman.ini
+
+- name: Enable XRDP and sesman services
+  service:
+    name: "{{ item }}"
+    enabled: yes
+  with_items:
+    - xrdp
+    - xrdp-sesman
+
+- include_tasks: pulseaudio.yml
+  when: pulseaudio_modules_dir is defined

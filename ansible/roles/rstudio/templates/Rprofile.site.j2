@@ -1,0 +1,7 @@
+## We set the cloud mirror, which is 'network-close' to everybody, as default
+local({
+    r <- getOption("repos")
+    r["CRAN"] <- "{{ r_cran_mirror }}"
+    options(repos = r)
+})
+

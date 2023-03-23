@@ -1,0 +1,10 @@
+# tasks file for shiny-server
+---
+- include_tasks: install.yml
+- include_tasks: configure.yml
+
+- name: start and enable service
+  service:
+    name: shiny-server
+    state: started
+    enabled: true

@@ -1,0 +1,8 @@
+# defaults file for shiny-server
+---
+shiny_server_version: 1.5.9.923
+shiny_server_install: []
+
+shiny_server_www_port: 3838
+shiny_server_www_address: 0.0.0.0
+shiny_server_site_dir: /srv/shiny-server

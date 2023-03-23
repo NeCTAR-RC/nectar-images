@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=Set Nectar XFCE4 panel
+Comment=Load Nectar XFCE4 panel profile
+Exec=xfce4-panel-profiles load /usr/share/xfce4-panel-profiles/layouts/Nectar.tar.bz2
+Terminal=false
+Type=Application
+Categories=
+GenericName=

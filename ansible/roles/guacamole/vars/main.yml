@@ -1,0 +1,32 @@
+---
+guacamole_tomcat_package: tomcat9
+
+# List of deps can be found at:
+#  https://guacamole.apache.org/doc/gug/installing-guacamole.html
+# Modified slightly for specific versions in Bionic
+guacamole_packages:
+  - autoconf
+  - build-essential
+  - dpkg-dev
+  - ghostscript
+  - libtool-bin
+  - libavcodec-dev
+  - libavformat-dev
+  - libavutil-dev
+  - libcairo2-dev
+  - freerdp2-dev
+  - libjpeg-dev
+  - libjpeg-turbo8-dev
+  - libossp-uuid-dev
+  - libpango1.0-dev
+  - libpng-dev
+  - libpulse-dev
+  - libssh2-1-dev
+  - libssl-dev
+  - libswscale-dev
+  - libtelnet-dev
+  - libvncserver-dev
+  - libvorbis-dev
+  - libwebp-dev
+  - libwebsockets-dev
+  - libmariadb-java

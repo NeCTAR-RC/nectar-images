@@ -1,0 +1,37 @@
+# tasks file for rstudio
+---
+- name: install | dependencies
+  apt:
+    name: "{{ rstudio_dependencies }}"
+    state: latest
+    update_cache: true
+    cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
+
+- name: install | additional
+  apt:
+    name: "{{ rstudio_install }}"
+    state: latest
+
+- name: install | create (download) directory
+  file:
+    path: "{{ rstudio_downloads_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+# Yes, bionic, even for focal
+- name: install | download deb
+  get_url:
+    url: "{{ rstudio_package_url }}"
+    dest: "/tmp//rstudio-{{ rstudio_version }}-amd64.deb"
+
+- name: install | install deb
+  apt:
+    deb: "/tmp/rstudio-{{ rstudio_version }}-amd64.deb"
+
+- name: install | clean up deb file
+  file:
+    path: "/tmp/rstudio-{{ rstudio_version }}-amd64.deb"
+    state: absent
+

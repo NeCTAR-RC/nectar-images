@@ -1,0 +1,23 @@
+---
+- name: install | dependencies
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: true
+    cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
+  with_items: "{{ shiny_server_dependencies }}"
+
+- name: install | additional
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ shiny_server_install }}"
+
+- name: install | download deb
+  get_url:
+    url: "https://download3.rstudio.org/ubuntu-14.04/x86_64/shiny-server-{{ shiny_server_version }}-amd64.deb"
+    dest: /tmp
+
+- name: install | install deb
+  apt:
+    deb: "/tmp/shiny-server-{{ shiny_server_version }}-amd64.deb"

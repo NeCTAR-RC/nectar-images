@@ -1,0 +1,12 @@
+[Unit]
+Description=Guacamole Server
+Documentation=man:guacd(8)
+After=network.target
+
+[Service]
+User=guacd
+ExecStart={{ guacamole_install_prefix }}/sbin/guacd -f -b {{ guacample_guacd_listen }} -l {{ guacamole_guacd_port }}
+Restart=on-abnormal
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,4 @@
+# vars file for rstudio-server
+---
+rstudio_server_dependencies: []
+rstudio_server_downloads_path: /var/lib/ansible/rstudio-server/downloads

@@ -1,0 +1,4 @@
+# vars file for shiny-server
+---
+shiny_server_dependencies: []
+shiny_server_downloads_path: /var/lib/ansible/rstudio-server/downloads

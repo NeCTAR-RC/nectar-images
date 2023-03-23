@@ -1,0 +1,11 @@
+# defaults file for rstudio-server
+---
+rstudio_server_version: 2023.03.0-386
+rstudio_server_install: []
+
+rstudio_server_www_port: 8787
+rstudio_server_www_address: 0.0.0.0
+
+# Yes, we use Bionic even for Focal
+rstudio_server_distro: "{% if ansible_distribution_major_version|int < 22 %}bionic{% else %}jammy{% endif %}"
+rstudio_server_package_url: "https://download2.rstudio.org/server/{{ rstudio_server_distro }}/amd64/rstudio-server-{{ rstudio_server_version }}-amd64.deb"

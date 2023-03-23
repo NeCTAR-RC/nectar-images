@@ -1,0 +1,10 @@
+---
+- name: Install xfce4-nectar-panel.desktop autostart script
+  copy:
+    src: xfce4-nectar-panel.desktop
+    dest: /etc/xdg/autostart/xfce4-nectar-panel.desktop
+
+- name: Copy customised panel config
+  copy:
+    src: nectar-xfce4-panel.tar.bz2
+    dest: /usr/share/xfce4-panel-profiles/layouts/Nectar.tar.bz2

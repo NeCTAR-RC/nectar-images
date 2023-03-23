@@ -1,0 +1,51 @@
+---
+- name: Install Tomcat
+  package:
+    name: "{{ guacamole_tomcat_package }}"
+    state: latest
+
+- name: Configure Tomcat
+  become: yes
+  lineinfile:
+    dest: "/etc/default/{{ guacamole_tomcat_package }}"
+    state: present
+    regexp: '^JAVA_OPTS=.*'
+    line: 'JAVA_OPTS="-Djava.awt.headless=true -Xmx128m -XX:+UseConcMarkSweepGC -Djava.security.egd=file:/dev/./urandom"'
+
+- name: Remove existing Tomcat root webapp
+  file:
+    path: "/var/lib/{{ guacamole_tomcat_package }}/webapps/ROOT"
+    state: absent
+
+# Deploy Guacamole as ROOT.war, which means host as the "root" app, not at /guacamole
+- name: Download Guacamole client
+  get_url:
+    #url: "https://archive.apache.org/dist/guacamole/{{ guacamole_version }}/binary/guacamole-{{ guacamole_version }}.war"
+    url: "https://github.com/NeCTAR-RC/guacamole-client/releases/download/nectar%2F{{ guacamole_version }}/guacamole-{{ guacamole_version }}.war"
+    dest: "/var/lib/{{ guacamole_tomcat_package }}/webapps/ROOT.war"
+
+- name: Make Guacamole home directory
+  file:
+    path: "{{ guacamole_home }}"
+    state: directory
+
+- name: Symlink guacamole home
+  file:
+    src: "{{ guacamole_home }}"
+    dest: "/usr/share/{{ guacamole_tomcat_package }}/.guacamole"
+    state: link
+    force: yes
+    follow: true
+
+- name: Create Guacamole directories
+  file:
+    path: "{{ guacamole_home }}/{{ item }}"
+    state: directory
+  with_items:
+    - lib
+    - extensions
+
+- name: Add guacamole settings
+  template:
+    src: guacamole.properties.j2
+    dest: "{{ guacamole_home }}/guacamole.properties"

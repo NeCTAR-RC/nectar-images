@@ -1,0 +1,6 @@
+# vars file for rstudio
+---
+rstudio_dependencies:
+  - libxkbcommon-x11-0  # core dumped without it
+ 
+rstudio_downloads_path: /var/lib/ansible/rstudio/downloads

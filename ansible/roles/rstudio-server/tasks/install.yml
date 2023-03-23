@@ -1,0 +1,30 @@
+# tasks file for rstudio-server
+---
+- name: install | dependencies
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: true
+    cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
+  with_items: "{{ rstudio_server_dependencies }}"
+
+- name: install | additional
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ rstudio_server_install }}"
+
+- name: install | download deb
+  get_url:
+    url: "{{ rstudio_server_package_url }}"
+    dest: "/tmp/rstudio-{{ rstudio_server_version }}-amd64.deb"
+
+- name: install | install deb
+  apt:
+    deb: "/tmp/rstudio-{{ rstudio_server_version }}-amd64.deb"
+
+- name: install | clean up deb file
+  file:
+    path: "/tmp/rstudio-{{ rstudio_server_version }}-amd64.deb"
+    state: absent
+

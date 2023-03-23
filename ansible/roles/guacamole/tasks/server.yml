@@ -1,0 +1,60 @@
+---
+- name: Install dependencies for Guacamole
+  apt:
+    name: '{{ guacamole_packages }}'
+    state: 'latest'
+    update_cache: true
+
+- name: Download Guacamole server
+  get_url:
+    url: "https://archive.apache.org/dist/guacamole/{{ guacamole_version }}/source/guacamole-server-{{ guacamole_version }}.tar.gz"
+    dest: "/tmp/guacamole-server-{{ guacamole_version }}.tar.gz"
+
+- name: Extract Guacamole server
+  unarchive:
+    src: "/tmp/guacamole-server-{{ guacamole_version }}.tar.gz"
+    copy: no
+    dest: /tmp
+
+- name: Build Guacamole server
+  shell: "{{ item }}"
+  args:
+    chdir: "/tmp/guacamole-server-{{ guacamole_version }}"
+    creates: "{{ guacamole_install_prefix }}/sbin/guacd"
+  with_items: 
+    - "./configure --prefix={{ guacamole_install_prefix }} --with-systemd-dir=/etc/systemd/system"
+    - "make -j {{ ansible_processor_vcpus }}"
+    - make install
+    - ldconfig
+
+- name: Create guacd group
+  group:
+    name: guacd
+
+- name: Create guacd user
+  user:
+    name: guacd
+    comment: Guacamole proxy daemon
+    group: guacd
+    system: yes
+    createhome: yes
+    home: /var/lib/guacd
+    shell: /sbin/nologin
+
+- name: Create guacd systemd unit
+  template:
+    src: guacd.service.j2
+    dest: /etc/systemd/system/guacd.service
+
+- name: Start guacd
+  service:
+    name: guacd
+    enabled: yes
+
+- name: Clean up Guacample server temp file
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "/tmp/guacamole-server-{{ guacamole_version }}.tar.gz"
+    - "/tmp/guacamole-server-{{ guacamole_version }}"

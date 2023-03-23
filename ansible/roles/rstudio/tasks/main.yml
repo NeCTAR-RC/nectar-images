@@ -1,0 +1,4 @@
+# tasks file for rstudio
+---
+- include_tasks: install.yml
+- include_tasks: configure.yml

@@ -1,0 +1,66 @@
+---
+- name: install xfce4 desktop packages
+  apt:
+    name: '{{ xfce4_apt_packages }}'
+    state: present
+    install_recommends: yes
+    update_cache: true
+    cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
+  when: ansible_distribution == 'Ubuntu'
+
+- name: remove unnecessary packages
+  apt:
+    name: '{{ remove_apt_packages }}'
+    state: absent
+    purge: yes
+    autoremove: yes
+  when: remove_apt_packages is defined
+
+- name: Install background
+  copy:
+    src: files/nectar-background.svg
+    dest: /usr/share/xfce4/backdrops/nectar.svg
+
+- name: Install menu icon
+  copy:
+    src: files/nectar-hex-gloss.svg
+    dest: /usr/share/pixmaps/nectar.svg
+
+- name: create kiosk dir
+  file:
+    path: /etc/xdg/xfce4/kiosk
+    state: directory
+
+- name: Install kioskrc
+  copy:
+    src: files/xfce4/kiosk/kioskrc
+    dest: /etc/xdg/xfce4/kiosk/kioskrc
+
+- name: create terminal dir
+  file:
+    path: /etc/xdg/xfce4/terminal
+    state: directory
+
+- name: Install terminalrc
+  copy:
+    src: files/xfce4/terminal/terminalrc
+    dest: /etc/xdg/xfce4/terminal/terminalrc
+
+- name: copy xfce4 default config
+  copy:
+    src: 'files/xfce4/xfconf/xfce-perchannel-xml/{{ item }}'
+    dest: '/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/{{ item }}'
+  with_items:
+    - xfce4-desktop.xml
+    - xfce4-power-manager.xml
+    - xfce4-screensaver.xml
+    - xsettings.xml
+
+- name: Disable lightdm on startup
+  service:
+    name: lightdm
+    state: stopped
+    enabled: false
+
+- include_tasks: policies.yml
+- include_tasks: panel.yml

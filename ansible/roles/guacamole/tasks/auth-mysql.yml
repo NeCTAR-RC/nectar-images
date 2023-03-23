@@ -1,0 +1,31 @@
+---
+- name: Download Guacamole JDBC auth plugin
+  get_url:
+    url: "https://archive.apache.org/dist/guacamole/{{ guacamole_version }}/binary/guacamole-auth-jdbc-{{ guacamole_version }}.tar.gz"
+    dest: /tmp
+
+- name: Extract Guacamole JDBC auth plugin
+  unarchive:
+    src: "/tmp/guacamole-auth-jdbc-{{ guacamole_version }}.tar.gz"
+    copy: no
+    dest: /tmp
+
+- name: Install Guacamole JDBC auth plugin
+  copy:
+    src: "/tmp/guacamole-auth-jdbc-{{ guacamole_version }}/mysql/guacamole-auth-jdbc-mysql-{{ guacamole_version }}.jar"
+    dest: /etc/guacamole/extensions
+    remote_src: yes
+
+- name: Install MySQL Java connector
+  file:
+    src: /usr/share/java/mariadb-java-client.jar
+    path: /etc/guacamole/lib/mariadb-java-client.jar
+    state: link
+
+- name: Clean up Guacamole OIDC temp files
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "/tmp/guacamole-auth-jdbc-{{ guacamole_version }}.tar.gz"
+    - "/tmp/guacamole-auth-jdbc-{{ guacamole_version }}"

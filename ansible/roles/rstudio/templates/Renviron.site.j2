@@ -1,0 +1,5 @@
+# {{ ansible_managed }}
+
+{% if rstudio_disable_check_for_updates is defined %}
+RSTUDIO_DISABLE_CHECK_FOR_UPDATES={{ rstudio_disable_check_for_updates }}
+{% endif %}

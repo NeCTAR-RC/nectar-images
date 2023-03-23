@@ -1,0 +1,10 @@
+# test file for rstudio
+---
+- hosts: all
+  remote_user: vagrant
+  sudo: true
+  roles:
+    - ../../
+  vars:
+    rstudio_install:
+      - r-base

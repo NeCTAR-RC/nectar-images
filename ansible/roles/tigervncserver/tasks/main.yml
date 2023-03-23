@@ -1,0 +1,10 @@
+---
+- name: Remove vnc4server packages
+  apt:
+    pkg: vnc4server
+    state: absent
+
+- name: Install tigervnc server
+  apt:
+    pkg: tigervnc-standalone-server
+    state: present

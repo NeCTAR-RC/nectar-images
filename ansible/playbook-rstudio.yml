@@ -1,0 +1,27 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: yes
+
+  vars_files:
+    - vars/main.yml
+    - vars/rstudio.yml
+
+  roles:
+    - image-name
+    - default-user
+    - nginx
+    - certbot
+    - xfce4-desktop
+    - desktop-common
+#    - x2go-server
+    - xrdp
+    - guacamole
+    - tigervncserver
+    - r
+    - rstudio
+    - rstudio-server
+    - shiny-server
+    - rstudio-setup
+    - facts
+    - cleanup
