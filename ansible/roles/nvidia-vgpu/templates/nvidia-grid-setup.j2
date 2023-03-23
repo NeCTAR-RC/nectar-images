@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh
 
 #
 # NVIDIA GRID (vGPU) driver setup script for ARDC Nectar Research Cloud
@@ -6,10 +6,21 @@
 # Andy Botting <andy.botting@ardc.edu.au>
 #
 
-logger -t nvidia-grid-setup "Fetching license token"
-if [ ! -f {{ nvidia_grid_client_config_token_path }}/{{ nvidia_grid_token_filename }} ]; then
-    mkdir -p {{ nvidia_grid_client_config_token_path }}
-    curl -s -S -f "{{ nvidia_grid_vendordata_url }}" | jq -j '{{ nvidia_grid_token_json_path }}' | base64 -d > {{ nvidia_grid_client_config_token_path }}/{{ nvidia_grid_token_filename }}
-    md5sum=$(md5sum {{ nvidia_grid_client_config_token_path }}/{{ nvidia_grid_token_filename }} | awk '{print $1}')
-    logger -t nvidia-grid-setup "Successfully fetched license token ($md5sum)"
+TOKEN_PATH="{{ nvidia_grid_client_config_token_path }}"
+TOKEN_FILE="$TOKEN_PATH/{{ nvidia_grid_token_filename }}"
+VENDORDATA_URL="{{ nvidia_grid_vendordata_url }}"
+VENDORDATA_JSON_PATH='{{ nvidia_grid_token_json_path }}'
+
+log () {
+        echo "$@" >&2;
+}
+
+log "Fetching license token..."
+if token=$(curl -s -S -f $VENDORDATA_URL | jq -j -e $VENDORDATA_JSON_PATH); then
+        mkdir -p $TOKEN_PATH
+        echo "$token" | base64 -d > $TOKEN_FILE
+        md5sum=$(md5sum $TOKEN_FILE | cut -d' ' -f1)
+        log "Successfully fetched license token ($md5sum)"
+else
+        log "ERROR: License token not found in vendor data. Please contact support."
 fi

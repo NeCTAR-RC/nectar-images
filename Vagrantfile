@@ -143,14 +143,15 @@ Vagrant.configure("2") do |config|
   end
 
   # Ubuntu 20.04 (focal) with NVIDIA vGPU
-  config.vm.define "ubuntu2004-vgpu" do |c|
+  config.vm.define "ubuntu2004-nvidia-vgpu" do |c|
     c.vm.box = "generic/ubuntu2004"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/focal64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
+      ansible.extra_vars = { nectar_test_build: true,
+                             nectar_image_name: "Ubuntu 20.04 LTS (Jammy) amd64 (NVIDIA vGPU)" }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-nvidia-vgpu.yml"
       ansible.become = true
@@ -204,6 +205,26 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # Ubuntu 22.04 (jammy) with NVIDIA vGPU
+  config.vm.define "ubuntu2204-nvidia-vgpu" do |c|
+    c.vm.box = "generic/ubuntu2204"
+    c.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/jammy64"
+    end
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true,
+                             nectar_image_name: "Ubuntu 22.04 LTS (Jammy) amd64 (NVIDIA vGPU)" }
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook-nvidia-vgpu.yml"
+      ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
+    end
+  end
 
   # CentOS 7
   config.vm.define "centos7" do |c|

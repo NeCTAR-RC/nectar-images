@@ -4,3 +4,10 @@ nvidia_grid_dependencies:
 - unzip
 - dkms
 - jq
+
+nvidia_cuda_distro: "ubuntu{{ ansible_distribution_version|replace('.', '') }}"
+nvidia_cuda_repo_url: "https://developer.download.nvidia.com/compute/cuda/repos/{{ nvidia_cuda_distro }}/x86_64"
+nvidia_cuda_keyring_url: "{{ nvidia_cuda_repo_url }}/cuda-archive-keyring.gpg"
+nvidia_cuda_apt_pin_url: "{{ nvidia_cuda_repo_url }}/cuda-{{ nvidia_cuda_distro }}.pin"
+nvidia_cuda_apt_repo_url: "{{ nvidia_cuda_repo_url}}/ /"
+nvidia_cuda_package: "cuda-toolkit-{{ nvidia_cuda_version|replace('.', '-') }}"

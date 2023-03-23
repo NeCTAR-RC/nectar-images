@@ -60,6 +60,14 @@
   set_fact:
     nectar_image_property_nvidia_grid_version: "{{ nvidia_vgpu_software_version }}"
 
+- name: Set NVIDIA driver version fact
+  set_fact:
+    nectar_image_property_nvidia_driver_version: "{{ nvidia_grid_driver_version }}"
+
+- name: Set NVIDIA CUDA version fact
+  set_fact:
+    nectar_image_property_nvidia_cuda_version: "{{ nvidia_cuda_version }}"
+
 # This property will be used to determine if the instance should be able to
 # access the license token
 - name: Set nectar_vgpu property on the image
