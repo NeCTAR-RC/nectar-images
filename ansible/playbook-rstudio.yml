@@ -10,6 +10,7 @@
   roles:
     - image-name
     - default-user
+    - testing
     - nginx
     - certbot
     - xfce4-desktop
