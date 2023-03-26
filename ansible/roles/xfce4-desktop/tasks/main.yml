@@ -54,7 +54,7 @@
     - xfce4-desktop.xml
     - xfce4-power-manager.xml
     - xfce4-screensaver.xml
-    - xfwm4.xm
+    - xfwm4.xml
     - xsettings.xml
 
 - name: Disable lightdm on startup
