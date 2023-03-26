@@ -15,7 +15,7 @@
     - certbot
     - xfce4-desktop
     - desktop-common
-#    - x2go-server
+    - x2go-server
     - xrdp
     - guacamole
     - tigervncserver

@@ -10,6 +10,9 @@
         <param name="security" value="rdp" />
         <param name="disable-audio" value="false" />
         <param name="server-layout" value="en-us-qwerty" />
+        <param name="enable-drive" value="true" />
+        <param name="create-drive-path" value="true" />
+        <param name="drive-path" value="/tmp/shared-files" />
     </config>
 
     <group name="sudo">
