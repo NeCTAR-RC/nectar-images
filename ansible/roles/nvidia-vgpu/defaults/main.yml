@@ -6,7 +6,7 @@
 nvidia_vgpu_software_version: 15.2
 
 # Version of the Linux driver from the VGPU package
-nvidia_grid_driver_version: 525.105.14
+nvidia_grid_driver_version: 525.105.17
 
 # This should be the latest version that is supposed by the driver version
 # See https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html#id4
