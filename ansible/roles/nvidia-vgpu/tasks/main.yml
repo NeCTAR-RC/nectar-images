@@ -50,6 +50,12 @@
     name: nouveau
     state: present
 
+- name: Copy the NVIDIA CUDA profile script
+  template:
+    src: profile-cuda.sh.j2
+    dest: /etc/profile.d/cuda.sh
+    mode: 0644
+
 #- name: Install testing script
 #  copy:
 #    src: 100-nvidia-grid-driver.sh
