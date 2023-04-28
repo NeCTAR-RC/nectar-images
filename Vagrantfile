@@ -329,42 +329,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Fedora 34
-  config.vm.define "fedora34" do |c|
-    c.vm.box = "fedora/34-cloud-base"
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             ansible_python_interpreter: "/usr/bin/python3" }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
-  # Fedora 35
-  config.vm.define "fedora35" do |c|
-    c.vm.box = "fedora/35-cloud-base"
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             ansible_python_interpreter: "/usr/bin/python3" }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
   # Fedora 36
   config.vm.define "fedora36" do |c|
     c.vm.box = "fedora/36-cloud-base"
@@ -372,6 +336,40 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook.yml"
+      ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
+    end
+  end
+
+  # Fedora 37
+  config.vm.define "fedora37" do |c|
+    c.vm.box = "fedora/37-cloud-base"
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true }
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook.yml"
+      ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
+    end
+  end
+
+  # Fedora 38
+  config.vm.define "fedora38" do |c|
+    c.vm.box = "fedora/38-cloud-base"
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook.yml"
       ansible.become = true

@@ -2,15 +2,15 @@
   "builders": [
     {
       "type": "qemu",
-      "name": "fedora-35",
-      "vm_name": "fedora-35",
+      "name": "fedora-37",
+      "vm_name": "fedora-37",
       "accelerator": "kvm",
       "disk_size": "4096",
       "format": "raw",
       "headless": true,
       "http_directory": "http",
-      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/Fedora-Server-netinst-x86_64-35-1.2.iso",
-      "iso_checksum": "sha256:dd35f955dd5a7054213a0098c6ee737ff116aa3090fc6dbfe89d424b5c3552dd",
+      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/Fedora-Server-netinst-x86_64-37-1.7.iso",
+      "iso_checksum": "sha256:149d4bae999022b07bd40f8272f6208bc28884dad5110c63e915d37458e6abc0",
       "ssh_username": "root",
       "ssh_private_key_file": "packer-ssh-key",
       "ssh_timeout": "60m",
@@ -21,15 +21,22 @@
         [ "-cpu", "host" ],
         [ "-smp", "2" ]
       ],
-      "boot_wait": "5s",
+      "boot_wait": "10s",
       "boot_command": [
-        "<tab> inst.text net.ifnames=0 inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-35-kickstart.cfg<enter><wait>"
+        "<home>e<down><down><end>",
+        " ip=dhcp",
+        " inst.cmdline",
+        " inst.ksstrict",
+        " inst.ks=http://{{.HTTPIP}}:{{.HTTPPort}}/fedora-37-kickstart.cfg",
+        " systemd.mask=brltty.service",
+        "<f10>"
       ]
     }
   ],
   "provisioners": [
     {
       "type": "ansible",
+      "use_proxy": "false",
       "ansible_env_vars": [
         "ANSIBLE_CONFIG=ansible/ansible.cfg"
       ],
@@ -37,7 +44,7 @@
         "--ssh-extra-args",
         "-o IdentitiesOnly=yes",
         "--extra-vars",
-        "ansible_python_interpreter=/usr/bin/python3 image_build_dir='{{pwd}}/output-{{build_name}}'"
+        "image_build_dir='{{pwd}}/output-{{build_name}}'"
       ],
       "playbook_file": "ansible/playbook.yml"
     },
