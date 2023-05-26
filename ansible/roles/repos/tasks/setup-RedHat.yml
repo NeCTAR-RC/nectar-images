@@ -1,38 +1,33 @@
 ---
-- name: Check if EPEL repo is already configured
-  stat:
-    path: "{{ epel_repofile_path }}"
-  register: epel_repofile_result
-
-- name: Import EPEL GPG key
-  rpm_key:
-    key: "{{ epel_repo_gpg_key_url }}"
+- name: Install EPEL repo
+  package:
+    name: epel-release
     state: present
-  when: not epel_repofile_result.stat.exists
 
 - name: Install EPEL repo
-  yum:
-    name: "{{ epel_repo_url }}"
+  dnf:
+    name: dnf-plugins-core
     state: present
-  register: result
-  until: result is succeeded
-  retries: 5
-  delay: 10
-  when: not epel_repofile_result.stat.exists
+  when:
+    - ansible_os_family == 'RedHat'
+    - ansible_distribution_major_version >= '8'
 
-- name: Find PowerTools repo file
-  find:
-    paths: /etc/yum.repos.d
-    patterns: "CentOS-*-PowerTools.repo"
-  register: powertools_repo_file
+# PowerTools is the CentOS version of RHEL's CodeReadyBuilder repo
+- name: Enable PowerTools repository
+  command: dnf config-manager --enable powertools
+  changed_when: false
+  when:
+    - ansible_os_family == 'RedHat'
+    - ansible_distribution_major_version == '8'
 
-- name: Enable PowerTools repo on CentOS 8
-  ini_file:
-    path: "{{ item.path }}"
-    section: powertools
-    option: enabled
-    value: '1'
-  with_items: "{{ powertools_repo_file.files }}"
+# RockyLinux from 9+ adopt the CRB name for PowerTools
+# https://wiki.rockylinux.org/rocky/repo/#notes-on-crb
+- name: Enable CRB repository
+  command: dnf config-manager --enable crb
+  changed_when: false
+  when:
+    - ansible_os_family == 'RedHat'
+    - ansible_distribution_major_version > '8'
 
 - name: Perform a full upgrade
   yum:
