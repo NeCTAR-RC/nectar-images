@@ -298,6 +298,7 @@ Vagrant.configure("2") do |config|
   # Rocky Linux 8
   config.vm.define "rocky8" do |c|
     c.vm.box = "rockylinux/8"
+    c.vm.box_version = "5.0.0"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
