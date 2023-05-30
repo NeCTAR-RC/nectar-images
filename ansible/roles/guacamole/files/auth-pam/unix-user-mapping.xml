@@ -15,7 +15,7 @@
         <param name="drive-path" value="/tmp/shared-files" />
     </config>
 
-    <group name="sudo">
+    <group name="users">
         <config-ref name="RDP Connection" />
     </group>
 </unix-user-mapping>
