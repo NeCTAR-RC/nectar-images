@@ -1,0 +1,58 @@
+{
+  "builders": [
+    {
+      "type": "qemu",
+      "name": "debian-12",
+      "vm_name": "debian-12",
+      "accelerator": "kvm",
+      "disk_size": "2048",
+      "format": "raw",
+      "headless": true,
+      "http_directory": "http",
+      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/debian-12.0.0-amd64-netinst.iso",
+      "iso_checksum": "sha256:3b0e9718e3653435f20d8c2124de6d363a51a1fd7f911b9ca0c6db6b3d30d53e",
+      "ssh_username": "root",
+      "ssh_private_key_file": "packer-ssh-key",
+      "ssh_timeout": "30m",
+      "vnc_bind_address": "0.0.0.0",
+      "qemuargs": [
+        [ "-m", "2048M" ],
+        [ "-cpu", "host" ],
+        [ "-smp", "2" ]
+      ],
+      "boot_wait": "5s",
+      "boot_command": [
+        "<esc><wait5><tab>",
+        "auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-12-preseed.cfg keymap=us ",
+        "debian-installer/keymap=us net.ifnames=0 biosdevname=0<enter><wait>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "apt-get -q -y update",
+        "apt-get -q -y install python3 sudo"
+      ]
+    },
+    {
+      "type": "ansible",
+      "use_proxy": "false",
+      "ansible_env_vars": [
+        "ANSIBLE_CONFIG=ansible/ansible.cfg"
+      ],
+      "playbook_file": "ansible/playbook.yml",
+      "extra_arguments": [
+        "--ssh-extra-args",
+        "-o IdentitiesOnly=yes",
+        "--extra-vars",
+        "ansible_python_interpreter=/usr/bin/python3 image_build_dir='{{pwd}}/output-{{build_name}}'"
+      ]
+    },
+    {
+      "type": "shell",
+      "script": "scripts/cleanup.sh"
+    }
+  ]
+}
