@@ -3,10 +3,10 @@
 
 # Download the Ubuntu KVM package from https://ui.licensing.nvidia.com/software
 # Complete vGPU 15.1 package for Ubuntu KVM ALL including supported guest drivers
-nvidia_vgpu_software_version: 15.2
+nvidia_vgpu_software_version: 15.3
 
 # Version of the Linux driver from the VGPU package
-nvidia_grid_driver_version: 525.105.17
+nvidia_grid_driver_version: 525.125.06
 
 # This should be the latest version that is supposed by the driver version
 # See https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html#id4
