@@ -45,6 +45,13 @@
     src: nvidia-gridd.service-override.conf.j2
     dest: /etc/systemd/system/nvidia-gridd.service.d/override.conf
 
+# Ensure gridd logs go to the console log
+- name: Install rsyslog config
+  copy:
+    dest: /etc/rsyslog.d/30-nvidia-gridd.conf
+    content: |
+      if $programname == 'nvidia-gridd' then /dev/console
+
 - name: Blacklist the nouveau driver module
   kernel_blacklist:
     name: nouveau

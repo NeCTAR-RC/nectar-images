@@ -1,2 +1,4 @@
 [Service]
+StandardOutput=journal+console
 ExecStartPre=/usr/local/sbin/nvidia-grid-setup
+ExecStartPost=/usr/bin/nvidia-smi

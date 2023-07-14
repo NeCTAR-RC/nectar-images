@@ -29,3 +29,11 @@
   ansible.builtin.apt:
     name: "{{ nvidia_cuda_package }}"
     state: present
+
+# Ensure rsyslog can write to /dev/console
+# https://bugs.launchpad.net/ubuntu/+source/rsyslog/+bug/1890177
+- name: Add syslog to the tty group
+  user:
+    name: syslog
+    groups: tty
+    append: yes
