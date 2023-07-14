@@ -30,10 +30,11 @@
     name: "{{ nvidia_cuda_package }}"
     state: present
 
-# Ensure rsyslog can write to /dev/console
+# Rsyslog can't log to /dev/console as is with Jammy or maybe Focal
+# https://github.com/GoogleCloudPlatform/guest-configs/issues/48#issuecomment-1527975956
 # https://bugs.launchpad.net/ubuntu/+source/rsyslog/+bug/1890177
-- name: Add syslog to the tty group
-  user:
-    name: syslog
-    groups: tty
-    append: yes
+- name: Fix /dev/console permissions for rsyslog to log to console
+  copy:
+    dest: /usr/lib/udev/rules.d/99-syslog-console.rules
+    content: |
+      KERNEL=="console", GROUP="syslog", MODE="0620"
