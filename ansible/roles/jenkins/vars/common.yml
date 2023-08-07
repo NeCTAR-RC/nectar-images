@@ -45,3 +45,10 @@ common_packages:
   - shellcheck
   - yamllint
   - cmake
+  - libncurses5-dev
+  - parallel
+  - bison
+  - flex
+  - mtools
+  - quilt
+  - texinfo
