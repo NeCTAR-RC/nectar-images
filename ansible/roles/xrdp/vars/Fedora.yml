@@ -4,6 +4,6 @@ xrdp_packages:
   - xrdp
   - xorgxrdp
 
-xorg_path: /usr/libexec/Xorg
+xrdp_xorg_path: /usr/libexec/Xorg
 
-#pulseaudio_modules_dir: /usr/lib64/pulse-10.0/modules
+#xrdp_pulseaudio_modules_dir: /usr/lib64/pulse-10.0/modules

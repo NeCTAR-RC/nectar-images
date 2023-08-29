@@ -32,13 +32,7 @@ LogLevel=INFO
 EnableConsole=true
 
 [Xorg]
-{% if ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7' %}
-param=Xorg
-{% elif ansible_os_family == 'RedHat' %}
-param=/usr/libexec/Xorg
-{% elif ansible_os_family == 'Debian' %}
-param=/usr/lib/xorg/Xorg
-{% endif %}
+param={{ xrdp_xorg_path }}
 param=-config
 param=xrdp/xorg.conf
 param=-noreset
