@@ -5,7 +5,7 @@
       "name": "ubuntu-22.04-nvidia-vgpu",
       "vm_name": "ubuntu-22.04-nvidia-vgpu",
       "accelerator": "kvm",
-      "disk_size": "20480",
+      "disk_size": "30720",
       "format": "raw",
       "headless": true,
       "http_directory": "http/ubuntu-22.04",

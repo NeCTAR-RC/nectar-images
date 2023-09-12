@@ -6,7 +6,7 @@
       "name": "ubuntu-20.04-nvidia-vgpu",
       "vm_name": "ubuntu-20.04-nvidia-vgpu",
       "accelerator": "kvm",
-      "disk_size": "20480",
+      "disk_size": "30720",
       "format": "raw",
       "headless": true,
       "http_directory": "http",
