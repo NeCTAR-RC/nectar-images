@@ -1,0 +1,12 @@
+#!/bin/sh
+
+VER=$(update-alternatives --query cuda | awk -F '-' '/Value/{print $NF}')
+echo
+echo "The active version of CUDA is currently set to: $VER"
+echo
+echo "The following versions of CUDA have been installed:"
+update-alternatives --query cuda | awk -F '-' '/Alternative/{print "  - " $NF}'
+echo
+echo "Use the following command to change the active version:"
+echo "  sudo update-alternatives --config cuda"
+echo

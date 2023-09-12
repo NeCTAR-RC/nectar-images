@@ -58,8 +58,8 @@
     state: present
 
 - name: Copy the NVIDIA CUDA profile script
-  template:
-    src: profile-cuda.sh.j2
+  ansible.builtin.copy:
+    src: profile-cuda.sh
     dest: /etc/profile.d/cuda.sh
     mode: 0644
 
@@ -77,9 +77,9 @@
   set_fact:
     nectar_image_property_nvidia_driver_version: "{{ nvidia_grid_driver_version }}"
 
-- name: Set NVIDIA CUDA version fact
+- name: Set NVIDIA CUDA versions fact
   set_fact:
-    nectar_image_property_nvidia_cuda_version: "{{ nvidia_cuda_version }}"
+    nectar_image_property_nvidia_cuda_versions: "{{ nvidia_cuda_versions|join(',') }}"
 
 # This property will be used to determine if the instance should be able to
 # access the license token

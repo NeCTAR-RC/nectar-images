@@ -11,4 +11,3 @@ nvidia_cuda_keyring_url: "https://developer.download.nvidia.com/compute/cuda/rep
 nvidia_cuda_apt_pin_url: "{{ nvidia_cuda_repo_url }}/cuda-{{ nvidia_cuda_distro }}.pin"
 nvidia_cuda_apt_repo_url: "{{ nvidia_cuda_repo_url}}/ /"
 nvidia_cuda_package: "cuda-toolkit-{{ nvidia_cuda_version|replace('.', '-') }}"
-nvidia_cuda_install_path: "/usr/local/cuda-{{ nvidia_cuda_version }}"

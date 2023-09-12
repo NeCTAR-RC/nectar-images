@@ -25,10 +25,11 @@
     state: present
     update_cache: true
 
-- name: Install CUDA toolkit package
+- name: Install CUDA toolkit packages
   ansible.builtin.apt:
-    name: "{{ nvidia_cuda_package }}"
+    name: "cuda-toolkit-{{ item|replace('.', '-') }}"
     state: present
+  with_items: "{{ nvidia_cuda_versions }}"
 
 # Rsyslog can't log to /dev/console as is with Jammy or maybe Focal
 # https://github.com/GoogleCloudPlatform/guest-configs/issues/48#issuecomment-1527975956
@@ -38,3 +39,9 @@
     dest: /usr/lib/udev/rules.d/99-syslog-console.rules
     content: |
       KERNEL=="console", GROUP="syslog", MODE="0620"
+
+- name: Copy motd help text
+  ansible.builtin.copy:
+    src: motd-help-text
+    dest: /etc/update-motd.d/10-help-text
+    mode: '0755'
