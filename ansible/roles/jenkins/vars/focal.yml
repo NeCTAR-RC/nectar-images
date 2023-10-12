@@ -37,3 +37,4 @@ hivemind_env: True
 
 gem_packages:
   - { name: puppet }
+  - { name: bundle, version: 2.2.11 }
