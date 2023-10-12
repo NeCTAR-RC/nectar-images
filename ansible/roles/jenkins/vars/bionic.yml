@@ -59,7 +59,7 @@ backport_packages:
 nodejs_repo: node_8.x
 
 gem_packages:
-  - puppet
+  - { name: puppet }
 
 pip_packages:
   - { name: tox, version: 3.14.0}

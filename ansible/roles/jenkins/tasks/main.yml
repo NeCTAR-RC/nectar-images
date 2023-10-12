@@ -105,7 +105,8 @@
 
 - name: Install gem packages
   gem:
-    name: "{{ item }}"
+    name: "{{ item.name }}"
+    version: "{{ item.version | default(omit) }}"
     state: present
     user_install: no
   with_items: "{{ gem_packages }}"

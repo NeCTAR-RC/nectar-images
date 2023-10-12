@@ -36,4 +36,4 @@ hivemind_env: True
 
 
 gem_packages:
-  - puppet
+  - { name: puppet }

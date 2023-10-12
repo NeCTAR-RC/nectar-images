@@ -30,5 +30,5 @@ packages:
 hivemind_env: True
 
 gem_packages:
-  - puppet
-  - puppetlabs_spec_helper
+  - { name: puppet }
+  - { name: puppetlabs_spec_helper }
