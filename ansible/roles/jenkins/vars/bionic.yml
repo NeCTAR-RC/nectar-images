@@ -60,7 +60,7 @@ nodejs_repo: node_8.x
 
 gem_packages:
   - { name: puppet }
-  - { name: bundle, version: 2.2.11 }
+  - { name: bundler, version: 2.2.11 }
 
 pip_packages:
   - { name: tox, version: 3.14.0}
