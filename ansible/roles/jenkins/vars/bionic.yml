@@ -59,7 +59,7 @@ backport_packages:
 nodejs_repo: node_8.x
 
 gem_packages:
-  - { name: puppet }
+  - { name: puppet, version: 6.28.0 }
   - { name: bundler, version: 2.2.11 }
 
 pip_packages:
