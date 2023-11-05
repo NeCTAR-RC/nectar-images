@@ -13,8 +13,8 @@ ssh_pwauth:   0
 syslog_fix_perms: root:root
 
 {% elif ansible_os_family == "Debian" %}
-apt_update: true
-apt_preserve_sources_list: true
+package_update: true
+preserve_sources_list: true
 
 {% endif %}
 mount_default_fields: [None, None, 'auto', 'defaults,nofail', '0', '2']
