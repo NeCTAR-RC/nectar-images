@@ -1,0 +1,2 @@
+---
+nectar_default_image_name: "{{ ansible_distribution }} {{ ansible_distribution_major_version }} {{ ansible_architecture }}"

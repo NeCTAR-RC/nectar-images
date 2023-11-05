@@ -1,5 +1,4 @@
 ---
-# systemd-timesyncd is disabled in CentOS 7, and not available in 6
-ntp_service: ntpd
-
-ntp_daemon: ntpd
+# Chrony is default in CentOS
+ntp_service: chrony
+ntp_daemon: chronyd

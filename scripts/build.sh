@@ -231,6 +231,8 @@ if [ "${BUILDER_TYPE}" == "qemu" ]; then
         USER_ACCOUNT=fedora
     elif echo "${NAME}" | grep -q rocky; then
         USER_ACCOUNT=rocky
+    elif echo "${NAME}" | grep -q almalinux; then
+        USER_ACCOUNT=almalinux
     else
         USER_ACCOUNT=ec2-user
     fi
