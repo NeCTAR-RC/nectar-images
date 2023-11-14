@@ -57,6 +57,26 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # Debian 12 (bookworm)
+  config.vm.define "debian12" do |c|
+    c.vm.box = "debian/bookworm64"
+    c.vm.provision "shell" do |shell|
+      shell.inline = "apt update"  # fix lsb-release
+    end
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true }
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook.yml"
+      ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
+    end
+  end
+
   # Ubuntu 16.04 (xenial)
   config.vm.define "ubuntu1604" do |c|
     c.vm.box = "generic/ubuntu1604"
