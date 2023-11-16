@@ -1,4 +1,9 @@
 ---
+- name: Install systemd-timesyncd package
+  package:
+    name: systemd-timesyncd
+    state: present
+
 - name: Configure systemd-timesyncd
   template:
     src: timesyncd.conf.j2
@@ -8,11 +13,3 @@
   service:
     name: systemd-timesyncd
     enabled: yes
-
-# https://bugzilla.redhat.com/show_bug.cgi?id=1559286
-- name: Fix Fedora 28 permission issue
-  file:
-    path: /var/lib/private
-    state: directory
-    mode: 0700
-  when: ansible_distribution == 'Fedora' and ansible_distribution_version == '28'

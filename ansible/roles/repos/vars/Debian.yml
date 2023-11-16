@@ -1,5 +1,5 @@
 ---
-apt_mirror: http://ftp.au.debian.org/debian
+apt_mirror: http://mirror.aarnet.edu.au/debian
 apt_repositories:
   - "deb {{ apt_mirror }} {{ ansible_distribution_release }} main"
   - "deb-src {{ apt_mirror }} {{ ansible_distribution_release }} main"
@@ -7,5 +7,5 @@ apt_repositories:
   - "deb-src {{ apt_mirror }} {{ ansible_distribution_release }}-updates main"
   - "deb {{ apt_mirror }} {{ ansible_distribution_release }}-backports main"
   - "deb-src {{ apt_mirror }} {{ ansible_distribution_release }}-backports main"
-  - "deb http://security.debian.org/ {{ ansible_distribution_release }}/updates main"
-  - "deb-src http://security.debian.org/ {{ ansible_distribution_release }}/updates main"
+  - "deb {{ apt_mirror }}-security {{ ansible_distribution_release }}-security main"
+  - "deb-src {{ apt_mirror }}-security {{ ansible_distribution_release }}-security main"
