@@ -1,0 +1,56 @@
+{
+  "builders": [
+    {
+      "type": "qemu",
+      "name": "fedora-39",
+      "vm_name": "fedora-39",
+      "accelerator": "kvm",
+      "disk_size": "4096",
+      "format": "raw",
+      "headless": true,
+      "http_directory": "http",
+      "iso_url": "http://mirrors.rc.nectar.org.au/packer-iso/Fedora-Server-netinst-x86_64-39-1.5.iso",
+      "iso_checksum": "sha256:61576ae7170e35210f03aae3102048f0a9e0df7868ac726908669b4ef9cc22e9",
+      "ssh_username": "root",
+      "ssh_private_key_file": "packer-ssh-key",
+      "ssh_timeout": "60m",
+      "ssh_handshake_attempts": 100,
+      "vnc_bind_address": "0.0.0.0",
+      "qemuargs": [
+        [ "-m", "2048M" ],
+        [ "-cpu", "host" ],
+        [ "-smp", "2" ]
+      ],
+      "boot_wait": "10s",
+      "boot_command": [
+        "<home>e<down><down><end>",
+        " ip=dhcp",
+        " inst.cmdline",
+        " inst.ksstrict",
+        " inst.ks=http://{{.HTTPIP}}:{{.HTTPPort}}/fedora-39-kickstart.cfg",
+        " systemd.mask=brltty.service",
+        "<f10>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "use_proxy": "false",
+      "ansible_env_vars": [
+        "ANSIBLE_CONFIG=ansible/ansible.cfg"
+      ],
+      "extra_arguments": [
+        "--ssh-extra-args",
+        "-o IdentitiesOnly=yes",
+        "--extra-vars",
+        "image_build_dir='{{pwd}}/output-{{build_name}}'"
+      ],
+      "playbook_file": "ansible/playbook.yml"
+    },
+    {
+      "type": "shell",
+      "script": "scripts/cleanup.sh"
+    }
+  ]
+}
