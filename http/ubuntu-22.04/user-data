@@ -3,7 +3,7 @@ autoinstall:
   version: 1
   locale: en_AU
   keyboard:
-    layout: en
+    layout: us
     variant: us
   early-commands:
     - systemctl stop ssh # otherwise packer tries to connect and exceed max attempts
