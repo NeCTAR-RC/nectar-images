@@ -6,7 +6,7 @@
       "name": "ubuntu-20.04",
       "vm_name": "ubuntu-20.04",
       "accelerator": "kvm",
-      "disk_size": "2048",
+      "disk_size": "8192",
       "format": "raw",
       "headless": true,
       "http_directory": "http",

@@ -5,7 +5,7 @@
       "name": "almalinux-9",
       "vm_name": "almalinux-9",
       "accelerator": "kvm",
-      "disk_size": "4096",
+      "disk_size": "8192",
       "format": "raw",
       "headless": true,
       "http_directory": "http",
