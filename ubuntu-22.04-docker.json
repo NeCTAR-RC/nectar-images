@@ -5,7 +5,7 @@
       "name": "ubuntu-22.04-docker",
       "vm_name": "ubuntu-22.04-docker",
       "accelerator": "kvm",
-      "disk_size": "4096",
+      "disk_size": "8192",
       "format": "raw",
       "headless": true,
       "http_directory": "http/ubuntu-22.04",

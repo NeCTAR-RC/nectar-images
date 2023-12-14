@@ -5,7 +5,7 @@
       "name": "rocky-8",
       "vm_name": "rocky-8",
       "accelerator": "kvm",
-      "disk_size": "4096",
+      "disk_size": "8192",
       "format": "raw",
       "headless": true,
       "http_directory": "http",
