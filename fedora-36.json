@@ -17,9 +17,9 @@
       "ssh_handshake_attempts": 100,
       "vnc_bind_address": "0.0.0.0",
       "qemuargs": [
-        [ "-m", "2048M" ],
+        [ "-m", "8192M" ],
         [ "-cpu", "host" ],
-        [ "-smp", "2" ]
+        [ "-smp", "4" ]
       ],
       "boot_wait": "5s",
       "boot_command": [
