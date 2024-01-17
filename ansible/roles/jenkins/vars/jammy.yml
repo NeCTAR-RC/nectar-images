@@ -8,6 +8,7 @@ ansible_ppa: True
 packages:
   - libpng-dev
 #  - python3-ceilometerclient
+  - python3-sphinx
   - python3-cinderclient
   - python3-designateclient
   - python3-glanceclient
