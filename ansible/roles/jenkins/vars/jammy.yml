@@ -8,7 +8,6 @@ ansible_ppa: True
 packages:
   - libpng-dev
 #  - python3-ceilometerclient
-  - python3-sphinx
   - python3-cinderclient
   - python3-designateclient
   - python3-glanceclient
@@ -23,6 +22,7 @@ packages:
   - python3-saharaclient
   - python3-swiftclient
   - python3-troveclient
+  - sphinx-common
   - twine
   - python2
   - python-setuptools
