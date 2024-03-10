@@ -3,12 +3,12 @@
   package:
     name:
       - libpq-dev
-      - postgresql-13
-      - postgresql-server-dev-13
+      - postgresql-16
+      - postgresql-server-dev-16
       - python3-psycopg2
     state: present
 
 - name: Install postgres logrotate config
   copy:
-    src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/pgsql-13-logrotate"
+    src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/pgsql-16-logrotate"
     dest: /etc/logrotate.d/postgresql-common

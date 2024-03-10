@@ -2,8 +2,8 @@
   "builders": [
     {
       "type": "qemu",
-      "name": "trove-postgresql-13-ubuntu-20.04-x86_64",
-      "vm_name": "trove-postgresql-13-ubuntu-20.04-x86_64",
+      "name": "trove-postgresql-16-ubuntu-20.04-x86_64",
+      "vm_name": "trove-postgresql-16-ubuntu-20.04-x86_64",
       "accelerator": "kvm",
       "disk_size": "8192",
       "format": "raw",
@@ -41,7 +41,7 @@
         "--ssh-extra-args",
         "-o IdentitiesOnly=yes",
         "--extra-vars",
-        "ansible_python_interpreter=/usr/bin/python3 datastore=pgsql datastore_version=13 nectar_image_name='Trove PostgreSQL 13 (Ubuntu 20.04 LTS)' image_build_dir='{{pwd}}/output-{{build_name}}'"
+        "ansible_python_interpreter=/usr/bin/python3 datastore=pgsql datastore_version=16 nectar_image_name='Trove PostgreSQL 16 (Ubuntu 20.04 LTS)' image_build_dir='{{pwd}}/output-{{build_name}}'"
       ],
       "playbook_file": "ansible/playbook-trove.yml"
     },
