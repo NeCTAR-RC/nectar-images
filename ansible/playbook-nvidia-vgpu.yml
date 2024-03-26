@@ -19,7 +19,6 @@
     - role: ssh
     - role: fail2ban
     - role: ntp
-    - role: cloudstor
     - role: nvidia-vgpu
     - role: banner
     - role: facts

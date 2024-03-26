@@ -22,8 +22,6 @@
     - role: ssh
     - role: fail2ban
     - role: ntp
-    - role: cloudstor
-      when: not (ansible_os_family == 'RedHat' and ansible_distribution_major_version == '9')
     - role: banner
     - role: facts
     - role: cleanup
