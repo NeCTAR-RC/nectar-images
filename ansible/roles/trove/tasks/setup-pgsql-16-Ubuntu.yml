@@ -5,6 +5,7 @@
       - libpq-dev
       - postgresql-16
       - postgresql-server-dev-16
+      - postgresql-16-postgis-3
       - python3-psycopg2
     state: present
 
