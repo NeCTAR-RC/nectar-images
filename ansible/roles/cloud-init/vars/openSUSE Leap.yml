@@ -10,7 +10,7 @@ distro: opensuse
 cloud_init_modules:
  - migrator
  - bootcmd
- - write-files
+ - write_files
  - growpart
  - resizefs
  - set_hostname
@@ -37,6 +37,7 @@ cloud_config_modules:
  - byobu
 
 cloud_final_modules:
+ - write_files_deferred
  - rightscale_userdata
  - scripts-per-once
  - scripts-per-boot

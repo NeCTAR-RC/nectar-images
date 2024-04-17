@@ -9,7 +9,7 @@ cloud_init_modules:
  - migrator
  - seed_random
  - bootcmd
- - write-files
+ - write_files
  - growpart
  - resizefs
  - disk_setup
@@ -34,6 +34,7 @@ cloud_config_modules:
 
 cloud_final_modules:
  - package-update-upgrade-install
+ - write_files_deferred
  - puppet
  - chef
  - salt-minion
