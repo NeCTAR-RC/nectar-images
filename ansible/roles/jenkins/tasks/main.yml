@@ -73,13 +73,13 @@
     name: "{{ common_packages }}"
     state: present
 
-- name: Install distrubution specific packages
+- name: Install distribution specific packages
   apt:
     name: "{{ packages }}"
     state: present
   when: packages is defined
 
-- name: Install distrubution specific backport packages
+- name: Install distribution specific backport packages
   apt:
     name: "{{ backport_packages }}"
     state: latest
@@ -96,6 +96,10 @@
 - name: Run hivemind Install Tasks
   include_tasks: hivemind.yml
   when: hivemind_env | default(False)
+
+- name: Run selenium Install Tasks
+  include_tasks: selenium.yml
+  when: selenium | default(False)
 
 - name: Install packer
   unarchive:

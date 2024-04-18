@@ -1,0 +1,45 @@
+---
+# This adds the prerequisites needed for Selenium testing.
+# Assumes that we will be testing against a Firefox browser only.
+# (Chrome and other browsers could be added if required.)
+#
+# Note that the snap version of Firefox in the Canonical Ubuntu
+# repositories doesn't work when the $HOME is not within "/home".
+# The workaround is to install the PPA version managed by the
+# Mozilla team.  See https://askubuntu.com/questions/1399383.
+#
+# This should work for all current (non-EOL) Ubuntu releases, though the
+# launchpad page (https://launchpad.net/~mozillateam/+archive/ubuntu/ppa)
+# says that these builds are unsupported.
+
+- name: Add mozilla PPA for non-snap version of Firefox (stable)
+  apt_repository:
+    repo: 'ppa:mozillateam/ppa'
+
+- name: Create apt preferences to pin the non-snap Firefox
+  copy:
+    dest: /etc/apt/preferences.d/mozilla-firefox
+    content: |
+      Package: *
+      Pin: release o=LP-PPA-mozillateam
+      Pin-Priority: 1001
+
+      Package: firefox
+      Pin: version 1:1snap1-0ubuntu2
+      Pin-Priority: -1
+
+- name: Set owner, group and permissions on pref file
+  file:
+    path: /etc/apt/preferences.d/mozilla-firefox
+    owner: root
+    group: root
+    mode: 0444
+
+- name: Install selenium prerequisites
+  apt:
+    pkg:
+    - xvfb
+    - firefox
+    - libxi6
+    - libgconf-2-4
+    state: present

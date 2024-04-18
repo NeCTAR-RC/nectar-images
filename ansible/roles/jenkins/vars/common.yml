@@ -52,7 +52,3 @@ common_packages:
   - mtools
   - quilt
   - texinfo
-  - xvfb
-  - firefox
-  - libxi6
-  - libgconf-2-4

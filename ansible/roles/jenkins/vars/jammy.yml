@@ -30,6 +30,8 @@ packages:
 
 hivemind_env: True
 
+selenium: True
+
 gem_packages:
   - { name: puppet }
   - { name: puppetlabs_spec_helper }
