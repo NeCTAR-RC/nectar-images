@@ -6,7 +6,6 @@
       - postgresql-16
       - postgresql-server-dev-16
       - postgresql-16-postgis-3
-      - postgresql-11
       - python3-psycopg2
     state: present
 
@@ -14,3 +13,12 @@
   copy:
     src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/pgsql-16-logrotate"
     dest: /etc/logrotate.d/postgresql-common
+
+- name: Install older pgsql-server
+  package:
+    name:
+      - postgresql-11
+    state: present
+
+- name: Remove postgres 11 cluster
+  shell: pg_dropcluster 11 main --stop
