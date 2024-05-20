@@ -1,0 +1,27 @@
+#cloud-config
+autoinstall:
+  version: 1
+  locale: en_AU
+  early-commands:
+    - systemctl stop ssh  # otherwise packer tries to connect and exceed max attempts
+  network:
+    version: 2
+    ethernets:
+      eth0:
+        dhcp4: yes
+  storage:
+    layout:
+      name: direct
+  identity:
+    hostname: ubuntu
+    username: root
+    password: '$y$j9T$RYjTmTZoViJW97AFc/0jg/$mvpiT295afuJ6mRJ3zIqfFskN5tiG1Ez1ZPifte93i6'  # not_a_real_password
+  ssh:
+    install-server: yes
+    authorized-keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDrBPobebA5Bn6b2jW6OxeZqbi9F1l5GyDsokDHzJ745 packer
+  user-data:
+    disable_root: false
+  late-commands:
+    - sed -ie 's/GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX="console=tty0 console=ttyS0,115200n8 vga=788 consoleblank=0 net.ifnames=0 systemd.log_color=no"/' /target/etc/default/grub
+    - curtin in-target --target /target update-grub2
