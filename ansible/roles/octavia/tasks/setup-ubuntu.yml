@@ -105,6 +105,14 @@
     dest: /usr/local/bin/lvs-masquerade.sh
     mode: 755
 
+- name: Symlink for udp-masquerade.sh
+  ansible.builtin.file:
+    src: /usr/local/bin/lvs-masquerade.sh
+    dest: /usr/local/bin/udp-masquerade.sh
+    owner: root
+    group: root
+    state: link
+
 - name: Install rsyslog config
   copy:
     src: 55-octavia-socket.conf
