@@ -32,9 +32,6 @@
 - include_tasks: cleanup-Debian.yml
   when: ansible_os_family == 'Debian'
 
-- include_tasks: cleanup-openSUSE.yml
-  when: ansible_distribution == 'openSUSE Leap'
-
 - name: Lock and disable root account
   shell: "{{ item }}"
   with_items:
