@@ -1,7 +1,0 @@
----
-# Stick with Rocky as the Python3 version wasn't fixed until at least Ussuri
-openstack_version: rocky
-openstack_repo: "http://mirror.centos.org/centos/{{ ansible_distribution_major_version }}/cloud/x86_64/openstack-{{ openstack_version }}/"
-
-murano_agent_package_name: openstack-murano-agent
-murano_agent_service_name: openstack-murano-agent

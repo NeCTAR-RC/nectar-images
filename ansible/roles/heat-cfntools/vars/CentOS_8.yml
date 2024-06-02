@@ -1,7 +1,0 @@
----
-openstack_version: ussuri
-openstack_repo: "http://mirror.centos.org/centos/{{ ansible_distribution_major_version }}-stream/cloud/x86_64/openstack-{{ openstack_version }}/"
-
-heat_cfntools_packages:
-  - heat-cfntools
-  - curl

@@ -14,7 +14,6 @@
     - role: repos
     - role: unattended-upgrades
     - role: cloud-init
-    - role: heat-cfntools
     - role: qemu-guest-agent
     - role: ssh
     - role: fail2ban

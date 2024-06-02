@@ -1,0 +1,29 @@
+---
+- name: Add Hashicorp apt repository key
+  ansible.builtin.get_url:
+    url: 'https://apt.releases.hashicorp.com/gpg'
+    dest: /usr/share/keyrings/hashicorp-keyring.asc
+
+- name: Add Hashicorp apt repository
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-keyring.asc] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
+    state: present
+    update_cache: true
+
+- name: Install Packer
+  ansible.builtin.apt:
+    name: packer
+    state: present
+
+- name: Get Packer install dir
+  shell: 'command -v packer | xargs dirname'
+  register: packer_path
+
+# Packer can discover its plugins from the same dir as the binary
+- name: Install Packer plugins
+  shell: "/usr/bin/packer plugins install {{ item }}"
+  environment:
+    PACKER_PLUGIN_PATH: "{{ packer_path.stdout }}"
+  with_items:
+    - github.com/hashicorp/qemu
+    - github.com/hashicorp/ansible

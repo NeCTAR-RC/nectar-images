@@ -1,6 +1,0 @@
----
-openstack_repo: 'http://download.opensuse.org/repositories/Cloud:/OpenStack:/Master/openSUSE_Leap_15.0/'
-
-heat_cfntools_packages:
-  - python3-heat-cfntools
-  - curl

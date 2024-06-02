@@ -101,12 +101,6 @@
   include_tasks: selenium.yml
   when: selenium | default(False)
 
-- name: Install packer
-  unarchive:
-    src: "https://releases.hashicorp.com/packer/{{ packer_version }}/packer_{{ packer_version }}_linux_amd64.zip"
-    dest: /usr/local/bin/
-    remote_src: True
-
 - name: Install gem packages
   gem:
     name: "{{ item.name }}"
@@ -121,3 +115,7 @@
     upgrade: dist
     dpkg_options: 'force-confold,force-confdef'
   when: nectar_test_build is not defined
+
+- name: Install packer
+  include_tasks: packer.yml
+
