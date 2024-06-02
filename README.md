@@ -7,6 +7,11 @@ used by the NeCTAR Research Cloud.
 We use Ansible to provision images, which are build using Packer and the
 QEMU/KVM provider from ISO with kickstart/preseed.
 
+Setup
+-----
+
+Refer to the ImageBuilding page in the Nectar Wiki.
+
 
 Testing
 -------

@@ -1,4 +1,5 @@
 packer_cache
+build.cfg
 serial.out
 output-*
 *.swp
