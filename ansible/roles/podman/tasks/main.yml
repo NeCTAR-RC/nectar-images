@@ -1,30 +1,30 @@
+---
+- name: Include OS-specific variables
+  include_vars: "{{ vars_item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+  loop_control:
+    loop_var: vars_item
 
 - name: Install Podman and role dependencies
-  apt:
-    name:
-      - apt-transport-https
-      - ca-certificates
-      - software-properties-common
+  ansible.builtin.apt:
+    name: "{{ podman_dependencies }}"
     install_recommends: False
 
-- name: Add Podman apt key
-  apt_key:
-    url: https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_{{ ansible_distribution_version }}/Release.key
-    id: 2472D6D0D2F66AF87ABA8DA34D64390375060AA4
+- name: Add Podman apt repository key
+  ansible.builtin.get_url:
+    url: "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_{{ ansible_distribution_version }}/Release.key"
+    dest: /usr/share/keyrings/devel_kubic_libcontainers-keyring.asc
+  when: podman_repository_key is defined
 
 - name: Configure upstream APT repository
   apt_repository:
-    repo: "{{ podman_repository }}"
-    update_cache: True
+    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/devel_kubic_libcontainers-keyring.asc] {{ podman_repository }}"
+  when: podman_repository is defined
 
 - name: Install Podman and friends
-  apt:
-    pkg:
-    - podman
-    - buildah
-    - skopeo
-    - fuse-overlayfs
-    state: latest
-    update_cache: True
+  ansible.builtin.apt:
+    name: "{{ podman_packages }}"
     install_recommends: False
-    cache_valid_time: 86400

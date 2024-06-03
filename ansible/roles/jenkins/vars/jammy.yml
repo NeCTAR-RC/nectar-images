@@ -27,6 +27,8 @@ packages:
   - python2
   - python-setuptools
   - dh-python
+  - qemu
+  - qemu-kvm
 
 hivemind_env: True
 

@@ -1,17 +1,12 @@
 ---
-openstack_version: ussuri
+#openstack_version:
 
-puppet_repo: "deb http://apt.puppetlabs.com {{ ansible_distribution_release }} puppet7"
+puppet_repo: "deb http://apt.puppetlabs.com jammy puppet8"
 
-ansible_ppa: True
+# ansible_ppa: 
 
 packages:
-  - ruby-puppetlabs-spec-helper
-  - ruby-puppet-syntax
-  - dh-systemd
-  - python-dev
   - libpng-dev
-  - python3-ceilometerclient
   - python3-cinderclient
   - python3-designateclient
   - python3-glanceclient
@@ -26,17 +21,15 @@ packages:
   - python3-saharaclient
   - python3-swiftclient
   - python3-troveclient
+  - sphinx-common
   - twine
-  - python2
-  - python-setuptools
-  - python-pbr
   - dh-python
-  - qemu
-  - qemu-kvm
+  - qemu-system-x86
 
-hivemind_env: True
+hivemind_env: False
 
+selenium: False
 
 gem_packages:
-  - { name: puppet, version: 7.26.0 }
-  - { name: bundler, version: 2.2.11 }
+  - { name: puppet }
+  - { name: puppetlabs_spec_helper }
