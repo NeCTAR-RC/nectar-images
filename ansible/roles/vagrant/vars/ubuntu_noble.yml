@@ -1,0 +1,17 @@
+---
+vagrant_package_filename: "vagrant_{{ vagrant_version }}-1_amd64.deb"
+
+vagrant_plugins:
+  - vagrant-libvirt
+
+vagrant_packages:
+  - qemu-system-x86
+  - libvirt-daemon-system
+  - libvirt-clients
+  - ebtables
+  - dnsmasq-base
+  - libxslt1-dev
+  - libxml2-dev
+  - libvirt-dev
+  - zlib1g-dev
+  - ruby-dev
