@@ -15,4 +15,5 @@
     - role: ifupdown
       when: ansible_distribution_major_version < '22'
     - role: cloud-init
+    - role: qemu-guest-agent
     - role: cleanup
