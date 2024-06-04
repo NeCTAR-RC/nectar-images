@@ -10,6 +10,7 @@
     - role: image-name
     - role: default-user
     - role: repos
+    - role: testing
     - role: systemd-networkd
       when: ansible_distribution_major_version >= '22'
     - role: ifupdown
