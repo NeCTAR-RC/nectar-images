@@ -20,7 +20,7 @@
       "boot_wait": "5s",
       "boot_command": [
         "e<wait><down><down><down><end>",
-        "vga=795 net.ifnames=0 autoinstall 'ds=nocloud;s=http://{{.HTTPIP}}:{{.HTTPPort}}/'",
+        "net.ifnames=0 autoinstall 'ds=nocloud;s=http://{{.HTTPIP}}:{{.HTTPPort}}/'",
         "<F10>"
       ]
     }
