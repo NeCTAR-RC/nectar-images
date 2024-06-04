@@ -15,11 +15,8 @@
       "ssh_private_key_file": "packer-ssh-key",
       "ssh_timeout": "30m",
       "vnc_bind_address": "0.0.0.0",
-      "qemuargs": [
-        [ "-m", "8192M" ],
-        [ "-cpu", "host" ],
-        [ "-smp", "4" ]
-      ],
+      "memory": 8192,
+      "cpus": 4,
       "boot_wait": "5s",
       "boot_command": [
         "<esc><wait5><tab>",
