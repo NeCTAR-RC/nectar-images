@@ -19,13 +19,9 @@
       "cpus": 4,
       "boot_wait": "5s",
       "boot_command": [
-        "<wait3s>c<wait3s>",
-        "linux /casper/vmlinuz vga=795 net.ifnames=0 autoinstall ds=nocloud-net\\;s=http://{{.HTTPIP}}:{{.HTTPPort}}/ ---",
-        "<enter><wait>",
-        "initrd /casper/initrd",
-        "<enter><wait>",
-        "boot",
-        "<enter>"
+        "e<wait><down><down><down><end>",
+        "vga=795 net.ifnames=0 autoinstall 'ds=nocloud;s=http://{{.HTTPIP}}:{{.HTTPPort}}/'",
+        "<F10>"
       ]
     }
   ],
