@@ -16,11 +16,8 @@
       "ssh_timeout": "60m",
       "ssh_handshake_attempts": 100,
       "vnc_bind_address": "0.0.0.0",
-      "qemuargs": [
-        [ "-m", "8192M" ],
-        [ "-cpu", "host" ],
-        [ "-smp", "4" ]
-      ],
+      "memory": 8192,
+      "cpus": 4,
       "boot_wait": "10s",
       "boot_command": [
         "<home>e<down><down><end>",
