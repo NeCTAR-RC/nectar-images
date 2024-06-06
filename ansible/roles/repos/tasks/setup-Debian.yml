@@ -12,6 +12,10 @@
     dest: /etc/apt/sources.list
     force: true
 
+- name: Wipe existing sources.list.d files
+  command: >-
+    find /etc/apt/sources.list.d -type f -delete
+
 - name: Set up mirror
   apt_repository:
     repo: "{{ item }}"
