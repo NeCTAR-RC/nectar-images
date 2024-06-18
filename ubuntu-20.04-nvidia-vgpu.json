@@ -14,7 +14,7 @@
       "iso_checksum": "sha256:0e79e00bf844929d40825b1f0e8634415cda195ba23bae0b041911fde4dfe018",
       "ssh_username": "root",
       "ssh_private_key_file": "packer-ssh-key",
-      "ssh_timeout": "30m",
+      "ssh_timeout": "60m",
       "vnc_bind_address": "0.0.0.0",
       "memory": 8192,
       "cpus": 4,
