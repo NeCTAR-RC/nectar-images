@@ -3,7 +3,7 @@
 
 puppet_repo: "deb http://apt.puppetlabs.com jammy puppet8"
 
-# ansible_ppa: 
+#ansible_ppa:
 
 packages:
   - libpng-dev

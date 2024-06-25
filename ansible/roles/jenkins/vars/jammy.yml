@@ -3,7 +3,7 @@ openstack_version: yoga
 
 puppet_repo: "deb http://apt.puppetlabs.com jammy puppet7"
 
-ansible_ppa: True
+ansible_ppa: 'ppa:ansible/ansible-2.10'
 
 packages:
   - libpng-dev

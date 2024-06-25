@@ -55,8 +55,8 @@
 
 - name: Add ansible PPA
   apt_repository:
-    repo: 'ppa:ansible/ansible-5'
-  when: ansible_ppa is defined and ansible_ppa == True
+    repo: "{{ ansible_ppa }}"
+  when: ansible_ppa is defined
 
 # Remove once we no longer install python2 and python3 version of cinderclient
 - name: Diversion for python2/python3-cinderclient conflict
