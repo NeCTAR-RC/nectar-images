@@ -1,0 +1,98 @@
+#!/bin/bash
+#
+# Nectar VGPU driver check tool
+#
+# Will pull the latest version of the driver from object storage and do some
+# simple semver check to ensure the installed driver is up to date, and if
+# not, download and install the correct version.
+#
+
+LATEST_URL=https://object-store.rc.nectar.org.au/v1/AUTH_2f6f7e75fc0f453d9c127b490b02e9e3/nvidia-vgpu-repo/current.json
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
+# Initialize our own variables
+OPTIND=1         # Reset in case getopts has been used previously in the shell.
+yes=0
+
+while getopts "h?y" opt; do
+    case "$opt" in
+    h|\?)
+        echo "Usage: $0 [-y]"
+        exit 0
+        ;;
+    y) yes=1
+        ;;
+    esac
+done
+
+shift $((OPTIND-1))
+[ "${1:-}" = "--" ] && shift
+
+# Semver comparison
+verlte() { printf '%s\n' "$1" "$2" | sort -C -V; }
+verlt() { ! verlte "$2" "$1"; }
+
+echo "This script will install the required VGPU driver."
+
+# Fetch current version
+latest_json=$(wget --timeout 5 -O- --content-on-error "$LATEST_URL" 2>/dev/null)
+if [ $? -ne 0 ]; then
+        echo "ERROR: Failed to fetch latest VGPU driver version!"
+        exit 1
+fi
+latest_driver_ver=$(echo $latest_json | jq -r '.current_version.guest_driver.Linux')
+
+# Get the installed version
+installed_driver_ver=$(nvidia-smi --query-gpu=driver_version --format=csv,noheader 2>/dev/null)
+# If the driver hasn't been able to be loaded at all, try getting the version
+# from the package version instead
+if [ $? -ne 0 ]; then
+    installed_driver_ver=$(dpkg-query -W -f '${db:Status-Status} ${Package} ${Version}\n' 'nvidia-linux-grid-*' | awk '/^installed/ {print $3}')
+fi
+
+# Print version
+echo
+echo "NVIDIA VGPU driver versions:"
+echo "  Required:  $latest_driver_ver"
+echo "  Installed: ${installed_driver_ver:-"Not found"}"
+echo
+
+if ! verlt "$installed_driver_ver" "$latest_driver_ver"; then
+    echo "Currently installed driver is OK"
+    exit 0
+fi
+
+echo "The NVIDIA VGPU driver is either not installed or out of date."
+echo
+
+# Prompt user
+if [ $yes -ne 1 ]; then
+    read -r -p "Would you like to install driver $latest_driver_ver? [y/N] " response
+    [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]] && yes=1
+fi
+
+if [ $yes -eq 0 ]; then
+    echo "Exiting"
+    exit 0
+fi
+
+latest_software_ver=$(echo $latest_json | jq -r '.current_version.vgpu_software')
+latest_driver_url=$(echo $latest_json | jq -r '.drivers."'$latest_software_ver'".Ubuntu')
+
+tmp_driver="$(mktemp --suffix=.deb)"
+wget --no-verbose -O "$tmp_driver" "$latest_driver_url"
+sudo apt install -y "$tmp_driver"
+install_ret=$?
+rm -f "$tmp_driver"
+
+if [ $install_ret -eq 0 ]; then
+    echo -e "${GREEN}Installation complete.${NC}"
+    echo "Please reboot to activate the NVIDIA VGPU driver"
+    exit 0
+fi
+
+echo "Something failed. Please send this output to ARDC Nectar Research Cloud support"
+exit 1

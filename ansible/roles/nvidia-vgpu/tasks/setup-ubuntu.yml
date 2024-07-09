@@ -45,3 +45,15 @@
     src: motd-help-text
     dest: /etc/update-motd.d/10-help-text
     mode: '0755'
+
+- name: Copy motd vgpu-driver-check
+  ansible.builtin.copy:
+    src: motd-vgpu-driver-check
+    dest: /etc/update-motd.d/10-vgpu-driver-check
+    mode: '0755'
+
+- name: Copy update-vgpu-driver script
+  ansible.builtin.copy:
+    src: update-vgpu-driver
+    dest: /usr/local/bin/update-vgpu-driver
+    mode: '0755'
