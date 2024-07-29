@@ -1,0 +1,24 @@
+---
+- name: Clean up apt
+  command: "{{ item }}"
+  with_items:
+    - apt-get -y autoremove
+    - apt-get -y autoclean
+    - apt-get -y clean all
+
+- name: Clean up cloud-init configs
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - /etc/cloud/cloud.cfg.d/99-installer.cfg
+    - /etc/cloud/cloud.cfg.d/curtin-preserve-sources.cfg
+    - /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg
+    - /etc/cloud/cloud.cfg.d/90-installer-network.cfg
+    - /etc/cloud/cloud.cfg.d/90_dpkg.cfg
+    - /etc/cloud/cloud.cfg.d/20-disable-cc-dpkg-grub.cfg
+    - /etc/cloud/cloud-init.disabled  # ubuntu 24.04 installer disabled cloud-init after build
+    - /etc/netplan/01-netcfg.yaml
+    - /var/lib/dbus/machine-id
+    - /var/lib/systemd/random-seed  # recommended by systemd for base images
+

@@ -17,11 +17,11 @@
 
 # Use command because ansible won't enable it if it's in enabled-runtime state
 #  https://github.com/ansible/ansible/issues/37551
-- name: Enable systemd-networkd service
-  command: systemctl enable systemd-networkd
-
-- name: Enable systemd-resolved
-  command: systemctl enable systemd-resolved
+- name: Enable systemd-networkd and resolved services
+  command: "systemctl enable {{ item }}"
+  with_items:
+  - systemd-networkd
+  - systemd-resolved
 
 - name: Start systemd-resolved
   systemd:

@@ -1,6 +1,14 @@
 ---
-- name: Clean up yum
-  shell: yum clean all
+- name: Remove packages
+  ansible.builtin.dnf:
+    name: "{{ cleanup_packages }}"
+    state: absent
+
+- name: Clean up orphaned packages
+  shell: dnf -y autoremove
+
+- name: Clean up dnf
+  shell: dnf -y clean all '--enablerepo=*'
 
 - name: Remove interface persistence
   file:

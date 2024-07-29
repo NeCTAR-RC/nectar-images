@@ -13,3 +13,7 @@
 - name: Set default_user image property
   set_fact:
     nectar_image_property_default_user: "{{ default_user }}"
+
+- name: Print default user
+  debug:
+    msg: "Default user is {{ default_user }}"

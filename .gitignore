@@ -13,6 +13,7 @@ virtualbox
 vmware
 iso
 *_build_*json
+builds/
 .facts
 .tags
 __pycache__

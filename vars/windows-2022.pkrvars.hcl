@@ -1,0 +1,12 @@
+os_name                = "windows"
+os_version             = "2022"
+os_arch                = "x86_64"
+is_windows             = true
+iso_url                = "http://mirrors.rc.nectar.org.au/packer-iso/WinSrv-2022_2108.1-X22-82986.iso"
+iso_checksum           = "sha256:4dfac7d89ccfe74665880c9c9d2005e2b0e697bc09e18e13fb85430c49f215f4"
+disk_size              = "30G"
+profile                = "windows"
+qemu_efi_boot          = true
+boot_command           = ["<wait5><enter><wait5><enter>"]
+qemu_efi_firmware_vars = "/usr/share/edk2/x64/OVMF_VARS.fd"
+qemu_efi_firmware_code = "/usr/share/edk2/x64/OVMF_CODE.fd"

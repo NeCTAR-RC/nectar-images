@@ -12,6 +12,9 @@ Setup
 
 Refer to the ImageBuilding page in the Nectar Wiki.
 
+NOTE: Requires Ansible 2.16. Later versions are too old to build Rocky/AlmaLinux 8
+with it's Python 3.6
+
 
 Testing
 -------

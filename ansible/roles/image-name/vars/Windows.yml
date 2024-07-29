@@ -1,0 +1,3 @@
+---
+# e.g. Microsoft Windows Server 2022 Datacenter x86_64
+nectar_default_image_name: "{{ ansible_distribution }} {{ ansible_architecture2 }}"

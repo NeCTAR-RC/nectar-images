@@ -1,17 +1,26 @@
 ---
+- name: Include OS-specific variables
+  include_vars: "{{ var_item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+    - default.yml
+  loop_control:
+    loop_var: var_item
+
 - name: Set architecture fact
   set_fact:
-    nectar_image_property_architecture: "{{ ansible_architecture }}"
+    nectar_image_property_architecture: "{{ facts_architecture }}"
 
 - name: Set os_distro fact
   set_fact:
-    nectar_image_property_os_distro: "{{ ansible_distribution|lower }}"
+    nectar_image_property_os_distro: "{{ facts_os_distro }}"
 
 - name: Set os_version fact
   set_fact:
-    nectar_image_property_os_version: "{% if ansible_distribution == 'Ubuntu' %}{{ ansible_distribution_version }}{% else %}{{ ansible_distribution_major_version }}{% endif %}"
+    nectar_image_property_os_version: "{{ facts_os_version }}"
 
 # Should be overridden by the packer config for non-standard images (e.g. trove)
 - name: Set nectar_name fact
   set_fact:
-    nectar_image_property_nectar_name: "{{ nectar_name }}"
+    nectar_image_property_nectar_name: "{{ facts_nectar_name }}"

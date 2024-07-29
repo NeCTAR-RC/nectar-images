@@ -1,4 +1,13 @@
 ---
+- name: Include OS-specific variables
+  include_vars: "{{ var_item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+    - default.yml
+  loop_control:
+    loop_var: var_item
+
 - name: "Create facts and tags directories"
   local_action:
     module: file
@@ -42,7 +51,12 @@
   become: False
   with_items: "{{ vars | select('match', '^nectar_image_tag_.*') | list }}"
 
-- name: Print image properties
+- name: Print facts
   debug:
     msg: "{{ item | regex_replace('^nectar_image_property_', '') }} = {{ vars[item] }}"
   with_items: "{{ vars | select('match', '^nectar_image_property_.*') | list }}"
+
+- name: Print image properties
+  debug:
+    msg: "{{ item }} = {{ image_properties[item] }}"
+  with_items: "{{ image_properties }}"

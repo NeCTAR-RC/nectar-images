@@ -1,4 +1,11 @@
 ---
+- name: Set distro-specific variables
+  include_vars: '{{ item }}'
+  with_first_found:
+    - '{{ ansible_distribution }}.yml'
+    - '{{ ansible_os_family }}.yml'
+    - default.yml
+
 - name: Clean up logs keys and configs
   shell: "{{ item }}"
   with_items:
@@ -10,27 +17,20 @@
     - 'rm -fr /root/.ssh'
     - 'rm -fr /root/*.cfg'
     - truncate -s 0 /etc/machine-id
+    - 'find /var/cache -type f -exec rm -rf {} \;'
+    - 'rm -rf /tmp/* /var/tmp/*'  # remove the contents of /tmp and /var/tmp
+    - 'rm -f /var/lib/systemd/random-seed'  # force a new random seed to be generated
   when: nectar_test_build is not defined
 
-# These are mostly from Ubuntu's subiquity installer
-- name: Clean up cloud-init configs
-  file:
-    name: "{{ item }}"
-    state: absent
-  with_items:
-    - /etc/cloud/cloud.cfg.d/99-installer.cfg
-    - /etc/cloud/cloud.cfg.d/curtin-preserve-sources.cfg
-    - /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg
-    - /etc/cloud/cloud-init.disabled  # ubuntu 24.04 installer disabled cloud-init after build
-    - /etc/netplan/01-netcfg.yaml
-    - /var/lib/dbus/machine-id
-    - /var/lib/systemd/random-seed  # recommended by systemd for base images
-
-- include_tasks: cleanup-RedHat.yml
-  when: ansible_os_family == 'RedHat'
-
-- include_tasks: cleanup-Debian.yml
-  when: ansible_os_family == 'Debian'
+- name: Include OS-specific cleanup tasks
+  include_tasks: "{{ tasks_item }}"
+  with_first_found:
+    - files:
+      - "cleanup-{{ ansible_distribution }}.yml"
+      - "cleanup-{{ ansible_os_family }}.yml"
+      skip: true
+  loop_control:
+    loop_var: tasks_item
 
 - name: Lock and disable root account
   shell: "{{ item }}"

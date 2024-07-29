@@ -1,0 +1,81 @@
+---
+cloud_init_packages:
+  - cloud-init
+  - curl
+
+network:
+  config: disabled
+
+datasources:
+  - ConfigDrive
+  - OpenStack
+
+distro: ubuntu
+
+cloud_init_modules:
+  - seed_random
+  - bootcmd
+  - write_files
+  - growpart
+  - resizefs
+  - disk_setup
+  - mounts
+  - set_hostname
+  - update_hostname
+  - update_etc_hosts
+  - ca_certs
+  - rsyslog
+  - users_groups
+  - ssh
+
+cloud_config_modules:
+  - wireguard
+  - snap
+  - ubuntu_autoinstall
+  - ssh_import_id
+  - keyboard
+  - locale
+  - set_passwords
+  - grub_dpkg
+  - apt_pipelining
+  - apt_configure
+  - ubuntu_pro
+  - ntp
+  - timezone
+  - disable_ec2_metadata
+  - runcmd
+  - byobu
+
+cloud_final_modules:
+  - package_update_upgrade_install
+  - fan
+  - landscape
+  - lxd
+  - ubuntu_drivers
+  - write_files_deferred
+  - puppet
+  - chef
+  - ansible
+  - mcollective
+  - salt_minion
+  - reset_rmc
+  - scripts_vendor
+  - scripts_per_once
+  - scripts_per_boot
+  - scripts_per_instance
+  - scripts_user
+  - ssh_authkey_fingerprints
+  - keys_to_console
+  - install_hotplug
+  - phone_home
+  - final_message
+  - power_state_change
+
+user_groups:
+  - adm
+  - cdrom
+  - dip
+  - lxd
+  - sudo
+
+ssh_svcname: ssh

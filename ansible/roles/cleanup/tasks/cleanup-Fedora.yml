@@ -1,0 +1,19 @@
+---
+- name: Remove packages
+  ansible.builtin.dnf:
+    name: "{{ cleanup_packages }}"
+    state: absent
+
+- name: Clean up orphaned packages
+  shell: dnf -y autoremove
+
+- name: Clean up dnf
+  shell: dnf -y clean all '--enablerepo=*'
+
+- name: Clean up files
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - /root/anaconda-ks.cfg
+    - /root/original-ks.cfg

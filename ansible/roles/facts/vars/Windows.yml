@@ -1,0 +1,7 @@
+---
+nectar_default_image_name: "{{ ansible_distribution }} {{ ansible_architecture2 }}"
+
+facts_architecture: "{{ ansible_architecture2 }}"
+facts_os_distro: "{{ ansible_os_family|lower }}"
+facts_os_version: "2022"
+facts_nectar_name: "{{ nectar_name }}"

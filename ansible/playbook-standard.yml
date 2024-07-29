@@ -1,0 +1,26 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: yes
+
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    - role: image-name
+    - role: default-user
+    - role: systemd-networkd
+      when: (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version >= '17') or
+            (ansible_distribution == 'Fedora' and ansible_distribution_version < '30')
+    - role: testing
+    - role: repos
+    - role: unattended-upgrades
+    - role: cloud-init
+    - role: murano-agent
+    - role: qemu-guest-agent
+    - role: ssh
+    - role: fail2ban
+    - role: ntp
+    - role: banner
+    - role: facts
+    - role: cleanup

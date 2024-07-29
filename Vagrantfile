@@ -1,7 +1,7 @@
 Vagrant.configure("2") do |config|
 
   # Debian 11 (bullseye)
-  config.vm.define "debian11" do |c|
+  config.vm.define "debian-11" do |c|
     c.vm.box = "debian/bullseye64"
     c.vm.provision "shell" do |shell|
       shell.inline = "apt update"  # fix lsb-release
@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Debian 12 (bookworm)
-  config.vm.define "debian12" do |c|
+  config.vm.define "debian-12" do |c|
     c.vm.box = "debian/bookworm64"
     c.vm.provision "shell" do |shell|
       shell.inline = "apt update"  # fix lsb-release
@@ -42,7 +42,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Ubuntu 20.04 (focal)
-  config.vm.define "ubuntu2004" do |c|
+  config.vm.define "ubuntu-20.04" do |c|
     c.vm.box = "generic/ubuntu2004"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/focal64"
@@ -62,7 +62,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Ubuntu 20.04 (focal) with NVIDIA vGPU
-  config.vm.define "ubuntu2004-nvidia-vgpu" do |c|
+  config.vm.define "ubuntu-20.04-nvidia-vgpu" do |c|
     c.vm.box = "generic/ubuntu2004"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/focal64"
@@ -83,7 +83,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Ubuntu 22.04 (jammy)
-  config.vm.define "ubuntu2204" do |c|
+  config.vm.define "ubuntu-22.04" do |c|
     c.vm.box = "generic/ubuntu2204"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/jammy64"
@@ -103,7 +103,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Ubuntu 22.04 (jammy) with Docker
-  config.vm.define "ubuntu2204-docker" do |c|
+  config.vm.define "ubuntu-22.04-docker" do |c|
     c.vm.box = "generic/ubuntu2204"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/jammy64"
@@ -125,7 +125,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Ubuntu 22.04 (jammy) with NVIDIA vGPU
-  config.vm.define "ubuntu2204-nvidia-vgpu" do |c|
+  config.vm.define "ubuntu-22.04-nvidia-vgpu" do |c|
     c.vm.box = "generic/ubuntu2204"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/jammy64"
@@ -146,7 +146,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Ubuntu 24.04 (noble)
-  config.vm.define "ubuntu2404" do |c|
+  config.vm.define "ubuntu-24.04" do |c|
     c.vm.box = "cloud-image/ubuntu-24.04"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/noble64"
@@ -166,7 +166,7 @@ Vagrant.configure("2") do |config|
   end
 
   # CentOS Stream 9
-  config.vm.define "centosstream9" do |c|
+  config.vm.define "centos-stream-9" do |c|
     c.vm.box = "generic/centos9s"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -183,7 +183,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Rocky Linux 8
-  config.vm.define "rocky8" do |c|
+  config.vm.define "rocky-8" do |c|
     c.vm.box = "rockylinux/8"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -200,7 +200,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Rocky Linux 9
-  config.vm.define "rocky9" do |c|
+  config.vm.define "rocky-9" do |c|
     c.vm.box = "generic/rocky9"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -217,7 +217,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Alma Linux 8
-  config.vm.define "almalinux8" do |c|
+  config.vm.define "almalinux-8" do |c|
     c.vm.box = "almalinux/8"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -234,7 +234,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Alma Linux 9
-  config.vm.define "almalinux9" do |c|
+  config.vm.define "almalinux-9" do |c|
     c.vm.box = "almalinux/9"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -251,7 +251,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Fedora 39
-  config.vm.define "fedora39" do |c|
+  config.vm.define "fedora-39" do |c|
     c.vm.box = "fedora/39-cloud-base"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -268,7 +268,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Fedora 40
-  config.vm.define "fedora40" do |c|
+  config.vm.define "fedora-40" do |c|
     c.vm.box = "fedora/40-cloud-base"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -326,78 +326,6 @@ Vagrant.configure("2") do |config|
     config.vm.network :forwarded_port, guest: 443, host: 8443, host_ip: '0.0.0.0'
   end
 
-  # Trove MySQL (Ubuntu 16.04 xenial)
-  config.vm.define "trove-mysql-ubuntu1604" do |c|
-    c.vm.box = "generic/ubuntu1604"
-    c.vm.provider "virtualbox" do |v, override|
-      override.vm.box = "ubuntu/xenial64"
-    end
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             ansible_python_interpreter: "/usr/bin/python3",
-                             datastore: "mysql",
-                             datastore_version: "5.7"}
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-trove.yml"
-      ansible.become = true
-    end
-  end
-
-  # Trove MySQL (Ubuntu 18.04 bionic)
-  config.vm.define "trove-mysql-ubuntu1804" do |c|
-    c.vm.box = "generic/ubuntu1804"
-    c.vm.provider "virtualbox" do |v, override|
-      override.vm.box = "ubuntu/bionic64"
-    end
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             ansible_python_interpreter: "/usr/bin/python3",
-                             datastore: "mysql",
-                             datastore_version: "8.0"}
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-trove.yml"
-      ansible.become = true
-    end
-  end
-
-  # Trove PostgreSQL (Ubuntu 16.04 xenial)
-  config.vm.define "trove-pgsql-ubuntu1604" do |c|
-    c.vm.box = "generic/ubuntu1604"
-    c.vm.provider "virtualbox" do |v, override|
-      override.vm.box = "ubuntu/xenial64"
-    end
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             ansible_python_interpreter: "/usr/bin/python3",
-                             datastore: "pgsql",
-                             datastore_version: "9.6"}
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-trove.yml"
-      ansible.become = true
-    end
-  end
-
-  # Trove PostgreSQL (Ubuntu 18.04 bionic)
-  config.vm.define "trove-pgsql-ubuntu1804" do |c|
-    c.vm.box = "generic/ubuntu1804"
-    c.vm.provider "virtualbox" do |v, override|
-      override.vm.box = "ubuntu/bionic64"
-    end
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             ansible_python_interpreter: "/usr/bin/python3",
-                             datastore: "pgsql",
-                             datastore_version: "11.3"}
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-trove.yml"
-      ansible.become = true
-    end
-  end
-
   # Octavia Amphora (Ubuntu 22.04 focal)
   config.vm.define "octavia-amphora" do |c|
     c.vm.box = "generic/ubuntu2204"
@@ -416,7 +344,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Manila Share Server (Ubuntu 20.04 focal)
-  config.vm.define "manila-share-server-ubuntu2004" do |c|
+  config.vm.define "ubuntu-20.04-manila-share-server" do |c|
     c.vm.box = "generic/ubuntu2004"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/focal64"
@@ -432,7 +360,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Ubuntu 20.04 (focal) Jenkins slave
-  config.vm.define "ubuntu2004-jenkins" do |c|
+  config.vm.define "ubuntu-20.04-jenkins" do |c|
     c.vm.box = "generic/ubuntu2004"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/focal64"
@@ -448,7 +376,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Ubuntu 22.04 (jammy) Jenkins slave
-  config.vm.define "ubuntu2204-jenkins" do |c|
+  config.vm.define "ubuntu-22.04-jenkins" do |c|
     c.vm.box = "generic/ubuntu2204"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/jammy64"
@@ -464,7 +392,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Ubuntu 24.04 (noble) Jenkins slave
-  config.vm.define "ubuntu2404-jenkins" do |c|
+  config.vm.define "ubuntu-24.04-jenkins" do |c|
     c.vm.box = "cloud-image/ubuntu-24.04"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/noble64"
@@ -479,7 +407,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Undercloud Ubuntu 20.04 (focal)
-  config.vm.define "undercloud-ubuntu2004" do |c|
+  config.vm.define "ubuntu-20.04-undercloud" do |c|
     c.vm.box = "generic/ubuntu2004"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/focal64"
@@ -495,7 +423,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Undercloud Ubuntu 22.04 (jammy)
-  config.vm.define "undercloud-ubuntu2204" do |c|
+  config.vm.define "ubuntu-22.04-undercloud" do |c|
     c.vm.box = "generic/ubuntu2204"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/jammy64"
@@ -511,7 +439,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Undercloud Ubuntu 24.04 (noble)
-  config.vm.define "undercloud-ubuntu2404" do |c|
+  config.vm.define "ubuntu-24.04-undercloud" do |c|
     c.vm.box = "cloud-image/ubuntu-24.04"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/noble64"
@@ -525,13 +453,28 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # Windows Server 2022
+  config.vm.define "windows-2022" do |c|
+    c.vm.box = "peru/windows-server-2022-standard-x64-eval"
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true }
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook-windows.yml"
+      #ansible.become = true
+    end
+  end
+
+  #config.winrm.transport = :plaintext
+  #config.winrm.basic_auth_only = true
+
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
   config.vm.provider :libvirt do |v|
-    v.memory = 2048
+    v.memory = 4096
     v.cpus = 2
     v.machine_virtual_size = 4  # 4GB disk
-    v.graphics_type = "none"
+    v.graphics_type = "spice"
   end
 
   config.vm.provider :virtualbox do |v|

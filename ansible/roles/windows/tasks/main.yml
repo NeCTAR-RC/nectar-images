@@ -1,0 +1,48 @@
+---
+- name: Enable Remote Desktop
+  ansible.windows.win_regedit:
+    key: 'HKLM:\System\CurrentControlSet\Control\Terminal Server'
+    value: fDenyTSConnections
+    data: 0
+    datatype: dword
+
+- name: Enable Remote Desktop firewall rule
+  ansible.windows.win_shell: Enable-NetFirewallRule -DisplayGroup 'Remote Desktop'
+
+#- name: Install the VirtIO Windows Guest Tools
+#  ansible.windows.win_package:
+#    path: "{{ virtio_win_iso_path }}\\virtio-win-guest-tools.exe"
+#    arguments: /install /passive /norestart /quiet
+
+#- name: Install QEMU Guest Agent
+#  ansible.windows.win_package:
+#    path: "{{ virtio_win_iso_path }}\\guest-agent\\qemu-ga-x86_64.msi"
+#    creates_path: "{{ ansible_env['ProgramFiles'] }}\\qemu-ga"
+
+- name: Enable the Windows Audio service
+  ansible.windows.win_service:
+    name: AudioSrv
+    start_mode: auto
+
+#- name: Install OpenSSH
+#  ansible.windows.win_shell: Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+#
+#- name: Enable sshd service
+#  ansible.windows.win_service:
+#    name: sshd
+#    start_mode: auto
+#
+#- name: Deploy sshd config
+#  copy:
+#    src: sshd_config
+#    dest: "{{ ansible_env['ProgramData'] }}\\ssh\\sshd_config"
+
+- name: Create C:\ProgramData\Nectar directory
+  ansible.windows.win_file:
+    path: C:\ProgramData\Nectar
+    state: directory
+
+- name: Install testing scripts
+  ansible.windows.win_copy:
+    src: testing/
+    dest: C:\ProgramData\Nectar\

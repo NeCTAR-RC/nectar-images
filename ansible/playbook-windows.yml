@@ -1,0 +1,13 @@
+---
+- hosts: all
+  gather_facts: yes
+
+  vars_files:
+    - vars/main.yml
+    - vars/windows.yml
+
+  roles:
+    - role: windows
+    - role: image-name
+    - role: default-user
+    - role: facts

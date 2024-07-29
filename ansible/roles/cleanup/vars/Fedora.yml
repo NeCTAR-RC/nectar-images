@@ -1,0 +1,13 @@
+---
+cleanup_packages:
+  - gcc
+  - cpp
+  - gc
+  - kernel-devel
+  - kernel-headers
+  - glibc-devel
+  - elfutils-libelf-devel
+  - glibc-headers
+  - kernel-devel
+  - kernel-headers
+  - linux-firmware

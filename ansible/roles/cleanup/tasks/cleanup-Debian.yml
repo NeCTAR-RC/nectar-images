@@ -1,4 +1,9 @@
 ---
+- name: Remove packages
+  ansible.builtin.apt:
+    name: "{{ cleanup_packages }}"
+    state: absent
+
 - name: Clean up apt
   command: "{{ item }}"
   with_items:

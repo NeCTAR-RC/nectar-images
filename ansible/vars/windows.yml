@@ -1,0 +1,12 @@
+---
+image_properties:
+  hw_video_model: virtio
+  hw_disk_bus: scsi
+  hw_scsi_model: virtio-scsi
+  hw_machine_type: q35
+  hw_qemu_guest_agent: yes
+  hw_firmware_type: uefi
+  os_require_quiesce: yes
+  trait:CUSTOM_NECTAR_WINDOWS: required
+  
+default_user: Administrator
