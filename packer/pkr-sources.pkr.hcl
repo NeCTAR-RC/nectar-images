@@ -68,7 +68,6 @@ locals {
 source "qemu" "vm" {
   # QEMU specific options
   boot_key_interval    = "20ms"  # default of 100ms is very slow
-  build_name           = local.build_name
   disk_image           = var.qemu_disk_image
   disk_compression     = true
   efi_boot             = var.qemu_efi_boot
@@ -100,6 +99,7 @@ source "qemu" "vm" {
   winrm_password       = var.winrm_password
   winrm_timeout        = var.winrm_timeout
   winrm_username       = var.winrm_username
+  vm_name              = local.build_name
   vnc_bind_address     = var.vnc_bind_address
 }
 
