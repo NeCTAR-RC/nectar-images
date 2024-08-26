@@ -239,7 +239,7 @@ variable "profile" {
 
 variable "profile_args" {
   type    = list(string)
-  default = null
+  default = []
 }
 
 variable "scripts" {
