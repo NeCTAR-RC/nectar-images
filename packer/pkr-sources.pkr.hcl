@@ -67,7 +67,6 @@ locals {
 # https://www.packer.io/docs/templates/hcl_templates/blocks/source
 source "qemu" "vm" {
   # QEMU specific options
-  boot_key_interval    = "20ms"  # default of 100ms is very slow
   disk_image           = var.qemu_disk_image
   disk_compression     = true
   efi_boot             = var.qemu_efi_boot
