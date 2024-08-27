@@ -163,7 +163,7 @@ fi
 info "Using user account: '$USER_ACCOUNT'"
 
 delete_image() {
-    [[ -n "$IMAGE_ID" ]] || return  # No image ID set
+    [[ -z "$IMAGE_ID" ]] && return  # No image ID set
     delete=1
     if [[ $DEBUG ]]; then
         read -r -p "${yellow}==>${bold} Would you like to clean up the image '$1'? [y/N] ${all_off}" response
@@ -180,7 +180,7 @@ delete_image() {
 }
 
 delete_instance() {
-    [[ -n "$INSTANCE_ID" ]] || return  # No instance ID set
+    [[ -z "$INSTANCE_ID" ]] && return  # No instance ID set
     if [[ $DEBUG ]]; then
         echo "Saving instance/server log to: '$BASE_DIR/console.txt'"
         openstack server show $1 > $BASE_DIR/console.txt

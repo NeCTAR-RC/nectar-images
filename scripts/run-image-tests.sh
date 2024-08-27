@@ -83,13 +83,13 @@ while getopts ":hdi:n:u:" option; do
             DEBUG=1
         ;;
         i)
-            IMAGE_ID=$OPTARG
+            IMAGE_ID="$OPTARG"
         ;;
         n)
-            NAME=$OPTARG
+            NAME="$OPTARG"
         ;;
         u)
-            USER_ACCOUNT=$OPTARG
+            USER_ACCOUNT="$OPTARG"
         ;;
         \?)
             echo "Error: Invalid option"
@@ -128,7 +128,7 @@ else
 fi
 
 # Discover name from image metadata
-if [[ -z $NAME ]]; then
+if [[ -z "$NAME" ]]; then
     NAME="$(openstack image show -c name -f value $IMAGE_ID)"
 fi
 info "Using name: '$NAME'"

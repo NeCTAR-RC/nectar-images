@@ -30,10 +30,8 @@ locals {
   _ansible_extra_arguments = var.is_windows ? ([
     "-e", "ansible_winrm_scheme=http",
     "-e", "image_build_dir=${local.output_directory}",
-    "-e", "nectar_test_build=${var.test_build}"
   ]) : ([
     "-e", "image_build_dir=${local.output_directory}",
-    "-e", "nectar_test_build=${var.test_build}"
   ])
 
   # Extra args given in vars file
