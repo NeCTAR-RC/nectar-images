@@ -8,5 +8,5 @@ disk_size              = "30G"
 profile                = "windows"
 qemu_efi_boot          = true
 boot_command           = ["<wait5><enter><wait5><enter>"]
-qemu_efi_firmware_vars = "/usr/share/edk2/x64/OVMF_VARS.fd"
-qemu_efi_firmware_code = "/usr/share/edk2/x64/OVMF_CODE.fd"
+qemu_efi_firmware_vars = "/usr/share/OVMF/OVMF_VARS.fd"
+qemu_efi_firmware_code = "/usr/share/OVMF/OVMF_CODE.fd"
