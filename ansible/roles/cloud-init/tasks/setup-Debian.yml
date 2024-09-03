@@ -23,10 +23,14 @@
 
 - include_tasks: install.yml
 
+# Also attempt to run this post-install to ensure it takes
+- name: Set datasources for Ubuntu/Debian (again)
+  shell: echo "cloud-init cloud-init/datasources multiselect {{ datasources|join(', ') }}" | debconf-set-selections
+
 - name: Add dpkg-divert for cloud.cfg
   command: dpkg-divert --add --rename --quiet --local --divert /etc/cloud/cloud.cfg.dist /etc/cloud/cloud.cfg
   args:
-    creates: '/etc/cloud/cloud.cfg.debian'
+    creates: '/etc/cloud/cloud.cfg.dist'
 
 - include_tasks: config.yml
 - include_tasks: services.yml
