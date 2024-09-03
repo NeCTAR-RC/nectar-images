@@ -146,9 +146,11 @@ test: # Builds an Image with Packer
 .PHONY: init
 init: # Installs and upgrades Packer Plugins
 	# Download virtio-win ISO for Windows builds
+	$(if $(target),,$(call missing_target))
 ifneq (,$(findstring windows,$(packer_var_target)))
 ifeq (,$(wildcard ./builds/build_files/virtio-win.iso))
-	wget -c -O ./builds/build_files/virtio-win.iso https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso
+	echo "Downloading virtio-win.iso..."
+	curl -s -L -o ./builds/build_files/virtio-win.iso https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso
 endif
 endif
 	# Ensure mode 0600 for packer-ssh-key
