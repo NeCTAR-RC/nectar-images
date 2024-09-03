@@ -185,14 +185,10 @@ debug "openstack server create --image $IMAGE_ID --flavor $OS_FLAVOR --availabil
 INSTANCE_ID=$(openstack server create -f value -c id --image $IMAGE_ID --flavor $OS_FLAVOR --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME --wait "$NAME" | xargs echo)  # xargs because of leading newline
 
 if [[ -z $INSTANCE_ID ]]; then
-    error "Instance ID not found!"
-    delete_image $IMAGE_ID
-    exit 1
+    fatal "Instance ID not found!"
 else
     info "Found instance ID: '$INSTANCE_ID'"
 fi
-
-set +e
 
 sleeptime=10
 attempts=30
