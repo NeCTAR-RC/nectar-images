@@ -185,9 +185,9 @@ debug "openstack server create --image $IMAGE_ID --flavor $OS_FLAVOR --availabil
 INSTANCE_ID=$(openstack server create -f value -c id --image $IMAGE_ID --flavor $OS_FLAVOR --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME --wait "$NAME" | xargs echo)  # xargs because of leading newline
 
 if [[ ${INSTANCE_ID//-/} =~ ^[[:xdigit:]]{32}$ ]]; then
-    fatal "Instance ID not found! $INSTANCE_ID"
-else
     info "Found instance ID: '$INSTANCE_ID'"
+else
+    fatal "Instance ID not found! $INSTANCE_ID"
 fi
 
 sleeptime=10
