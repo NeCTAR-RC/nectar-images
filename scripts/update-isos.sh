@@ -32,7 +32,7 @@ action() {
 git_diff() {
     GIT_CONFIG_GLOBAL=''
     GIT_CONFIG_SYSTEM=''
-    git diff -U0 --color=always "$1" | grep --color=never -E $'^\e\[(32m\+|31m-)'
+    git diff -U0 --color=always "$1" # | grep --color=never -E $'^\e\[(32m\+|31m-)' || true
 }
 
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
