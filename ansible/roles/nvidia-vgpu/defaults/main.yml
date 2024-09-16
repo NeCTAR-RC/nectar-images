@@ -11,7 +11,6 @@ nvidia_grid_driver_version: 550.54.15
 # This should be the latest version that is supposed by the driver version
 # See https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html#id4
 nvidia_cuda_versions:
-  - 11.8
   - 12.4
 
 nvidia_grid_driver_url_path: https://object-store.rc.nectar.org.au/v1/AUTH_2f6f7e75fc0f453d9c127b490b02e9e3/nvidia-vgpu-repo
