@@ -21,6 +21,7 @@ packages:
   - python3-saharaclient
   - python3-swiftclient
   - python3-troveclient
+  - python3-build
   - sphinx-common
   - twine
   - dh-python
