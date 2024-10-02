@@ -1,13 +1,8 @@
 ---
-podman_dependencies:
-  - apt-transport-https
-  - ca-certificates
-  - software-properties-common
-podman_repository_key: "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_{{ ansible_distribution_version }}/Release.key"
-podman_repository: "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_{{ ansible_distribution_version }}/ /"
+podman_dependencies: []
+
 podman_packages:
   - podman
   - buildah
   - skopeo
   - fuse-overlayfs
-
