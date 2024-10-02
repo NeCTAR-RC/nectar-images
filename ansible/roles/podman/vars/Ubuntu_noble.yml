@@ -1,8 +1,0 @@
----
-podman_dependencies: []
-
-podman_packages:
-  - podman
-  - buildah
-  - skopeo
-  - fuse-overlayfs
