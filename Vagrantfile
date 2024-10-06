@@ -360,7 +360,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Ubuntu 20.04 (focal) Jenkins slave
-  config.vm.define "ubuntu-20.04-jenkins" do |c|
+  config.vm.define "jenkins-slave-ubuntu-20.04" do |c|
     c.vm.box = "generic/ubuntu2004"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/focal64"
@@ -376,7 +376,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Ubuntu 22.04 (jammy) Jenkins slave
-  config.vm.define "ubuntu-22.04-jenkins" do |c|
+  config.vm.define "jenkins-slave-ubuntu-22.04" do |c|
     c.vm.box = "generic/ubuntu2204"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/jammy64"
@@ -392,7 +392,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Ubuntu 24.04 (noble) Jenkins slave
-  config.vm.define "ubuntu-24.04-jenkins" do |c|
+  config.vm.define "jenkins-slave-ubuntu-24.04" do |c|
     c.vm.box = "cloud-image/ubuntu-24.04"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/noble64"
@@ -407,7 +407,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Undercloud Ubuntu 20.04 (focal)
-  config.vm.define "ubuntu-20.04-undercloud" do |c|
+  config.vm.define "undercloud-ubuntu-20.04" do |c|
     c.vm.box = "generic/ubuntu2004"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/focal64"
@@ -423,7 +423,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Undercloud Ubuntu 22.04 (jammy)
-  config.vm.define "ubuntu-22.04-undercloud" do |c|
+  config.vm.define "undercloud-ubuntu-22.04" do |c|
     c.vm.box = "generic/ubuntu2204"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/jammy64"
@@ -439,7 +439,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Undercloud Ubuntu 24.04 (noble)
-  config.vm.define "ubuntu-24.04-undercloud" do |c|
+  config.vm.define "undercloud-ubuntu-24.04" do |c|
     c.vm.box = "cloud-image/ubuntu-24.04"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/noble64"
