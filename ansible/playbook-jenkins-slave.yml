@@ -17,4 +17,5 @@
     - role: vagrant
     - role: docker
     - role: podman
+    - role: facts
     - role: cleanup
