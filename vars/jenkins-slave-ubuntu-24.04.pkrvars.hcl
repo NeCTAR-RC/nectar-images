@@ -7,3 +7,4 @@ iso_url        = "http://mirror.aarnet.edu.au/pub/ubuntu/releases/24.04/ubuntu-2
 iso_checksum   = "file:http://mirror.aarnet.edu.au/pub/ubuntu/releases/24.04/SHA256SUMS"
 boot_command   = ["<wait>e<wait><down><down><down><end> net.ifnames=0 autoinstall ds=nocloud-net\\;s=http://{{.HTTPIP}}:{{.HTTPPort}}/ubuntu-24.04<wait><f10><wait>"]
 profile        = "jenkins-slave"
+profile_args   = ["nectar_image_name='Jenkins Slave (Ubuntu 24.04)'"]
