@@ -7,3 +7,4 @@ iso_url        = "http://mirror.aarnet.edu.au/pub/ubuntu/releases/20.04/ubuntu-2
 iso_checksum   = "file:http://mirror.aarnet.edu.au/pub/ubuntu/releases/20.04/SHA256SUMS"
 boot_command   = ["<wait><enter><wait><enter><wait><f6><wait><esc><wait> preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu-20.04-preseed.cfg net.ifnames=0<enter><wait>"]
 profile        = "jenkins-slave"
+profile_args   = ["nectar_image_name='Jenkins Slave (Ubuntu 20.04)'"]
