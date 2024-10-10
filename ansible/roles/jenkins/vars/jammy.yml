@@ -23,6 +23,8 @@ packages:
   - python3-swiftclient
   - python3-troveclient
   - python3-build
+  - python3-hivemind
+  - python3-hivemind-contrib
   - sphinx-common
   - twine
   - python2
@@ -31,7 +33,6 @@ packages:
   - qemu
   - qemu-kvm
 
-hivemind_env: True
 
 selenium: True
 
