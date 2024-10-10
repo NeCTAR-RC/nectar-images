@@ -1,0 +1,13 @@
+---
+- name: Install Hivemind
+  pip:
+     virtualenv: /opt/hivemind
+     name: git+https://github.com/NeCTAR-RC/hivemind.git,git+https://github.com/NeCTAR-RC/hivemind_contrib.git
+
+- name: Create a symbolic link for Hivemind venv
+  file:
+    src: /opt/hivemind/bin/hivemind
+    dest: /usr/local/bin/hivemind
+    owner: root
+    group: root
+    state: link

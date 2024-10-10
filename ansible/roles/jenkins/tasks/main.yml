@@ -93,6 +93,9 @@
   with_items: "{{ pip_packages }}"
   when: pip_packages is defined
 
+- name: Run hivemind Install Tasks
+  include_tasks: hivemind.yml
+
 - name: Run selenium Install Tasks
   include_tasks: selenium.yml
   when: selenium | default(False)
