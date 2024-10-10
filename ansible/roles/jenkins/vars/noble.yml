@@ -27,8 +27,6 @@ packages:
   - dh-python
   - qemu-system-x86
 
-hivemind_env: False
-
 selenium: False
 
 gem_packages:
