@@ -27,9 +27,6 @@ packages:
   - python3-swiftclient
   - python3-troveclient
   - twine
-  - python2
-  - python-setuptools
-  - python-pbr
   - dh-python
   - qemu
   - qemu-kvm
