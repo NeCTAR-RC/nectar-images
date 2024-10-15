@@ -28,7 +28,7 @@ packages:
   - dh-python
   - qemu
   - qemu-kvm
-
+  - pre-commit
 
 selenium: True
 

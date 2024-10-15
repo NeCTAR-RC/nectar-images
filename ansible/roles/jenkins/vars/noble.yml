@@ -26,6 +26,7 @@ packages:
   - twine
   - dh-python
   - qemu-system-x86
+  - pre-commit
 
 selenium: False
 
