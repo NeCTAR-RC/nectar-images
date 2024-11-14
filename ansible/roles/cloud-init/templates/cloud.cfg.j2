@@ -4,11 +4,10 @@ users:
  - default
 
 disable_root: true
-
+ssh_pwauth: false
 
 {% if ansible_os_family == "RedHat" %}
 resize_rootfs_tmp: /dev
-ssh_pwauth:   0
 
 {% elif ansible_os_family == "Suse" %}
 syslog_fix_perms: root:root
