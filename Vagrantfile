@@ -297,11 +297,6 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "ansible/playbook-jupyterlab.yml"
       ansible.become = true
     end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
   end
 
   # R-Studio
