@@ -1,6 +1,7 @@
 ---
+# Jenkins now needs OpenJDK 21
 common_packages:
-  - default-jdk
+  - openjdk-21-jre-headless
   - rake
   - puppet-lint
   - git
