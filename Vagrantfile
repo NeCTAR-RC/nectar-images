@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
       ansible.extra_vars = { nectar_test_build: true,
                              ansible_python_interpreter: "/usr/bin/python3" }
       ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
+      ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
     end
     c.vm.provision "shell" do |shell|
@@ -31,7 +31,7 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
+      ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
     end
     c.vm.provision "shell" do |shell|
@@ -51,7 +51,7 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
+      ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
     end
     c.vm.provision "shell" do |shell|
@@ -92,7 +92,7 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
+      ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
     end
     c.vm.provision "shell" do |shell|
@@ -155,7 +155,7 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
+      ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
     end
     c.vm.provision "shell" do |shell|
@@ -172,7 +172,7 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
+      ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
     end
     c.vm.provision "shell" do |shell|
@@ -189,7 +189,7 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
+      ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
     end
     c.vm.provision "shell" do |shell|
@@ -206,7 +206,7 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
+      ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
     end
     c.vm.provision "shell" do |shell|
@@ -223,7 +223,7 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
+      ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
     end
     c.vm.provision "shell" do |shell|
@@ -240,7 +240,7 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
+      ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
     end
     c.vm.provision "shell" do |shell|
@@ -257,7 +257,7 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
+      ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
     end
     c.vm.provision "shell" do |shell|
@@ -274,7 +274,27 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
       ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook.yml"
+      ansible.playbook = "ansible/playbook-standard.yml"
+      ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
+    end
+  end
+
+  # Fedora 41
+  config.vm.define "fedora-41" do |c|
+    c.vm.box = "fedora/41-cloud-base"
+    c.vm.provision "shell" do |shell|
+      shell.inline = "sudo dnf install -y python3-libdnf5"  # https://github.com/ansible/ansible/issues/84206
+    end
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true }
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
     end
     c.vm.provision "shell" do |shell|
