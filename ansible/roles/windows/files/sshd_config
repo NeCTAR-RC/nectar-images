@@ -32,13 +32,10 @@
 #MaxSessions 10
 
 #PubkeyAuthentication yes
-PubkeyAuthentication yes
-
-StrictModes no
 
 # The default is to check both .ssh/authorized_keys and .ssh/authorized_keys2
 # but this is overridden so installations will only check .ssh/authorized_keys
-AuthorizedKeysFile  .ssh/authorized_keys
+AuthorizedKeysFile	.ssh/authorized_keys
 
 #AuthorizedPrincipalsFile none
 
@@ -51,9 +48,8 @@ AuthorizedKeysFile  .ssh/authorized_keys
 #IgnoreRhosts yes
 
 # To disable tunneled clear text passwords, change to no here!
-#PasswordAuthentication yes
-#PermitEmptyPasswords no
 PasswordAuthentication no
+#PermitEmptyPasswords no
 
 # GSSAPI options
 #GSSAPIAuthentication no
@@ -80,14 +76,13 @@ PasswordAuthentication no
 #Banner none
 
 # override default of no subsystems
-Subsystem   sftp    sftp-server.exe
+Subsystem	sftp	sftp-server.exe
 
 # Example of overriding settings on a per-user basis
 #Match User anoncvs
-#   AllowTcpForwarding no
-#   PermitTTY no
-#   ForceCommand cvs server
+#	AllowTcpForwarding no
+#	PermitTTY no
+#	ForceCommand cvs server
 
 #Match Group administrators
 #       AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys
-
