@@ -20,8 +20,8 @@
 # Deploy Guacamole as ROOT.war, which means host as the "root" app, not at /guacamole
 - name: Download Guacamole client
   get_url:
-    #url: "https://archive.apache.org/dist/guacamole/{{ guacamole_version }}/binary/guacamole-{{ guacamole_version }}.war"
-    url: "https://github.com/NeCTAR-RC/guacamole-client/releases/download/nectar%2F{{ guacamole_version }}/guacamole-{{ guacamole_version }}.war"
+    url: "https://archive.apache.org/dist/guacamole/{{ guacamole_version }}/binary/guacamole-{{ guacamole_version }}.war"
+    #url: "https://github.com/NeCTAR-RC/guacamole-client/releases/download/nectar%2F{{ guacamole_version }}/guacamole-{{ guacamole_version }}.war"
     dest: "/var/lib/{{ guacamole_tomcat_package }}/webapps/ROOT.war"
 
 - name: Make Guacamole home directory
