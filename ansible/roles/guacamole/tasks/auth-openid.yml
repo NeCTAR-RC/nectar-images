@@ -13,7 +13,7 @@
 - name: Extract Guacamole OIDC auth plugin
   copy:
     src: "/tmp/guacamole-auth-sso-{{ guacamole_version }}/openid/guacamole-auth-sso-openid-{{ guacamole_version }}.jar"
-    dest: "/etc/guacamole/extensions/01-guacamole-auth-sso-openid-{{ guacamole_version }}.jar"
+    dest: "/etc/guacamole/extensions/guacamole-auth-sso-openid-{{ guacamole_version }}.jar"
     remote_src: yes
 
 - name: Clean up Guacamole OIDC auth plugin temp files

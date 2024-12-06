@@ -22,7 +22,7 @@
     path: /etc/guacamole/lib/mariadb-java-client.jar
     state: link
 
-- name: Clean up Guacamole OIDC temp files
+- name: Clean up Guacamole JDBC auth temp files
   file:
     path: "{{ item }}"
     state: absent
