@@ -1,0 +1,13 @@
+---
+- name: Remove 127.0.1.1 from hosts
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '^127\.0\.1\.1'
+    state: absent
+
+- name: Point localhost to 127.0.0.1
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '^127\.0\.0\.1'
+    line: '127.0.0.1 localhost localhost.localdomain'
+    state: present

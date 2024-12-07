@@ -494,6 +494,20 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # Bumblebee Scientific Toolbox
+  config.vm.define "bumblebee-scientific-toolbox" do |c|
+    c.vm.box = "generic/ubuntu2204"
+    c.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/jammy64"
+    end
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true,
+                             nectar_image_name: "Scientific Toolbox" }
+      ansible.playbook = "ansible/playbook-bumblebee-scientific-toolbox.yml"
+      ansible.become = true
+    end
+  end
 
   #config.winrm.transport = :plaintext
   #config.winrm.basic_auth_only = true

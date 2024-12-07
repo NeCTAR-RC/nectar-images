@@ -1,0 +1,13 @@
+---
+- name: Check if apport config exists
+  stat:
+    path: /etc/default/apport
+  register: apport_config
+
+- name: Disable apport
+  lineinfile:
+    dest: /etc/default/apport
+    regexp: '^enabled=1'
+    line: 'enabled=0'
+    state: present
+  when: apport_config.stat.exists

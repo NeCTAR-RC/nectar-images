@@ -1,0 +1,24 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: yes
+
+  vars_files:
+    - vars/main.yml
+    - vars/bumblebee-desktop.yml
+    - vars/bumblebee-scientific-toolbox.yml
+
+  roles:
+    - image-name
+    - default-user
+    - xfce4-desktop
+    - xrdp
+    - desktop-common
+#    - pgadmin
+    - anaconda
+    - r
+    - rstudio
+    - testing
+    - nectar-user
+    - facts
+    - cleanup

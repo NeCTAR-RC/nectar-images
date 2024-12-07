@@ -1,0 +1,7 @@
+---
+- name: remove fd0 mount
+  mount:
+    name: /media/floppy0
+    fstype: auto
+    src: /dev/fd0
+    state: absent

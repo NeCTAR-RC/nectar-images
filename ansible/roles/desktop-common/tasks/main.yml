@@ -7,7 +7,7 @@
   loop_control:
     loop_var: vars_item
 
-- name: Install common packages
-  package:
-    name: "{{ desktop_common_packages }}"
-    state: present
+- include_tasks: etc_hosts.yml
+- include_tasks: remove_floppy.yml
+- include_tasks: disable_apport.yml
+- include_tasks: packages.yml
