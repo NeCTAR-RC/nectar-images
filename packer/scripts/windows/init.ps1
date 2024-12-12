@@ -1,5 +1,6 @@
 #ps1_sysnative
 
+$ProgressPreference = 'SilentlyContinue'
 $ErrorActionPreference = "Continue"
 
 function Custom-Log ($m) {
@@ -47,6 +48,26 @@ if (Test-Path -Path $Folder) {
     }
 } else {
     Custom-Log "SKIP: NVIDIA VGPU Driver not installed"
+}
+
+# Create VGPU driver install shortcut if device found...
+$videoController = Get-CimInstance Win32_VideoController
+if ($videoController.PNPDeviceID -like 'PCI\VEN_10DE*') {
+    Custom-Log "NVIDIA VGPU device found!"
+    Custom-Log "Creating driver install shortcut..."
+    $WshShell = New-Object -comObject WScript.Shell
+    $DesktopPath = "C:\Users\Administrator\Desktop"
+    $ShortCutPath = Join-Path -Path $DesktopPath -ChildPath 'NVIDIA VGPU Driver Installer.lnk'
+    $Shortcut = $WshShell.CreateShortcut($ShortCutPath)
+    $Shortcut.TargetPath = "powershell.exe"
+    $Shortcut.Arguments = "-ExecutionPolicy Bypass -File C:\ProgramData\Nectar\nvidia_vgpu_driver_install.ps1"
+    $Shortcut.WorkingDirectory = "C:\ProgramData\Nectar"
+    $Shortcut.Description = "NVIDIA VGPU Driver Installer"
+    $Shortcut.IconLocation = "powershell.exe,0"  # Uses default PowerShell icon
+    $Shortcut.Save()
+    Custom-Log "Shortcut created!"
+} else {
+    Custom-Log "SKIP: NVIDIA VGPU Device not found"
 }
 
 Custom-Log "Checking Windows license status..."
