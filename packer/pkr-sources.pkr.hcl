@@ -38,10 +38,6 @@ locals {
 
   http_directory = var.http_directory == null ? "${path.root}/http" : var.http_directory
 
-  memory = var.memory == null ? (
-    var.is_windows ? 4096 : 2048
-  ) : var.memory
-
   security_groups = var.security_group != null ? [var.security_group] : null
 
   shutdown_command = var.shutdown_command == null ? (
@@ -86,7 +82,7 @@ source "qemu" "vm" {
   http_directory       = local.http_directory
   iso_checksum         = var.iso_checksum
   iso_url              = var.iso_url
-  memory               = local.memory
+  memory               = var.memory
   net_device           = var.qemu_net_device
   output_directory     = local.output_directory
   shutdown_command     = local.shutdown_command
