@@ -148,6 +148,12 @@ init: # Installs and upgrades Packer Plugins
 	# Download virtio-win ISO for Windows builds
 	$(if $(target),,$(call missing_target))
 ifneq (,$(findstring windows,$(packer_var_target)))
+# Get a local writable copy of the UEFI OVMF VARS if it doesn't exist already
+ifeq (,$(wildcard ./builds/build_files/efivars.fd))
+	cp /usr/share/OVMF/OVMF_VARS.fd ./builds/build_files/efivars.fd
+	chmod 0644 ./builds/build_files/efivars.fd
+endif
+# Download VirtIO Win ISO if it doesn't exist already
 ifeq (,$(wildcard ./builds/build_files/virtio-win.iso))
 	echo "Downloading virtio-win.iso..."
 	curl -s -L -o ./builds/build_files/virtio-win.iso https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso
