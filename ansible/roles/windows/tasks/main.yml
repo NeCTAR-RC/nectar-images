@@ -8,7 +8,7 @@
 
 - name: Disable the "Allow your PC to be discoverable" message
   ansible.windows.win_regedit:
-    path: 'HKLM:\System\CurrentControlSet\Control\NewNetworkWindowOff'
+    path: 'HKLM:\System\CurrentControlSet\Control\Network\NewNetworkWindowOff'
 
 - name: Enable Remote Desktop firewall rule
   ansible.windows.win_shell: Enable-NetFirewallRule -DisplayGroup 'Remote Desktop'
