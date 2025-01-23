@@ -6,4 +6,5 @@ iso_url        = "http://mirror.aarnet.edu.au/pub/ubuntu/releases/22.04/ubuntu-2
 iso_checksum   = "sha256:9bc6028870aef3f74f4e16b900008179e78b130e6b0b9a140635434a46aa98b0"
 boot_command   = ["c<wait>linux /casper/vmlinuz autoinstall ds=nocloud-net\\;s=http://{{.HTTPIP}}:{{.HTTPPort}}/ubuntu-22.04/ net.ifnames=0<enter><wait5>initrd /casper/initrd<enter><wait10>boot<enter>"]
 profile        = "docker"
-profile_args   = ["nectar_image_name='Ubuntu 22.04 LTS (Jammy) amd64 (with Docker)'"]
+profile_args   = ["nectar_image_name='Ubuntu 22.04 LTS (Jammy) amd64 (with Docker)'",
+                  "murano_image_type='Docker'"]
