@@ -1,0 +1,133 @@
+---
+nectar_image_name: Scientific Toolbox
+
+# Save these vars for setting as image properties
+image_properties:
+  hw_qemu_guest_agent: 'yes'
+
+r_cran_mirror: https://mirror.aarnet.edu.au/pub/CRAN
+r_install_dev: true
+
+r_install:
+#  - gdal
+  - libhdf4-0-alt
+  - hdf4-tools
+  - libnetcdf-dev
+  - netcdf-bin
+  - proj-bin
+  - libproj-dev
+  - libgdal-dev
+  - gdal-bin
+  - libudunits2-dev
+  - libsodium-dev      # required by sodium for cloudstoR
+  - libmagick++-dev    # required by animation package
+  - libprotobuf-dev    # required by crawl package
+  - protobuf-compiler  # required by crawl package
+  - libjq-dev          # required by crawl package
+  - libv8-dev          # required by crawl package
+  - libssl-dev         # required by devtools,httr package
+  - libsodium-dev      # required by sodium for cloudstoR
+
+
+r_packages:
+  - name: abind
+  - name: ade4
+  - name: adehabitatHR
+  - name: adehabitatLT
+  - name: adehabitatMA
+  - name: akima
+  - name: animation
+  - name: bit
+  - name: bitops
+  - name: brew
+  - name: caTools
+  - name: changepoint
+  - name: CircStats
+  - name: cloudstoR
+  - name: coda
+  - name: colorspace
+  - name: crawl
+  - name: deldir
+  - name: devtools
+  - name: dichromat
+  - name: digest
+  - name: dismo
+  - name: diveMove
+  - name: dplyr
+  - name: evaluate
+  - name: exactextractr
+  - name: ff
+  - name: FNN
+  - name: foreach
+  - name: formatR
+  - name: gdalUtils
+  - name: GeoLight
+  - name: geometry
+  - name: geosphere
+  - name: ggplot2
+  - name: gstat
+  - name: gtable
+  - name: highr
+  - name: htmltools
+  - name: httpuv
+  - name: httr
+  - name: intervals
+  - name: iterators
+  - name: jsonlite
+  - name: knitr
+  - name: labeling
+  - name: leaflet
+  - name: magic
+  - name: mapdata
+  - name: maps
+  - name: maptools
+  - name: markdown
+  - name: memoise
+  - name: mime
+  - name: misc3d
+  - name: munsell
+  - name: mvtnorm
+  - name: ncdf4
+  - name: plyr
+  - name: polyclip
+  - name: proto
+  - name: quantreg
+  - name: R6
+  - name: raster
+  - name: RColorBrewer
+  - name: Rcpp
+  - name: RCurl
+  - name: reshape2
+  - name: rgdal
+  - name: rgeos
+  - name: RJSONIO
+  - name: rmarkdown
+  - name: R.methodsS3
+  - name: RNetCDF
+  - name: R.oo
+  - name: roxygen2
+  - name: rstudioapi
+  - name: R.utils
+  - name: scales
+  - name: sf
+  - name: shiny
+  - name: sp
+  - name: spacetime
+  - name: SparseM
+  - name: stringr
+  - name: targets
+  - name: tarchetypes
+  - name: tensor
+  - name: testthat
+  - name: terra
+  - name: trip
+  - name: visNetwork
+  - name: whisker
+  - name: xtable
+  - name: xts
+  - name: yaml
+  - name: zoo
+
+#  - name: XML  # not available for 3.6.3
+#  - name: ncdf # Error: package 'ncdf' is not available (for R version 3.3.2)
+#  - name: rgl  # needs X11

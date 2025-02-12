@@ -507,6 +507,7 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "ansible/playbook-bumblebee-scientific-toolbox.yml"
       ansible.become = true
     end
+    config.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
   end
 
   # Bumblebee Rocky 9

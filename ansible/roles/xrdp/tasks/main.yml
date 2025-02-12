@@ -70,6 +70,9 @@
     - xrdp
     - xrdp-sesman
 
+# Fix for GNOME keyring
+- include_tasks: keyring.yml
+
 - include_tasks: pulseaudio.yml
   when: pulseaudio_modules_dir is defined
 

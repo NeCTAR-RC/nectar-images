@@ -19,6 +19,7 @@
     - anaconda
     - r
     - rstudio
+    - vscode
     - testing
     - nectar-user
     - facts

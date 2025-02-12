@@ -1,0 +1,24 @@
+---
+# XRDP does not unlock the GNOME keyring by default
+# as discussed in the following GitHub issue:
+# https://github.com/neutrinolabs/xrdp/issues/2776
+# and the pull request:
+# https://github.com/neutrinolabs/xrdp/pull/2780
+#
+# This should be fixed in v10 of XRDP, but for v9
+# we just need to add the keyring unlocking to the
+# XRDP sesman PAM config
+
+- name: PAM - keyring unlock in xrdp auth
+  ansible.builtin.lineinfile:
+    path: /etc/pam.d/xrdp-sesman
+    insertafter: '^@include common-auth'
+    regex: '^-auth.*pam_gnome_keyring'
+    line: '-auth optional pam_gnome_keyring.so'
+
+- name: PAM - keyring unlock in xrdp session
+  ansible.builtin.lineinfile:
+    path: /etc/pam.d/xrdp-sesman
+    insertafter: '^@include common-session'
+    regex: '^-session.*pam_gnome_keyring'
+    line: '-session optional pam_gnome_keyring.so autostart'
