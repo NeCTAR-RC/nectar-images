@@ -1,0 +1,14 @@
+---
+- name: Include OS-specific variables
+  include_vars: "{{ vars_item }}"
+  with_first_found:
+    - "{{ ansible_distribution | lower }}.yml"
+    - "{{ ansible_os_family | lower }}.yml"
+  loop_control:
+    loop_var: vars_item
+
+- name: 'install ({{ ansible_pkg_mgr }})'
+  include_tasks: 'install-{{ ansible_pkg_mgr }}.yml'
+
+#- import_tasks: install-extensions.yml
+#- import_tasks: write-settings.yml

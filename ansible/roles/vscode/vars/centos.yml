@@ -1,0 +1,4 @@
+---
+vscode_package: code
+vscode_deps:
+  - which
