@@ -5,12 +5,16 @@
 
   vars_files:
     - vars/main.yml
-    - vars/bumblebee-guacamole.yml
+    - vars/bumblebee-desktop.yml
 
   roles:
     - image-name
     - default-user
-    - guacamole
+    - xfce4-desktop
+    - xrdp
+    - openstack-clients
+    - desktop-common
+    - testing
     - nectar-user
     - facts
     - cleanup

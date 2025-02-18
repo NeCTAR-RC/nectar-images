@@ -516,11 +516,25 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
                              nectar_image_name: "Rocky Linux 9 Virtual Desktop" }
-      ansible.playbook = "ansible/playbook-bumblebee-rocky-9.yml"
+      ansible.playbook = "ansible/playbook-bumblebee-desktop.yml"
       ansible.become = true
     end
     config.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
   end
+
+  # Bumblebee Ubuntu 22.04 LTS (Jammy)
+  config.vm.define "bumblebee-ubuntu-22.04" do |c|
+    c.vm.box = "generic/ubuntu2204"
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true,
+                             nectar_image_name: "Ubuntu 22.04 LTS (Jammy) Virtual Desktop" }
+      ansible.playbook = "ansible/playbook-bumblebee-desktop.yml"
+      ansible.become = true
+    end
+    config.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
+  end
+
 
   #config.winrm.transport = :plaintext
   #config.winrm.basic_auth_only = true
