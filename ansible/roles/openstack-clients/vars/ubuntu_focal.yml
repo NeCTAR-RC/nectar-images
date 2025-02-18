@@ -1,0 +1,18 @@
+---
+openstack_clients_version: yoga
+openstack_clients_packages:
+  - python3-ceilometerclient
+  - python3-cinderclient
+  - python3-designateclient
+  - python3-glanceclient
+  - python3-heatclient
+  - python3-keystoneclient
+  - python3-manilaclient
+  - python3-mistralclient
+  - python3-muranoclient
+  - python3-neutronclient
+  - python3-novaclient
+  - python3-openstackclient
+  - python3-saharaclient
+  - python3-swiftclient
+  - python3-troveclient

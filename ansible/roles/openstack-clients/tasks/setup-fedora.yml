@@ -1,0 +1,5 @@
+---
+- name: Install OpenStack client packages
+  dnf:
+    name: "{{ openstack_clients_packages }}"
+    state: present

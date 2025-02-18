@@ -4,7 +4,14 @@
     src: xfce4-nectar-panel.desktop
     dest: /etc/xdg/autostart/xfce4-nectar-panel.desktop
 
-- name: Copy customised panel config
+- name: Copy customised panel config (Ubuntu)
   copy:
-    src: nectar-xfce4-panel.tar.bz2
+    src: "{{ ansible_distribution_release }}-nectar-xfce4-panel.tar.bz2"
     dest: /usr/share/xfce4-panel-profiles/layouts/Nectar.tar.bz2
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Copy customised panel config (not Ubuntu)
+  copy:
+    src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}-nectar-xfce4-panel.tar.bz2"
+    dest: /usr/share/xfce4-panel-profiles/layouts/Nectar.tar.bz2
+  when: ansible_distribution != 'Ubuntu'

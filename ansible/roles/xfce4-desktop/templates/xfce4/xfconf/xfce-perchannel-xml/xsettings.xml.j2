@@ -2,8 +2,8 @@
 
 <channel name="xsettings" version="1.0">
   <property name="Net" type="empty">
-    <property name="ThemeName" type="string" value="Greybird"/>
-    <property name="IconThemeName" type="string" value="elementary-xfce-darker"/>
+    <property name="ThemeName" type="string" value="{{ xfce_theme }}"/>
+    <property name="IconThemeName" type="string" value="{{ xfce_icon_theme }}"/>
     <property name="FallbackIconTheme" type="string" value="gnome"/>
   </property>
   <property name="Xft" type="empty">
@@ -15,11 +15,11 @@
     <property name="Lcdfilter" type="string" value="lcddefault"/>
   </property>
   <property name="Gtk" type="empty">
-    <property name="CursorThemeName" type="string" value="DMZ-White"/>
+    <property name="CursorThemeName" type="string" value="{{ xfce_cursor_theme }}"/>
     <property name="CursorThemeSize" type="int" value="24"/>
     <property name="DecorationLayout" type="string" value="menu:minimize,maximize,close"/>
-    <property name="FontName" type="string" value="Noto Sans 9"/>
-    <property name="MonospaceFontName" type="string" value="Ubuntu Mono 10.6"/>
+    <property name="FontName" type="string" value="{{ xfce_font }}"/>
+    <property name="MonospaceFontName" type="string" value="{{ xfce_monospace_font }}"/>
     <property name="IconSizes" type="string" value="gtk-button=16,16"/>
     <property name="MenuImages" type="bool" value="true"/>
   </property>

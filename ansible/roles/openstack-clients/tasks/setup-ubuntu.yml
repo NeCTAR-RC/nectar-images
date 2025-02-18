@@ -1,0 +1,17 @@
+---
+- name: Add Ubuntu cloud archive key
+  apt_key:
+    id: 391A9AA2147192839E9DB0315EDB1B62EC4926EA
+    keyserver: keyserver.ubuntu.com
+  when: openstack_clients_version is defined
+
+- name: Add Ubuntu cloud archive repository
+  apt_repository:
+    repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_distribution_release }}-updates/{{ openstack_clients_version }} main"
+    update_cache: yes
+  when: openstack_clients_version is defined
+
+- name: Install OpenStack client packages
+  package:
+    name: "{{ openstack_clients_packages }}"
+    state: present

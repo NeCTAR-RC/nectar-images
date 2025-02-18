@@ -1,0 +1,11 @@
+---
+- name: restart xrdp
+  service:
+    name: xrdp
+    state: restarted
+
+- name: restart sesman
+  service:
+    name: xrdp-sesman
+    state: restarted
+

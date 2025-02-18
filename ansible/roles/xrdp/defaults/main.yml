@@ -1,3 +1,0 @@
----
-# Listen on localhost by default
-xrdp_port: tcp://127.0.0.1:3389

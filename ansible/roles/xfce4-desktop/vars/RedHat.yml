@@ -1,0 +1,75 @@
+---
+xfce_packages:
+- '@base-x'
+- '@guest-desktop-agents'
+- '@standard'
+- '@core'
+- '@fonts'
+- '@multimedia'
+- '@internet-browser'
+- '@Xfce'
+- libXcomposite
+- libXdamage
+- mesa-libEGL
+- mesa-libgbm
+- mesa-libglapi
+- xterm
+- seahorse
+- pcp-selinux
+- lightdm
+- firefox
+- rocky-backgrounds
+- parole
+- xfce4-taskmanager
+- xfce4-datetime-plugin
+- xfce4-netload-plugin
+- xfce4-screenshooter-plugin
+- xfce4-smartbookmark-plugin
+- xfce4-systemload-plugin
+- xfce4-whiskermenu-plugin
+- pavucontrol
+- xfce4-appfinder
+- xfce4-panel-profiles
+- xfce4-pulseaudio-plugin
+- xfce4-terminal
+- openssh-askpass
+- thunar-archive-plugin
+- thunar-volman
+- tumbler
+- mousepad
+- ristretto
+- xfce-polkit
+- wget
+- xdg-user-dirs
+- xdg-user-dirs-gtk
+- gstreamer1-plugins-ugly-free
+- gstreamer1-plugins-bad-free
+- python3-gobject  # needed for xfce3-panel-profile
+- langpacks-en
+- glibc-all-langpacks
+
+xfce_remove_packages:
+- autofs
+- acpid
+- gimp-help
+- desktop-backgrounds-basic
+- aspell-*
+- xfce4-sensors-plugin
+- xfce4-eyes-plugin
+- mpage
+- hplip
+- isdn4k-utils
+- xsane
+- xsane-gimp
+- sane-backends
+- gdm
+- gnome-shell
+- network-manager-applet
+- firewalld
+
+xfce_theme: Adwaita
+xfce_icon_theme: Adwaita
+xfce_cursor_theme: Adwaita
+xfce_font: Sans 8.6
+xfce_monospace_font: Monospace 8.6
+xfce_background_path: /usr/share/backgrounds/nectar.svg

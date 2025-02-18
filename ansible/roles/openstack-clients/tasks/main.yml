@@ -1,0 +1,20 @@
+---
+- name: Include OS-specific variables
+  include_vars: "{{ vars_item }}"
+  with_first_found:
+    - "{{ ansible_distribution | lower }}_{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution | lower }}_{{ ansible_distribution_release }}.yml"
+    - "{{ ansible_os_family | lower }}_{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_os_family | lower }}_{{ ansible_distribution_release }}.yml"
+    - "{{ ansible_distribution | lower }}.yml"
+    - "{{ ansible_os_family | lower }}.yml"
+  loop_control:
+    loop_var: vars_item
+
+- name: Include OS-specific tasks
+  include_tasks: "{{ tasks_item }}"
+  with_first_found:
+    - "setup-{{ ansible_distribution | lower }}.yml"
+    - "setup-{{ ansible_os_family | lower }}.yml"
+  loop_control:
+    loop_var: tasks_item

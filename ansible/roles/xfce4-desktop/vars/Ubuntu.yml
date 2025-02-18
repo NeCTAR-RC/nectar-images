@@ -1,0 +1,37 @@
+---
+xfce_packages:
+  - xubuntu-desktop
+  - libpulse0
+
+xfce_remove_packages:
+  - apport  # nuke the system program problem detected alert
+  - blueman
+  - bluez
+  - evolution-data-server
+  - geoclue-2.0
+  - gnome-session-bin  # remove these to force xfce as the default X session
+  - gnome-settings-daemon
+  - gnome-shell
+  - gnome-software
+  - gnome-terminal
+  - light-locker
+  - mate-session-manager
+  - network-manager
+  - network-manager-gnome
+  - spice-vdagent
+  - system-config-printer
+  - unity-settings-daemon
+  - update-notifier
+  - xfce4-power-manager
+  - xfce4-power-manager-data
+  - xfce4-power-manager-plugins
+  - xiccd
+  - xscreensaver
+  - xscreensaver-data
+
+xfce_theme: Greybird
+xfce_icon_theme: elementary-xfce-darker
+xfce_cursor_theme: DMZ-White
+xfce_font: Noto Sans 9
+xfce_monospace_font: Ubuntu Mono 10.6
+xfce_background_path: /usr/share/xfce4/backdrops/nectar.svg

@@ -1,0 +1,7 @@
+---
+- name: Set XFCE4 as default desktop
+  copy:
+    dest: /etc/sysconfig/desktop
+    content: |
+      PREFERRED=/usr/bin/startxfce4
+  when: ansible_os_family == 'RedHat'

@@ -1,0 +1,10 @@
+---
+- name: Add OpenStack package repository
+  dnf:
+    name: "centos-release-openstack-{{ openstack_clients_version }}"
+    state: present
+
+- name: Install OpenStack client packages
+  dnf:
+    name: "{{ openstack_clients_packages }}"
+    state: present

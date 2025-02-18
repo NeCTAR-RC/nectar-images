@@ -1,0 +1,9 @@
+---
+xrdp_packages:
+  - xorg-x11-server-Xorg
+  - xrdp
+  - xorgxrdp
+
+xorg_path: /usr/bin/Xorg
+
+pulseaudio_modules_dir: /usr/lib64/pulse-10.0/modules

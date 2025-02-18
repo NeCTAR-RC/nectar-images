@@ -1,25 +1,56 @@
 ---
-- name: install xfce4 desktop packages
+- name: Include OS-specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}_{{ ansible_distribution_version }}.yml"
+    - "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+    - "default.yml"
+
+- name: Install XFCE desktop packages (yum)
+  yum:
+    name: "{{ xfce_packages }}"
+    exclude: "{{ xfce_remove_packages|default([]) }}"
+    state: present
+    update_cache: yes
+  when:
+    - ansible_os_family == 'RedHat'
+    - ansible_distribution_major_version < '8'
+
+- name: Install XFCE desktop packages (dnf)
+  ansible.builtin.dnf:
+    name: "{{ xfce_packages }}"
+    exclude: "{{ xfce_remove_packages|default([]) }}"
+    state: present
+    update_cache: yes
+  when:
+    - ansible_os_family == 'RedHat'
+    - ansible_distribution_major_version > '7'
+
+- name: Install XFCE desktop packages (apt)
   apt:
-    name: '{{ xfce4_apt_packages }}'
+    name: '{{ xfce_packages }}'
     state: present
     install_recommends: yes
     update_cache: true
-    cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
+    cache_valid_time: 3600
   when: ansible_distribution == 'Ubuntu'
 
 - name: remove unnecessary packages
   apt:
-    name: '{{ remove_apt_packages }}'
+    name: '{{ xfce_remove_packages }}'
     state: absent
     purge: yes
     autoremove: yes
-  when: remove_apt_packages is defined
+  when:
+    - ansible_distribution == 'Ubuntu'
+    - xfce_remove_packages is defined
 
 - name: Install background
   copy:
     src: files/nectar-background.svg
-    dest: /usr/share/xfce4/backdrops/nectar.svg
+    dest: "{{ xfce_background_path }}"
 
 - name: Install menu icon
   copy:
@@ -51,10 +82,15 @@
     src: 'files/xfce4/xfconf/xfce-perchannel-xml/{{ item }}'
     dest: '/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/{{ item }}'
   with_items:
-    - xfce4-desktop.xml
     - xfce4-power-manager.xml
     - xfce4-screensaver.xml
-    - xfwm4.xml
+
+- name: copy xfce4 default config templates
+  template:
+    src: 'xfce4/xfconf/xfce-perchannel-xml/{{ item }}.j2'
+    dest: '/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/{{ item }}'
+  with_items:
+    - xfce4-desktop.xml
     - xsettings.xml
 
 - name: Disable lightdm on startup
@@ -63,5 +99,14 @@
     state: stopped
     enabled: false
 
+- name: Disable XScreenSaver
+  copy:
+    dest: /etc/skel/.xscreensaver
+    content: |
+      mode:           off
+      lock:           False
+      dpmsEnabled:    False
+
 - include_tasks: policies.yml
 - include_tasks: panel.yml
+- include_tasks: default-session.yml

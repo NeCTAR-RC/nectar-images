@@ -32,7 +32,13 @@ LogLevel=INFO
 EnableConsole=true
 
 [Xorg]
-param={{ xrdp_xorg_path }}
+{% if ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7' %}
+param=Xorg
+{% elif ansible_os_family == 'RedHat' %}
+param=/usr/libexec/Xorg
+{% elif ansible_os_family == 'Debian' %}
+param=/usr/lib/xorg/Xorg
+{% endif %}
 param=-config
 param=xrdp/xorg.conf
 param=-noreset
@@ -42,7 +48,7 @@ param=-logfile
 param=.xorgxrdp.%s.log
 
 [Chansrv]
-FuseMountName=shared_drives
+FuseMountName=thinclient_drives
 FileUmask=077
 
 [ChansrvLogging]
