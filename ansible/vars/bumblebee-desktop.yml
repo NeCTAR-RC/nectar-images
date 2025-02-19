@@ -1,3 +1,7 @@
 ---
 organisation_name: Bumblebee
 locale: en_AU.UTF-8
+
+# Save these vars for setting as image properties
+image_properties:
+  hw_qemu_guest_agent: 'yes'
