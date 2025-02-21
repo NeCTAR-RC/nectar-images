@@ -274,18 +274,16 @@ if [[ -n "$SSH_TESTING_KEY" ]]; then
     ssh_use_key="-i $SSH_TESTING_KEY"
 fi
 
-action "Running instance tests..."
-if [[ "$NAME" =~ indows ]]; then
-    TEST_CMD='C:\ProgramData\Nectar\run_tests.cmd'
-	debug "ssh -oConnectTimeout=5 -oIdentitiesOnly=yes -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $ssh_use_key $USER_ACCOUNT@$ip '$TEST_CMD'"
-    # TODO(andy) Windows tests will fail in rctest for example due to not being able to be licensed.
-    # Make the tests handle this situation better
-	ssh -oConnectTimeout=5 -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $ssh_use_key $USER_ACCOUNT@$ip "$TEST_CMD" || true
+# Windows and Linux have different test commands
+if [[ "$NAME" =~ (W|w)indows ]]; then
+    test_command='C:\ProgramData\Nectar\run_tests.cmd'
 else
-    TEST_CMD='/bin/bash /usr/nectar/run_tests.sh'
-	debug "ssh -oConnectTimeout=5 -oIdentitiesOnly=yes -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $ssh_use_key $USER_ACCOUNT@$ip '$TEST_CMD'"
-	ssh -oConnectTimeout=5 -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $ssh_use_key $USER_ACCOUNT@$ip "$TEST_CMD"
+    test_command='/bin/bash /usr/nectar/run_tests.sh'
 fi
 
-# Complete
-delete_instance $INSTANCE_ID
+action "Running instance tests..."
+debug "ssh -oConnectTimeout=5 -oIdentitiesOnly=yes -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $ssh_use_key $USER_ACCOUNT@$ip '$test_command'"
+ssh -oConnectTimeout=5 -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $ssh_use_key $USER_ACCOUNT@$ip "$test_command" || fatal 'Test failed'
+
+# Success
+exit 0
