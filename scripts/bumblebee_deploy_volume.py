@@ -40,7 +40,7 @@ def wait_for_status(status_f, res_id, status_field='status',
         elif status in error_status:
             retval = False
             break
-        LOG.debug('Volume status is: %s', status)
+        LOG.info('Volume status is: %s', status)
         time.sleep(sleep_time)
     return retval
 
@@ -103,7 +103,7 @@ def do_stuff(args):
                         LOG.info('Created volume %s', vol.id)
                     else:
                         LOG.error('Error creating volume: %s', vol.id)
-                        raise SystemExit
+                        raise SystemExit(1)
 
 
 def main():
