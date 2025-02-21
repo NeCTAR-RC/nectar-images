@@ -1,6 +1,4 @@
 ---
-nectar_image_name: Scientific Toolbox
-
 # Save these vars for setting as image properties
 image_properties:
   hw_qemu_guest_agent: 'yes'

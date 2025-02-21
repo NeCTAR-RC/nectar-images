@@ -5,4 +5,4 @@ os_arch           = "x86_64"
 source_image_name = "NeCTAR Ubuntu 22.04 LTS (Jammy) amd64"
 ssh_username      = "ubuntu"
 profile           = "bumblebee-scientific-toolbox"
-profile_args      = ["nectar_image_name='Scientific Toolbox'"]
+profile_args      = ["nectar_image_name='Scientific Toolbox Virtual Desktop'"]
