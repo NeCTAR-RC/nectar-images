@@ -1,0 +1,10 @@
+---
+# Vars
+- name: Include datastore-specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ datastore }}-{{ datastore_version }}.yml"
+    - "default.yml"
+
+# Datastore setup
+- include_tasks: "setup-{{ datastore }}-{{ ansible_distribution }}.yml"
