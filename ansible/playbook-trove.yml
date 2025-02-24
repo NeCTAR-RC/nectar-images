@@ -7,7 +7,6 @@
     - vars/main.yml
 
   roles:
-    - role: trove-uid-gid
     - role: image-name
     - role: default-user
     - role: systemd-networkd

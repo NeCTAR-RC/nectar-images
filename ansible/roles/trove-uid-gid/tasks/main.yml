@@ -1,3 +1,0 @@
----
-# Datastore setup
-- include_tasks: "setup-{{ datastore }}-{{ ansible_distribution }}.yml"
