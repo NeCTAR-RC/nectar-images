@@ -1,4 +1,4 @@
-build_name     = "trove-postgresql-16"
+build_name     = "trove-mysql-8.0"
 os_name        = "ubuntu"
 os_version     = "20.04"
 os_arch        = "x86_64"
