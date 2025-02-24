@@ -19,6 +19,30 @@
     id: 391A9AA2147192839E9DB0315EDB1B62EC4926EA
     keyserver: keyserver.ubuntu.com
 
+
+# We dont't add user/group when using vagrant as uid/gid clashes as extra users
+# exist in the image
+# This is to try and ensure mysql/postgres uid/gid are free
+
+- name: Ensure group "trove" exists
+  group:
+    name: trove
+    state: present
+    gid: 150
+    system: yes
+  when: nectar_test_build | default(False) == False
+
+- name: Ensure user "trove" exists
+  user:
+    name: trove
+    shell: /bin/false
+    system: yes
+    home: /var/lib/trove
+    create_home: yes
+    group: true
+    uid: 150
+  when: nectar_test_build | default(False) == False
+
 - name: Install Trove Guest agent
   package:
     name:
