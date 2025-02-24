@@ -19,6 +19,3 @@
     name:
       - postgresql-11
     state: present
-
-- name: Remove postgres 11 cluster
-  shell: pg_dropcluster 11 main --stop
