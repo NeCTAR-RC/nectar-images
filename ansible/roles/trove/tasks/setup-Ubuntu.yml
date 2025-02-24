@@ -39,7 +39,7 @@
     system: yes
     home: /var/lib/trove
     create_home: yes
-    group: true
+    group: trove
     uid: 150
   when: nectar_test_build | default(False) == False
 
