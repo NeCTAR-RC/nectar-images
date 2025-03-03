@@ -6,4 +6,5 @@ xrdp_packages:
 
 xorg_path: /usr/bin/Xorg
 
+pipewire_files_dir: "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}"
 pipewire_modules_dir: /usr/lib64/pipewire-0.3

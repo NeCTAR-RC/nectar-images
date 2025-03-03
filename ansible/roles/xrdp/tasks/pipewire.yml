@@ -4,6 +4,7 @@
   with_first_found:
     - "{{ ansible_distribution }}_{{ ansible_distribution_version }}.yml"
     - "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
     - "{{ ansible_distribution }}.yml"
     - "{{ ansible_os_family }}.yml"
     - "default.yml"
@@ -26,7 +27,7 @@
 #  https://github.com/neutrinolabs/pipewire-module-xrdp/wiki/README
 - name: Install XRDP Pipewire modules
   copy:
-    src: "xrdp-pipewire/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}/{{ item }}"
+    src: "xrdp-pipewire/{{ pipewire_files_dir }}/{{ item }}"
     dest: "{{ pipewire_modules_dir }}/{{ item }}"
   with_items:
     - libpipewire-module-xrdp.la
@@ -34,7 +35,7 @@
 
 - name: Install pipewire-xrdp.desktop
   copy:
-    src: "xrdp-pipewire/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}/pipewire-xrdp.desktop"
+    src: "xrdp-pipewire/{{ pipewire_files_dir }}/pipewire-xrdp.desktop"
     dest: /etc/xdg/autostart/pipewire-xrdp.desktop
 
 - name: Create xrdp-pipewire-installer directory
@@ -42,8 +43,8 @@
     path: /libexec/pipewire-module-xrdp
     state: directory
 
-- name: Install load_pa_modules.sh
+- name: Install load_pw_modules.sh
   copy:
-    src: "xrdp-pipewire/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}/load_pw_modules.sh"
+    src: "xrdp-pipewire/{{ pipewire_files_dir }}/load_pw_modules.sh"
     dest: /libexec/pipewire-module-xrdp/load_pw_modules.sh
     mode: '0755'

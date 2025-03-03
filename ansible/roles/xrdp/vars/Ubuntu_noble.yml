@@ -15,4 +15,5 @@ xrdp_packages:
 
 xorg_path: /usr/lib/xorg/Xorg
 
-pulseaudio_modules_dir: /usr/lib/pulse-15.99.1+dfsg1/modules
+pipewire_files_dir: "{{ ansible_distribution }}_{{ ansible_distribution_release }}"
+pipewire_modules_dir: /usr/lib/x86_64-linux-gnu/pipewire-0.3

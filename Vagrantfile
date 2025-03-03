@@ -536,6 +536,19 @@ Vagrant.configure("2") do |config|
     config.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
   end
 
+  # Bumblebee Ubuntu 24.04 LTS (Noble)
+  config.vm.define "bumblebee-ubuntu-24.04" do |c|
+    c.vm.box = "cloud-image/ubuntu-24.04"
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true,
+                             nectar_image_name: "Ubuntu 24.04 LTS (Noble) Virtual Desktop" }
+      ansible.playbook = "ansible/playbook-bumblebee-desktop.yml"
+      ansible.become = true
+    end
+    config.vm.network :forwarded_port, guest: 3389, host: 30389, host_ip: '0.0.0.0'
+  end
+
 
   # Ubuntu 22.04 (jammy) - transcription desktop
   config.vm.define "bumblebee-transcription" do |c|

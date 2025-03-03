@@ -1,8 +1,11 @@
 ---
-- name: Ensure polkit directory exists
-  file:
+# Directory doesn't exist in Noble, and may not be needed, so we push the
+# config only if it exists
+- name: Get polkit localauthority directory
+  stat:
     path: /etc/polkit-1/localauthority/50-local.d
-    state: directory
+  register: polkit_localauth_dir
+
 - name: Create color manager policy
   copy:
     dest: /etc/polkit-1/localauthority/50-local.d/45-allow.colord.pkla
@@ -13,6 +16,7 @@
       ResultAny=no
       ResultInactive=no
       ResultActive=yes
+  when: polkit_localauth_dir.stat.exists
 
 - name: Create package manager policy
   copy:
@@ -24,3 +28,4 @@
       ResultAny=yes
       ResultInactive=yes
       ResultActive=yes
+  when: polkit_localauth_dir.stat.exists
