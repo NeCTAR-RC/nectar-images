@@ -26,3 +26,7 @@
     - '^IPV6INIT'
     - '^NM_CONTROLLED'
     - '^MTU'
+
+# Cloud-init isn't cleaning up old entries from image build
+- name: Clean resolv.conf
+  shell: truncate -s 0 /etc/resolv.conf
