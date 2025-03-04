@@ -15,5 +15,5 @@ xrdp_packages:
 
 xorg_path: /usr/lib/xorg/Xorg
 
-pulseaudio_dir: "{{ ansible_distribution }}_{{ ansible_distribution_release }}"
+pulseaudio_files_dir: "{{ ansible_distribution }}_{{ ansible_distribution_release }}"
 pulseaudio_modules_dir: /usr/lib/pulse-15.99.1+dfsg1/modules

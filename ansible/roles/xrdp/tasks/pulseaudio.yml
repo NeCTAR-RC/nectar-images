@@ -1,26 +1,8 @@
 ---
-- name: Include OS-specific variables
-  include_vars: "{{ item }}"
-  with_first_found:
-    - "{{ ansible_distribution }}_{{ ansible_distribution_version }}.yml"
-    - "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
-    - "default.yml"
-
-# Ensure PulseAudio replaces Pipewire for Rocky9 at least
-- name: Install pulseaudio
-  ansible.builtin.dnf:
-    name: pulseaudio
-    state: present
-    allowerasing: true
-  when: ansible_os_family == 'RedHat'
-
-- name: Ensure PulseAudio is enabled for the user account
-  ansible.builtin.systemd:
-    name: pulseaudio.service
-    scope: global
-    enabled: true
+#- name: Ensure PulseAudio is enabled for the user account
+#  ansible.builtin.systemd_service:
+#    name: pulseaudio.service
+#    enabled: true
 
 # To build, follow the instructions from
 #  https://github.com/neutrinolabs/pulseaudio-module-xrdp/wiki/README

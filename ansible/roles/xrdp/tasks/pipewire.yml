@@ -1,14 +1,4 @@
 ---
-- name: Include OS-specific variables
-  include_vars: "{{ item }}"
-  with_first_found:
-    - "{{ ansible_distribution }}_{{ ansible_distribution_version }}.yml"
-    - "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
-    - "{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
-    - "default.yml"
-
 # Ensure Pipewire replaces Pipewire for Rocky9 at least
 - name: Install pipewire
   ansible.builtin.dnf:
@@ -17,11 +7,12 @@
     allowerasing: true
   when: ansible_os_family == 'RedHat'
 
-- name: Ensure Pipewire is enabled for the user account
-  ansible.builtin.systemd:
-    name: pipewire.service
-    scope: global
-    enabled: true
+# Ensure Pipewire is installed on Ubuntu
+- name: Install pipewire
+  ansible.builtin.apt:
+    name: pipewire
+    state: present
+  when: ansible_os_family == 'Debian'
 
 # To build, follow the instructions from
 #  https://github.com/neutrinolabs/pipewire-module-xrdp/wiki/README
