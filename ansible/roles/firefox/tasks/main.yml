@@ -1,0 +1,65 @@
+---
+- name: Ensure Firefox is installed on non-Ubuntu distros
+  package:
+    name: firefox
+    state: present
+  when: ansible_facts['distribution'] != 'Ubuntu'
+
+# Install Firefox on Ubuntu, while removing the 'snap' package
+- block:
+    - name: Remove Firefox Snap
+      ansible.builtin.snap:
+        state: absent
+        name: firefox
+      register: firefox_snap_removal
+      changed_when: firefox_snap_removal.changed
+
+    - name: Remove Firefox Snap deb
+      ansible.builtin.apt:
+        name: firefox
+        state: absent
+      when: firefox_snap_removal.changed
+
+    - name: Add Mozilla PPA for non-snap version of Firefox (stable)
+      apt_repository:
+        repo: 'ppa:mozillateam/ppa'
+
+    - name: Create apt preferences to pin the non-snap Firefox
+      copy:
+        dest: /etc/apt/preferences.d/mozilla
+        content: |
+          Package: *
+          Pin: release o=LP-PPA-mozillateam
+          Pin-Priority: 100
+          
+          Package: firefox
+          Pin: version 1:1snap1*
+          Pin-Priority: -1
+
+    - name: Set owner, group and permissions on pref file
+      file:
+        path: /etc/apt/preferences.d/mozilla
+        owner: root
+        group: root
+        mode: 0444
+
+    - name: Install Firefox
+      ansible.builtin.apt:
+        name: firefox
+        state: latest
+        update_cache: yes
+        allow_downgrade: yes
+
+  when: ansible_facts['distribution'] == 'Ubuntu'
+
+- name: Set Firefox system-wide preferences
+  lineinfile:
+    path: /etc/firefox/syspref.js
+    regexp: '^pref\(\"{{ item }}\",.*'
+    line: 'pref("{{ item }}", {{ firefox_prefs[item] }});'
+    create: yes
+    mode: '0644'
+  with_items: "{{ firefox_prefs }}"
+  when:
+    - firefox_prefs is defined
+    - firefox_prefs != ""

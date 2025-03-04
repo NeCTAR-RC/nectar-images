@@ -11,35 +11,15 @@
 # This should work for all current (non-EOL) Ubuntu releases, though the
 # launchpad page (https://launchpad.net/~mozillateam/+archive/ubuntu/ppa)
 # says that these builds are unsupported.
-
-- name: Add mozilla PPA for non-snap version of Firefox (stable)
-  apt_repository:
-    repo: 'ppa:mozillateam/ppa'
-
-- name: Create apt preferences to pin the non-snap Firefox
-  copy:
-    dest: /etc/apt/preferences.d/mozilla-firefox
-    content: |
-      Package: *
-      Pin: release o=LP-PPA-mozillateam
-      Pin-Priority: 1001
-
-      Package: firefox
-      Pin: version 1:1snap1-0ubuntu2
-      Pin-Priority: -1
-
-- name: Set owner, group and permissions on pref file
-  file:
-    path: /etc/apt/preferences.d/mozilla-firefox
-    owner: root
-    group: root
-    mode: 0444
+#
+# NOTE: Firefox is now set as a dependency role of the Jenkins role, so
+# we now install it via that.
+#
 
 - name: Install selenium prerequisites
   apt:
     pkg:
     - xvfb
-    - firefox
     - libxi6
     - libgconf-2-4
     state: present

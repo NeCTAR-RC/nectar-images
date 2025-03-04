@@ -5,3 +5,9 @@ locale: en_AU.UTF-8
 # Save these vars for setting as image properties
 image_properties:
   hw_qemu_guest_agent: 'yes'
+
+firefox_prefs:
+  browser.aboutwelcome.enabled: 'true'
+  browser.startup.homepage: "'https://ardc.edu.au'"
+  browser.startup.firstrunSkipsHomepage: 'true'
+  startup.homepage_welcome_url: "'https://ardc.edu.au'"
