@@ -1,0 +1,23 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: yes
+
+  vars_files:
+    - vars/main.yml
+    - vars/neurodesk.yml
+
+  roles:
+    - image-name
+    - default-user
+    - lxde-desktop
+    - cvmfs
+    - neurodesk
+    - vscode
+    - xrdp
+    - openstack-clients
+    - desktop-common
+    - testing
+    - nectar-user
+    - facts
+    - cleanup

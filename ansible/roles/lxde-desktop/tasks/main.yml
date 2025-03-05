@@ -1,0 +1,33 @@
+---
+- name: Include OS-specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution | lower }}.yml"
+    - "{{ ansible_os_family | lower }}.yml"
+    - "default.yml"
+
+- name: Install system packages (yum)
+  yum:
+    name: "{{ lxde_packages }}"
+    exclude: "{{ lxde_exclude_packages|default([]) }}"
+    state: present
+    update_cache: yes
+  when: ansible_pkg_mgr == 'yum'
+
+- name: Install system packages (apt)
+  apt:
+   name: "{{ lxde_packages }}"
+   state: present
+   update_cache: true
+   force: yes
+  when: ansible_pkg_mgr == 'apt'
+
+- name: Remove unnecessary packages (apt)
+  apt:
+   name: "{{ lxde_exclude_packages|default([]) }}"
+   purge: yes
+   state: absent
+  when: ansible_pkg_mgr == 'apt'
+
+#- include_tasks: background.yml
+- include_tasks: default-session.yml

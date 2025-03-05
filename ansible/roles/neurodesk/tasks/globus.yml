@@ -1,0 +1,18 @@
+---
+- name: Install dependencies for Globus client
+  package:
+    name:
+      - tk
+      - tcllib
+    state: latest
+
+- name: Create singularity mount points
+  file:
+    path: /opt/globusconnectpersonal
+    state: directory
+
+- name: Download and extract Globus client
+  unarchive:
+    src: https://downloads.globus.org/globus-connect-personal/linux/stable/globusconnectpersonal-latest.tgz
+    dest: /opt/globusconnectpersonal
+    remote_src: yes

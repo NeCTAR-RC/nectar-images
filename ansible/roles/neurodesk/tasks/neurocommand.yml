@@ -1,0 +1,36 @@
+---
+- name: Clone NeuroDesk repository
+  git:
+    repo: https://github.com/NeuroDesk/neurocommand.git
+    dest: /neurocommand
+
+- name: Install NeuroCommand
+  shell: "{{ item }}"
+  args:
+    chdir: /neurocommand
+    creates: /usr/share/applications/neurodesk
+  with_items:
+    - ./build.sh --lxde --edit
+    - ./install.sh
+
+- name: Prepare a container directory for users developing their own containers and testing them before release
+  file:
+    path: /neurocommand/local/containers
+    state: directory
+    mode: '0777'
+
+- name: Copy Neurocommand update script
+  copy:
+    src: neurocommand-update.sh
+    dest: /usr/local/sbin/neurocommand-update.sh
+    mode: '0755'
+
+- name: Copy Neurocommand update systemd unit file
+  copy:
+    src: neurocommand-update.service
+    dest: /etc/systemd/system/neurocommand-update.service
+
+- name: Enable Neurocommand update service
+  systemd:
+    name: neurocommand-update
+    enabled: yes

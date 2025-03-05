@@ -1,0 +1,64 @@
+---
+firefox_prefs:
+  browser.aboutwelcome.enabled: 'true'
+  browser.startup.homepage: '"https://www.neurodesk.org"'
+  browser.startup.firstrunSkipsHomepage: 'true'
+  startup.homepage_welcome_url: '"https://www.neurodesk.org"'
+
+# Settings from the base image that Neurodesk uses
+# https://github.com/jupyter/docker-stacks/blob/main/images/docker-stacks-foundation/Dockerfile#L122
+micromamba_dest: /tmp/micromamba
+micromamba_root_prefix: /opt/conda
+micromamba_packages:
+  - jupyter_core
+  - conda
+  - mamba
+  - python=3.12
+
+# This is constructed from 
+# https://github.com/jupyter/docker-stacks/blob/main/images/docker-stacks-foundation/initial-condarc
+# https://github.com/NeuroDesk/neurodesktop/blob/main/Dockerfile#L198
+micromamba_root_prefix_condarc:
+  auto_update_conda: false
+  show_channel_urls: true
+  channels:
+    - conda-forge
+  envs_dirs:
+    - ~/conda-environments
+
+# https://julialang.org/downloads - latest LTS release
+neurodesk_julia_version: 1.10.8
+
+# Mamba install of packages from these Docker files
+# https://github.com/NeuroDesk/neurodesktop/blob/main/Dockerfile#L200
+# https://github.com/jupyter/docker-stacks/blob/main/images/docker-stacks-foundation/Dockerfile#L122
+# https://github.com/jupyter/docker-stacks/blob/main/images/base-notebook/Dockerfile#L41
+neurodesk_python_packages:
+  - datalad
+  - nipype
+  - matplotlib
+  - datalad-container
+  - datalad-osf
+  - osfclient
+  - ipyniivue
+  - jupyter-server-proxy
+  - jupyterlmod==4.0.3
+  - jupyterlab-git 
+  - jupyterlab_rise
+  - ipycanvas
+  - jupyter-resource-usage
+  - jupyter_scheduler
+  - httpx
+  - ipywidgets
+  - ipyvolume
+  - jupyterlab_widgets
+#  - jupyterhub-singleuser - only a metapackage for jupyterlab
+  - jupyterlab
+  - jupyter-server
+  - nbclassic
+  - notebook
+
+neurodesk_conda_packages:
+  - nb_conda_kernels
+
+

@@ -1,0 +1,22 @@
+---
+- name: Get global mount point list
+  set_fact:
+    singularity_mounts: "{{ lookup('url', neurodesk_mountpoint_list_url).split(' ') }}"
+
+- name: Create singularity mount points
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items: "{{ singularity_mounts }}"
+
+- name: Write singularity profile
+  copy:
+    content: |
+      # Expand $PATH to include the singularity install dir
+      singularity_path="/usr/local/singularity/bin"
+      if [ -n "${PATH##*${singularity_path}}" ] && [ -n "${PATH##*${singularity_path}:*}" ]; then
+        export PATH=$PATH:${singularity_path}
+      fi
+      # Singularity bind path
+      export SINGULARITY_BINDPATH={{ singularity_mounts | join(',') }}
+    dest: /etc/profile.d/singularity.sh

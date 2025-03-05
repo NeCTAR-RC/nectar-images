@@ -1,0 +1,9 @@
+---
+lxde_packages:
+  - lxde
+
+lxde_exclude_packages:
+  - clipit
+  - xscreensaver
+  - zutty
+  - network-manager

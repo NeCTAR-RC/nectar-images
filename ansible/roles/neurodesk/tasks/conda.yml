@@ -1,0 +1,6 @@
+---
+- name: Install Conda packages
+  conda:
+    name: "{{ item }}"
+    executable: /opt/conda/bin/conda
+  with_items: "{{ neurodesk_conda_packages }}"

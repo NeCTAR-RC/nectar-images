@@ -1,0 +1,110 @@
+---
+- name: Include OS-specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution | lower }}.yml"
+    - "{{ ansible_os_family | lower }}.yml"
+    - "default.yml"
+
+- name: install extra packages
+  package:
+    name: "{{ neurodesk_extra_packages }}"
+    state: present
+
+- name: Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /data
+    - /opt/neurodesktop
+    - /etc/jupyter
+    - /etc/skel/.config/lxpanel
+    - /etc/skel/.config/lxpanel/LXDE
+    - /etc/skel/.config/lxpanel/LXDE/panels
+    - /etc/skel/.config/Code/User
+
+- name: Copy config files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - src: config/lxde/background.png
+      dest: /usr/share/lxde/wallpapers/desktop_wallpaper.png
+    - src: config/lxde/pcmanfm.conf
+      dest: /etc/xdg/pcmanfm/LXDE/pcmanfm.conf
+    - src: config/lxde/lxterminal.conf
+      dest: /usr/share/lxterminal/lxterminal.conf
+    - src: config/lxde/panel
+      dest: /etc/skel/.config/lxpanel/LXDE/panels/panel
+    - src: config/lxde/libfm.conf
+      dest: /etc/skel/.config/libfm
+    - src: config/lxde/rc.xml
+      dest: /etc/xdg/openbox/LXDE/rc.xml
+    # bashrc
+    - src: config/lxde/.bashrc
+      dest: /etc/skel/.bashrc
+    # mineapps
+    - src: config/lxde/mimeapps.list
+      dest: /etc/skel/.config/mimeapps.list
+    # misc
+    - src: config/test_neurodesktop.sh
+      dest: /usr/share/test_neurodesktop.sh
+    - src: config/itksnap
+      dest: /etc/skel/.config/.itksnap.org
+    # VSCode    
+    - src: config/vscode/settings.json
+      dest: /etc/skel/.config/Code/User/settings.json
+
+- name: Copy module system
+  copy:
+    src: config/lmod/module.sh
+    dest: /usr/share/
+
+- name: Create storage directory
+  file:
+    path: /neurodesktop-storage
+    state: directory
+    mode: "0777"
+
+- name: Create storage directory
+  file:
+    path: /etc/skel/Desktop
+    state: directory
+
+- name: Create a symbolic link to upload directory (has to be forced because home does not yet exist at buildtime)
+  file:
+    src: /neurodesktop-storage
+    dest: /etc/skel/Desktop/neurodesktop-storage
+    state: link
+
+- name: Create a symbolic link
+  file:
+    src: /home/vdiuser/thinclient_drives/GUACFS
+    dest: /etc/skel/Desktop/transfer
+    state: link
+    force: true
+
+#TODO(andybotting): Not needed outside a container?
+# Allow the root user to access the sshfs mount
+# https://github.com/NeuroDesk/neurodesk/issues/47
+- name: Ensure SELinux is set to enforcing mode
+  lineinfile:
+    path: /etc/fuse.conf
+    regexp: '#user_allow_other'
+    line: 'user_allow_other'
+
+- include_tasks: globus.yml
+- include_tasks: cvmfs.yml
+- include_tasks: apptainer.yml
+- include_tasks: julia.yml
+- include_tasks: conda.yml
+- include_tasks: jupyter.yml
+- include_tasks: neurocommand.yml
+
+- name: Clone NeuroDesk example-notebooks
+  git:
+    repo: https://github.com/NeuroDesk/example-notebooks
+    dest: /etc/skel/example-notebooks
+    depth: 1

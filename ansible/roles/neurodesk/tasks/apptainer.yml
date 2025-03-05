@@ -1,0 +1,17 @@
+---
+- name: Install required packages for Ubuntu
+  ansible.builtin.apt:
+    name: software-properties-common
+    state: present
+
+- name: Add Apptainer PPA
+  ansible.builtin.apt_repository:
+    repo: 'ppa:apptainer/ppa'
+
+- name: Install Apptainer
+  ansible.builtin.apt:
+    name:
+      - apptainer
+      - apptainer-suid
+    state: present
+    update_cache: yes

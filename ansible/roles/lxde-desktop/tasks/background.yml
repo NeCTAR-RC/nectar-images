@@ -1,0 +1,6 @@
+---
+- name: copy background.svg over
+  become: yes
+  copy:
+    src: background.svg
+    dest: /usr/share/backgrounds/

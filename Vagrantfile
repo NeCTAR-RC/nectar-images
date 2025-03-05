@@ -546,9 +546,25 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "ansible/playbook-bumblebee-desktop.yml"
       ansible.become = true
     end
-    config.vm.network :forwarded_port, guest: 3389, host: 30389, host_ip: '0.0.0.0'
+    config.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
   end
 
+  # Bumblebee Neurodesktop
+  config.vm.define "bumblebee-neurodesk" do |c|
+    c.vm.box = "cloud-image/ubuntu-24.04"
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true,
+                             nectar_image_name: "Neurodesktop" }
+      ansible.playbook = "ansible/playbook-bumblebee-neurodesk.yml"
+      ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "cp -rT /etc/skel /home/vagrant"
+      shell.privileged = false
+    end
+  config.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
+  end
 
   # Ubuntu 22.04 (jammy) - transcription desktop
   config.vm.define "bumblebee-transcription" do |c|
@@ -572,10 +588,12 @@ Vagrant.configure("2") do |config|
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
+  config.vm.disk :disk, size: "20GB", primary: true
+
   config.vm.provider :libvirt do |v|
     v.memory = 4096
     v.cpus = 2
-    v.machine_virtual_size = 4  # 4GB disk
+    v.machine_virtual_size = 20  # 4GB disk
     v.graphics_type = "spice"
   end
 
