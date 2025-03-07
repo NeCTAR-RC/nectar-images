@@ -1,0 +1,53 @@
+---
+- name: Install micromamba
+  ansible.builtin.unarchive:
+    remote_src: true
+    src: "{{ micromamba_base_url }}/{{ micromamba_arch }}/{{ micromamba_version }}"
+    dest: /usr/local
+    include: bin/micromamba
+    creates: /usr/local/bin/micromamba
+    mode: '0755'
+
+- name: Check if micromamba_root_prefix is defined but doesn't exist
+  ansible.builtin.stat:
+    path: "{{ micromamba_root_prefix }}"
+  register: root_prefix_stat
+  when: micromamba_root_prefix is defined
+
+- name: Build first part of arguments
+  ansible.builtin.set_fact:
+    first_args:
+      - /usr/local/bin/micromamba
+      - install
+      - --yes
+      - "--root-prefix={{ micromamba_root_prefix }}"
+      - "{{ ('--name=' + name) if name is defined else '' }}"
+      - "{{ ('--file=' + file) if file is defined else '' }}"
+      - "{{ ('--prefix=' + (prefix | default(micromamba_root_prefix))) if name is not defined else '' }}"
+  when:
+    - micromamba_root_prefix is defined
+    - not root_prefix_stat.stat.exists
+
+# Note: at this point, 'first_args' is defined by the previous task exactly when
+#   1. the root_prefix has been specified, and
+#   2. the corresponding directory does not yet exist.
+# This coincides with the condition that we want to proceed with the
+# 'micromamba install' command. Thus it's convenient to checking 'first_args is defined'
+# in what follows.
+
+- name: Build channel part of arguments
+  ansible.builtin.set_fact:
+    channel_args: "{{ ['--channel='] | product(micromamba_channels) | map('join') | list }}"
+  when: first_args is defined
+
+- name: Create a new conda environment
+  ansible.builtin.command:
+    argv: "{{ (first_args + channel_args + micromamba_packages) | reject('equalto', '') | list }}"
+  when: first_args is defined
+
+- name: Create .condarc file
+  ansible.builtin.copy:
+    dest: "{{ micromamba_root_prefix }}/.condarc"
+    content: "{{ micromamba_root_prefix_condarc | to_nice_yaml }}"
+    mode: '0644'
+  when: (first_args is defined) and (micromamba_root_prefix_condarc is defined)
