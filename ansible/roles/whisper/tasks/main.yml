@@ -1,0 +1,41 @@
+---
+- name: Ensure dpkg and apt are not locked
+  become: yes
+  shell: |
+    rm -f /var/lib/dpkg/lock-frontend
+    rm -f /var/lib/dpkg/lock
+    dpkg --configure -a
+  args:
+    warn: false
+
+- name: Install whisper pre-requisite APT packages
+  become: yes
+  ansible.builtin.apt:
+    name:
+      - curl
+      - ffmpeg
+      - libopenblas-dev
+      - libwebkit2gtk-4.1-0
+      - libgtk-3-0
+    state: present
+    update_cache: yes
+
+- name: Install VIBE
+  shell: curl -sSf https://thewh1teagle.github.io/vibe/installer.sh | sh -s v{{ vibe_version }}
+  args:
+    executable: /bin/bash
+
+- name: Install Flatpak
+  become: yes
+  apt:
+    name: flatpak
+    state: present
+    update_cache: yes
+
+- name: Add Flathub repository
+  become: yes
+  command: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+- name: Install Buzz via Flatpak
+  become: yes
+  command: flatpak install -y flathub io.github.chidiwilliams.Buzz
