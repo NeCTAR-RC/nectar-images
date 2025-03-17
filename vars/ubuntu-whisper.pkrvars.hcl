@@ -1,10 +1,9 @@
-build_name     = "ubuntu-24.04-whisper"
+build_name     = "ubuntu-22.04-whisper"
 os_name        = "ubuntu"
-os_version     = "24.04"
+os_version     = "242.04"
 os_arch        = "x86_64"
-iso_url        = "http://mirror.aarnet.edu.au/pub/ubuntu/releases/24.04/ubuntu-24.04.2-live-server-amd64.iso"
-iso_checksum   = "sha256:d6dab0c3a657988501b4bd76f1297c053df710e06e0c3aece60dead24f270b4d"
-boot_command   = ["<wait>e<wait><down><down><down><end> net.ifnames=0 autoinstall ds=nocloud-net\\;s=http://{{.HTTPIP}}:{{.HTTPPort}}/ubuntu-24.04<wait><f10><wait>"]
+iso_url        = "http://mirror.aarnet.edu.au/pub/ubuntu/releases/22.04/ubuntu-22.04.5-live-server-amd64.iso"
+iso_checksum   = "sha256:9bc6028870aef3f74f4e16b900008179e78b130e6b0b9a140635434a46aa98b0"
+boot_command   = ["c<wait>linux /casper/vmlinuz autoinstall ds=nocloud-net\\;s=http://{{.HTTPIP}}:{{.HTTPPort}}/ubuntu-22.04/ net.ifnames=0<enter><wait5>initrd /casper/initrd<enter><wait10>boot<enter>"]
 disk_size      = "50G"
 profile        = "ubuntu-whisper"
-profile_args   = ["nectar_image_name='Ubuntu 24.04 LTS (Noble) amd64 whisper'"]

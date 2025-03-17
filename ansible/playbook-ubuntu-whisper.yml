@@ -26,7 +26,6 @@
     - role: banner
     - role: facts
     - role: cleanup
-    - role: nvidia-vgpu
     - role: xfce4-desktop
     - role: xrdp
     - role: desktop-common

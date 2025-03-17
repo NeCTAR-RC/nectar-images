@@ -1,4 +1,8 @@
 ---
+- name: Ensure polkit directory exists
+  file:
+    path: /etc/polkit-1/localauthority/50-local.d
+    state: directory
 - name: Create color manager policy
   copy:
     dest: /etc/polkit-1/localauthority/50-local.d/45-allow.colord.pkla
