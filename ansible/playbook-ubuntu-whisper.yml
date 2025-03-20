@@ -30,3 +30,4 @@
     - role: xrdp
     - role: desktop-common
     - role: whisper
+    - role: nvidia-vgpu
