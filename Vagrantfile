@@ -154,7 +154,7 @@ Vagrant.configure("2") do |config|
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
-                             nectar_image_name: "Ubuntu 22.04 LTS (Jammy) amd64 (NVIDIA vGPU) whisper" }
+                             nectar_image_name: "ubuntu-whisper" }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-ubuntu-whisper.yml"
       ansible.become = true
