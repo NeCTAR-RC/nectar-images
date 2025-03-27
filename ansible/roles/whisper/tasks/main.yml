@@ -37,3 +37,9 @@
 - name: Install Buzz via Flatpak
   become: yes
   command: flatpak install -y flathub io.github.chidiwilliams.Buzz
+
+- name: Copy whisper model files to vibe models directory 
+  copy:
+    src: files/vibe/*.ggml
+    dest: /home/ubuntu/.local/share/github.com.thewh1teagle.vibe/
+    remote_src: yes
