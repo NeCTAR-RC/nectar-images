@@ -6,23 +6,31 @@
     rm -f /var/lib/dpkg/lock
     dpkg --configure -a
 
-- name: Install whisper pre-requisite APT packages
-  become: yes
+- name: Install vibe
   ansible.builtin.apt:
-    name:
-      - curl
-      - ffmpeg
-      - libopenblas-dev
-      - libwebkit2gtk-4.1-0
-      - libgtk-3-0
-    state: present
-    update_cache: yes
+    deb: "https://github.com/thewh1teagle/vibe/releases/download/v{{ vibe_version }}/vibe_{{ vibe_version }}_amd64_ubuntu-22.04.deb"
 
-- name: Install VIBE
-  shell: curl -sSf https://thewh1teagle.github.io/vibe/installer.sh | sh -s v{{ vibe_version }}
-  args:
-    executable: /bin/bash
+- name: Ensure vibe folder created in /usr/local
+  file:
+      path: /usr/local/share/vibe/
+      state: directory
 
+- name: Pre-download large model
+  get_url:
+    url: "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3-turbo.bin?download=true"
+    dest: /usr/local/share/vibe/ggml-large-v3-turbo.bin
+
+- name: Ensure vibe folder created in home skeleton
+  file:
+      path: /etc/skel/.local/share/github.com.thewh1teagle.vibe/
+      state: directory
+
+- name: Symlink large model in home skeleton
+  file:
+    src: /usr/local/share/vibe/ggml-large-v3-turbo.bin
+    dest: "/etc/skel/.local/share/github.com.thewh1teagle.vibe/ggml-large-v3-turbo.bin"
+    state: link
+  
 - name: Install Flatpak
   become: yes
   apt:
@@ -37,9 +45,3 @@
 - name: Install Buzz via Flatpak
   become: yes
   command: flatpak install -y flathub io.github.chidiwilliams.Buzz
-
-- name: Copy whisper model files to vibe models directory 
-  copy:
-    src: files/vibe/*.ggml
-    dest: /home/ubuntu/.local/share/github.com.thewh1teagle.vibe/
-    remote_src: yes
