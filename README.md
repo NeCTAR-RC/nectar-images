@@ -17,7 +17,9 @@ Setup
 For local building, you will need:
 * Ansible v2.16
 * Packer (latest)
+* Qemu - qemu-system and qemu-user
 
+Ensure your user account is able to use the kvm hypervisor - for example, by being in the `kvm` group.
 NOTE: This project Requires Ansible 2.16. Later versions are too old to build
 Rocky/AlmaLinux 8 with it's Python 3.6
 
