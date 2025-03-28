@@ -1,0 +1,66 @@
+---
+- name: Ensure dpkg and apt are not locked
+  become: yes
+  shell: |
+    rm -f /var/lib/dpkg/lock-frontend
+    rm -f /var/lib/dpkg/lock
+    dpkg --configure -a
+
+- name: Install vibe
+  ansible.builtin.apt:
+    deb: "https://github.com/thewh1teagle/vibe/releases/download/v{{ vibe_version }}/vibe_{{ vibe_version }}_amd64_ubuntu-22.04.deb"
+
+- name: Ensure vibe folder created in /usr/local
+  file:
+      path: /usr/local/share/vibe/
+      state: directory
+
+- name: Pre-download large model
+  get_url:
+    url: "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3-turbo.bin?download=true"
+    dest: /usr/local/share/vibe/ggml-large-v3-turbo.bin
+
+- name: Ensure vibe folder created in home skeleton
+  file:
+      path: /etc/skel/.local/share/github.com.thewh1teagle.vibe/
+      state: directory
+
+- name: Symlink large model in home skeleton
+  file:
+    src: /usr/local/share/vibe/ggml-large-v3-turbo.bin
+    dest: "/etc/skel/.local/share/github.com.thewh1teagle.vibe/ggml-large-v3-turbo.bin"
+    state: link
+
+- name: Install Flatpak
+  become: yes
+  apt:
+    name: flatpak
+    state: present
+    update_cache: yes
+
+- name: Add Flathub repository
+  become: yes
+  command: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+- name: Install Buzz via Flatpak
+  become: yes
+  command: flatpak install -y flathub io.github.chidiwilliams.Buzz
+
+- name: Ensure desktop folder exists
+  file:
+    path: /etc/skel/Desktop
+    state: directory
+
+- name: Add desktop shortcut for Buzz
+  copy:
+    src: /var/lib/flatpak/exports/share/applications/io.github.chidiwilliams.Buzz.desktop
+    remote_src: true
+    dest: "/etc/skel/Desktop/io.github.chidiwilliams.Buzz.desktop"
+    mode: 0770
+
+- name: Add desktop shortcut for Vibe
+  copy:
+    src: /usr/share/applications/vibe.desktop
+    remote_src: true
+    dest: "/etc/skel/Desktop/vibe.desktop"
+    mode: 0770

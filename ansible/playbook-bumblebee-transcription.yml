@@ -1,0 +1,21 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: yes
+
+  vars_files:
+    - vars/main.yml
+    - vars/transcription.yml
+    - vars/bumblebee-desktop.yml
+
+  roles:
+    - image-name
+    - default-user
+    - xfce4-desktop
+    - xrdp
+    - openstack-clients
+    - desktop-common
+    - transcription
+    - nectar-user
+    - facts
+    - cleanup
