@@ -154,7 +154,7 @@ Vagrant.configure("2") do |config|
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true,
-                             nectar_image_name: "bumblebee-transcription" }
+                             nectar_image_name: "Transcription desktop" }
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-bumblebee-transcription.yml"
       ansible.become = true
@@ -567,7 +567,9 @@ Vagrant.configure("2") do |config|
     v.memory = 4096
     v.cpus = 2
     v.machine_virtual_size = 4  # 4GB disk
-    v.graphics_type = "spice"
+    # v.graphics_type = "spice"
+    v.cpu_mode = 'host-passthrough'
+    v.nested = true
   end
 
   config.vm.provider :virtualbox do |v|

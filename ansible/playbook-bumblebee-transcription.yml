@@ -9,6 +9,7 @@
     - vars/bumblebee-desktop.yml
 
   roles:
+    - image-name
     - default-user
     - xfce4-desktop
     - xrdp
