@@ -56,11 +56,11 @@
     src: /var/lib/flatpak/exports/share/applications/io.github.chidiwilliams.Buzz.desktop
     remote_src: true
     dest: "/etc/skel/Desktop/io.github.chidiwilliams.Buzz.desktop"
-    mode: 777
+    mode: 0770
 
 - name: Add desktop shortcut for Vibe
   copy:
     src: /usr/share/applications/vibe.desktop
     remote_src: true
     dest: "/etc/skel/Desktop/vibe.desktop"
-    mode: 777
+    mode: 0770
