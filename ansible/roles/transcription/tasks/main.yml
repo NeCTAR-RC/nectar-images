@@ -46,14 +46,21 @@
   become: yes
   command: flatpak install -y flathub io.github.chidiwilliams.Buzz
 
+- name: Ensure desktop folder exists
+  file:
+    path: /etc/skel/Desktop
+    state: directory
+
 - name: Add desktop shortcut for Buzz
   copy:
     src: /var/lib/flatpak/exports/share/applications/io.github.chidiwilliams.Buzz.desktop
+    remote_src: true
     dest: "/etc/skel/Desktop/io.github.chidiwilliams.Buzz.desktop"
-    mode: 700
+    mode: 777
 
 - name: Add desktop shortcut for Vibe
   copy:
     src: /usr/share/applications/vibe.desktop
+    remote_src: true
     dest: "/etc/skel/Desktop/vibe.desktop"
-    mode: 700
+    mode: 777
