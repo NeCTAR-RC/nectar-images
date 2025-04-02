@@ -45,3 +45,15 @@
 - name: Install Buzz via Flatpak
   become: yes
   command: flatpak install -y flathub io.github.chidiwilliams.Buzz
+
+- name: Add desktop shortcut for Buzz
+  copy:
+    src: /var/lib/flatpak/exports/share/applications/io.github.chidiwilliams.Buzz.desktop
+    dest: "/etc/skel/Desktop/io.github.chidiwilliams.Buzz.desktop"
+    mode: 700
+
+- name: Add desktop shortcut for Vibe
+  copy:
+    src: /usr/share/applications/vibe.desktop
+    dest: "/etc/skel/Desktop/vibe.desktop"
+    mode: 700

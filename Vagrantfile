@@ -145,27 +145,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Ubuntu 22.04 (jammy) - transcription desktop
-  config.vm.define "bumblebee-transcription" do |c|
-    c.vm.box = "generic/ubuntu2204"
-    c.vm.provider "virtualbox" do |v, override|
-      override.vm.box = "ubuntu/jammy64"
-    end
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             nectar_image_name: "Transcription desktop" }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-bumblebee-transcription.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
   # Ubuntu 24.04 (noble)
   config.vm.define "ubuntu-24.04" do |c|
     c.vm.box = "cloud-image/ubuntu-24.04"
@@ -552,6 +531,23 @@ Vagrant.configure("2") do |config|
       ansible.extra_vars = { nectar_test_build: true,
                              nectar_image_name: "Ubuntu 22.04 LTS (Jammy) Virtual Desktop" }
       ansible.playbook = "ansible/playbook-bumblebee-desktop.yml"
+      ansible.become = true
+    end
+    config.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
+  end
+
+
+  # Ubuntu 22.04 (jammy) - transcription desktop
+  config.vm.define "bumblebee-transcription" do |c|
+    c.vm.box = "generic/ubuntu2204"
+    c.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/jammy64"
+    end
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true,
+                             nectar_image_name: "Transcription desktop" }
+      ansible.playbook = "ansible/playbook-bumblebee-transcription.yml"
       ansible.become = true
     end
     config.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
