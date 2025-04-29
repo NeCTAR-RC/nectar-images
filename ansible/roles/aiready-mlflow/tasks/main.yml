@@ -1,0 +1,86 @@
+- name: Install MLflow and psycopg2 using pip
+  ansible.builtin.pip:
+    name:
+      - mlflow[auth]
+      - psycopg2
+    executable: "{{ anaconda_link_dir }}/bin/pip"
+
+- name: Create mlflow group
+  group:
+    name: "{{ mlflow_group }}"
+    state: present
+    system: yes
+
+- name: Create mlflow user
+  user:
+    name: "{{ mlflow_user }}"
+    password: "{{ mlflow_user_password }}"
+    group: "{{ mlflow_group }}"
+    home: "{{ mlflow_home }}"
+    system: yes
+    create_home: yes
+    shell: /bin/bash
+
+- name: Create PostgreSQL user for mlflow
+  become_user: postgres
+  postgresql_user:
+    name: "{{ mlflow_db_user }}"
+    password: "{{ mlflow_db_password }}"
+    encrypted: yes
+    state: present
+
+- name: Create PostgreSQL database for mlflow
+  become_user: postgres
+  postgresql_db:
+    name: "{{ mlflow_db_name }}"
+    owner: "{{ mlflow_db_user }}"
+    state: present
+
+- name: Generate MLFLOW_FLASK_SERVER_SECRET_KEY
+  command: python3 -c "import uuid; print(uuid.uuid4().hex)"
+  register: mlflow_secret_key
+
+- name: Ensure service directory exists
+  file:
+    path: "{{ mlflow_system_folder }}"
+    state: directory
+    owner: "{{ mlflow_user }}"
+    group: "{{ mlflow_group }}"
+    mode: '0750'
+
+- name: Create mlflow .env file
+  copy:
+    dest: "{{ mlflow_env_path }}"
+    content: |
+      MLFLOW_FLASK_SERVER_SECRET_KEY={{ mlflow_secret_key.stdout }}
+    owner: "{{ mlflow_user }}"
+    group: "{{ mlflow_group }}"
+    mode: '0600'
+
+- name: Create systemd service for mlflow
+  ansible.builtin.template:
+    src: mlflow.service.j2
+    dest: /etc/systemd/system/mlflow.service
+  notify: Restart mlflow
+
+- name: Enable and start mlflow service
+  ansible.builtin.systemd:
+    name: mlflow
+    enabled: true
+    state: started
+
+- name: Copy example notebooks to JupyterLab directory
+  
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/skel/"
+    mode: '0644'
+  with_fileglob:
+    - "notebooks/*.ipynb"
+
+- name: Create tmp folder for storing artifacts
+  file:
+    path: /tmp/mlflow
+    state: directory
+    mode: '0777'
+  
