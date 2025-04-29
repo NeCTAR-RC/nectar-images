@@ -1,0 +1,13 @@
+---
+
+- name: Set up PostgreSQL for Airflow
+  include_tasks: setup_postgres.yml
+
+- name: Set up Conda environment and install dependencies
+  include_tasks: setup_conda.yml
+
+- name: Configure and initialize Airflow
+  include_tasks: setup_airflow.yml
+
+- name: Deploy Airflow and JupyterLab services
+  include_tasks: setup_services.yml
