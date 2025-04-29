@@ -1,0 +1,4 @@
+- include_tasks: install.yml
+- include_tasks: configure_prometheus.yml
+- include_tasks: configure_grafana.yml
+- include_tasks: deploy_dashboard.yml

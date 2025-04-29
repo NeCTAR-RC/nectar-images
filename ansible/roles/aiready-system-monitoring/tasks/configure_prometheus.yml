@@ -1,0 +1,5 @@
+- name: Configure Prometheus
+  ansible.builtin.copy:
+    src: prometheus.yml
+    dest: /etc/prometheus/prometheus.yml
+  notify: Restart Prometheus

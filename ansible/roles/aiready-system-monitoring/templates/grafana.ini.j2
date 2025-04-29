@@ -1,0 +1,23 @@
+[server]
+http_port = {{ grafana_port }}
+
+[auth]
+disable_login_form = true
+
+[auth.anonymous]
+enabled = true
+org_name = Main Org.
+org_role = Admin
+
+[paths]
+default_home_dashboard_path = /var/lib/grafana/dashboards/system-metrics.json
+provisioning = /etc/grafana/provisioning
+dashboards = /var/lib/grafana/dashboards
+
+[database]
+type = postgres
+host = localhost:5432
+name = {{ grafana_db_name }}
+user = {{ grafana_db_user }}
+password = {{ grafana_db_password }}
+ssl_mode = disable
