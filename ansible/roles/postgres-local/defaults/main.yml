@@ -1,0 +1,32 @@
+---
+# Cache update timeout (in seconds)
+postgresql_cache_valid_time: 3600
+
+# List of packages to install
+postgresql_packages:
+  - python3-pip
+  - python3-dev
+  - python3-venv
+  - libpq-dev
+  - build-essential
+  - postgresql
+  - postgresql-contrib
+  - python3-psycopg2
+  - git
+  - vim
+
+# PostgreSQL service name
+postgresql_service_name: postgresql
+postgresql_version: 14
+# Data directory (adjust based on your distro/version)
+postgresql_data_dir: /var/lib/postgresql
+
+# Configuration directory (adjust based on your distro/version)
+postgresql_config_dir: /etc/postgresql/{{ postgresql_version }}/main
+
+# Whether to use a custom config file
+postgresql_custom_config: false
+
+postgresql_listen_addresses: '*'
+postgresql_port: 5432
+postgresql_max_connections: 100
