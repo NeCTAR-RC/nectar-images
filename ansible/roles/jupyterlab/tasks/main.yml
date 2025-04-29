@@ -1,11 +1,10 @@
 ---
-- name: Install Jupyter Lab packages
-  conda:
+- name: Install jupyter lab packages using pip
+  ansible.builtin.pip:
     name: "{{ item }}"
-    state: present
-    executable: '{{ anaconda_conda_bin }}'
-    channels: conda-forge
-  with_items: "{{ jupyter_lab_packages }}"
+    executable: "{{ anaconda_link_dir }}/bin/pip"
+  loop: "{{ jupyter_lab_packages }}"
+  become: true
 
 - name: Create /etc/jupyter
   file:

@@ -1,0 +1,34 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: yes
+
+  vars_files:
+    - vars/main.yml
+    - vars/aiready.yml
+
+  roles:
+    # Initial Setup
+    - role: image-name
+    - role: default-user
+    - role: systemd-networkd
+    - role: ssh
+    - role: ntp
+    - role: nginx
+    - role: certbot
+    # R
+    - role: r
+    - role: rstudio
+    - role: rstudio-server
+    # Python
+    - role: anaconda
+    - role: jupyterlab
+    # infastructure layers    
+    - role: postgres-local
+    - role: aiready-airflow
+    - role: aiready-system-monitoring
+    - role: aiready-mlflow
+    # Finishing up
+    - role: banner
+    - role: facts
+    - role: cleanup
