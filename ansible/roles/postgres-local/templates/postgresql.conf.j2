@@ -1,0 +1,5 @@
+# PostgreSQL configuration file
+# Managed by Ansible
+listen_addresses = '{{ postgresql_listen_addresses | default("*") }}'
+port = {{ postgresql_port | default(5432) }}
+max_connections = {{ postgresql_max_connections | default(100) }}

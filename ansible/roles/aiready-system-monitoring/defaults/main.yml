@@ -1,0 +1,11 @@
+grafana_version: latest
+prometheus_version: latest
+node_exporter_version: latest
+dcgm_exporter_version: latest
+
+grafana_admin_user: admin
+grafana_admin_password: admin
+grafana_prometheus_url: "http://localhost:9090"
+
+grafana_home_dashboard: "system-metrics"
+

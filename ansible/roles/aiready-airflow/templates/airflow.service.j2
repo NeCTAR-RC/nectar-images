@@ -1,0 +1,16 @@
+[Unit]
+Description=Airflow webserver daemon
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+User={{ ansible_env.SUDO_USER }}
+Group={{ ansible_env.SUDO_USER }}
+Type=simple
+ExecStart=/bin/bash -c 'source {{ conda_path }}/etc/profile.d/conda.sh && conda activate {{ conda_env_name }} && airflow webserver --port {{ airflow_port }}'
+Restart=on-failure
+RestartSec=5s
+Environment="AIRFLOW_HOME={{ airflow_home }}"
+
+[Install]
+WantedBy=multi-user.target

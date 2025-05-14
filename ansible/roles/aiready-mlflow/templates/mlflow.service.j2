@@ -1,0 +1,18 @@
+[Unit]
+Description=MLflow Tracking Server
+After=network.target
+
+[Service]
+User=root
+EnvironmentFile={{ mlflow_env_path }}
+WorkingDirectory={{ mlflow_system_folder }}
+ExecStart={{ anaconda_link_dir }}/bin/mlflow server \
+    --host {{ mlflow_host }} \
+    --port {{ mlflow_port }} \
+    --backend-store-uri {{ mlflow_backend_uri }} \
+    --default-artifact-root {{ mlflow_artifact_root }} \
+    --app-name basic-auth
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

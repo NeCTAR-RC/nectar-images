@@ -1,0 +1,60 @@
+---
+- name: Copy airflow configuration
+  template:
+    src: airflow.cfg.j2
+    dest: "{{ airflow_home }}/airflow.cfg"
+    mode: "0644"
+  notify:
+    - restart airflow webserver
+    - restart airflow scheduler
+
+- name: Set correct permissions
+  file:
+    path: "{{ airflow_home }}"
+    mode: "0755"
+    recurse: yes
+
+- name: Initialize Airflow
+  block:
+    - name: Initialize Airflow database
+      ansible.builtin.command:
+        cmd: "{{ anaconda_link_dir }}/bin/airflow db init"
+        creates: "{{ airflow_home }}/db_initialized"
+      environment:
+        AIRFLOW_HOME: "{{ airflow_home }}"
+        SQL_ALCHEMY_CONN: "postgresql+psycopg2://{{ airflow_db_user }}:{{ airflow_db_password }}@{{ airflow_db_host }}/{{ airflow_db_name }}"
+      register: db_init
+      changed_when: db_init.rc == 0
+      failed_when: db_init.rc != 0 and 'already initialized' not in db_init.stderr
+
+    - name: Create flag file for database initialization
+      ansible.builtin.file:
+        path: "{{ airflow_home }}/db_initialized"
+        state: touch
+        mode: "0644"
+      when: db_init.rc == 0
+
+    - name: Create Airflow admin user
+      ansible.builtin.command:
+        cmd: >
+          {{ anaconda_link_dir }}/bin/airflow users create
+          --username "{{ airflow_admin_username }}"
+          --firstname "{{ airflow_admin_firstname }}"
+          --lastname "{{ airflow_admin_lastname }}"
+          --role Admin
+          --email "{{ airflow_admin_email }}"
+          --password "{{ airflow_admin_password }}"
+        creates: "{{ airflow_home }}/admin_user_created"
+      environment:
+        AIRFLOW_HOME: "{{ airflow_home }}"
+        SQL_ALCHEMY_CONN: "postgresql+psycopg2://{{ airflow_db_user }}:{{ airflow_db_password }}@{{ airflow_db_host }}/{{ airflow_db_name }}"
+      register: admin_create
+      changed_when: admin_create.rc == 0
+      failed_when: admin_create.rc != 0 and 'already exists' not in admin_create.stderr
+
+    - name: Create flag file for admin user
+      ansible.builtin.file:
+        path: "{{ airflow_home }}/admin_user_created"
+        state: touch
+        mode: "0644"
+      when: admin_create.rc == 0

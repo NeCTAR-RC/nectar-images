@@ -1,0 +1,9 @@
+- name: Restart Prometheus
+  service:
+    name: prometheus
+    state: restarted
+
+- name: Restart Grafana
+  service:
+    name: grafana-server
+    state: restarted

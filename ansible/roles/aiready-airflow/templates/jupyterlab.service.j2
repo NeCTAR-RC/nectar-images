@@ -1,0 +1,15 @@
+[Unit]
+Description=JupyterLab Service for Airflow
+After=network.target
+
+[Service]
+User={{ ansible_env.SUDO_USER }}
+Group={{ ansible_env.SUDO_USER }}
+Type=simple
+ExecStart=/bin/bash -c 'source {{ conda_path }}/etc/profile.d/conda.sh && conda activate {{ conda_env_name }} && jupyter lab --port=8888 --no-browser --ip=0.0.0.0 --NotebookApp.notebook_dir={{ airflow_home }}/notebooks'
+WorkingDirectory="home/{{ ansible_env.SUDO_USER }}/Notebooks"
+Restart=always
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

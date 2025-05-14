@@ -1,0 +1,50 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: "{{ postgresql_cache_valid_time }}"
+
+- name: Install PostgreSQL and dependencies
+  apt:
+    name: "{{ postgresql_packages }}"
+    state: present
+
+- name: Ensure PostgreSQL data directory exists
+  file:
+    path: "{{ postgresql_data_dir }}"
+    state: directory
+    mode: '0700'
+    owner: postgres
+    group: postgres
+
+- name: Copy PostgreSQL configuration file (optional)
+  template:
+    src: postgresql.conf.j2
+    dest: "{{ postgresql_config_dir }}/postgresql.conf"
+    mode: '0644'
+    owner: postgres
+    group: postgres
+  notify: Restart PostgreSQL
+  when: postgresql_custom_config | bool
+
+- name: Modify pg_hba.conf to allow md5 authentication for local connections
+  lineinfile:
+    path: "{{ postgresql_config_dir }}/pg_hba.conf"
+    regexp: '^local\s+all\s+postgres\s+peer$'
+    line: 'local   all   postgres   md5'
+    state: present
+  notify: Restart PostgreSQL
+
+- name: Ensure PostgreSQL is running and enabled
+  service:
+    name: "{{ postgresql_service_name }}"
+    state: started
+    enabled: yes
+
+- name: Set password for postgres user
+  become_user: postgres
+  postgresql_user:
+    name: postgres
+    password: "{{ postgres_password | default('postgres') }}"
+    state: present
+  no_log: true

@@ -1,0 +1,8 @@
+grafana_db_name: grafana
+grafana_db_user: grafana
+grafana_db_password: password
+grafana_user: grafana
+grafana_user_password: password
+grafana_home: "/var/lib/grafana" 
+grafana_port: 3000
+grafana_group: grafana
