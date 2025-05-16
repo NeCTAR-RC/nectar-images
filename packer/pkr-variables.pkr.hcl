@@ -213,7 +213,7 @@ variable "vnc_bind_address" {
 # OpenStack
 variable "availability_zone" {
   type    = string
-  default = "melbourne-qh2"
+  default = "ardc-syd-1"
 }
 
 variable "flavor" {
