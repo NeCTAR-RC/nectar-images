@@ -113,8 +113,8 @@ variable "communicator" {
 }
 
 variable "disk_size" {
-  type    = string
-  default = "10G"
+  type    = number
+  default = "10"
 }
 
 variable "floppy_files" {

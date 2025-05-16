@@ -59,6 +59,18 @@ locals {
   #    "most_recent": true
   #  }
   #): null
+
+  # Default flavors have only 30GB disk. For builds that require more disk space,
+  # automatically enable the Packer OpenStack builder option 'use_blockstorage_volume'
+  use_volume = var.disk_size > 30 ? true : false
+
+  # If we do need to use a volume, only then pass a volume size to OpenStack, as we
+  # want to stick with the standard flavor disk
+  volume_size = var.disk_size > 30 ? var.disk_size: null
+
+  # QEMU uses disk size as a string (e.g. 10G, 1024M), but OpenStack uses
+  # volume_size as an integer as GB. This is to harmonise the two.
+  disk_size = "${var.disk_size}G"
 }
 
 # https://www.packer.io/docs/templates/hcl_templates/blocks/source
@@ -76,7 +88,7 @@ source "qemu" "vm" {
   boot_wait            = local.boot_wait
   cpus                 = var.cpus
   communicator         = local.communicator
-  disk_size            = var.disk_size
+  disk_size            = local.disk_size
   floppy_files         = local.floppy_files
   headless             = var.headless
   http_directory       = local.http_directory
@@ -100,10 +112,12 @@ source "qemu" "vm" {
 }
 
 source "openstack" "vm" {
-  availability_zone    = var.availability_zone
-  flavor               = var.flavor
-  image_name           = local.build_name
-  security_groups      = local.security_groups
-  source_image_name    = var.source_image_name
-  ssh_username         = var.ssh_username
+  availability_zone       = var.availability_zone
+  flavor                  = var.flavor
+  image_name              = local.build_name
+  security_groups         = local.security_groups
+  source_image_name       = var.source_image_name
+  ssh_username            = var.ssh_username
+  use_blockstorage_volume = local.use_volume
+  volume_size             = local.volume_size
 }
