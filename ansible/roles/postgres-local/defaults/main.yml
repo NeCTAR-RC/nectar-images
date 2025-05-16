@@ -14,6 +14,7 @@ postgresql_packages:
   - python3-psycopg2
   - git
   - vim
+  - acl
 
 # PostgreSQL service name
 postgresql_service_name: postgresql
