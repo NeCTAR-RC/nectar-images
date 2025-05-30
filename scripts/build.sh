@@ -28,11 +28,13 @@ TAG_DIR=$OUTPUT_DIR/.tags
 DEBUG=1
 
 # Run tests?
-RUN_TESTS=true
-AVAILABILITY_ZONE=melbourne-qh2
-SECGROUP=image-build
-FLAVOR=m3.small
-SSH_KEY=jenkins-image-testing
+
+# Environment vars
+: "${RUN_TESTS:=true}"
+: "${OS_AVAILABILITY_ZONE:=ardc-syd-1}"
+: "${OS_SECGROUP:=image-build}"
+: "${OS_FLAVOR:=m3.small}"
+: "${OS_KEYNAME:=jenkins-image-testing}"
 BUILD_PROPERTY=nectar_build
 ORGANISATION=NeCTAR
 
@@ -103,12 +105,12 @@ if [ -z "$OS_USERNAME" ]; then
 fi
 
 # Test keypair is available
-if [ -n "$SSH_KEY" ]; then
-    KEY=$(openstack keypair show -f value -c name "$SSH_KEY")
+if [ -n "$OS_KEYNAME" ]; then
+    KEY=$(openstack keypair show -f value -c name "$OS_KEYNAME")
     if [ -n "$KEY" ]; then
         echo "Found keypair: $KEY"
     else
-        echo "Testing keypair $SSH_KEY not found"
+        echo "Testing keypair $OS_KEYNAME not found"
         exit 1
     fi
 fi
@@ -130,9 +132,9 @@ if [ "${BUILDER_TYPE}" == "qemu" ]; then
     fi
 else
     # OpenStack builder
-    write_packer_var flavor "${FLAVOR}"
+    write_packer_var flavor "${OS_FLAVOR}"
     write_packer_var image_name "${BUILD_NAME}"
-    write_packer_var availability_zone "${AVAILABILITY_ZONE}"
+    write_packer_var availability_zone "${OS_AVAILABILITY_ZONE}"
 fi
 
 echo "Building image ${NAME}..."
@@ -187,9 +189,9 @@ if [ ! -z $BUILD_PROPERTY ]; then
 fi
 
 echo "Creating instance \"test_${NAME}_${BUILD_NUMBER}\"..."
-[ -z $AVAILABILITY_ZONE ] || AZ_OPT="--availability-zone $AVAILABILITY_ZONE"
-echo "--> openstack server create --image ${IMAGE_ID} --flavor ${FLAVOR} ${AZ_OPT} --security-group ${SECGROUP} --key-name ${SSH_KEY} --wait \"${BUILD_NAME}\""
-INSTANCE_ID=$(openstack server create -f value -c id --image ${IMAGE_ID} --flavor ${FLAVOR} ${AZ_OPT} --security-group ${SECGROUP} --key-name ${SSH_KEY} "${BUILD_NAME}")
+[ -z $OS_AVAILABILITY_ZONE ] || AZ_OPT="--availability-zone $OS_AVAILABILITY_ZONE"
+echo "--> openstack server create --image ${IMAGE_ID} --flavor ${OS_FLAVOR} ${AZ_OPT} --security-group ${OS_SECGROUP} --key-name ${OS_KEYNAME} --wait \"${BUILD_NAME}\""
+INSTANCE_ID=$(openstack server create -f value -c id --image ${IMAGE_ID} --flavor ${OS_FLAVOR} ${AZ_OPT} --security-group ${OS_SECGROUP} --key-name ${OS_KEYNAME} "${BUILD_NAME}")
 echo "Found instance ID: ${INSTANCE_ID}"
 
 set +e
