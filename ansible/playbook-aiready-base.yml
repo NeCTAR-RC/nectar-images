@@ -22,9 +22,10 @@
     - role: rstudio-server
     # Python
     - role: anaconda
-    - role: jupyterlab
+    - role: jupyterhub
     # infastructure layers    
     - role: postgres-local
+    - role: aiready-base
     - role: aiready-airflow
     - role: aiready-system-monitoring
     - role: aiready-mlflow

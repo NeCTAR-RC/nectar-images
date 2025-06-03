@@ -1,12 +1,10 @@
 - name: Create Grafana group
-  become: yes
   group:
     name: "{{ grafana_group }}"
     state: present
     system: yes
 
 - name: Create grafana user
-  become: yes
   user:
     name: "{{ grafana_user }}"
     password: "{{ grafana_user_password }}"
@@ -17,14 +15,12 @@
     shell: /bin/bash
    
 - name: Ensure PostgreSQL is running
-  become: yes
   service:
     name: postgresql
     state: started
     enabled: yes
 
 - name: Create PostgreSQL user for grafana
-  become: yes
   become_user: postgres
   postgresql_user:
     name: "{{ grafana_db_user }}"
@@ -33,7 +29,6 @@
     state: present
 
 - name: Create PostgreSQL database for grafana
-  become: yes
   become_user: postgres
   postgresql_db:
     name: "{{ grafana_db_name }}"
@@ -46,3 +41,8 @@
     dest: /etc/grafana/grafana.ini
   notify: Restart Grafana
 
+- name: Ensure Grafana is enabled
+  service:
+    name: grafana-server
+    state: started
+    enabled: yes
