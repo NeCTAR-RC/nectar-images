@@ -1,0 +1,471 @@
+---
+jupyterhub_port: 8000
+
+jupyterhub_packages:
+  - jupyterhub
+  - jupyterhub-systemdspawner
+  - configurable-http-proxy
+  - notebook
+  - jupyterlab
+  - altair
+  - beautifulsoup4
+  - bokeh
+  - bottleneck
+  - cloudpickle
+  - cython
+  - dask
+  - dill
+  - h5py
+  - ipympl
+  - ipywidgets
+  - matplotlib
+  - numba
+  - numpy
+  - numexpr
+  - openpyxl
+  - pandas
+  - patsy
+  - plotly
+  - protobuf
+  - tables
+  - scikit-image
+  - scikit-learn
+  - scipy
+  - seaborn
+  - sqlalchemy
+  - statsmodels
+  - sympy
+  - widgetsnbextension
+  - xlrd
+
+jupyterhub_config_file: /etc/jupyterhub/jupyterhub_config.py
+
+jupyterhub_base_url: '/jupyterhub'
+jupyterhub_bind_url: 'http://127.0.0.1:8000'
+jupyterhub_spawner_class: 'systemdspawner.SystemdSpawner'
+jupyterhub_systemdspawner_readwrite_paths: "['/home/{USERNAME}']"
+jupyterhub_authenticator_allow_all: True
+
+
+# These defaults were pulled from a generated config from
+# the generate scripts in the files directory of this role
+
+#jupyterhub_application_log_datefmt: '%Y-%m-%d %H:%M:%S'
+#jupyterhub_application_log_format: '[%(name)s]%(highlevel)s %(message)s'
+#jupyterhub_application_log_level: 30
+#jupyterhub_application_logging_config: {}
+#jupyterhub_application_show_config: False
+#jupyterhub_application_show_config_json: False
+#jupyterhub_active_server_limit: 0
+#jupyterhub_active_user_window: 1800
+#jupyterhub_activity_resolution: 30
+#jupyterhub_admin_access: False
+#jupyterhub_admin_users: set()
+#jupyterhub_allow_named_servers: False
+#jupyterhub_answer_yes: False
+#jupyterhub_api_page_default_limit: 50
+#jupyterhub_api_page_max_limit: 200
+#jupyterhub_api_tokens: {}
+#jupyterhub_authenticate_prometheus: True
+#jupyterhub_authenticator_class: 'jupyterhub.auth.PAMAuthenticator'
+#jupyterhub_base_url: '/'
+#jupyterhub_bind_url: 'http://:8000'
+#jupyterhub_cleanup_proxy: True
+#jupyterhub_cleanup_servers: True
+#jupyterhub_concurrent_spawn_limit: 100
+#jupyterhub_config_file: 'jupyterhub_config.py'
+#jupyterhub_confirm_no_ssl: False
+#jupyterhub_cookie_host_prefix_enabled: False
+#jupyterhub_cookie_max_age_days: 14
+#jupyterhub_cookie_secret: traitlets.Undefined
+#jupyterhub_cookie_secret_file: 'jupyterhub_cookie_secret'
+#jupyterhub_custom_scopes: {}
+#jupyterhub_data_files_path: '/usr/local/Anaconda3-2024.10-1-Linux-x86_64/share/jupyterhub'
+#jupyterhub_db_kwargs: {}
+#jupyterhub_db_url: 'sqlite:///jupyterhub.sqlite'
+#jupyterhub_debug_db: False
+#jupyterhub_debug_proxy: False
+#jupyterhub_default_server_name: ''
+#jupyterhub_default_url: traitlets.Undefined
+#jupyterhub_external_ssl_authorities: {}
+#jupyterhub_extra_handlers: []
+#jupyterhub_extra_log_file: ''
+#jupyterhub_extra_log_handlers: []
+#jupyterhub_forwarded_host_header: ''
+#jupyterhub_generate_certs: False
+#jupyterhub_generate_config: False
+#jupyterhub_hub_bind_url: ''
+#jupyterhub_hub_connect_ip: ''
+#jupyterhub_hub_connect_port: 0
+#jupyterhub_hub_connect_url: ''
+#jupyterhub_hub_ip: '127.0.0.1'
+#jupyterhub_hub_port: 8081
+#jupyterhub_hub_routespec: '/'
+#jupyterhub_implicit_spawn_seconds: 0
+#jupyterhub_init_spawners_timeout: 10
+#jupyterhub_internal_certs_location: 'internal-ssl'
+#jupyterhub_internal_ssl: False
+#jupyterhub_ip: ''
+#jupyterhub_jinja_environment_options: {}
+#jupyterhub_last_activity_interval: 300
+#jupyterhub_load_groups: {}
+#jupyterhub_load_roles: []
+#jupyterhub_log_datefmt: '%Y-%m-%d %H:%M:%S'
+#jupyterhub_log_format: '[%(name)s]%(highlevel)s %(message)s'
+#jupyterhub_log_level: 30
+#jupyterhub_logging_config: {}
+#jupyterhub_logo_file: ''
+#jupyterhub_named_server_limit_per_user: 0
+#jupyterhub_oauth_token_expires_in: 0
+#jupyterhub_pid_file: ''
+#jupyterhub_port: 8000
+#jupyterhub_proxy_api_ip: ''
+#jupyterhub_proxy_api_port: 0
+#jupyterhub_proxy_auth_token: ''
+#jupyterhub_proxy_check_interval: 5
+#jupyterhub_proxy_class: 'jupyterhub.proxy.ConfigurableHTTPProxy'
+#jupyterhub_proxy_cmd: []
+#jupyterhub_public_url: ''
+#jupyterhub_recreate_internal_certs: False
+#jupyterhub_redirect_to_server: True
+#jupyterhub_reset_db: False
+#jupyterhub_service_check_interval: 60
+#jupyterhub_service_tokens: {}
+#jupyterhub_services: []
+#jupyterhub_show_config: False
+#jupyterhub_show_config_json: False
+#jupyterhub_shutdown_on_logout: False
+#jupyterhub_spawner_class: 'jupyterhub.spawner.LocalProcessSpawner'
+#jupyterhub_ssl_cert: ''
+#jupyterhub_ssl_key: ''
+#jupyterhub_statsd_host: ''
+#jupyterhub_statsd_port: 8125
+#jupyterhub_statsd_prefix: 'jupyterhub'
+#jupyterhub_subdomain_hook: 'idna'
+#jupyterhub_subdomain_host: ''
+#jupyterhub_template_paths: []
+#jupyterhub_template_vars: {}
+#jupyterhub_token_expires_in_max_seconds: 0
+#jupyterhub_tornado_settings: {}
+#jupyterhub_trust_user_provided_tokens: False
+#jupyterhub_trusted_alt_names: []
+#jupyterhub_trusted_downstream_ips: []
+#jupyterhub_upgrade_db: False
+#jupyterhub_use_legacy_stopped_server_status_code: False
+#jupyterhub_user_redirect_hook: None
+#jupyterhub_authenticator_admin_users: set()
+#jupyterhub_authenticator_allow_all: False
+#jupyterhub_authenticator_allow_existing_users: False
+#jupyterhub_authenticator_allowed_users: set()
+#jupyterhub_authenticator_any_allow_config: False
+#jupyterhub_authenticator_auth_refresh_age: 300
+#jupyterhub_authenticator_auto_login: False
+#jupyterhub_authenticator_auto_login_oauth2_authorize: False
+#jupyterhub_authenticator_blocked_users: set()
+#jupyterhub_authenticator_delete_invalid_users: False
+#jupyterhub_authenticator_enable_auth_state: False
+#jupyterhub_authenticator_manage_groups: False
+#jupyterhub_authenticator_manage_roles: False
+#jupyterhub_authenticator_otp_prompt: 'OTP:'
+#jupyterhub_authenticator_post_auth_hook: None
+#jupyterhub_authenticator_refresh_pre_spawn: False
+#jupyterhub_authenticator_request_otp: False
+#jupyterhub_authenticator_reset_managed_roles_on_startup: False
+#jupyterhub_authenticator_username_map: {}
+#jupyterhub_authenticator_username_pattern: ''
+#jupyterhub_authenticator_whitelist: set()
+#jupyterhub_localauthenticator_add_user_cmd: []
+#jupyterhub_localauthenticator_admin_users: set()
+#jupyterhub_localauthenticator_allow_all: False
+#jupyterhub_localauthenticator_allow_existing_users: False
+#jupyterhub_localauthenticator_allowed_groups: set()
+#jupyterhub_localauthenticator_allowed_users: set()
+#jupyterhub_localauthenticator_any_allow_config: False
+#jupyterhub_localauthenticator_auth_refresh_age: 300
+#jupyterhub_localauthenticator_auto_login: False
+#jupyterhub_localauthenticator_auto_login_oauth2_authorize: False
+#jupyterhub_localauthenticator_blocked_users: set()
+#jupyterhub_localauthenticator_create_system_users: False
+#jupyterhub_localauthenticator_delete_invalid_users: False
+#jupyterhub_localauthenticator_enable_auth_state: False
+#jupyterhub_localauthenticator_group_whitelist: set()
+#jupyterhub_localauthenticator_manage_groups: False
+#jupyterhub_localauthenticator_manage_roles: False
+#jupyterhub_localauthenticator_otp_prompt: 'OTP:'
+#jupyterhub_localauthenticator_post_auth_hook: None
+#jupyterhub_localauthenticator_refresh_pre_spawn: False
+#jupyterhub_localauthenticator_request_otp: False
+#jupyterhub_localauthenticator_reset_managed_roles_on_startup: False
+#jupyterhub_localauthenticator_uids: {}
+#jupyterhub_localauthenticator_username_map: {}
+#jupyterhub_localauthenticator_username_pattern: ''
+#jupyterhub_localauthenticator_whitelist: set()
+#jupyterhub_pamauthenticator_add_user_cmd: []
+#jupyterhub_pamauthenticator_admin_groups: set()
+#jupyterhub_pamauthenticator_admin_users: set()
+#jupyterhub_pamauthenticator_allow_all: False
+#jupyterhub_pamauthenticator_allow_existing_users: False
+#jupyterhub_pamauthenticator_allowed_groups: set()
+#jupyterhub_pamauthenticator_allowed_users: set()
+#jupyterhub_pamauthenticator_any_allow_config: False
+#jupyterhub_pamauthenticator_auth_refresh_age: 300
+#jupyterhub_pamauthenticator_auto_login: False
+#jupyterhub_pamauthenticator_auto_login_oauth2_authorize: False
+#jupyterhub_pamauthenticator_blocked_users: set()
+#jupyterhub_pamauthenticator_check_account: True
+#jupyterhub_pamauthenticator_create_system_users: False
+#jupyterhub_pamauthenticator_delete_invalid_users: False
+#jupyterhub_pamauthenticator_enable_auth_state: False
+#jupyterhub_pamauthenticator_encoding: 'utf8'
+#jupyterhub_pamauthenticator_executor_threads: 4
+#jupyterhub_pamauthenticator_group_whitelist: set()
+#jupyterhub_pamauthenticator_manage_groups: False
+#jupyterhub_pamauthenticator_manage_roles: False
+#jupyterhub_pamauthenticator_open_sessions: False
+#jupyterhub_pamauthenticator_otp_prompt: 'OTP:'
+#jupyterhub_pamauthenticator_pam_normalize_username: False
+#jupyterhub_pamauthenticator_post_auth_hook: None
+#jupyterhub_pamauthenticator_refresh_pre_spawn: False
+#jupyterhub_pamauthenticator_request_otp: False
+#jupyterhub_pamauthenticator_reset_managed_roles_on_startup: False
+#jupyterhub_pamauthenticator_service: 'login'
+#jupyterhub_pamauthenticator_uids: {}
+#jupyterhub_pamauthenticator_username_map: {}
+#jupyterhub_pamauthenticator_username_pattern: ''
+#jupyterhub_pamauthenticator_whitelist: set()
+#jupyterhub_nullauthenticator_admin_users: set()
+#jupyterhub_nullauthenticator_allow_all: False
+#jupyterhub_nullauthenticator_allow_existing_users: False
+#jupyterhub_nullauthenticator_allowed_users: set()
+#jupyterhub_nullauthenticator_any_allow_config: False
+#jupyterhub_nullauthenticator_auth_refresh_age: 300
+#jupyterhub_nullauthenticator_auto_login_oauth2_authorize: False
+#jupyterhub_nullauthenticator_blocked_users: set()
+#jupyterhub_nullauthenticator_delete_invalid_users: False
+#jupyterhub_nullauthenticator_enable_auth_state: False
+#jupyterhub_nullauthenticator_manage_groups: False
+#jupyterhub_nullauthenticator_manage_roles: False
+#jupyterhub_nullauthenticator_otp_prompt: 'OTP:'
+#jupyterhub_nullauthenticator_post_auth_hook: None
+#jupyterhub_nullauthenticator_refresh_pre_spawn: False
+#jupyterhub_nullauthenticator_request_otp: False
+#jupyterhub_nullauthenticator_reset_managed_roles_on_startup: False
+#jupyterhub_nullauthenticator_username_map: {}
+#jupyterhub_nullauthenticator_username_pattern: ''
+#jupyterhub_nullauthenticator_whitelist: set()
+#jupyterhub_proxy_extra_routes: {}
+#jupyterhub_proxy_should_start: True
+#jupyterhub_configurablehttpproxy_api_url: ''
+#jupyterhub_configurablehttpproxy_auth_token: ''
+#jupyterhub_configurablehttpproxy_check_running_interval: 5
+#jupyterhub_configurablehttpproxy_command: ['configurable-http-proxy']
+#jupyterhub_configurablehttpproxy_concurrency: 10
+#jupyterhub_configurablehttpproxy_debug: False
+#jupyterhub_configurablehttpproxy_extra_routes: {}
+#jupyterhub_configurablehttpproxy_log_level: 'info'
+#jupyterhub_configurablehttpproxy_pid_file: 'jupyterhub-proxy.pid'
+#jupyterhub_configurablehttpproxy_should_start: True
+#jupyterhub_sharedpasswordauthenticator_admin_password: None
+#jupyterhub_sharedpasswordauthenticator_admin_users: set()
+#jupyterhub_sharedpasswordauthenticator_allow_all: False
+#jupyterhub_sharedpasswordauthenticator_allow_existing_users: False
+#jupyterhub_sharedpasswordauthenticator_allowed_users: set()
+#jupyterhub_sharedpasswordauthenticator_any_allow_config: False
+#jupyterhub_sharedpasswordauthenticator_auth_refresh_age: 300
+#jupyterhub_sharedpasswordauthenticator_auto_login: False
+#jupyterhub_sharedpasswordauthenticator_auto_login_oauth2_authorize: False
+#jupyterhub_sharedpasswordauthenticator_blocked_users: set()
+#jupyterhub_sharedpasswordauthenticator_delete_invalid_users: False
+#jupyterhub_sharedpasswordauthenticator_enable_auth_state: False
+#jupyterhub_sharedpasswordauthenticator_manage_groups: False
+#jupyterhub_sharedpasswordauthenticator_manage_roles: False
+#jupyterhub_sharedpasswordauthenticator_otp_prompt: 'OTP:'
+#jupyterhub_sharedpasswordauthenticator_post_auth_hook: None
+#jupyterhub_sharedpasswordauthenticator_refresh_pre_spawn: False
+#jupyterhub_sharedpasswordauthenticator_request_otp: False
+#jupyterhub_sharedpasswordauthenticator_reset_managed_roles_on_startup: False
+#jupyterhub_sharedpasswordauthenticator_user_password: None
+#jupyterhub_sharedpasswordauthenticator_username_map: {}
+#jupyterhub_sharedpasswordauthenticator_username_pattern: ''
+#jupyterhub_sharedpasswordauthenticator_whitelist: set()
+#jupyterhub_dummyauthenticator_admin_users: set()
+#jupyterhub_dummyauthenticator_allow_all: False
+#jupyterhub_dummyauthenticator_allow_existing_users: False
+#jupyterhub_dummyauthenticator_allowed_users: set()
+#jupyterhub_dummyauthenticator_any_allow_config: False
+#jupyterhub_dummyauthenticator_auth_refresh_age: 300
+#jupyterhub_dummyauthenticator_auto_login: False
+#jupyterhub_dummyauthenticator_auto_login_oauth2_authorize: False
+#jupyterhub_dummyauthenticator_blocked_users: set()
+#jupyterhub_dummyauthenticator_delete_invalid_users: False
+#jupyterhub_dummyauthenticator_enable_auth_state: False
+#jupyterhub_dummyauthenticator_manage_groups: False
+#jupyterhub_dummyauthenticator_manage_roles: False
+#jupyterhub_dummyauthenticator_otp_prompt: 'OTP:'
+#jupyterhub_dummyauthenticator_password: ''
+#jupyterhub_dummyauthenticator_post_auth_hook: None
+#jupyterhub_dummyauthenticator_refresh_pre_spawn: False
+#jupyterhub_dummyauthenticator_request_otp: False
+#jupyterhub_dummyauthenticator_reset_managed_roles_on_startup: False
+#jupyterhub_dummyauthenticator_username_map: {}
+#jupyterhub_dummyauthenticator_username_pattern: ''
+#jupyterhub_dummyauthenticator_whitelist: set()
+#jupyterhub_cryptkeeper_keys: []
+#jupyterhub_cryptkeeper_n_threads: 16
+#jupyterhub_spawner_apply_user_options: None
+#jupyterhub_spawner_args: []
+#jupyterhub_spawner_auth_state_hook: None
+#jupyterhub_spawner_cmd: ['jupyterhub-singleuser']
+#jupyterhub_spawner_consecutive_failure_limit: 0
+#jupyterhub_spawner_cpu_guarantee: None
+#jupyterhub_spawner_cpu_limit: None
+#jupyterhub_spawner_debug: False
+#jupyterhub_spawner_default_url: ''
+#jupyterhub_spawner_disable_user_config: False
+#jupyterhub_spawner_env_keep: ['JUPYTERHUB_SINGLEUSER_APP']
+#jupyterhub_spawner_environment: {}
+#jupyterhub_spawner_group_overrides: traitlets.Undefined
+#jupyterhub_spawner_http_timeout: 30
+#jupyterhub_spawner_hub_connect_url: None
+#jupyterhub_spawner_ip: '127.0.0.1'
+#jupyterhub_spawner_mem_guarantee: None
+#jupyterhub_spawner_mem_limit: None
+#jupyterhub_spawner_notebook_dir: ''
+#jupyterhub_spawner_oauth_client_allowed_scopes: traitlets.Undefined
+#jupyterhub_spawner_oauth_roles: traitlets.Undefined
+#jupyterhub_spawner_options_form: traitlets.Undefined
+#jupyterhub_spawner_options_from_form: traitlets.Undefined
+#jupyterhub_spawner_poll_interval: 30
+#jupyterhub_spawner_poll_jitter: 0.1
+#jupyterhub_spawner_port: 0
+#jupyterhub_spawner_post_stop_hook: None
+#jupyterhub_spawner_pre_spawn_hook: None
+#jupyterhub_spawner_progress_ready_hook: None
+#jupyterhub_spawner_server_token_scopes: traitlets.Undefined
+#jupyterhub_spawner_ssl_alt_names: []
+#jupyterhub_spawner_ssl_alt_names_include_local: True
+#jupyterhub_spawner_start_timeout: 60
+#jupyterhub_systemdspawner_apply_user_options: None
+#jupyterhub_systemdspawner_args: []
+#jupyterhub_systemdspawner_auth_state_hook: None
+#jupyterhub_systemdspawner_cmd: ['jupyterhub-singleuser']
+#jupyterhub_systemdspawner_consecutive_failure_limit: 0
+#jupyterhub_systemdspawner_cpu_guarantee: None
+#jupyterhub_systemdspawner_cpu_limit: None
+#jupyterhub_systemdspawner_debug: False
+#jupyterhub_systemdspawner_default_shell: '/bin/bash'
+#jupyterhub_systemdspawner_default_url: ''
+#jupyterhub_systemdspawner_disable_user_config: False
+#jupyterhub_systemdspawner_disable_user_sudo: True
+#jupyterhub_systemdspawner_dynamic_users: False
+#jupyterhub_systemdspawner_env_keep: ['JUPYTERHUB_SINGLEUSER_APP']
+#jupyterhub_systemdspawner_environment: {}
+#jupyterhub_systemdspawner_extra_paths: []
+#jupyterhub_systemdspawner_group_overrides: traitlets.Undefined
+#jupyterhub_systemdspawner_http_timeout: 30
+#jupyterhub_systemdspawner_hub_connect_url: None
+#jupyterhub_systemdspawner_ip: '127.0.0.1'
+#jupyterhub_systemdspawner_isolate_devices: False
+#jupyterhub_systemdspawner_isolate_tmp: False
+#jupyterhub_systemdspawner_mem_guarantee: None
+#jupyterhub_systemdspawner_mem_limit: None
+#jupyterhub_systemdspawner_notebook_dir: ''
+#jupyterhub_systemdspawner_oauth_client_allowed_scopes: traitlets.Undefined
+#jupyterhub_systemdspawner_oauth_roles: traitlets.Undefined
+#jupyterhub_systemdspawner_options_form: traitlets.Undefined
+#jupyterhub_systemdspawner_options_from_form: traitlets.Undefined
+#jupyterhub_systemdspawner_poll_interval: 30
+#jupyterhub_systemdspawner_poll_jitter: 0.1
+#jupyterhub_systemdspawner_port: 0
+#jupyterhub_systemdspawner_post_stop_hook: None
+#jupyterhub_systemdspawner_pre_spawn_hook: None
+#jupyterhub_systemdspawner_progress_ready_hook: None
+#jupyterhub_systemdspawner_readonly_paths: []
+#jupyterhub_systemdspawner_readwrite_paths: []
+#jupyterhub_systemdspawner_server_token_scopes: traitlets.Undefined
+#jupyterhub_systemdspawner_slice: None
+#jupyterhub_systemdspawner_ssl_alt_names: []
+#jupyterhub_systemdspawner_ssl_alt_names_include_local: True
+#jupyterhub_systemdspawner_start_timeout: 60
+#jupyterhub_systemdspawner_unit_extra_properties: {}
+#jupyterhub_systemdspawner_unit_name_template: 'jupyter-{USERNAME}-singleuser'
+#jupyterhub_systemdspawner_user_workingdir: None
+#jupyterhub_systemdspawner_username_template: '{USERNAME}'
+#jupyterhub_localprocessspawner_apply_user_options: None
+#jupyterhub_localprocessspawner_args: []
+#jupyterhub_localprocessspawner_auth_state_hook: None
+#jupyterhub_localprocessspawner_cmd: ['jupyterhub-singleuser']
+#jupyterhub_localprocessspawner_consecutive_failure_limit: 0
+#jupyterhub_localprocessspawner_cpu_guarantee: None
+#jupyterhub_localprocessspawner_cpu_limit: None
+#jupyterhub_localprocessspawner_debug: False
+#jupyterhub_localprocessspawner_default_url: ''
+#jupyterhub_localprocessspawner_disable_user_config: False
+#jupyterhub_localprocessspawner_env_keep: ['JUPYTERHUB_SINGLEUSER_APP']
+#jupyterhub_localprocessspawner_environment: {}
+#jupyterhub_localprocessspawner_group_overrides: traitlets.Undefined
+#jupyterhub_localprocessspawner_http_timeout: 30
+#jupyterhub_localprocessspawner_hub_connect_url: None
+#jupyterhub_localprocessspawner_interrupt_timeout: 10
+#jupyterhub_localprocessspawner_ip: '127.0.0.1'
+#jupyterhub_localprocessspawner_kill_timeout: 5
+#jupyterhub_localprocessspawner_mem_guarantee: None
+#jupyterhub_localprocessspawner_mem_limit: None
+#jupyterhub_localprocessspawner_notebook_dir: ''
+#jupyterhub_localprocessspawner_oauth_client_allowed_scopes: traitlets.Undefined
+#jupyterhub_localprocessspawner_oauth_roles: traitlets.Undefined
+#jupyterhub_localprocessspawner_options_form: traitlets.Undefined
+#jupyterhub_localprocessspawner_options_from_form: traitlets.Undefined
+#jupyterhub_localprocessspawner_poll_interval: 30
+#jupyterhub_localprocessspawner_poll_jitter: 0.1
+#jupyterhub_localprocessspawner_popen_kwargs: {}
+#jupyterhub_localprocessspawner_port: 0
+#jupyterhub_localprocessspawner_post_stop_hook: None
+#jupyterhub_localprocessspawner_pre_spawn_hook: None
+#jupyterhub_localprocessspawner_progress_ready_hook: None
+#jupyterhub_localprocessspawner_server_token_scopes: traitlets.Undefined
+#jupyterhub_localprocessspawner_shell_cmd: []
+#jupyterhub_localprocessspawner_ssl_alt_names: []
+#jupyterhub_localprocessspawner_ssl_alt_names_include_local: True
+#jupyterhub_localprocessspawner_start_timeout: 60
+#jupyterhub_localprocessspawner_term_timeout: 5
+#jupyterhub_simplelocalprocessspawner_apply_user_options: None
+#jupyterhub_simplelocalprocessspawner_args: []
+#jupyterhub_simplelocalprocessspawner_auth_state_hook: None
+#jupyterhub_simplelocalprocessspawner_cmd: ['jupyterhub-singleuser']
+#jupyterhub_simplelocalprocessspawner_consecutive_failure_limit: 0
+#jupyterhub_simplelocalprocessspawner_cpu_guarantee: None
+#jupyterhub_simplelocalprocessspawner_cpu_limit: None
+#jupyterhub_simplelocalprocessspawner_debug: False
+#jupyterhub_simplelocalprocessspawner_default_url: ''
+#jupyterhub_simplelocalprocessspawner_disable_user_config: False
+#jupyterhub_simplelocalprocessspawner_env_keep: ['JUPYTERHUB_SINGLEUSER_APP']
+#jupyterhub_simplelocalprocessspawner_environment: {}
+#jupyterhub_simplelocalprocessspawner_group_overrides: traitlets.Undefined
+#jupyterhub_simplelocalprocessspawner_home_dir_template: '/tmp/{username}'
+#jupyterhub_simplelocalprocessspawner_http_timeout: 30
+#jupyterhub_simplelocalprocessspawner_hub_connect_url: None
+#jupyterhub_simplelocalprocessspawner_interrupt_timeout: 10
+#jupyterhub_simplelocalprocessspawner_ip: '127.0.0.1'
+#jupyterhub_simplelocalprocessspawner_kill_timeout: 5
+#jupyterhub_simplelocalprocessspawner_mem_guarantee: None
+#jupyterhub_simplelocalprocessspawner_mem_limit: None
+#jupyterhub_simplelocalprocessspawner_notebook_dir: ''
+#jupyterhub_simplelocalprocessspawner_oauth_client_allowed_scopes: traitlets.Undefined
+#jupyterhub_simplelocalprocessspawner_oauth_roles: traitlets.Undefined
+#jupyterhub_simplelocalprocessspawner_options_form: traitlets.Undefined
+#jupyterhub_simplelocalprocessspawner_options_from_form: traitlets.Undefined
+#jupyterhub_simplelocalprocessspawner_poll_interval: 30
+#jupyterhub_simplelocalprocessspawner_poll_jitter: 0.1
+#jupyterhub_simplelocalprocessspawner_popen_kwargs: {}
+#jupyterhub_simplelocalprocessspawner_port: 0
+#jupyterhub_simplelocalprocessspawner_post_stop_hook: None
+#jupyterhub_simplelocalprocessspawner_pre_spawn_hook: None
+#jupyterhub_simplelocalprocessspawner_progress_ready_hook: None
+#jupyterhub_simplelocalprocessspawner_server_token_scopes: traitlets.Undefined
+#jupyterhub_simplelocalprocessspawner_shell_cmd: []
+#jupyterhub_simplelocalprocessspawner_ssl_alt_names: []
+#jupyterhub_simplelocalprocessspawner_ssl_alt_names_include_local: True
+#jupyterhub_simplelocalprocessspawner_start_timeout: 60
+#jupyterhub_simplelocalprocessspawner_term_timeout: 5
+

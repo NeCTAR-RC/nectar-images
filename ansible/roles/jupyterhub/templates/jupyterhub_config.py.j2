@@ -1,0 +1,4938 @@
+# Configuration file for jupyterhub.
+
+c = get_config()  #noqa
+
+#------------------------------------------------------------------------------
+# Application(SingletonConfigurable) configuration
+#------------------------------------------------------------------------------
+## This is an application.
+
+## The date format used by logging formatters for %(asctime)s
+#  Default: '%Y-%m-%d %H:%M:%S'
+{% if jupyterhub_application_log_datefmt is defined %}
+c.Application.log_datefmt = '{{ jupyterhub_application_log_datefmt }}'
+{% else %}
+# c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
+{% endif %}
+
+## The Logging format template
+#  Default: '[%(name)s]%(highlevel)s %(message)s'
+{% if jupyterhub_application_log_format is defined %}
+c.Application.log_format = '{{ jupyterhub_application_log_format }}'
+{% else %}
+# c.Application.log_format = '[%(name)s]%(highlevel)s %(message)s'
+{% endif %}
+
+## Set the log level by value or name.
+#  Choices: any of [0, 10, 20, 30, 40, 50, 'DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL']
+#  Default: 30
+{% if jupyterhub_application_log_level is defined %}
+c.Application.log_level = {{ jupyterhub_application_log_level }}
+{% else %}
+# c.Application.log_level = 30
+{% endif %}
+
+## Configure additional log handlers.
+#  
+#  The default stderr logs handler is configured by the log_level, log_datefmt
+#  and log_format settings.
+#  
+#  This configuration can be used to configure additional handlers (e.g. to
+#  output the log to a file) or for finer control over the default handlers.
+#  
+#  If provided this should be a logging configuration dictionary, for more
+#  information see:
+#  https://docs.python.org/3/library/logging.config.html#logging-config-
+#  dictschema
+#  
+#  This dictionary is merged with the base logging configuration which defines
+#  the following:
+#  
+#  * A logging formatter intended for interactive use called
+#    ``console``.
+#  * A logging handler that writes to stderr called
+#    ``console`` which uses the formatter ``console``.
+#  * A logger with the name of this application set to ``DEBUG``
+#    level.
+#  
+#  This example adds a new handler that writes to a file:
+#  
+#  .. code-block:: python
+#  
+#     c.Application.logging_config = {
+#         "handlers": {
+#             "file": {
+#                 "class": "logging.FileHandler",
+#                 "level": "DEBUG",
+#                 "filename": "<path/to/file>",
+#             }
+#         },
+#         "loggers": {
+#             "<application-name>": {
+#                 "level": "DEBUG",
+#                 # NOTE: if you don't list the default "console"
+#                 # handler here then it will be disabled
+#                 "handlers": ["console", "file"],
+#             },
+#         },
+#     }
+#  Default: {}
+{% if jupyterhub_application_logging_config is defined %}
+c.Application.logging_config = {{ jupyterhub_application_logging_config }}
+{% else %}
+# c.Application.logging_config = {}
+{% endif %}
+
+## Instead of starting the Application, dump configuration to stdout
+#  Default: False
+{% if jupyterhub_application_show_config is defined %}
+c.Application.show_config = {{ jupyterhub_application_show_config | bool }}
+{% else %}
+# c.Application.show_config = False
+{% endif %}
+
+## Instead of starting the Application, dump configuration to stdout (as JSON)
+#  Default: False
+{% if jupyterhub_application_show_config_json is defined %}
+c.Application.show_config_json = {{ jupyterhub_application_show_config_json | bool }}
+{% else %}
+# c.Application.show_config_json = False
+{% endif %}
+
+#------------------------------------------------------------------------------
+# JupyterHub(Application) configuration
+#------------------------------------------------------------------------------
+## An Application for starting a Multi-User Jupyter Notebook server.
+
+## Maximum number of concurrent servers that can be active at a time.
+#  
+#  Setting this can limit the total resources your users can consume.
+#  
+#  An active server is any server that's not fully stopped. It is considered
+#  active from the time it has been requested until the time that it has
+#  completely stopped.
+#  
+#  If this many user servers are active, users will not be able to launch new
+#  servers until a server is shutdown. Spawn requests will be rejected with a 429
+#  error asking them to try again.
+#  
+#  If set to 0, no limit is enforced.
+#  Default: 0
+{% if jupyterhub_active_server_limit is defined %}
+c.JupyterHub.active_server_limit = {{ jupyterhub_active_server_limit }}
+{% else %}
+# c.JupyterHub.active_server_limit = 0
+{% endif %}
+
+## Duration (in seconds) to determine the number of active users.
+#  Default: 1800
+{% if jupyterhub_active_user_window is defined %}
+c.JupyterHub.active_user_window = {{ jupyterhub_active_user_window }}
+{% else %}
+# c.JupyterHub.active_user_window = 1800
+{% endif %}
+
+## Resolution (in seconds) for updating activity
+#  
+#  If activity is registered that is less than activity_resolution seconds more
+#  recent than the current value, the new value will be ignored.
+#  
+#  This avoids too many writes to the Hub database.
+#  Default: 30
+{% if jupyterhub_activity_resolution is defined %}
+c.JupyterHub.activity_resolution = {{ jupyterhub_activity_resolution }}
+{% else %}
+# c.JupyterHub.activity_resolution = 30
+{% endif %}
+
+## DEPRECATED since version 2.0.0.
+#  
+#          The default admin role has full permissions, use custom RBAC scopes instead to
+#          create restricted administrator roles.
+#          https://jupyterhub.readthedocs.io/en/stable/rbac/index.html
+#  Default: False
+{% if jupyterhub_admin_access is defined %}
+c.JupyterHub.admin_access = {{ jupyterhub_admin_access | bool }}
+{% else %}
+# c.JupyterHub.admin_access = False
+{% endif %}
+
+## DEPRECATED since version 0.7.2, use Authenticator.admin_users instead.
+#  Default: set()
+{% if jupyterhub_admin_users is defined %}
+c.JupyterHub.admin_users = {{ jupyterhub_admin_users }}
+{% else %}
+# c.JupyterHub.admin_users = set()
+{% endif %}
+
+## Allow named single-user servers per user
+#  Default: False
+{% if jupyterhub_allow_named_servers is defined %}
+c.JupyterHub.allow_named_servers = {{ jupyterhub_allow_named_servers | bool }}
+{% else %}
+# c.JupyterHub.allow_named_servers = False
+{% endif %}
+
+## Answer yes to any questions (e.g. confirm overwrite)
+#  Default: False
+{% if jupyterhub_answer_yes is defined %}
+c.JupyterHub.answer_yes = {{ jupyterhub_answer_yes | bool }}
+{% else %}
+# c.JupyterHub.answer_yes = False
+{% endif %}
+
+## The default amount of records returned by a paginated endpoint
+#  Default: 50
+{% if jupyterhub_api_page_default_limit is defined %}
+c.JupyterHub.api_page_default_limit = {{ jupyterhub_api_page_default_limit }}
+{% else %}
+# c.JupyterHub.api_page_default_limit = 50
+{% endif %}
+
+## The maximum amount of records that can be returned at once
+#  Default: 200
+{% if jupyterhub_api_page_max_limit is defined %}
+c.JupyterHub.api_page_max_limit = {{ jupyterhub_api_page_max_limit }}
+{% else %}
+# c.JupyterHub.api_page_max_limit = 200
+{% endif %}
+
+## PENDING DEPRECATION: consider using services
+#  
+#          Dict of token:username to be loaded into the database.
+#  
+#          Allows ahead-of-time generation of API tokens for use by externally managed services,
+#          which authenticate as JupyterHub users.
+#  
+#          Consider using services for general services that talk to the
+#  JupyterHub API.
+#  Default: {}
+{% if jupyterhub_api_tokens is defined %}
+c.JupyterHub.api_tokens = {{ jupyterhub_api_tokens }}
+{% else %}
+# c.JupyterHub.api_tokens = {}
+{% endif %}
+
+## Authentication for prometheus metrics
+#  Default: True
+{% if jupyterhub_authenticate_prometheus is defined %}
+c.JupyterHub.authenticate_prometheus = {{ jupyterhub_authenticate_prometheus | bool }}
+{% else %}
+# c.JupyterHub.authenticate_prometheus = True
+{% endif %}
+
+## Class for authenticating users.
+#  
+#          This should be a subclass of :class:`jupyterhub.auth.Authenticator`
+#  
+#          with an :meth:`authenticate` method that:
+#  
+#          - is a coroutine (asyncio or tornado)
+#          - returns username on success, None on failure
+#          - takes two arguments: (handler, data),
+#            where `handler` is the calling web.RequestHandler,
+#            and `data` is the POST form data from the login page.
+#  
+#          .. versionchanged:: 1.0
+#              authenticators may be registered via entry points,
+#              e.g. `c.JupyterHub.authenticator_class = 'pam'`
+#  
+#  Currently installed: 
+#    - default: jupyterhub.auth.PAMAuthenticator
+#    - dummy: jupyterhub.auth.DummyAuthenticator
+#    - null: jupyterhub.auth.NullAuthenticator
+#    - pam: jupyterhub.auth.PAMAuthenticator
+#    - shared-password: jupyterhub.authenticators.shared.SharedPasswordAuthenticator
+#  Default: 'jupyterhub.auth.PAMAuthenticator'
+{% if jupyterhub_authenticator_class is defined %}
+c.JupyterHub.authenticator_class = '{{ jupyterhub_authenticator_class }}'
+{% else %}
+# c.JupyterHub.authenticator_class = 'jupyterhub.auth.PAMAuthenticator'
+{% endif %}
+
+## The base URL of the entire application.
+#  
+#          Add this to the beginning of all JupyterHub URLs.
+#          Use base_url to run JupyterHub within an existing website.
+#  Default: '/'
+{% if jupyterhub_base_url is defined %}
+c.JupyterHub.base_url = '{{ jupyterhub_base_url }}'
+{% else %}
+# c.JupyterHub.base_url = '/'
+{% endif %}
+
+## The public facing URL of the whole JupyterHub application.
+#  
+#          This is the address on which the proxy will bind.
+#          Sets protocol, ip, base_url
+#  Default: 'http://:8000'
+{% if jupyterhub_bind_url is defined %}
+c.JupyterHub.bind_url = '{{ jupyterhub_bind_url }}'
+{% else %}
+# c.JupyterHub.bind_url = 'http://:8000'
+{% endif %}
+
+## Whether to shutdown the proxy when the Hub shuts down.
+#  
+#          Disable if you want to be able to teardown the Hub while leaving the
+#  proxy running.
+#  
+#          Only valid if the proxy was starting by the Hub process.
+#  
+#          If both this and cleanup_servers are False, sending SIGINT to the Hub will
+#          only shutdown the Hub, leaving everything else running.
+#  
+#          The Hub should be able to resume from database state.
+#  Default: True
+{% if jupyterhub_cleanup_proxy is defined %}
+c.JupyterHub.cleanup_proxy = {{ jupyterhub_cleanup_proxy | bool }}
+{% else %}
+# c.JupyterHub.cleanup_proxy = True
+{% endif %}
+
+## Whether to shutdown single-user servers when the Hub shuts down.
+#  
+#          Disable if you want to be able to teardown the Hub while leaving the
+#  single-user servers running.
+#  
+#          If both this and cleanup_proxy are False, sending SIGINT to the Hub will
+#          only shutdown the Hub, leaving everything else running.
+#  
+#          The Hub should be able to resume from database state.
+#  Default: True
+{% if jupyterhub_cleanup_servers is defined %}
+c.JupyterHub.cleanup_servers = {{ jupyterhub_cleanup_servers | bool }}
+{% else %}
+# c.JupyterHub.cleanup_servers = True
+{% endif %}
+
+## Maximum number of concurrent users that can be spawning at a time.
+#  
+#  Spawning lots of servers at the same time can cause performance problems for
+#  the Hub or the underlying spawning system. Set this limit to prevent bursts of
+#  logins from attempting to spawn too many servers at the same time.
+#  
+#  This does not limit the number of total running servers. See
+#  active_server_limit for that.
+#  
+#  If more than this many users attempt to spawn at a time, their requests will
+#  be rejected with a 429 error asking them to try again. Users will have to wait
+#  for some of the spawning services to finish starting before they can start
+#  their own.
+#  
+#  If set to 0, no limit is enforced.
+#  Default: 100
+{% if jupyterhub_concurrent_spawn_limit is defined %}
+c.JupyterHub.concurrent_spawn_limit = {{ jupyterhub_concurrent_spawn_limit }}
+{% else %}
+# c.JupyterHub.concurrent_spawn_limit = 100
+{% endif %}
+
+## The config file to load
+#  Default: 'jupyterhub_config.py'
+{% if jupyterhub_config_file is defined %}
+c.JupyterHub.config_file = '{{ jupyterhub_config_file }}'
+{% else %}
+# c.JupyterHub.config_file = 'jupyterhub_config.py'
+{% endif %}
+
+## DEPRECATED: does nothing
+#  Default: False
+{% if jupyterhub_confirm_no_ssl is defined %}
+c.JupyterHub.confirm_no_ssl = {{ jupyterhub_confirm_no_ssl | bool }}
+{% else %}
+# c.JupyterHub.confirm_no_ssl = False
+{% endif %}
+
+## Enable `__Host-` prefix on authentication cookies.
+#  
+#          The `__Host-` prefix on JupyterHub cookies provides further
+#          protection against cookie tossing when untrusted servers
+#          may control subdomains of your jupyterhub deployment.
+#  
+#          _However_, it also requires that cookies be set on the path `/`,
+#          which means they are shared by all JupyterHub components,
+#          so a compromised server component will have access to _all_ JupyterHub-related
+#          cookies of the visiting browser.
+#          It is recommended to only combine `__Host-` cookies with per-user domains.
+#  
+#          .. versionadded:: 4.1
+#  Default: False
+{% if jupyterhub_cookie_host_prefix_enabled is defined %}
+c.JupyterHub.cookie_host_prefix_enabled = {{ jupyterhub_cookie_host_prefix_enabled | bool }}
+{% else %}
+# c.JupyterHub.cookie_host_prefix_enabled = False
+{% endif %}
+
+## Number of days for a login cookie to be valid.
+#          Default is two weeks.
+#  Default: 14
+{% if jupyterhub_cookie_max_age_days is defined %}
+c.JupyterHub.cookie_max_age_days = {{ jupyterhub_cookie_max_age_days }}
+{% else %}
+# c.JupyterHub.cookie_max_age_days = 14
+{% endif %}
+
+## The cookie secret to use to encrypt cookies.
+#  
+#          Loaded from the JPY_COOKIE_SECRET env variable by default.
+#  
+#          Should be exactly 256 bits (32 bytes).
+#  Default: traitlets.Undefined
+{% if jupyterhub_cookie_secret is defined %}
+c.JupyterHub.cookie_secret = {{ jupyterhub_cookie_secret }}
+{% else %}
+# c.JupyterHub.cookie_secret = traitlets.Undefined
+{% endif %}
+
+## File in which to store the cookie secret.
+#  Default: 'jupyterhub_cookie_secret'
+{% if jupyterhub_cookie_secret_file is defined %}
+c.JupyterHub.cookie_secret_file = '{{ jupyterhub_cookie_secret_file }}'
+{% else %}
+# c.JupyterHub.cookie_secret_file = 'jupyterhub_cookie_secret'
+{% endif %}
+
+## Custom scopes to define.
+#  
+#          For use when defining custom roles,
+#          to grant users granular permissions
+#  
+#          All custom scopes must have a description,
+#          and must start with the prefix `custom:`.
+#  
+#          For example::
+#  
+#              custom_scopes = {
+#                  "custom:jupyter_server:read": {
+#                      "description": "read-only access to a single-user server",
+#                  },
+#              }
+#  Default: {}
+{% if jupyterhub_custom_scopes is defined %}
+c.JupyterHub.custom_scopes = {{ jupyterhub_custom_scopes }}
+{% else %}
+# c.JupyterHub.custom_scopes = {}
+{% endif %}
+
+## The location of jupyterhub data files (e.g. /usr/local/share/jupyterhub)
+#  Default: '/usr/local/Anaconda3-2024.10-1-Linux-x86_64/share/jupyterhub'
+{% if jupyterhub_data_files_path is defined %}
+c.JupyterHub.data_files_path = '{{ jupyterhub_data_files_path }}'
+{% else %}
+# c.JupyterHub.data_files_path = '/usr/local/Anaconda3-2024.10-1-Linux-x86_64/share/jupyterhub'
+{% endif %}
+
+## Include any kwargs to pass to the database connection.
+#          See sqlalchemy.create_engine for details.
+#  Default: {}
+{% if jupyterhub_db_kwargs is defined %}
+c.JupyterHub.db_kwargs = {{ jupyterhub_db_kwargs }}
+{% else %}
+# c.JupyterHub.db_kwargs = {}
+{% endif %}
+
+## url for the database. e.g. `sqlite:///jupyterhub.sqlite`
+#  Default: 'sqlite:///jupyterhub.sqlite'
+{% if jupyterhub_db_url is defined %}
+c.JupyterHub.db_url = '{{ jupyterhub_db_url }}'
+{% else %}
+# c.JupyterHub.db_url = 'sqlite:///jupyterhub.sqlite'
+{% endif %}
+
+## log all database transactions. This has A LOT of output
+#  Default: False
+{% if jupyterhub_debug_db is defined %}
+c.JupyterHub.debug_db = {{ jupyterhub_debug_db | bool }}
+{% else %}
+# c.JupyterHub.debug_db = False
+{% endif %}
+
+## DEPRECATED since version 0.8: Use ConfigurableHTTPProxy.debug
+#  Default: False
+{% if jupyterhub_debug_proxy is defined %}
+c.JupyterHub.debug_proxy = {{ jupyterhub_debug_proxy | bool }}
+{% else %}
+# c.JupyterHub.debug_proxy = False
+{% endif %}
+
+## If named servers are enabled, default name of server to spawn or open when no
+#  server is specified, e.g. by user-redirect.
+#  
+#  Note: This has no effect if named servers are not enabled, and does _not_
+#  change the existence or behavior of the default server named `''` (the empty
+#  string). This only affects which named server is launched when no server is
+#  specified, e.g. by links to `/hub/user-redirect/lab/tree/mynotebook.ipynb`.
+#  Default: ''
+{% if jupyterhub_default_server_name is defined %}
+c.JupyterHub.default_server_name = '{{ jupyterhub_default_server_name }}'
+{% else %}
+# c.JupyterHub.default_server_name = ''
+{% endif %}
+
+## The default URL for users when they arrive (e.g. when user directs to "/")
+#  
+#  By default, redirects users to their own server.
+#  
+#  Can be a Unicode string (e.g. '/hub/home') or a callable based on the handler
+#  object:
+#  
+#  ::
+#  
+#      def default_url_fn(handler):
+#          user = handler.current_user
+#          if user and user.admin:
+#              return '/hub/admin'
+#          return '/hub/home'
+#  
+#      c.JupyterHub.default_url = default_url_fn
+#  Default: traitlets.Undefined
+{% if jupyterhub_default_url is defined %}
+c.JupyterHub.default_url = {{ jupyterhub_default_url }}
+{% else %}
+# c.JupyterHub.default_url = traitlets.Undefined
+{% endif %}
+
+## Dict authority:dict(files). Specify the key, cert, and/or
+#          ca file for an authority. This is useful for externally managed
+#          proxies that wish to use internal_ssl.
+#  
+#          The files dict has this format (you must specify at least a cert)::
+#  
+#              {
+#                  'key': '/path/to/key.key',
+#                  'cert': '/path/to/cert.crt',
+#                  'ca': '/path/to/ca.crt'
+#              }
+#  
+#          The authorities you can override: 'hub-ca', 'notebooks-ca',
+#          'proxy-api-ca', 'proxy-client-ca', and 'services-ca'.
+#  
+#          Use with internal_ssl
+#  Default: {}
+{% if jupyterhub_external_ssl_authorities is defined %}
+c.JupyterHub.external_ssl_authorities = {{ jupyterhub_external_ssl_authorities }}
+{% else %}
+# c.JupyterHub.external_ssl_authorities = {}
+{% endif %}
+
+## DEPRECATED.
+#  
+#  If you need to register additional HTTP endpoints please use services instead.
+#  Default: []
+{% if jupyterhub_extra_handlers is defined %}
+c.JupyterHub.extra_handlers = {{ jupyterhub_extra_handlers }}
+{% else %}
+# c.JupyterHub.extra_handlers = []
+{% endif %}
+
+## DEPRECATED: use output redirection instead, e.g.
+#  
+#  jupyterhub &>> /var/log/jupyterhub.log
+#  Default: ''
+{% if jupyterhub_extra_log_file is defined %}
+c.JupyterHub.extra_log_file = '{{ jupyterhub_extra_log_file }}'
+{% else %}
+# c.JupyterHub.extra_log_file = ''
+{% endif %}
+
+## Extra log handlers to set on JupyterHub logger
+#  Default: []
+{% if jupyterhub_extra_log_handlers is defined %}
+c.JupyterHub.extra_log_handlers = {{ jupyterhub_extra_log_handlers }}
+{% else %}
+# c.JupyterHub.extra_log_handlers = []
+{% endif %}
+
+## Alternate header to use as the Host (e.g., X-Forwarded-Host)
+#          when determining whether a request is cross-origin
+#  
+#          This may be useful when JupyterHub is running behind a proxy that rewrites
+#          the Host header.
+#  Default: ''
+{% if jupyterhub_forwarded_host_header is defined %}
+c.JupyterHub.forwarded_host_header = '{{ jupyterhub_forwarded_host_header }}'
+{% else %}
+# c.JupyterHub.forwarded_host_header = ''
+{% endif %}
+
+## Generate certs used for internal ssl
+#  Default: False
+{% if jupyterhub_generate_certs is defined %}
+c.JupyterHub.generate_certs = {{ jupyterhub_generate_certs | bool }}
+{% else %}
+# c.JupyterHub.generate_certs = False
+{% endif %}
+
+## Generate default config file
+#  Default: False
+{% if jupyterhub_generate_config is defined %}
+c.JupyterHub.generate_config = {{ jupyterhub_generate_config | bool }}
+{% else %}
+# c.JupyterHub.generate_config = False
+{% endif %}
+
+## The URL on which the Hub will listen. This is a private URL for internal
+#  communication. Typically set in combination with hub_connect_url. If a unix
+#  socket, hub_connect_url **must** also be set.
+#  
+#  For example:
+#  
+#      "http://127.0.0.1:8081"
+#      "unix+http://%2Fsrv%2Fjupyterhub%2Fjupyterhub.sock"
+#  
+#  .. versionadded:: 0.9
+#  Default: ''
+{% if jupyterhub_hub_bind_url is defined %}
+c.JupyterHub.hub_bind_url = '{{ jupyterhub_hub_bind_url }}'
+{% else %}
+# c.JupyterHub.hub_bind_url = ''
+{% endif %}
+
+## The ip or hostname for proxies and spawners to use
+#          for connecting to the Hub.
+#  
+#          Use when the bind address (`hub_ip`) is 0.0.0.0, :: or otherwise different
+#          from the connect address.
+#  
+#          Default: when `hub_ip` is 0.0.0.0 or ::, use `socket.gethostname()`,
+#  otherwise use `hub_ip`.
+#  
+#          Note: Some spawners or proxy implementations might not support hostnames. Check your
+#          spawner or proxy documentation to see if they have extra requirements.
+#  
+#          .. versionadded:: 0.8
+#  Default: ''
+{% if jupyterhub_hub_connect_ip is defined %}
+c.JupyterHub.hub_connect_ip = '{{ jupyterhub_hub_connect_ip }}'
+{% else %}
+# c.JupyterHub.hub_connect_ip = ''
+{% endif %}
+
+## DEPRECATED
+#  
+#  Use hub_connect_url
+#  
+#  .. versionadded:: 0.8
+#  
+#  .. deprecated:: 0.9
+#      Use hub_connect_url
+#  Default: 0
+{% if jupyterhub_hub_connect_port is defined %}
+c.JupyterHub.hub_connect_port = {{ jupyterhub_hub_connect_port }}
+{% else %}
+# c.JupyterHub.hub_connect_port = 0
+{% endif %}
+
+## The URL for connecting to the Hub. Spawners, services, and the proxy will use
+#  this URL to talk to the Hub.
+#  
+#  Only needs to be specified if the default hub URL is not connectable (e.g.
+#  using a unix+http:// bind url).
+#  
+#  .. seealso::
+#      JupyterHub.hub_connect_ip
+#      JupyterHub.hub_bind_url
+#  
+#  .. versionadded:: 0.9
+#  Default: ''
+{% if jupyterhub_hub_connect_url is defined %}
+c.JupyterHub.hub_connect_url = '{{ jupyterhub_hub_connect_url }}'
+{% else %}
+# c.JupyterHub.hub_connect_url = ''
+{% endif %}
+
+## The ip address for the Hub process to *bind* to.
+#  
+#          By default, the hub listens on localhost only. This address must be accessible from
+#          the proxy and user servers. You may need to set this to a public ip or '' for all
+#          interfaces if the proxy or user servers are in containers or on a different host.
+#  
+#          See `hub_connect_ip` for cases where the bind and connect address should differ,
+#          or `hub_bind_url` for setting the full bind URL.
+#  Default: '127.0.0.1'
+{% if jupyterhub_hub_ip is defined %}
+c.JupyterHub.hub_ip = '{{ jupyterhub_hub_ip }}'
+{% else %}
+# c.JupyterHub.hub_ip = '127.0.0.1'
+{% endif %}
+
+## The internal port for the Hub process.
+#  
+#          This is the internal port of the hub itself. It should never be accessed directly.
+#          See JupyterHub.port for the public port to use when accessing jupyterhub.
+#          It is rare that this port should be set except in cases of port conflict.
+#  
+#          See also `hub_ip` for the ip and `hub_bind_url` for setting the full
+#  bind URL.
+#  Default: 8081
+{% if jupyterhub_hub_port is defined %}
+c.JupyterHub.hub_port = {{ jupyterhub_hub_port }}
+{% else %}
+# c.JupyterHub.hub_port = 8081
+{% endif %}
+
+## The routing prefix for the Hub itself.
+#  
+#  Override to send only a subset of traffic to the Hub. Default is to use the
+#  Hub as the default route for all requests.
+#  
+#  This is necessary for normal jupyterhub operation, as the Hub must receive
+#  requests for e.g. `/user/:name` when the user's server is not running.
+#  
+#  However, some deployments using only the JupyterHub API may want to handle
+#  these events themselves, in which case they can register their own default
+#  target with the proxy and set e.g. `hub_routespec = /hub/` to serve only the
+#  hub's own pages, or even `/hub/api/` for api-only operation.
+#  
+#  Note: hub_routespec must include the base_url, if any.
+#  
+#  .. versionadded:: 1.4
+#  Default: '/'
+{% if jupyterhub_hub_routespec is defined %}
+c.JupyterHub.hub_routespec = '{{ jupyterhub_hub_routespec }}'
+{% else %}
+# c.JupyterHub.hub_routespec = '/'
+{% endif %}
+
+## Trigger implicit spawns after this many seconds.
+#  
+#          When a user visits a URL for a server that's not running,
+#          they are shown a page indicating that the requested server
+#          is not running with a button to spawn the server.
+#  
+#          Setting this to a positive value will redirect the user
+#          after this many seconds, effectively clicking this button
+#          automatically for the users,
+#          automatically beginning the spawn process.
+#  
+#          Warning: this can result in errors and surprising behavior
+#          when sharing access URLs to actual servers,
+#          since the wrong server is likely to be started.
+#  Default: 0
+{% if jupyterhub_implicit_spawn_seconds is defined %}
+c.JupyterHub.implicit_spawn_seconds = {{ jupyterhub_implicit_spawn_seconds }}
+{% else %}
+# c.JupyterHub.implicit_spawn_seconds = 0
+{% endif %}
+
+## Timeout (in seconds) to wait for spawners to initialize
+#  
+#  Checking if spawners are healthy can take a long time if many spawners are
+#  active at hub start time.
+#  
+#  If it takes longer than this timeout to check, init_spawner will be left to
+#  complete in the background and the http server is allowed to start.
+#  
+#  A timeout of -1 means wait forever, which can mean a slow startup of the Hub
+#  but ensures that the Hub is fully consistent by the time it starts responding
+#  to requests. This matches the behavior of jupyterhub 1.0.
+#  
+#  .. versionadded: 1.1.0
+#  Default: 10
+{% if jupyterhub_init_spawners_timeout is defined %}
+c.JupyterHub.init_spawners_timeout = {{ jupyterhub_init_spawners_timeout }}
+{% else %}
+# c.JupyterHub.init_spawners_timeout = 10
+{% endif %}
+
+## The location to store certificates automatically created by
+#          JupyterHub.
+#  
+#          Use with internal_ssl
+#  Default: 'internal-ssl'
+{% if jupyterhub_internal_certs_location is defined %}
+c.JupyterHub.internal_certs_location = '{{ jupyterhub_internal_certs_location }}'
+{% else %}
+# c.JupyterHub.internal_certs_location = 'internal-ssl'
+{% endif %}
+
+## Enable SSL for all internal communication
+#  
+#          This enables end-to-end encryption between all JupyterHub components.
+#          JupyterHub will automatically create the necessary certificate
+#          authority and sign notebook certificates as they're created.
+#  Default: False
+{% if jupyterhub_internal_ssl is defined %}
+c.JupyterHub.internal_ssl = {{ jupyterhub_internal_ssl | bool }}
+{% else %}
+# c.JupyterHub.internal_ssl = False
+{% endif %}
+
+## The public facing ip of the whole JupyterHub application
+#          (specifically referred to as the proxy).
+#  
+#          This is the address on which the proxy will listen. The default is to
+#          listen on all interfaces. This is the only address through which JupyterHub
+#          should be accessed by users.
+#  Default: ''
+{% if jupyterhub_ip is defined %}
+c.JupyterHub.ip = '{{ jupyterhub_ip }}'
+{% else %}
+# c.JupyterHub.ip = ''
+{% endif %}
+
+## Supply extra arguments that will be passed to Jinja environment.
+#  Default: {}
+{% if jupyterhub_jinja_environment_options is defined %}
+c.JupyterHub.jinja_environment_options = {{ jupyterhub_jinja_environment_options }}
+{% else %}
+# c.JupyterHub.jinja_environment_options = {}
+{% endif %}
+
+## Interval (in seconds) at which to update last-activity timestamps.
+#  Default: 300
+{% if jupyterhub_last_activity_interval is defined %}
+c.JupyterHub.last_activity_interval = {{ jupyterhub_last_activity_interval }}
+{% else %}
+# c.JupyterHub.last_activity_interval = 300
+{% endif %}
+
+## Dict of `{'group': {'users':['usernames'], 'properties': {}}`  to load at
+#  startup.
+#  
+#  Example::
+#  
+#      c.JupyterHub.load_groups = {
+#          'groupname': {
+#              'users': ['usernames'],
+#              'properties': {'key': 'value'},
+#          },
+#      }
+#  
+#  This strictly *adds* groups and users to groups. Properties, if defined,
+#  replace all existing properties.
+#  
+#  Loading one set of groups, then starting JupyterHub again with a different set
+#  will not remove users or groups from previous launches. That must be done
+#  through the API.
+#  
+#  .. versionchanged:: 3.2
+#    Changed format of group from list of usernames to dict
+#  Default: {}
+{% if jupyterhub_load_groups is defined %}
+c.JupyterHub.load_groups = {{ jupyterhub_load_groups }}
+{% else %}
+# c.JupyterHub.load_groups = {}
+{% endif %}
+
+## List of predefined role dictionaries to load at startup.
+#  
+#          For instance::
+#  
+#              load_roles = [
+#                              {
+#                                  'name': 'teacher',
+#                                  'description': 'Access to users' information and group membership',
+#                                  'scopes': ['users', 'groups'],
+#                                  'users': ['cyclops', 'gandalf'],
+#                                  'services': [],
+#                                  'groups': []
+#                              }
+#                          ]
+#  
+#          All keys apart from 'name' are optional.
+#          See all the available scopes in the JupyterHub REST API documentation.
+#  
+#          Default roles are defined in roles.py.
+#  Default: []
+{% if jupyterhub_load_roles is defined %}
+c.JupyterHub.load_roles = {{ jupyterhub_load_roles }}
+{% else %}
+# c.JupyterHub.load_roles = []
+{% endif %}
+
+## The date format used by logging formatters for %(asctime)s
+#  See also: Application.log_datefmt
+{% if jupyterhub_log_datefmt is defined %}
+c.JupyterHub.log_datefmt = '{{ jupyterhub_log_datefmt }}'
+{% else %}
+# c.JupyterHub.log_datefmt = '%Y-%m-%d %H:%M:%S'
+{% endif %}
+
+## The Logging format template
+#  See also: Application.log_format
+{% if jupyterhub_log_format is defined %}
+c.JupyterHub.log_format = '{{ jupyterhub_log_format }}'
+{% else %}
+# c.JupyterHub.log_format = '[%(name)s]%(highlevel)s %(message)s'
+{% endif %}
+
+## Set the log level by value or name.
+#  See also: Application.log_level
+{% if jupyterhub_log_level is defined %}
+c.JupyterHub.log_level = {{ jupyterhub_log_level }}
+{% else %}
+# c.JupyterHub.log_level = 30
+{% endif %}
+
+## 
+#  See also: Application.logging_config
+{% if jupyterhub_logging_config is defined %}
+c.JupyterHub.logging_config = {{ jupyterhub_logging_config }}
+{% else %}
+# c.JupyterHub.logging_config = {}
+{% endif %}
+
+## Specify path to a logo image to override the Jupyter logo in the banner.
+#  Default: ''
+{% if jupyterhub_logo_file is defined %}
+c.JupyterHub.logo_file = '{{ jupyterhub_logo_file }}'
+{% else %}
+# c.JupyterHub.logo_file = ''
+{% endif %}
+
+## Maximum number of concurrent named servers that can be created by a user at a
+#  time.
+#  
+#  Setting this can limit the total resources a user can consume.
+#  
+#  If set to 0, no limit is enforced.
+#  
+#  Can be an integer or a callable/awaitable based on the handler object:
+#  
+#  ::
+#  
+#      def named_server_limit_per_user_fn(handler):
+#          user = handler.current_user
+#          if user and user.admin:
+#              return 0
+#          return 5
+#  
+#      c.JupyterHub.named_server_limit_per_user = named_server_limit_per_user_fn
+#  Default: 0
+{% if jupyterhub_named_server_limit_per_user is defined %}
+c.JupyterHub.named_server_limit_per_user = {{ jupyterhub_named_server_limit_per_user }}
+{% else %}
+# c.JupyterHub.named_server_limit_per_user = 0
+{% endif %}
+
+## Expiry (in seconds) of OAuth access tokens.
+#  
+#          The default is to expire when the cookie storing them expires,
+#          according to `cookie_max_age_days` config.
+#  
+#          These are the tokens stored in cookies when you visit
+#          a single-user server or service.
+#          When they expire, you must re-authenticate with the Hub,
+#          even if your Hub authentication is still valid.
+#          If your Hub authentication is valid,
+#          logging in may be a transparent redirect as you refresh the page.
+#  
+#          This does not affect JupyterHub API tokens in general,
+#          which do not expire by default.
+#          Only tokens issued during the oauth flow
+#          accessing services and single-user servers are affected.
+#  
+#          .. versionadded:: 1.4
+#              OAuth token expires_in was not previously configurable.
+#          .. versionchanged:: 1.4
+#              Default now uses cookie_max_age_days so that oauth tokens
+#              which are generally stored in cookies,
+#              expire when the cookies storing them expire.
+#              Previously, it was one hour.
+#  Default: 0
+{% if jupyterhub_oauth_token_expires_in is defined %}
+c.JupyterHub.oauth_token_expires_in = {{ jupyterhub_oauth_token_expires_in }}
+{% else %}
+# c.JupyterHub.oauth_token_expires_in = 0
+{% endif %}
+
+## File to write PID
+#          Useful for daemonizing JupyterHub.
+#  Default: ''
+{% if jupyterhub_pid_file is defined %}
+c.JupyterHub.pid_file = '{{ jupyterhub_pid_file }}'
+{% else %}
+# c.JupyterHub.pid_file = ''
+{% endif %}
+
+## The public facing port of the proxy.
+#  
+#          This is the port on which the proxy will listen.
+#          This is the only port through which JupyterHub
+#          should be accessed by users.
+#  Default: 8000
+{% if jupyterhub_port is defined %}
+c.JupyterHub.port = {{ jupyterhub_port }}
+{% else %}
+# c.JupyterHub.port = 8000
+{% endif %}
+
+## DEPRECATED since version 0.8 : Use ConfigurableHTTPProxy.api_url
+#  Default: ''
+{% if jupyterhub_proxy_api_ip is defined %}
+c.JupyterHub.proxy_api_ip = '{{ jupyterhub_proxy_api_ip }}'
+{% else %}
+# c.JupyterHub.proxy_api_ip = ''
+{% endif %}
+
+## DEPRECATED since version 0.8 : Use ConfigurableHTTPProxy.api_url
+#  Default: 0
+{% if jupyterhub_proxy_api_port is defined %}
+c.JupyterHub.proxy_api_port = {{ jupyterhub_proxy_api_port }}
+{% else %}
+# c.JupyterHub.proxy_api_port = 0
+{% endif %}
+
+## DEPRECATED since version 0.8: Use ConfigurableHTTPProxy.auth_token
+#  Default: ''
+{% if jupyterhub_proxy_auth_token is defined %}
+c.JupyterHub.proxy_auth_token = '{{ jupyterhub_proxy_auth_token }}'
+{% else %}
+# c.JupyterHub.proxy_auth_token = ''
+{% endif %}
+
+## DEPRECATED since version 0.8: Use ConfigurableHTTPProxy.check_running_interval
+#  Default: 5
+{% if jupyterhub_proxy_check_interval is defined %}
+c.JupyterHub.proxy_check_interval = {{ jupyterhub_proxy_check_interval }}
+{% else %}
+# c.JupyterHub.proxy_check_interval = 5
+{% endif %}
+
+## The class to use for configuring the JupyterHub proxy.
+#  
+#          Should be a subclass of :class:`jupyterhub.proxy.Proxy`.
+#  
+#          .. versionchanged:: 1.0
+#              proxies may be registered via entry points,
+#              e.g. `c.JupyterHub.proxy_class = 'traefik'`
+#  
+#  Currently installed: 
+#    - configurable-http-proxy: jupyterhub.proxy.ConfigurableHTTPProxy
+#    - default: jupyterhub.proxy.ConfigurableHTTPProxy
+#  Default: 'jupyterhub.proxy.ConfigurableHTTPProxy'
+{% if jupyterhub_proxy_class is defined %}
+c.JupyterHub.proxy_class = '{{ jupyterhub_proxy_class }}'
+{% else %}
+# c.JupyterHub.proxy_class = 'jupyterhub.proxy.ConfigurableHTTPProxy'
+{% endif %}
+
+## DEPRECATED since version 0.8. Use ConfigurableHTTPProxy.command
+#  Default: []
+{% if jupyterhub_proxy_cmd is defined %}
+c.JupyterHub.proxy_cmd = {{ jupyterhub_proxy_cmd }}
+{% else %}
+# c.JupyterHub.proxy_cmd = []
+{% endif %}
+
+## Set the public URL of JupyterHub
+#  
+#          This will skip any detection of URL and protocol from requests,
+#          which isn't always correct when JupyterHub is behind
+#          multiple layers of proxies, etc.
+#          Usually the failure is detecting http when it's really https.
+#  
+#          Should include the full, public URL of JupyterHub,
+#          including the public-facing base_url prefix
+#          (i.e. it should include a trailing slash), e.g.
+#          https://jupyterhub.example.org/prefix/
+#  Default: ''
+{% if jupyterhub_public_url is defined %}
+c.JupyterHub.public_url = '{{ jupyterhub_public_url }}'
+{% else %}
+# c.JupyterHub.public_url = ''
+{% endif %}
+
+## Recreate all certificates used within JupyterHub on restart.
+#  
+#          Note: enabling this feature requires restarting all notebook servers.
+#  
+#          Use with internal_ssl
+#  Default: False
+{% if jupyterhub_recreate_internal_certs is defined %}
+c.JupyterHub.recreate_internal_certs = {{ jupyterhub_recreate_internal_certs | bool }}
+{% else %}
+# c.JupyterHub.recreate_internal_certs = False
+{% endif %}
+
+## Redirect user to server (if running), instead of control panel.
+#  Default: True
+{% if jupyterhub_redirect_to_server is defined %}
+c.JupyterHub.redirect_to_server = {{ jupyterhub_redirect_to_server | bool }}
+{% else %}
+# c.JupyterHub.redirect_to_server = True
+{% endif %}
+
+## Purge and reset the database.
+#  Default: False
+{% if jupyterhub_reset_db is defined %}
+c.JupyterHub.reset_db = {{ jupyterhub_reset_db | bool }}
+{% else %}
+# c.JupyterHub.reset_db = False
+{% endif %}
+
+## Interval (in seconds) at which to check connectivity of services with web
+#  endpoints.
+#  Default: 60
+{% if jupyterhub_service_check_interval is defined %}
+c.JupyterHub.service_check_interval = {{ jupyterhub_service_check_interval }}
+{% else %}
+# c.JupyterHub.service_check_interval = 60
+{% endif %}
+
+## Dict of token:servicename to be loaded into the database.
+#  
+#          Allows ahead-of-time generation of API tokens for use by externally
+#  managed services.
+#  Default: {}
+{% if jupyterhub_service_tokens is defined %}
+c.JupyterHub.service_tokens = {{ jupyterhub_service_tokens }}
+{% else %}
+# c.JupyterHub.service_tokens = {}
+{% endif %}
+
+## List of service specification dictionaries.
+#  
+#          A service
+#  
+#          For instance::
+#  
+#              services = [
+#                  {
+#                      'name': 'cull_idle',
+#                      'command': ['/path/to/cull_idle_servers.py'],
+#                  },
+#                  {
+#                      'name': 'formgrader',
+#                      'url': 'http://127.0.0.1:1234',
+#                      'api_token': 'super-secret',
+#                      'environment':
+#                  }
+#              ]
+#  Default: []
+{% if jupyterhub_services is defined %}
+c.JupyterHub.services = {{ jupyterhub_services }}
+{% else %}
+# c.JupyterHub.services = []
+{% endif %}
+
+## Instead of starting the Application, dump configuration to stdout
+#  See also: Application.show_config
+{% if jupyterhub_show_config is defined %}
+c.JupyterHub.show_config = {{ jupyterhub_show_config | bool }}
+{% else %}
+# c.JupyterHub.show_config = False
+{% endif %}
+
+## Instead of starting the Application, dump configuration to stdout (as JSON)
+#  See also: Application.show_config_json
+{% if jupyterhub_show_config_json is defined %}
+c.JupyterHub.show_config_json = {{ jupyterhub_show_config_json | bool }}
+{% else %}
+# c.JupyterHub.show_config_json = False
+{% endif %}
+
+## Shuts down all user servers on logout
+#  Default: False
+{% if jupyterhub_shutdown_on_logout is defined %}
+c.JupyterHub.shutdown_on_logout = {{ jupyterhub_shutdown_on_logout | bool }}
+{% else %}
+# c.JupyterHub.shutdown_on_logout = False
+{% endif %}
+
+## The class to use for spawning single-user servers.
+#  
+#          Should be a subclass of :class:`jupyterhub.spawner.Spawner`.
+#  
+#          .. versionchanged:: 1.0
+#              spawners may be registered via entry points,
+#              e.g. `c.JupyterHub.spawner_class = 'localprocess'`
+#  
+#  Currently installed: 
+#    - systemd: systemdspawner.SystemdSpawner
+#    - systemdspawner: systemdspawner.SystemdSpawner
+#    - default: jupyterhub.spawner.LocalProcessSpawner
+#    - localprocess: jupyterhub.spawner.LocalProcessSpawner
+#    - simple: jupyterhub.spawner.SimpleLocalProcessSpawner
+#  Default: 'jupyterhub.spawner.LocalProcessSpawner'
+{% if jupyterhub_spawner_class is defined %}
+c.JupyterHub.spawner_class = '{{ jupyterhub_spawner_class }}'
+{% else %}
+# c.JupyterHub.spawner_class = 'jupyterhub.spawner.LocalProcessSpawner'
+{% endif %}
+
+## Path to SSL certificate file for the public facing interface of the proxy
+#  
+#          When setting this, you should also set ssl_key
+#  Default: ''
+{% if jupyterhub_ssl_cert is defined %}
+c.JupyterHub.ssl_cert = '{{ jupyterhub_ssl_cert }}'
+{% else %}
+# c.JupyterHub.ssl_cert = ''
+{% endif %}
+
+## Path to SSL key file for the public facing interface of the proxy
+#  
+#          When setting this, you should also set ssl_cert
+#  Default: ''
+{% if jupyterhub_ssl_key is defined %}
+c.JupyterHub.ssl_key = '{{ jupyterhub_ssl_key }}'
+{% else %}
+# c.JupyterHub.ssl_key = ''
+{% endif %}
+
+## Host to send statsd metrics to. An empty string (the default) disables sending
+#  metrics.
+#  Default: ''
+{% if jupyterhub_statsd_host is defined %}
+c.JupyterHub.statsd_host = '{{ jupyterhub_statsd_host }}'
+{% else %}
+# c.JupyterHub.statsd_host = ''
+{% endif %}
+
+## Port on which to send statsd metrics about the hub
+#  Default: 8125
+{% if jupyterhub_statsd_port is defined %}
+c.JupyterHub.statsd_port = {{ jupyterhub_statsd_port }}
+{% else %}
+# c.JupyterHub.statsd_port = 8125
+{% endif %}
+
+## Prefix to use for all metrics sent by jupyterhub to statsd
+#  Default: 'jupyterhub'
+{% if jupyterhub_statsd_prefix is defined %}
+c.JupyterHub.statsd_prefix = '{{ jupyterhub_statsd_prefix }}'
+{% else %}
+# c.JupyterHub.statsd_prefix = 'jupyterhub'
+{% endif %}
+
+## Hook for constructing subdomains for users and services. Only used when
+#  `JupyterHub.subdomain_host` is set.
+#  
+#  There are two predefined hooks, which can be selected by name:
+#  
+#  - 'legacy' (deprecated) - 'idna' (default, more robust. No change for _most_
+#  usernames)
+#  
+#  Otherwise, should be a function which must not be async. A custom
+#  subdomain_hook should have the signature:
+#  
+#  def subdomain_hook(name, domain, kind) -> str:
+#      ...
+#  
+#  and should return a unique, valid domain name for all usernames.
+#  
+#  - `name` is the original name, which may need escaping to be safe as a domain
+#  name label - `domain` is the domain of the Hub itself - `kind` will be one of
+#  'user' or 'service'
+#  
+#  JupyterHub itself puts very little limit on usernames to accommodate a wide
+#  variety of Authenticators, but your identity provider is likely much more
+#  strict, allowing you to make assumptions about the name.
+#  
+#  The 'idna' hook should produce a valid domain name for any user, using IDNA
+#  encoding for unicode usernames, and a truncate-and-hash approach for any
+#  usernames that can't be easily encoded into a domain component.
+#  
+#  .. versionadded:: 5.0
+#  Default: 'idna'
+{% if jupyterhub_subdomain_hook is defined %}
+c.JupyterHub.subdomain_hook = '{{ jupyterhub_subdomain_hook }}'
+{% else %}
+# c.JupyterHub.subdomain_hook = 'idna'
+{% endif %}
+
+## Run single-user servers on subdomains of this host.
+#  
+#          This should be the full `https://hub.domain.tld[:port]`.
+#  
+#          Provides additional cross-site protections for javascript served by
+#  single-user servers.
+#  
+#          Requires `<username>.hub.domain.tld` to resolve to the same host as
+#  `hub.domain.tld`.
+#  
+#          In general, this is most easily achieved with wildcard DNS.
+#  
+#          When using SSL (i.e. always) this also requires a wildcard SSL
+#  certificate.
+#  Default: ''
+{% if jupyterhub_subdomain_host is defined %}
+c.JupyterHub.subdomain_host = '{{ jupyterhub_subdomain_host }}'
+{% else %}
+# c.JupyterHub.subdomain_host = ''
+{% endif %}
+
+## Paths to search for jinja templates, before using the default templates.
+#  Default: []
+{% if jupyterhub_template_paths is defined %}
+c.JupyterHub.template_paths = {{ jupyterhub_template_paths }}
+{% else %}
+# c.JupyterHub.template_paths = []
+{% endif %}
+
+## Extra variables to be passed into jinja templates.
+#  
+#          Values in dict may contain callable objects.
+#          If value is callable, the current user is passed as argument.
+#  
+#          Example::
+#  
+#              def callable_value(user):
+#                  # user is generated by handlers.base.get_current_user
+#                  with open("/tmp/file.txt", "r") as f:
+#                      ret = f.read()
+#                  ret = ret.replace("<username>", user.name)
+#                  return ret
+#  
+#              c.JupyterHub.template_vars = {
+#                  "key1": "value1",
+#                  "key2": callable_value,
+#              }
+#  Default: {}
+{% if jupyterhub_template_vars is defined %}
+c.JupyterHub.template_vars = {{ jupyterhub_template_vars }}
+{% else %}
+# c.JupyterHub.template_vars = {}
+{% endif %}
+
+## Set the maximum expiration (in seconds) of tokens created via the API.
+#  
+#  Set to any positive value to disallow creation of tokens with no expiration.
+#  
+#  0 (default) = no limit.
+#  
+#  Does not affect:
+#  
+#  - Server API tokens ($JUPYTERHUB_API_TOKEN is tied to lifetime of the server)
+#  - Tokens issued during oauth (use `oauth_token_expires_in`) - Tokens created
+#  via the API before configuring this limit
+#  
+#  .. versionadded:: 5.1
+#  Default: 0
+{% if jupyterhub_token_expires_in_max_seconds is defined %}
+c.JupyterHub.token_expires_in_max_seconds = {{ jupyterhub_token_expires_in_max_seconds }}
+{% else %}
+# c.JupyterHub.token_expires_in_max_seconds = 0
+{% endif %}
+
+## Extra settings overrides to pass to the tornado application.
+#  Default: {}
+{% if jupyterhub_tornado_settings is defined %}
+c.JupyterHub.tornado_settings = {{ jupyterhub_tornado_settings }}
+{% else %}
+# c.JupyterHub.tornado_settings = {}
+{% endif %}
+
+## Trust user-provided tokens (via JupyterHub.service_tokens)
+#          to have good entropy.
+#  
+#          If you are not inserting additional tokens via configuration file,
+#          this flag has no effect.
+#  
+#          In JupyterHub 0.8, internally generated tokens do not
+#          pass through additional hashing because the hashing is costly
+#          and does not increase the entropy of already-good UUIDs.
+#  
+#          User-provided tokens, on the other hand, are not trusted to have good entropy by default,
+#          and are passed through many rounds of hashing to stretch the entropy of the key
+#          (i.e. user-provided tokens are treated as passwords instead of random keys).
+#          These keys are more costly to check.
+#  
+#          If your inserted tokens are generated by a good-quality mechanism,
+#          e.g. `openssl rand -hex 32`, then you can set this flag to True
+#          to reduce the cost of checking authentication tokens.
+#  Default: False
+{% if jupyterhub_trust_user_provided_tokens is defined %}
+c.JupyterHub.trust_user_provided_tokens = {{ jupyterhub_trust_user_provided_tokens | bool }}
+{% else %}
+# c.JupyterHub.trust_user_provided_tokens = False
+{% endif %}
+
+## Names to include in the subject alternative name.
+#  
+#          These names will be used for server name verification. This is useful
+#          if JupyterHub is being run behind a reverse proxy or services using ssl
+#          are on different hosts.
+#  
+#          Use with internal_ssl
+#  Default: []
+{% if jupyterhub_trusted_alt_names is defined %}
+c.JupyterHub.trusted_alt_names = {{ jupyterhub_trusted_alt_names }}
+{% else %}
+# c.JupyterHub.trusted_alt_names = []
+{% endif %}
+
+## Downstream proxy IP addresses to trust.
+#  
+#          This sets the list of IP addresses that are trusted and skipped when processing
+#          the `X-Forwarded-For` header. For example, if an external proxy is used for TLS
+#          termination, its IP address should be added to this list to ensure the correct
+#          client IP addresses are recorded in the logs instead of the proxy server's IP
+#          address.
+#  Default: []
+{% if jupyterhub_trusted_downstream_ips is defined %}
+c.JupyterHub.trusted_downstream_ips = {{ jupyterhub_trusted_downstream_ips }}
+{% else %}
+# c.JupyterHub.trusted_downstream_ips = []
+{% endif %}
+
+## Upgrade the database automatically on start.
+#  
+#          Only safe if database is regularly backed up.
+#          Only SQLite databases will be backed up to a local file automatically.
+#  Default: False
+{% if jupyterhub_upgrade_db is defined %}
+c.JupyterHub.upgrade_db = {{ jupyterhub_upgrade_db | bool }}
+{% else %}
+# c.JupyterHub.upgrade_db = False
+{% endif %}
+
+## Return 503 rather than 424 when request comes in for a non-running server.
+#  
+#  Prior to JupyterHub 2.0, we returned a 503 when any request came in for a user
+#  server that was currently not running. By default, JupyterHub 2.0 will return
+#  a 424 - this makes operational metric dashboards more useful.
+#  
+#  JupyterLab < 3.2 expected the 503 to know if the user server is no longer
+#  running, and prompted the user to start their server. Set this config to true
+#  to retain the old behavior, so JupyterLab < 3.2 can continue to show the
+#  appropriate UI when the user server is stopped.
+#  
+#  This option will be removed in a future release.
+#  Default: False
+{% if jupyterhub_use_legacy_stopped_server_status_code is defined %}
+c.JupyterHub.use_legacy_stopped_server_status_code = {{ jupyterhub_use_legacy_stopped_server_status_code | bool }}
+{% else %}
+# c.JupyterHub.use_legacy_stopped_server_status_code = False
+{% endif %}
+
+## Callable to affect behavior of /user-redirect/
+#  
+#  Receives 4 parameters: 1. path - URL path that was provided after /user-
+#  redirect/ 2. request - A Tornado HTTPServerRequest representing the current
+#  request. 3. user - The currently authenticated user. 4. base_url - The
+#  base_url of the current hub, for relative redirects
+#  
+#  It should return the new URL to redirect to, or None to preserve current
+#  behavior.
+#  Default: None
+{% if jupyterhub_user_redirect_hook is defined %}
+c.JupyterHub.user_redirect_hook = '{{ jupyterhub_user_redirect_hook }}'
+{% else %}
+# c.JupyterHub.user_redirect_hook = None
+{% endif %}
+
+#------------------------------------------------------------------------------
+# Authenticator(LoggingConfigurable) configuration
+#------------------------------------------------------------------------------
+## Base class for implementing an authentication provider for JupyterHub
+
+## Set of users that will be granted admin rights on this JupyterHub.
+#  
+#  Note:
+#  
+#      As of JupyterHub 2.0,
+#      full admin rights should not be required,
+#      and more precise permissions can be managed via roles.
+#  
+#  Caution:
+#  
+#      Adding users to `admin_users` can only *grant* admin rights,
+#      removing a username from the admin_users set **DOES NOT** remove admin rights previously granted.
+#  
+#      For an authoritative, restricted set of admins,
+#      assign explicit membership of the `admin` *role*::
+#  
+#          c.JupyterHub.load_roles = [
+#              {
+#                  "name": "admin",
+#                  "users": ["admin1", "..."],
+#              }
+#          ]
+#  
+#  Admin users can take every possible action on behalf of all users, for
+#  example:
+#  
+#  - Use the admin panel to see list of users logged in - Add / remove users in
+#  some authenticators - Restart / halt the hub - Start / stop users' single-user
+#  servers - Can access each individual users' single-user server
+#  
+#  Admin access should be treated the same way root access is.
+#  
+#  Defaults to an empty set, in which case no user has admin access.
+#  Default: set()
+{% if jupyterhub_authenticator_admin_users is defined %}
+c.Authenticator.admin_users = {{ jupyterhub_authenticator_admin_users }}
+{% else %}
+# c.Authenticator.admin_users = set()
+{% endif %}
+
+## Allow every user who can successfully authenticate to access JupyterHub.
+#  
+#  False by default, which means for most Authenticators, _some_ allow-related
+#  configuration is required to allow users to log in.
+#  
+#  Authenticator subclasses may override the default with e.g.::
+#  
+#      from traitlets import default
+#      @default("allow_all")
+#      def _default_allow_all(self):
+#          # if _any_ auth config (depends on the Authenticator)
+#          if self.allowed_users or self.allowed_groups or self.allow_existing_users:
+#              return False
+#          else:
+#              return True
+#  
+#  .. versionadded:: 5.0
+#  
+#  .. versionchanged:: 5.0
+#      Prior to 5.0, `allow_all` wasn't defined on its own,
+#      and was instead implicitly True when no allow config was provided,
+#      i.e. `allowed_users` unspecified or empty on the base Authenticator class.
+#  
+#      To preserve pre-5.0 behavior,
+#      set `allow_all = True` if you have no other allow configuration.
+#  Default: False
+{% if jupyterhub_authenticator_allow_all is defined %}
+c.Authenticator.allow_all = {{ jupyterhub_authenticator_allow_all | bool }}
+{% else %}
+# c.Authenticator.allow_all = False
+{% endif %}
+
+## Allow existing users to login.
+#  
+#  Defaults to True if `allowed_users` is set for historical reasons, and False
+#  otherwise.
+#  
+#  With this enabled, all users present in the JupyterHub database are allowed to
+#  login. This has the effect of any user who has _previously_ been allowed to
+#  login via any means will continue to be allowed until the user is deleted via
+#  the /hub/admin page or REST API.
+#  
+#  .. warning::
+#  
+#     Before enabling this you should review the existing users in the
+#     JupyterHub admin panel at `/hub/admin`. You may find users existing
+#     there because they have previously been declared in config such as
+#     `allowed_users` or allowed to sign in.
+#  
+#  .. warning::
+#  
+#     When this is enabled and you wish to remove access for one or more
+#     users previously allowed, you must make sure that they
+#     are removed from the jupyterhub database. This can be tricky to do
+#     if you stop allowing an externally managed group of users for example.
+#  
+#  With this enabled, JupyterHub admin users can visit `/hub/admin` or use
+#  JupyterHub's REST API to add and remove users to manage who can login.
+#  
+#  .. versionadded:: 5.0
+#  Default: False
+{% if jupyterhub_authenticator_allow_existing_users is defined %}
+c.Authenticator.allow_existing_users = {{ jupyterhub_authenticator_allow_existing_users | bool }}
+{% else %}
+# c.Authenticator.allow_existing_users = False
+{% endif %}
+
+## Set of usernames that are allowed to log in.
+#  
+#  Use this to limit which authenticated users may login. Default behavior: only
+#  users in this set are allowed.
+#  
+#  If empty, does not perform any restriction, in which case any authenticated
+#  user is allowed.
+#  
+#  Authenticators may extend :meth:`.Authenticator.check_allowed` to combine
+#  `allowed_users` with other configuration to either expand or restrict access.
+#  
+#  .. versionchanged:: 1.2
+#      `Authenticator.whitelist` renamed to `allowed_users`
+#  Default: set()
+{% if jupyterhub_authenticator_allowed_users is defined %}
+c.Authenticator.allowed_users = {{ jupyterhub_authenticator_allowed_users }}
+{% else %}
+# c.Authenticator.allowed_users = set()
+{% endif %}
+
+## Is there any allow config?
+#  
+#          Used to show a warning if it looks like nobody can access the Hub,
+#          which can happen when upgrading to JupyterHub 5,
+#          now that `allow_all` defaults to False.
+#  
+#          Deployments can set this explicitly to True to suppress
+#          the "No allow config found" warning.
+#  
+#          Will be True if any config tagged with `.tag(allow_config=True)`
+#          or starts with `allow` is truthy.
+#  
+#          .. versionadded:: 5.0
+#  Default: False
+{% if jupyterhub_authenticator_any_allow_config is defined %}
+c.Authenticator.any_allow_config = {{ jupyterhub_authenticator_any_allow_config | bool }}
+{% else %}
+# c.Authenticator.any_allow_config = False
+{% endif %}
+
+## The max age (in seconds) of authentication info
+#          before forcing a refresh of user auth info.
+#  
+#          Authenticators that support it may re-load managed groups,
+#          refresh auth tokens, etc., or force a new login if auth info cannot be refreshed.
+#  
+#          See :meth:`.refresh_user` for what happens when user auth info is refreshed,
+#          which varies by authenticator.
+#          If an Authenticator does not implement `refresh_user`,
+#          auth info will never be considered stale.
+#  
+#          Set `auth_refresh_age = 0` to disable time-based calls to `refresh_user`.
+#          You can still use :attr:`refresh_pre_spawn` if `auth_refresh_age` is disabled.
+#  Default: 300
+{% if jupyterhub_authenticator_auth_refresh_age is defined %}
+c.Authenticator.auth_refresh_age = {{ jupyterhub_authenticator_auth_refresh_age }}
+{% else %}
+# c.Authenticator.auth_refresh_age = 300
+{% endif %}
+
+## Automatically begin the login process
+#  
+#          rather than starting with a "Login with..." link at `/hub/login`
+#  
+#          To work, `.login_url()` must give a URL other than the default `/hub/login`,
+#          such as an oauth handler or another automatic login handler,
+#          registered with `.get_handlers()`.
+#  
+#          .. versionadded:: 0.8
+#  Default: False
+{% if jupyterhub_authenticator_auto_login is defined %}
+c.Authenticator.auto_login = {{ jupyterhub_authenticator_auto_login | bool }}
+{% else %}
+# c.Authenticator.auto_login = False
+{% endif %}
+
+## Automatically begin login process for OAuth2 authorization requests
+#  
+#  When another application is using JupyterHub as OAuth2 provider, it sends
+#  users to `/hub/api/oauth2/authorize`. If the user isn't logged in already, and
+#  auto_login is not set, the user will be dumped on the hub's home page, without
+#  any context on what to do next.
+#  
+#  Setting this to true will automatically redirect users to login if they aren't
+#  logged in *only* on the `/hub/api/oauth2/authorize` endpoint.
+#  
+#  .. versionadded:: 1.5
+#  Default: False
+{% if jupyterhub_authenticator_auto_login_oauth2_authorize is defined %}
+c.Authenticator.auto_login_oauth2_authorize = {{ jupyterhub_authenticator_auto_login_oauth2_authorize | bool }}
+{% else %}
+# c.Authenticator.auto_login_oauth2_authorize = False
+{% endif %}
+
+## Set of usernames that are not allowed to log in.
+#  
+#  Use this with supported authenticators to restrict which users can not log in.
+#  This is an additional block list that further restricts users, beyond whatever
+#  restrictions the authenticator has in place.
+#  
+#  If empty, does not perform any additional restriction.
+#  
+#  .. versionadded: 0.9
+#  
+#  .. versionchanged:: 5.2
+#      Users blocked via `blocked_users` that may have logged in in the past
+#      have all permissions and group membership revoked
+#      and all servers stopped at JupyterHub startup.
+#      Previously, User permissions (e.g. API tokens)
+#      and servers were unaffected and required additional
+#      administrator operations to block after a user is added to `blocked_users`.
+#  
+#  .. versionchanged:: 1.2
+#      `Authenticator.blacklist` renamed to `blocked_users`
+#  Default: set()
+{% if jupyterhub_authenticator_blocked_users is defined %}
+c.Authenticator.blocked_users = {{ jupyterhub_authenticator_blocked_users }}
+{% else %}
+# c.Authenticator.blocked_users = set()
+{% endif %}
+
+## Delete any users from the database that do not pass validation
+#  
+#          When JupyterHub starts, `.add_user` will be called
+#          on each user in the database to verify that all users are still valid.
+#  
+#          If `delete_invalid_users` is True,
+#          any users that do not pass validation will be deleted from the database.
+#          Use this if users might be deleted from an external system,
+#          such as local user accounts.
+#  
+#          If False (default), invalid users remain in the Hub's database
+#          and a warning will be issued.
+#          This is the default to avoid data loss due to config changes.
+#  Default: False
+{% if jupyterhub_authenticator_delete_invalid_users is defined %}
+c.Authenticator.delete_invalid_users = {{ jupyterhub_authenticator_delete_invalid_users | bool }}
+{% else %}
+# c.Authenticator.delete_invalid_users = False
+{% endif %}
+
+## Enable persisting auth_state (if available).
+#  
+#          auth_state will be encrypted and stored in the Hub's database.
+#          This can include things like authentication tokens, etc.
+#          to be passed to Spawners as environment variables.
+#  
+#          Encrypting auth_state requires the cryptography package.
+#  
+#          Additionally, the JUPYTERHUB_CRYPT_KEY environment variable must
+#          contain one (or more, separated by ;) 32B encryption keys.
+#          These can be either base64 or hex-encoded.
+#  
+#          If encryption is unavailable, auth_state cannot be persisted.
+#  
+#          New in JupyterHub 0.8
+#  Default: False
+{% if jupyterhub_authenticator_enable_auth_state is defined %}
+c.Authenticator.enable_auth_state = {{ jupyterhub_authenticator_enable_auth_state | bool }}
+{% else %}
+# c.Authenticator.enable_auth_state = False
+{% endif %}
+
+## Let authenticator manage user groups
+#  
+#          If True, Authenticator.authenticate and/or .refresh_user
+#          may return a list of group names in the 'groups' field,
+#          which will be assigned to the user.
+#  
+#          All group-assignment APIs are disabled if this is True.
+#  Default: False
+{% if jupyterhub_authenticator_manage_groups is defined %}
+c.Authenticator.manage_groups = {{ jupyterhub_authenticator_manage_groups | bool }}
+{% else %}
+# c.Authenticator.manage_groups = False
+{% endif %}
+
+## Let authenticator manage roles
+#  
+#          If True, Authenticator.authenticate and/or .refresh_user
+#          may return a list of roles in the 'roles' field,
+#          which will be added to the database.
+#  
+#          When enabled, all role management will be handled by the
+#          authenticator; in particular, assignment of roles via
+#          `JupyterHub.load_roles` traitlet will not be possible.
+#  
+#          .. versionadded:: 5.0
+#  Default: False
+{% if jupyterhub_authenticator_manage_roles is defined %}
+c.Authenticator.manage_roles = {{ jupyterhub_authenticator_manage_roles | bool }}
+{% else %}
+# c.Authenticator.manage_roles = False
+{% endif %}
+
+## The prompt string for the extra OTP (One Time Password) field.
+#  
+#  .. versionadded:: 5.0
+#  Default: 'OTP:'
+{% if jupyterhub_authenticator_otp_prompt is defined %}
+c.Authenticator.otp_prompt = '{{ jupyterhub_authenticator_otp_prompt }}'
+{% else %}
+# c.Authenticator.otp_prompt = 'OTP:'
+{% endif %}
+
+## An optional hook function that you can implement to do some bootstrapping work
+#  during authentication. For example, loading user account details from an
+#  external system.
+#  
+#  This function is called after the user has passed all authentication checks
+#  and is ready to successfully authenticate. This function must return the
+#  auth_model dict reguardless of changes to it. The hook is called with 3
+#  positional arguments: `(authenticator, handler, auth_model)`.
+#  
+#  This may be a coroutine.
+#  
+#  .. versionadded: 1.0
+#  
+#  Example::
+#  
+#      import os
+#      import pwd
+#      def my_hook(authenticator, handler, auth_model):
+#          user_data = pwd.getpwnam(auth_model['name'])
+#          spawn_data = {
+#              'pw_data': user_data
+#              'gid_list': os.getgrouplist(auth_model['name'], user_data.pw_gid)
+#          }
+#  
+#          if auth_model['auth_state'] is None:
+#              auth_model['auth_state'] = {}
+#          auth_model['auth_state']['spawn_data'] = spawn_data
+#  
+#          return auth_model
+#  
+#      c.Authenticator.post_auth_hook = my_hook
+#  Default: None
+{% if jupyterhub_authenticator_post_auth_hook is defined %}
+c.Authenticator.post_auth_hook = '{{ jupyterhub_authenticator_post_auth_hook }}'
+{% else %}
+# c.Authenticator.post_auth_hook = None
+{% endif %}
+
+## Force refresh of auth prior to spawn.
+#  
+#          This forces :meth:`.refresh_user` to be called prior to launching
+#          a server, to ensure that auth state is up-to-date.
+#  
+#          This can be important when e.g. auth tokens that may have expired
+#          are passed to the spawner via environment variables from auth_state.
+#  
+#          If refresh_user cannot refresh the user auth data,
+#          launch will fail until the user logs in again.
+#  Default: False
+{% if jupyterhub_authenticator_refresh_pre_spawn is defined %}
+c.Authenticator.refresh_pre_spawn = {{ jupyterhub_authenticator_refresh_pre_spawn | bool }}
+{% else %}
+# c.Authenticator.refresh_pre_spawn = False
+{% endif %}
+
+## Prompt for OTP (One Time Password) in the login form.
+#  
+#  .. versionadded:: 5.0
+#  Default: False
+{% if jupyterhub_authenticator_request_otp is defined %}
+c.Authenticator.request_otp = {{ jupyterhub_authenticator_request_otp | bool }}
+{% else %}
+# c.Authenticator.request_otp = False
+{% endif %}
+
+## Reset managed roles to result of `load_managed_roles()` on startup.
+#  
+#          If True:
+#            - stale managed roles will be removed,
+#            - stale assignments to managed roles will be removed.
+#  
+#          Any role not present in `load_managed_roles()` will be considered
+#  'stale'.
+#  
+#          The 'stale' status for role assignments is also determined from
+#  `load_managed_roles()` result:
+#  
+#          - user role assignments status will depend on whether the `users` key
+#  is defined or not:
+#  
+#            * if a list is defined under the `users` key and the user is not listed, then the user role assignment will be considered 'stale',
+#            * if the `users` key is not provided, the user role assignment will be preserved;
+#          - service and group role assignments will be considered 'stale':
+#  
+#            * if not included in the `services` and `groups` list,
+#            * if the `services` and `groups` keys are not provided.
+#  
+#          .. versionadded:: 5.0
+#  Default: False
+{% if jupyterhub_authenticator_reset_managed_roles_on_startup is defined %}
+c.Authenticator.reset_managed_roles_on_startup = {{ jupyterhub_authenticator_reset_managed_roles_on_startup | bool }}
+{% else %}
+# c.Authenticator.reset_managed_roles_on_startup = False
+{% endif %}
+
+## Dictionary mapping authenticator usernames to JupyterHub users.
+#  
+#          Primarily used to normalize OAuth user names to local users.
+#  Default: {}
+{% if jupyterhub_authenticator_username_map is defined %}
+c.Authenticator.username_map = {{ jupyterhub_authenticator_username_map }}
+{% else %}
+# c.Authenticator.username_map = {}
+{% endif %}
+
+## Regular expression pattern that all valid usernames must match.
+#  
+#  If a username does not match the pattern specified here, authentication will
+#  not be attempted.
+#  
+#  If not set, allow any username.
+#  Default: ''
+{% if jupyterhub_authenticator_username_pattern is defined %}
+c.Authenticator.username_pattern = '{{ jupyterhub_authenticator_username_pattern }}'
+{% else %}
+# c.Authenticator.username_pattern = ''
+{% endif %}
+
+## Deprecated, use `Authenticator.allowed_users`
+#  Default: set()
+{% if jupyterhub_authenticator_whitelist is defined %}
+c.Authenticator.whitelist = {{ jupyterhub_authenticator_whitelist }}
+{% else %}
+# c.Authenticator.whitelist = set()
+{% endif %}
+
+#------------------------------------------------------------------------------
+# LocalAuthenticator(Authenticator) configuration
+#------------------------------------------------------------------------------
+## Base class for Authenticators that work with local Linux/UNIX users
+#  
+#      Checks for local users, and can attempt to create them if they exist.
+
+## The command to use for creating users as a list of strings
+#  
+#  For each element in the list, the string USERNAME will be replaced with the
+#  user's username. The username will also be appended as the final argument.
+#  
+#  For Linux, the default value is:
+#  
+#      ['adduser', '-q', '--gecos', '""', '--disabled-password']
+#  
+#  To specify a custom home directory, set this to:
+#  
+#      ['adduser', '-q', '--gecos', '""', '--home', '/customhome/USERNAME', '--
+#  disabled-password']
+#  
+#  This will run the command:
+#  
+#      adduser -q --gecos "" --home /customhome/river --disabled-password river
+#  
+#  when the user 'river' is created.
+#  Default: []
+{% if jupyterhub_localauthenticator_add_user_cmd is defined %}
+c.LocalAuthenticator.add_user_cmd = {{ jupyterhub_localauthenticator_add_user_cmd }}
+{% else %}
+# c.LocalAuthenticator.add_user_cmd = []
+{% endif %}
+
+## 
+#  See also: Authenticator.admin_users
+{% if jupyterhub_localauthenticator_admin_users is defined %}
+c.LocalAuthenticator.admin_users = {{ jupyterhub_localauthenticator_admin_users }}
+{% else %}
+# c.LocalAuthenticator.admin_users = set()
+{% endif %}
+
+## 
+#  See also: Authenticator.allow_all
+{% if jupyterhub_localauthenticator_allow_all is defined %}
+c.LocalAuthenticator.allow_all = {{ jupyterhub_localauthenticator_allow_all | bool }}
+{% else %}
+# c.LocalAuthenticator.allow_all = False
+{% endif %}
+
+## 
+#  See also: Authenticator.allow_existing_users
+{% if jupyterhub_localauthenticator_allow_existing_users is defined %}
+c.LocalAuthenticator.allow_existing_users = {{ jupyterhub_localauthenticator_allow_existing_users | bool }}
+{% else %}
+# c.LocalAuthenticator.allow_existing_users = False
+{% endif %}
+
+## Allow login from all users in these UNIX groups.
+#  
+#  .. versionchanged:: 5.0
+#      `allowed_groups` may be specified together with allowed_users,
+#      to grant access by group OR name.
+#  Default: set()
+{% if jupyterhub_localauthenticator_allowed_groups is defined %}
+c.LocalAuthenticator.allowed_groups = {{ jupyterhub_localauthenticator_allowed_groups }}
+{% else %}
+# c.LocalAuthenticator.allowed_groups = set()
+{% endif %}
+
+## 
+#  See also: Authenticator.allowed_users
+{% if jupyterhub_localauthenticator_allowed_users is defined %}
+c.LocalAuthenticator.allowed_users = {{ jupyterhub_localauthenticator_allowed_users }}
+{% else %}
+# c.LocalAuthenticator.allowed_users = set()
+{% endif %}
+
+## Is there any allow config?
+#  See also: Authenticator.any_allow_config
+{% if jupyterhub_localauthenticator_any_allow_config is defined %}
+c.LocalAuthenticator.any_allow_config = {{ jupyterhub_localauthenticator_any_allow_config | bool }}
+{% else %}
+# c.LocalAuthenticator.any_allow_config = False
+{% endif %}
+
+## The max age (in seconds) of authentication info
+#  See also: Authenticator.auth_refresh_age
+{% if jupyterhub_localauthenticator_auth_refresh_age is defined %}
+c.LocalAuthenticator.auth_refresh_age = {{ jupyterhub_localauthenticator_auth_refresh_age }}
+{% else %}
+# c.LocalAuthenticator.auth_refresh_age = 300
+{% endif %}
+
+## Automatically begin the login process
+#  See also: Authenticator.auto_login
+{% if jupyterhub_localauthenticator_auto_login is defined %}
+c.LocalAuthenticator.auto_login = {{ jupyterhub_localauthenticator_auto_login | bool }}
+{% else %}
+# c.LocalAuthenticator.auto_login = False
+{% endif %}
+
+## 
+#  See also: Authenticator.auto_login_oauth2_authorize
+{% if jupyterhub_localauthenticator_auto_login_oauth2_authorize is defined %}
+c.LocalAuthenticator.auto_login_oauth2_authorize = {{ jupyterhub_localauthenticator_auto_login_oauth2_authorize | bool }}
+{% else %}
+# c.LocalAuthenticator.auto_login_oauth2_authorize = False
+{% endif %}
+
+## 
+#  See also: Authenticator.blocked_users
+{% if jupyterhub_localauthenticator_blocked_users is defined %}
+c.LocalAuthenticator.blocked_users = {{ jupyterhub_localauthenticator_blocked_users }}
+{% else %}
+# c.LocalAuthenticator.blocked_users = set()
+{% endif %}
+
+## If set to True, will attempt to create local system users if they do not exist
+#  already.
+#  
+#  Supports Linux and BSD variants only.
+#  Default: False
+{% if jupyterhub_localauthenticator_create_system_users is defined %}
+c.LocalAuthenticator.create_system_users = {{ jupyterhub_localauthenticator_create_system_users | bool }}
+{% else %}
+# c.LocalAuthenticator.create_system_users = False
+{% endif %}
+
+## Delete any users from the database that do not pass validation
+#  See also: Authenticator.delete_invalid_users
+{% if jupyterhub_localauthenticator_delete_invalid_users is defined %}
+c.LocalAuthenticator.delete_invalid_users = {{ jupyterhub_localauthenticator_delete_invalid_users | bool }}
+{% else %}
+# c.LocalAuthenticator.delete_invalid_users = False
+{% endif %}
+
+## Enable persisting auth_state (if available).
+#  See also: Authenticator.enable_auth_state
+{% if jupyterhub_localauthenticator_enable_auth_state is defined %}
+c.LocalAuthenticator.enable_auth_state = {{ jupyterhub_localauthenticator_enable_auth_state | bool }}
+{% else %}
+# c.LocalAuthenticator.enable_auth_state = False
+{% endif %}
+
+## DEPRECATED: use allowed_groups
+#  Default: set()
+{% if jupyterhub_localauthenticator_group_whitelist is defined %}
+c.LocalAuthenticator.group_whitelist = {{ jupyterhub_localauthenticator_group_whitelist }}
+{% else %}
+# c.LocalAuthenticator.group_whitelist = set()
+{% endif %}
+
+## Let authenticator manage user groups
+#  See also: Authenticator.manage_groups
+{% if jupyterhub_localauthenticator_manage_groups is defined %}
+c.LocalAuthenticator.manage_groups = {{ jupyterhub_localauthenticator_manage_groups | bool }}
+{% else %}
+# c.LocalAuthenticator.manage_groups = False
+{% endif %}
+
+## Let authenticator manage roles
+#  See also: Authenticator.manage_roles
+{% if jupyterhub_localauthenticator_manage_roles is defined %}
+c.LocalAuthenticator.manage_roles = {{ jupyterhub_localauthenticator_manage_roles | bool }}
+{% else %}
+# c.LocalAuthenticator.manage_roles = False
+{% endif %}
+
+## 
+#  See also: Authenticator.otp_prompt
+{% if jupyterhub_localauthenticator_otp_prompt is defined %}
+c.LocalAuthenticator.otp_prompt = '{{ jupyterhub_localauthenticator_otp_prompt }}'
+{% else %}
+# c.LocalAuthenticator.otp_prompt = 'OTP:'
+{% endif %}
+
+## 
+#  See also: Authenticator.post_auth_hook
+{% if jupyterhub_localauthenticator_post_auth_hook is defined %}
+c.LocalAuthenticator.post_auth_hook = '{{ jupyterhub_localauthenticator_post_auth_hook }}'
+{% else %}
+# c.LocalAuthenticator.post_auth_hook = None
+{% endif %}
+
+## Force refresh of auth prior to spawn.
+#  See also: Authenticator.refresh_pre_spawn
+{% if jupyterhub_localauthenticator_refresh_pre_spawn is defined %}
+c.LocalAuthenticator.refresh_pre_spawn = {{ jupyterhub_localauthenticator_refresh_pre_spawn | bool }}
+{% else %}
+# c.LocalAuthenticator.refresh_pre_spawn = False
+{% endif %}
+
+## 
+#  See also: Authenticator.request_otp
+{% if jupyterhub_localauthenticator_request_otp is defined %}
+c.LocalAuthenticator.request_otp = {{ jupyterhub_localauthenticator_request_otp | bool }}
+{% else %}
+# c.LocalAuthenticator.request_otp = False
+{% endif %}
+
+## Reset managed roles to result of `load_managed_roles()` on startup.
+#  See also: Authenticator.reset_managed_roles_on_startup
+{% if jupyterhub_localauthenticator_reset_managed_roles_on_startup is defined %}
+c.LocalAuthenticator.reset_managed_roles_on_startup = {{ jupyterhub_localauthenticator_reset_managed_roles_on_startup | bool }}
+{% else %}
+# c.LocalAuthenticator.reset_managed_roles_on_startup = False
+{% endif %}
+
+## Dictionary of uids to use at user creation time. This helps ensure that users
+#  created from the database get the same uid each time they are created in
+#  temporary deployments or containers.
+#  Default: {}
+{% if jupyterhub_localauthenticator_uids is defined %}
+c.LocalAuthenticator.uids = {{ jupyterhub_localauthenticator_uids }}
+{% else %}
+# c.LocalAuthenticator.uids = {}
+{% endif %}
+
+## Dictionary mapping authenticator usernames to JupyterHub users.
+#  See also: Authenticator.username_map
+{% if jupyterhub_localauthenticator_username_map is defined %}
+c.LocalAuthenticator.username_map = {{ jupyterhub_localauthenticator_username_map }}
+{% else %}
+# c.LocalAuthenticator.username_map = {}
+{% endif %}
+
+## 
+#  See also: Authenticator.username_pattern
+{% if jupyterhub_localauthenticator_username_pattern is defined %}
+c.LocalAuthenticator.username_pattern = '{{ jupyterhub_localauthenticator_username_pattern }}'
+{% else %}
+# c.LocalAuthenticator.username_pattern = ''
+{% endif %}
+
+## Deprecated, use `Authenticator.allowed_users`
+#  See also: Authenticator.whitelist
+{% if jupyterhub_localauthenticator_whitelist is defined %}
+c.LocalAuthenticator.whitelist = {{ jupyterhub_localauthenticator_whitelist }}
+{% else %}
+# c.LocalAuthenticator.whitelist = set()
+{% endif %}
+
+#------------------------------------------------------------------------------
+# PAMAuthenticator(LocalAuthenticator) configuration
+#------------------------------------------------------------------------------
+## Authenticate local UNIX users with PAM
+
+## 
+#  See also: LocalAuthenticator.add_user_cmd
+{% if jupyterhub_pamauthenticator_add_user_cmd is defined %}
+c.PAMAuthenticator.add_user_cmd = {{ jupyterhub_pamauthenticator_add_user_cmd }}
+{% else %}
+# c.PAMAuthenticator.add_user_cmd = []
+{% endif %}
+
+## Authoritative list of user groups that determine admin access. Users not in
+#  these groups can still be granted admin status through admin_users.
+#  
+#  allowed/blocked rules still apply.
+#  
+#  Note: As of JupyterHub 2.0, full admin rights should not be required, and more
+#  precise permissions can be managed via roles.
+#  Default: set()
+{% if jupyterhub_pamauthenticator_admin_groups is defined %}
+c.PAMAuthenticator.admin_groups = {{ jupyterhub_pamauthenticator_admin_groups }}
+{% else %}
+# c.PAMAuthenticator.admin_groups = set()
+{% endif %}
+
+## 
+#  See also: Authenticator.admin_users
+{% if jupyterhub_pamauthenticator_admin_users is defined %}
+c.PAMAuthenticator.admin_users = {{ jupyterhub_pamauthenticator_admin_users }}
+{% else %}
+# c.PAMAuthenticator.admin_users = set()
+{% endif %}
+
+## 
+#  See also: Authenticator.allow_all
+{% if jupyterhub_pamauthenticator_allow_all is defined %}
+c.PAMAuthenticator.allow_all = {{ jupyterhub_pamauthenticator_allow_all | bool }}
+{% else %}
+# c.PAMAuthenticator.allow_all = False
+{% endif %}
+
+## 
+#  See also: Authenticator.allow_existing_users
+{% if jupyterhub_pamauthenticator_allow_existing_users is defined %}
+c.PAMAuthenticator.allow_existing_users = {{ jupyterhub_pamauthenticator_allow_existing_users | bool }}
+{% else %}
+# c.PAMAuthenticator.allow_existing_users = False
+{% endif %}
+
+## 
+#  See also: LocalAuthenticator.allowed_groups
+{% if jupyterhub_pamauthenticator_allowed_groups is defined %}
+c.PAMAuthenticator.allowed_groups = {{ jupyterhub_pamauthenticator_allowed_groups }}
+{% else %}
+# c.PAMAuthenticator.allowed_groups = set()
+{% endif %}
+
+## 
+#  See also: Authenticator.allowed_users
+{% if jupyterhub_pamauthenticator_allowed_users is defined %}
+c.PAMAuthenticator.allowed_users = {{ jupyterhub_pamauthenticator_allowed_users }}
+{% else %}
+# c.PAMAuthenticator.allowed_users = set()
+{% endif %}
+
+## Is there any allow config?
+#  See also: Authenticator.any_allow_config
+{% if jupyterhub_pamauthenticator_any_allow_config is defined %}
+c.PAMAuthenticator.any_allow_config = {{ jupyterhub_pamauthenticator_any_allow_config | bool }}
+{% else %}
+# c.PAMAuthenticator.any_allow_config = False
+{% endif %}
+
+## The max age (in seconds) of authentication info
+#  See also: Authenticator.auth_refresh_age
+{% if jupyterhub_pamauthenticator_auth_refresh_age is defined %}
+c.PAMAuthenticator.auth_refresh_age = {{ jupyterhub_pamauthenticator_auth_refresh_age }}
+{% else %}
+# c.PAMAuthenticator.auth_refresh_age = 300
+{% endif %}
+
+## Automatically begin the login process
+#  See also: Authenticator.auto_login
+{% if jupyterhub_pamauthenticator_auto_login is defined %}
+c.PAMAuthenticator.auto_login = {{ jupyterhub_pamauthenticator_auto_login | bool }}
+{% else %}
+# c.PAMAuthenticator.auto_login = False
+{% endif %}
+
+## 
+#  See also: Authenticator.auto_login_oauth2_authorize
+{% if jupyterhub_pamauthenticator_auto_login_oauth2_authorize is defined %}
+c.PAMAuthenticator.auto_login_oauth2_authorize = {{ jupyterhub_pamauthenticator_auto_login_oauth2_authorize | bool }}
+{% else %}
+# c.PAMAuthenticator.auto_login_oauth2_authorize = False
+{% endif %}
+
+## 
+#  See also: Authenticator.blocked_users
+{% if jupyterhub_pamauthenticator_blocked_users is defined %}
+c.PAMAuthenticator.blocked_users = {{ jupyterhub_pamauthenticator_blocked_users }}
+{% else %}
+# c.PAMAuthenticator.blocked_users = set()
+{% endif %}
+
+## Whether to check the user's account status via PAM during authentication.
+#  
+#  The PAM account stack performs non-authentication based account management. It
+#  is typically used to restrict/permit access to a service and this step is
+#  needed to access the host's user access control.
+#  
+#  Disabling this can be dangerous as authenticated but unauthorized users may be
+#  granted access and, therefore, arbitrary execution on the system.
+#  Default: True
+{% if jupyterhub_pamauthenticator_check_account is defined %}
+c.PAMAuthenticator.check_account = {{ jupyterhub_pamauthenticator_check_account | bool }}
+{% else %}
+# c.PAMAuthenticator.check_account = True
+{% endif %}
+
+## 
+#  See also: LocalAuthenticator.create_system_users
+{% if jupyterhub_pamauthenticator_create_system_users is defined %}
+c.PAMAuthenticator.create_system_users = {{ jupyterhub_pamauthenticator_create_system_users | bool }}
+{% else %}
+# c.PAMAuthenticator.create_system_users = False
+{% endif %}
+
+## Delete any users from the database that do not pass validation
+#  See also: Authenticator.delete_invalid_users
+{% if jupyterhub_pamauthenticator_delete_invalid_users is defined %}
+c.PAMAuthenticator.delete_invalid_users = {{ jupyterhub_pamauthenticator_delete_invalid_users | bool }}
+{% else %}
+# c.PAMAuthenticator.delete_invalid_users = False
+{% endif %}
+
+## Enable persisting auth_state (if available).
+#  See also: Authenticator.enable_auth_state
+{% if jupyterhub_pamauthenticator_enable_auth_state is defined %}
+c.PAMAuthenticator.enable_auth_state = {{ jupyterhub_pamauthenticator_enable_auth_state | bool }}
+{% else %}
+# c.PAMAuthenticator.enable_auth_state = False
+{% endif %}
+
+## The text encoding to use when communicating with PAM
+#  Default: 'utf8'
+{% if jupyterhub_pamauthenticator_encoding is defined %}
+c.PAMAuthenticator.encoding = '{{ jupyterhub_pamauthenticator_encoding }}'
+{% else %}
+# c.PAMAuthenticator.encoding = 'utf8'
+{% endif %}
+
+## Number of executor threads.
+#  
+#  PAM auth requests happen in this thread, so it is mostly waiting for the pam
+#  stack. One thread is usually enough, unless your pam stack is doing something
+#  slow like network requests
+#  Default: 4
+{% if jupyterhub_pamauthenticator_executor_threads is defined %}
+c.PAMAuthenticator.executor_threads = {{ jupyterhub_pamauthenticator_executor_threads }}
+{% else %}
+# c.PAMAuthenticator.executor_threads = 4
+{% endif %}
+
+## DEPRECATED: use allowed_groups
+#  See also: LocalAuthenticator.group_whitelist
+{% if jupyterhub_pamauthenticator_group_whitelist is defined %}
+c.PAMAuthenticator.group_whitelist = {{ jupyterhub_pamauthenticator_group_whitelist }}
+{% else %}
+# c.PAMAuthenticator.group_whitelist = set()
+{% endif %}
+
+## Let authenticator manage user groups
+#  See also: Authenticator.manage_groups
+{% if jupyterhub_pamauthenticator_manage_groups is defined %}
+c.PAMAuthenticator.manage_groups = {{ jupyterhub_pamauthenticator_manage_groups | bool }}
+{% else %}
+# c.PAMAuthenticator.manage_groups = False
+{% endif %}
+
+## Let authenticator manage roles
+#  See also: Authenticator.manage_roles
+{% if jupyterhub_pamauthenticator_manage_roles is defined %}
+c.PAMAuthenticator.manage_roles = {{ jupyterhub_pamauthenticator_manage_roles | bool }}
+{% else %}
+# c.PAMAuthenticator.manage_roles = False
+{% endif %}
+
+## Whether to open a new PAM session when spawners are started.
+#  
+#  This may trigger things like mounting shared filesystems, loading credentials,
+#  etc. depending on system configuration.
+#  
+#  The lifecycle of PAM sessions is not correct, so many PAM session
+#  configurations will not work.
+#  
+#  If any errors are encountered when opening/closing PAM sessions, this is
+#  automatically set to False.
+#  
+#  .. versionchanged:: 2.2
+#  
+#      Due to longstanding problems in the session lifecycle,
+#      this is now disabled by default.
+#      You may opt-in to opening sessions by setting this to True.
+#  Default: False
+{% if jupyterhub_pamauthenticator_open_sessions is defined %}
+c.PAMAuthenticator.open_sessions = {{ jupyterhub_pamauthenticator_open_sessions | bool }}
+{% else %}
+# c.PAMAuthenticator.open_sessions = False
+{% endif %}
+
+## 
+#  See also: Authenticator.otp_prompt
+{% if jupyterhub_pamauthenticator_otp_prompt is defined %}
+c.PAMAuthenticator.otp_prompt = '{{ jupyterhub_pamauthenticator_otp_prompt }}'
+{% else %}
+# c.PAMAuthenticator.otp_prompt = 'OTP:'
+{% endif %}
+
+## Round-trip the username via PAM lookups to make sure it is unique
+#  
+#  PAM can accept multiple usernames that map to the same user, for example
+#  DOMAIN\username in some cases.  To prevent this, convert username into uid,
+#  then back to uid to normalize.
+#  Default: False
+{% if jupyterhub_pamauthenticator_pam_normalize_username is defined %}
+c.PAMAuthenticator.pam_normalize_username = {{ jupyterhub_pamauthenticator_pam_normalize_username | bool }}
+{% else %}
+# c.PAMAuthenticator.pam_normalize_username = False
+{% endif %}
+
+## 
+#  See also: Authenticator.post_auth_hook
+{% if jupyterhub_pamauthenticator_post_auth_hook is defined %}
+c.PAMAuthenticator.post_auth_hook = '{{ jupyterhub_pamauthenticator_post_auth_hook }}'
+{% else %}
+# c.PAMAuthenticator.post_auth_hook = None
+{% endif %}
+
+## Force refresh of auth prior to spawn.
+#  See also: Authenticator.refresh_pre_spawn
+{% if jupyterhub_pamauthenticator_refresh_pre_spawn is defined %}
+c.PAMAuthenticator.refresh_pre_spawn = {{ jupyterhub_pamauthenticator_refresh_pre_spawn | bool }}
+{% else %}
+# c.PAMAuthenticator.refresh_pre_spawn = False
+{% endif %}
+
+## 
+#  See also: Authenticator.request_otp
+{% if jupyterhub_pamauthenticator_request_otp is defined %}
+c.PAMAuthenticator.request_otp = {{ jupyterhub_pamauthenticator_request_otp | bool }}
+{% else %}
+# c.PAMAuthenticator.request_otp = False
+{% endif %}
+
+## Reset managed roles to result of `load_managed_roles()` on startup.
+#  See also: Authenticator.reset_managed_roles_on_startup
+{% if jupyterhub_pamauthenticator_reset_managed_roles_on_startup is defined %}
+c.PAMAuthenticator.reset_managed_roles_on_startup = {{ jupyterhub_pamauthenticator_reset_managed_roles_on_startup | bool }}
+{% else %}
+# c.PAMAuthenticator.reset_managed_roles_on_startup = False
+{% endif %}
+
+## The name of the PAM service to use for authentication
+#  Default: 'login'
+{% if jupyterhub_pamauthenticator_service is defined %}
+c.PAMAuthenticator.service = '{{ jupyterhub_pamauthenticator_service }}'
+{% else %}
+# c.PAMAuthenticator.service = 'login'
+{% endif %}
+
+## 
+#  See also: LocalAuthenticator.uids
+{% if jupyterhub_pamauthenticator_uids is defined %}
+c.PAMAuthenticator.uids = {{ jupyterhub_pamauthenticator_uids }}
+{% else %}
+# c.PAMAuthenticator.uids = {}
+{% endif %}
+
+## Dictionary mapping authenticator usernames to JupyterHub users.
+#  See also: Authenticator.username_map
+{% if jupyterhub_pamauthenticator_username_map is defined %}
+c.PAMAuthenticator.username_map = {{ jupyterhub_pamauthenticator_username_map }}
+{% else %}
+# c.PAMAuthenticator.username_map = {}
+{% endif %}
+
+## 
+#  See also: Authenticator.username_pattern
+{% if jupyterhub_pamauthenticator_username_pattern is defined %}
+c.PAMAuthenticator.username_pattern = '{{ jupyterhub_pamauthenticator_username_pattern }}'
+{% else %}
+# c.PAMAuthenticator.username_pattern = ''
+{% endif %}
+
+## Deprecated, use `Authenticator.allowed_users`
+#  See also: Authenticator.whitelist
+{% if jupyterhub_pamauthenticator_whitelist is defined %}
+c.PAMAuthenticator.whitelist = {{ jupyterhub_pamauthenticator_whitelist }}
+{% else %}
+# c.PAMAuthenticator.whitelist = set()
+{% endif %}
+
+#------------------------------------------------------------------------------
+# NullAuthenticator(Authenticator) configuration
+#------------------------------------------------------------------------------
+## Null Authenticator for JupyterHub
+#  
+#      For cases where authentication should be disabled,
+#      e.g. only allowing access via API tokens.
+#  
+#      .. versionadded:: 2.0
+
+## 
+#  See also: Authenticator.admin_users
+{% if jupyterhub_nullauthenticator_admin_users is defined %}
+c.NullAuthenticator.admin_users = {{ jupyterhub_nullauthenticator_admin_users }}
+{% else %}
+# c.NullAuthenticator.admin_users = set()
+{% endif %}
+
+## 
+#  See also: Authenticator.allow_all
+{% if jupyterhub_nullauthenticator_allow_all is defined %}
+c.NullAuthenticator.allow_all = {{ jupyterhub_nullauthenticator_allow_all | bool }}
+{% else %}
+# c.NullAuthenticator.allow_all = False
+{% endif %}
+
+## 
+#  See also: Authenticator.allow_existing_users
+{% if jupyterhub_nullauthenticator_allow_existing_users is defined %}
+c.NullAuthenticator.allow_existing_users = {{ jupyterhub_nullauthenticator_allow_existing_users | bool }}
+{% else %}
+# c.NullAuthenticator.allow_existing_users = False
+{% endif %}
+
+## 
+#  See also: Authenticator.allowed_users
+{% if jupyterhub_nullauthenticator_allowed_users is defined %}
+c.NullAuthenticator.allowed_users = {{ jupyterhub_nullauthenticator_allowed_users }}
+{% else %}
+# c.NullAuthenticator.allowed_users = set()
+{% endif %}
+
+## Is there any allow config?
+#  See also: Authenticator.any_allow_config
+{% if jupyterhub_nullauthenticator_any_allow_config is defined %}
+c.NullAuthenticator.any_allow_config = {{ jupyterhub_nullauthenticator_any_allow_config | bool }}
+{% else %}
+# c.NullAuthenticator.any_allow_config = False
+{% endif %}
+
+## The max age (in seconds) of authentication info
+#  See also: Authenticator.auth_refresh_age
+{% if jupyterhub_nullauthenticator_auth_refresh_age is defined %}
+c.NullAuthenticator.auth_refresh_age = {{ jupyterhub_nullauthenticator_auth_refresh_age }}
+{% else %}
+# c.NullAuthenticator.auth_refresh_age = 300
+{% endif %}
+
+## 
+#  See also: Authenticator.auto_login_oauth2_authorize
+{% if jupyterhub_nullauthenticator_auto_login_oauth2_authorize is defined %}
+c.NullAuthenticator.auto_login_oauth2_authorize = {{ jupyterhub_nullauthenticator_auto_login_oauth2_authorize | bool }}
+{% else %}
+# c.NullAuthenticator.auto_login_oauth2_authorize = False
+{% endif %}
+
+## 
+#  See also: Authenticator.blocked_users
+{% if jupyterhub_nullauthenticator_blocked_users is defined %}
+c.NullAuthenticator.blocked_users = {{ jupyterhub_nullauthenticator_blocked_users }}
+{% else %}
+# c.NullAuthenticator.blocked_users = set()
+{% endif %}
+
+## Delete any users from the database that do not pass validation
+#  See also: Authenticator.delete_invalid_users
+{% if jupyterhub_nullauthenticator_delete_invalid_users is defined %}
+c.NullAuthenticator.delete_invalid_users = {{ jupyterhub_nullauthenticator_delete_invalid_users | bool }}
+{% else %}
+# c.NullAuthenticator.delete_invalid_users = False
+{% endif %}
+
+## Enable persisting auth_state (if available).
+#  See also: Authenticator.enable_auth_state
+{% if jupyterhub_nullauthenticator_enable_auth_state is defined %}
+c.NullAuthenticator.enable_auth_state = {{ jupyterhub_nullauthenticator_enable_auth_state | bool }}
+{% else %}
+# c.NullAuthenticator.enable_auth_state = False
+{% endif %}
+
+## Let authenticator manage user groups
+#  See also: Authenticator.manage_groups
+{% if jupyterhub_nullauthenticator_manage_groups is defined %}
+c.NullAuthenticator.manage_groups = {{ jupyterhub_nullauthenticator_manage_groups | bool }}
+{% else %}
+# c.NullAuthenticator.manage_groups = False
+{% endif %}
+
+## Let authenticator manage roles
+#  See also: Authenticator.manage_roles
+{% if jupyterhub_nullauthenticator_manage_roles is defined %}
+c.NullAuthenticator.manage_roles = {{ jupyterhub_nullauthenticator_manage_roles | bool }}
+{% else %}
+# c.NullAuthenticator.manage_roles = False
+{% endif %}
+
+## 
+#  See also: Authenticator.otp_prompt
+{% if jupyterhub_nullauthenticator_otp_prompt is defined %}
+c.NullAuthenticator.otp_prompt = '{{ jupyterhub_nullauthenticator_otp_prompt }}'
+{% else %}
+# c.NullAuthenticator.otp_prompt = 'OTP:'
+{% endif %}
+
+## 
+#  See also: Authenticator.post_auth_hook
+{% if jupyterhub_nullauthenticator_post_auth_hook is defined %}
+c.NullAuthenticator.post_auth_hook = '{{ jupyterhub_nullauthenticator_post_auth_hook }}'
+{% else %}
+# c.NullAuthenticator.post_auth_hook = None
+{% endif %}
+
+## Force refresh of auth prior to spawn.
+#  See also: Authenticator.refresh_pre_spawn
+{% if jupyterhub_nullauthenticator_refresh_pre_spawn is defined %}
+c.NullAuthenticator.refresh_pre_spawn = {{ jupyterhub_nullauthenticator_refresh_pre_spawn | bool }}
+{% else %}
+# c.NullAuthenticator.refresh_pre_spawn = False
+{% endif %}
+
+## 
+#  See also: Authenticator.request_otp
+{% if jupyterhub_nullauthenticator_request_otp is defined %}
+c.NullAuthenticator.request_otp = {{ jupyterhub_nullauthenticator_request_otp | bool }}
+{% else %}
+# c.NullAuthenticator.request_otp = False
+{% endif %}
+
+## Reset managed roles to result of `load_managed_roles()` on startup.
+#  See also: Authenticator.reset_managed_roles_on_startup
+{% if jupyterhub_nullauthenticator_reset_managed_roles_on_startup is defined %}
+c.NullAuthenticator.reset_managed_roles_on_startup = {{ jupyterhub_nullauthenticator_reset_managed_roles_on_startup | bool }}
+{% else %}
+# c.NullAuthenticator.reset_managed_roles_on_startup = False
+{% endif %}
+
+## Dictionary mapping authenticator usernames to JupyterHub users.
+#  See also: Authenticator.username_map
+{% if jupyterhub_nullauthenticator_username_map is defined %}
+c.NullAuthenticator.username_map = {{ jupyterhub_nullauthenticator_username_map }}
+{% else %}
+# c.NullAuthenticator.username_map = {}
+{% endif %}
+
+## 
+#  See also: Authenticator.username_pattern
+{% if jupyterhub_nullauthenticator_username_pattern is defined %}
+c.NullAuthenticator.username_pattern = '{{ jupyterhub_nullauthenticator_username_pattern }}'
+{% else %}
+# c.NullAuthenticator.username_pattern = ''
+{% endif %}
+
+## Deprecated, use `Authenticator.allowed_users`
+#  See also: Authenticator.whitelist
+{% if jupyterhub_nullauthenticator_whitelist is defined %}
+c.NullAuthenticator.whitelist = {{ jupyterhub_nullauthenticator_whitelist }}
+{% else %}
+# c.NullAuthenticator.whitelist = set()
+{% endif %}
+
+#------------------------------------------------------------------------------
+# Proxy(LoggingConfigurable) configuration
+#------------------------------------------------------------------------------
+## Base class for configurable proxies that JupyterHub can use.
+#  
+#      A proxy implementation should subclass this and must define the following
+#  methods:
+#  
+#      - :meth:`.get_all_routes` return a dictionary of all JupyterHub-related routes
+#      - :meth:`.add_route` adds a route
+#      - :meth:`.delete_route` deletes a route
+#  
+#      In addition to these, the following method(s) may need to be implemented:
+#  
+#      - :meth:`.start` start the proxy, if it should be launched by the Hub
+#        instead of externally managed.
+#        If the proxy is externally managed, it should set :attr:`should_start` to False.
+#      - :meth:`.stop` stop the proxy. Only used if :meth:`.start` is also used.
+#  
+#      And the following method(s) are optional, but can be provided:
+#  
+#      - :meth:`.get_route` gets a single route.
+#        There is a default implementation that extracts data from :meth:`.get_all_routes`,
+#        but implementations may choose to provide a more efficient implementation
+#        of fetching a single route.
+
+## Additional routes to be maintained in the proxy.
+#  
+#  A dictionary with a route specification as key, and a URL as target. The hub
+#  will ensure this route is present in the proxy.
+#  
+#  If the hub is running in host based mode (with JupyterHub.subdomain_host set),
+#  the routespec *must* have a domain component (example.com/my-url/). If the hub
+#  is not running in host based mode, the routespec *must not* have a domain
+#  component (/my-url/).
+#  
+#  Helpful when the hub is running in API-only mode.
+#  Default: {}
+{% if jupyterhub_proxy_extra_routes is defined %}
+c.Proxy.extra_routes = {{ jupyterhub_proxy_extra_routes }}
+{% else %}
+# c.Proxy.extra_routes = {}
+{% endif %}
+
+## Should the Hub start the proxy
+#  
+#          If True, the Hub will start the proxy and stop it.
+#          Set to False if the proxy is managed externally,
+#          such as by systemd, docker, or another service manager.
+#  Default: True
+{% if jupyterhub_proxy_should_start is defined %}
+c.Proxy.should_start = {{ jupyterhub_proxy_should_start | bool }}
+{% else %}
+# c.Proxy.should_start = True
+{% endif %}
+
+#------------------------------------------------------------------------------
+# ConfigurableHTTPProxy(Proxy) configuration
+#------------------------------------------------------------------------------
+## Proxy implementation for the default configurable-http-proxy.
+#  
+#      This is the default proxy implementation
+#      for running the nodejs proxy `configurable-http-proxy`.
+#  
+#      If the proxy should not be run as a subprocess of the Hub,
+#      (e.g. in a separate container),
+#      set::
+#  
+#          c.ConfigurableHTTPProxy.should_start = False
+
+## The ip (or hostname) of the proxy's API endpoint
+#  Default: ''
+{% if jupyterhub_configurablehttpproxy_api_url is defined %}
+c.ConfigurableHTTPProxy.api_url = '{{ jupyterhub_configurablehttpproxy_api_url }}'
+{% else %}
+# c.ConfigurableHTTPProxy.api_url = ''
+{% endif %}
+
+## The Proxy auth token
+#  
+#          Loaded from the CONFIGPROXY_AUTH_TOKEN env variable by default.
+#  Default: ''
+{% if jupyterhub_configurablehttpproxy_auth_token is defined %}
+c.ConfigurableHTTPProxy.auth_token = '{{ jupyterhub_configurablehttpproxy_auth_token }}'
+{% else %}
+# c.ConfigurableHTTPProxy.auth_token = ''
+{% endif %}
+
+## Interval (in seconds) at which to check if the proxy is running.
+#  Default: 5
+{% if jupyterhub_configurablehttpproxy_check_running_interval is defined %}
+c.ConfigurableHTTPProxy.check_running_interval = {{ jupyterhub_configurablehttpproxy_check_running_interval }}
+{% else %}
+# c.ConfigurableHTTPProxy.check_running_interval = 5
+{% endif %}
+
+## The command to start the proxy
+#  Default: ['configurable-http-proxy']
+{% if jupyterhub_configurablehttpproxy_command is defined %}
+c.ConfigurableHTTPProxy.command = {{ jupyterhub_configurablehttpproxy_command }}
+{% else %}
+# c.ConfigurableHTTPProxy.command = ['configurable-http-proxy']
+{% endif %}
+
+## The number of requests allowed to be concurrently outstanding to the proxy
+#  
+#  Limiting this number avoids potential timeout errors by sending too many
+#  requests to update the proxy at once
+#  Default: 10
+{% if jupyterhub_configurablehttpproxy_concurrency is defined %}
+c.ConfigurableHTTPProxy.concurrency = {{ jupyterhub_configurablehttpproxy_concurrency }}
+{% else %}
+# c.ConfigurableHTTPProxy.concurrency = 10
+{% endif %}
+
+## Add debug-level logging to the Proxy.
+#  Default: False
+{% if jupyterhub_configurablehttpproxy_debug is defined %}
+c.ConfigurableHTTPProxy.debug = {{ jupyterhub_configurablehttpproxy_debug | bool }}
+{% else %}
+# c.ConfigurableHTTPProxy.debug = False
+{% endif %}
+
+## 
+#  See also: Proxy.extra_routes
+{% if jupyterhub_configurablehttpproxy_extra_routes is defined %}
+c.ConfigurableHTTPProxy.extra_routes = {{ jupyterhub_configurablehttpproxy_extra_routes }}
+{% else %}
+# c.ConfigurableHTTPProxy.extra_routes = {}
+{% endif %}
+
+## Proxy log level
+#  Choices: any of ['debug', 'info', 'warn', 'error'] (case-insensitive)
+#  Default: 'info'
+{% if jupyterhub_configurablehttpproxy_log_level is defined %}
+c.ConfigurableHTTPProxy.log_level = '{{ jupyterhub_configurablehttpproxy_log_level }}'
+{% else %}
+# c.ConfigurableHTTPProxy.log_level = 'info'
+{% endif %}
+
+## File in which to write the PID of the proxy process.
+#  Default: 'jupyterhub-proxy.pid'
+{% if jupyterhub_configurablehttpproxy_pid_file is defined %}
+c.ConfigurableHTTPProxy.pid_file = '{{ jupyterhub_configurablehttpproxy_pid_file }}'
+{% else %}
+# c.ConfigurableHTTPProxy.pid_file = 'jupyterhub-proxy.pid'
+{% endif %}
+
+## Should the Hub start the proxy
+#  See also: Proxy.should_start
+{% if jupyterhub_configurablehttpproxy_should_start is defined %}
+c.ConfigurableHTTPProxy.should_start = {{ jupyterhub_configurablehttpproxy_should_start | bool }}
+{% else %}
+# c.ConfigurableHTTPProxy.should_start = True
+{% endif %}
+
+#------------------------------------------------------------------------------
+# SharedPasswordAuthenticator(Authenticator) configuration
+#------------------------------------------------------------------------------
+## Authenticator with static shared passwords.
+#  
+#  For use in short-term deployments with negligible security concerns.
+#  
+#  Enable with::
+#  
+#      c.JupyterHub.authenticator_class = "shared-password"
+#  
+#  .. warning::
+#      This is an insecure Authenticator only appropriate for short-term
+#      deployments with no requirement to protect users from each other.
+#  
+#      - The password is stored in plain text at rest in config
+#      - Anyone with the password can login as **any user**
+#      - All users are able to login as all other (non-admin) users with the same password
+
+## Set a global password that grants *admin* privileges to users logging in with
+#  this password. Only usernames declared in `admin_users` may login with this
+#  password.
+#  
+#  Must meet the following requirements:
+#  
+#  - Be 32 characters or longer - Not be the same as `user_password`
+#  
+#  If not set, admin users cannot login.
+#  Default: None
+{% if jupyterhub_sharedpasswordauthenticator_admin_password is defined %}
+c.SharedPasswordAuthenticator.admin_password = '{{ jupyterhub_sharedpasswordauthenticator_admin_password }}'
+{% else %}
+# c.SharedPasswordAuthenticator.admin_password = None
+{% endif %}
+
+## 
+#  See also: Authenticator.admin_users
+{% if jupyterhub_sharedpasswordauthenticator_admin_users is defined %}
+c.SharedPasswordAuthenticator.admin_users = {{ jupyterhub_sharedpasswordauthenticator_admin_users }}
+{% else %}
+# c.SharedPasswordAuthenticator.admin_users = set()
+{% endif %}
+
+## 
+#  See also: Authenticator.allow_all
+{% if jupyterhub_sharedpasswordauthenticator_allow_all is defined %}
+c.SharedPasswordAuthenticator.allow_all = {{ jupyterhub_sharedpasswordauthenticator_allow_all | bool }}
+{% else %}
+# c.SharedPasswordAuthenticator.allow_all = False
+{% endif %}
+
+## 
+#  See also: Authenticator.allow_existing_users
+{% if jupyterhub_sharedpasswordauthenticator_allow_existing_users is defined %}
+c.SharedPasswordAuthenticator.allow_existing_users = {{ jupyterhub_sharedpasswordauthenticator_allow_existing_users | bool }}
+{% else %}
+# c.SharedPasswordAuthenticator.allow_existing_users = False
+{% endif %}
+
+## 
+#  See also: Authenticator.allowed_users
+{% if jupyterhub_sharedpasswordauthenticator_allowed_users is defined %}
+c.SharedPasswordAuthenticator.allowed_users = {{ jupyterhub_sharedpasswordauthenticator_allowed_users }}
+{% else %}
+# c.SharedPasswordAuthenticator.allowed_users = set()
+{% endif %}
+
+## Is there any allow config?
+#  See also: Authenticator.any_allow_config
+{% if jupyterhub_sharedpasswordauthenticator_any_allow_config is defined %}
+c.SharedPasswordAuthenticator.any_allow_config = {{ jupyterhub_sharedpasswordauthenticator_any_allow_config | bool }}
+{% else %}
+# c.SharedPasswordAuthenticator.any_allow_config = False
+{% endif %}
+
+## The max age (in seconds) of authentication info
+#  See also: Authenticator.auth_refresh_age
+{% if jupyterhub_sharedpasswordauthenticator_auth_refresh_age is defined %}
+c.SharedPasswordAuthenticator.auth_refresh_age = {{ jupyterhub_sharedpasswordauthenticator_auth_refresh_age }}
+{% else %}
+# c.SharedPasswordAuthenticator.auth_refresh_age = 300
+{% endif %}
+
+## Automatically begin the login process
+#  See also: Authenticator.auto_login
+{% if jupyterhub_sharedpasswordauthenticator_auto_login is defined %}
+c.SharedPasswordAuthenticator.auto_login = {{ jupyterhub_sharedpasswordauthenticator_auto_login | bool }}
+{% else %}
+# c.SharedPasswordAuthenticator.auto_login = False
+{% endif %}
+
+## 
+#  See also: Authenticator.auto_login_oauth2_authorize
+{% if jupyterhub_sharedpasswordauthenticator_auto_login_oauth2_authorize is defined %}
+c.SharedPasswordAuthenticator.auto_login_oauth2_authorize = {{ jupyterhub_sharedpasswordauthenticator_auto_login_oauth2_authorize | bool }}
+{% else %}
+# c.SharedPasswordAuthenticator.auto_login_oauth2_authorize = False
+{% endif %}
+
+## 
+#  See also: Authenticator.blocked_users
+{% if jupyterhub_sharedpasswordauthenticator_blocked_users is defined %}
+c.SharedPasswordAuthenticator.blocked_users = {{ jupyterhub_sharedpasswordauthenticator_blocked_users }}
+{% else %}
+# c.SharedPasswordAuthenticator.blocked_users = set()
+{% endif %}
+
+## Delete any users from the database that do not pass validation
+#  See also: Authenticator.delete_invalid_users
+{% if jupyterhub_sharedpasswordauthenticator_delete_invalid_users is defined %}
+c.SharedPasswordAuthenticator.delete_invalid_users = {{ jupyterhub_sharedpasswordauthenticator_delete_invalid_users | bool }}
+{% else %}
+# c.SharedPasswordAuthenticator.delete_invalid_users = False
+{% endif %}
+
+## Enable persisting auth_state (if available).
+#  See also: Authenticator.enable_auth_state
+{% if jupyterhub_sharedpasswordauthenticator_enable_auth_state is defined %}
+c.SharedPasswordAuthenticator.enable_auth_state = {{ jupyterhub_sharedpasswordauthenticator_enable_auth_state | bool }}
+{% else %}
+# c.SharedPasswordAuthenticator.enable_auth_state = False
+{% endif %}
+
+## Let authenticator manage user groups
+#  See also: Authenticator.manage_groups
+{% if jupyterhub_sharedpasswordauthenticator_manage_groups is defined %}
+c.SharedPasswordAuthenticator.manage_groups = {{ jupyterhub_sharedpasswordauthenticator_manage_groups | bool }}
+{% else %}
+# c.SharedPasswordAuthenticator.manage_groups = False
+{% endif %}
+
+## Let authenticator manage roles
+#  See also: Authenticator.manage_roles
+{% if jupyterhub_sharedpasswordauthenticator_manage_roles is defined %}
+c.SharedPasswordAuthenticator.manage_roles = {{ jupyterhub_sharedpasswordauthenticator_manage_roles | bool }}
+{% else %}
+# c.SharedPasswordAuthenticator.manage_roles = False
+{% endif %}
+
+## 
+#  See also: Authenticator.otp_prompt
+{% if jupyterhub_sharedpasswordauthenticator_otp_prompt is defined %}
+c.SharedPasswordAuthenticator.otp_prompt = '{{ jupyterhub_sharedpasswordauthenticator_otp_prompt }}'
+{% else %}
+# c.SharedPasswordAuthenticator.otp_prompt = 'OTP:'
+{% endif %}
+
+## 
+#  See also: Authenticator.post_auth_hook
+{% if jupyterhub_sharedpasswordauthenticator_post_auth_hook is defined %}
+c.SharedPasswordAuthenticator.post_auth_hook = '{{ jupyterhub_sharedpasswordauthenticator_post_auth_hook }}'
+{% else %}
+# c.SharedPasswordAuthenticator.post_auth_hook = None
+{% endif %}
+
+## Force refresh of auth prior to spawn.
+#  See also: Authenticator.refresh_pre_spawn
+{% if jupyterhub_sharedpasswordauthenticator_refresh_pre_spawn is defined %}
+c.SharedPasswordAuthenticator.refresh_pre_spawn = {{ jupyterhub_sharedpasswordauthenticator_refresh_pre_spawn | bool }}
+{% else %}
+# c.SharedPasswordAuthenticator.refresh_pre_spawn = False
+{% endif %}
+
+## 
+#  See also: Authenticator.request_otp
+{% if jupyterhub_sharedpasswordauthenticator_request_otp is defined %}
+c.SharedPasswordAuthenticator.request_otp = {{ jupyterhub_sharedpasswordauthenticator_request_otp | bool }}
+{% else %}
+# c.SharedPasswordAuthenticator.request_otp = False
+{% endif %}
+
+## Reset managed roles to result of `load_managed_roles()` on startup.
+#  See also: Authenticator.reset_managed_roles_on_startup
+{% if jupyterhub_sharedpasswordauthenticator_reset_managed_roles_on_startup is defined %}
+c.SharedPasswordAuthenticator.reset_managed_roles_on_startup = {{ jupyterhub_sharedpasswordauthenticator_reset_managed_roles_on_startup | bool }}
+{% else %}
+# c.SharedPasswordAuthenticator.reset_managed_roles_on_startup = False
+{% endif %}
+
+## Set a global password for all *non admin* users wanting to log in.
+#  
+#  Must be 8 characters or longer.
+#  
+#  If not set, regular users cannot login.
+#  
+#  If `allow_all` is True, anybody can register unlimited new users with any
+#  username by logging in with this password. Users may be allowed by name by
+#  specifying `allowed_users`.
+#  
+#  Any user will also be able to login as **any other non-admin user** with this
+#  password.
+#  
+#  If `admin_users` is set, those users *must* use `admin_password` to log in.
+#  Default: None
+{% if jupyterhub_sharedpasswordauthenticator_user_password is defined %}
+c.SharedPasswordAuthenticator.user_password = '{{ jupyterhub_sharedpasswordauthenticator_user_password }}'
+{% else %}
+# c.SharedPasswordAuthenticator.user_password = None
+{% endif %}
+
+## Dictionary mapping authenticator usernames to JupyterHub users.
+#  See also: Authenticator.username_map
+{% if jupyterhub_sharedpasswordauthenticator_username_map is defined %}
+c.SharedPasswordAuthenticator.username_map = {{ jupyterhub_sharedpasswordauthenticator_username_map }}
+{% else %}
+# c.SharedPasswordAuthenticator.username_map = {}
+{% endif %}
+
+## 
+#  See also: Authenticator.username_pattern
+{% if jupyterhub_sharedpasswordauthenticator_username_pattern is defined %}
+c.SharedPasswordAuthenticator.username_pattern = '{{ jupyterhub_sharedpasswordauthenticator_username_pattern }}'
+{% else %}
+# c.SharedPasswordAuthenticator.username_pattern = ''
+{% endif %}
+
+## Deprecated, use `Authenticator.allowed_users`
+#  See also: Authenticator.whitelist
+{% if jupyterhub_sharedpasswordauthenticator_whitelist is defined %}
+c.SharedPasswordAuthenticator.whitelist = {{ jupyterhub_sharedpasswordauthenticator_whitelist }}
+{% else %}
+# c.SharedPasswordAuthenticator.whitelist = set()
+{% endif %}
+
+#------------------------------------------------------------------------------
+# DummyAuthenticator(Authenticator) configuration
+#------------------------------------------------------------------------------
+## Dummy Authenticator for testing
+#  
+#      By default, any username + password is allowed
+#      If a non-empty password is set, any username will be allowed
+#      if it logs in with that password.
+#  
+#      .. versionadded:: 1.0
+#  
+#      .. versionadded:: 5.0
+#          `allow_all` defaults to True,
+#          preserving default behavior.
+
+## 
+#  See also: Authenticator.admin_users
+{% if jupyterhub_dummyauthenticator_admin_users is defined %}
+c.DummyAuthenticator.admin_users = {{ jupyterhub_dummyauthenticator_admin_users }}
+{% else %}
+# c.DummyAuthenticator.admin_users = set()
+{% endif %}
+
+## 
+#  See also: Authenticator.allow_all
+{% if jupyterhub_dummyauthenticator_allow_all is defined %}
+c.DummyAuthenticator.allow_all = {{ jupyterhub_dummyauthenticator_allow_all | bool }}
+{% else %}
+# c.DummyAuthenticator.allow_all = False
+{% endif %}
+
+## 
+#  See also: Authenticator.allow_existing_users
+{% if jupyterhub_dummyauthenticator_allow_existing_users is defined %}
+c.DummyAuthenticator.allow_existing_users = {{ jupyterhub_dummyauthenticator_allow_existing_users | bool }}
+{% else %}
+# c.DummyAuthenticator.allow_existing_users = False
+{% endif %}
+
+## 
+#  See also: Authenticator.allowed_users
+{% if jupyterhub_dummyauthenticator_allowed_users is defined %}
+c.DummyAuthenticator.allowed_users = {{ jupyterhub_dummyauthenticator_allowed_users }}
+{% else %}
+# c.DummyAuthenticator.allowed_users = set()
+{% endif %}
+
+## Is there any allow config?
+#  See also: Authenticator.any_allow_config
+{% if jupyterhub_dummyauthenticator_any_allow_config is defined %}
+c.DummyAuthenticator.any_allow_config = {{ jupyterhub_dummyauthenticator_any_allow_config | bool }}
+{% else %}
+# c.DummyAuthenticator.any_allow_config = False
+{% endif %}
+
+## The max age (in seconds) of authentication info
+#  See also: Authenticator.auth_refresh_age
+{% if jupyterhub_dummyauthenticator_auth_refresh_age is defined %}
+c.DummyAuthenticator.auth_refresh_age = {{ jupyterhub_dummyauthenticator_auth_refresh_age }}
+{% else %}
+# c.DummyAuthenticator.auth_refresh_age = 300
+{% endif %}
+
+## Automatically begin the login process
+#  See also: Authenticator.auto_login
+{% if jupyterhub_dummyauthenticator_auto_login is defined %}
+c.DummyAuthenticator.auto_login = {{ jupyterhub_dummyauthenticator_auto_login | bool }}
+{% else %}
+# c.DummyAuthenticator.auto_login = False
+{% endif %}
+
+## 
+#  See also: Authenticator.auto_login_oauth2_authorize
+{% if jupyterhub_dummyauthenticator_auto_login_oauth2_authorize is defined %}
+c.DummyAuthenticator.auto_login_oauth2_authorize = {{ jupyterhub_dummyauthenticator_auto_login_oauth2_authorize | bool }}
+{% else %}
+# c.DummyAuthenticator.auto_login_oauth2_authorize = False
+{% endif %}
+
+## 
+#  See also: Authenticator.blocked_users
+{% if jupyterhub_dummyauthenticator_blocked_users is defined %}
+c.DummyAuthenticator.blocked_users = {{ jupyterhub_dummyauthenticator_blocked_users }}
+{% else %}
+# c.DummyAuthenticator.blocked_users = set()
+{% endif %}
+
+## Delete any users from the database that do not pass validation
+#  See also: Authenticator.delete_invalid_users
+{% if jupyterhub_dummyauthenticator_delete_invalid_users is defined %}
+c.DummyAuthenticator.delete_invalid_users = {{ jupyterhub_dummyauthenticator_delete_invalid_users | bool }}
+{% else %}
+# c.DummyAuthenticator.delete_invalid_users = False
+{% endif %}
+
+## Enable persisting auth_state (if available).
+#  See also: Authenticator.enable_auth_state
+{% if jupyterhub_dummyauthenticator_enable_auth_state is defined %}
+c.DummyAuthenticator.enable_auth_state = {{ jupyterhub_dummyauthenticator_enable_auth_state | bool }}
+{% else %}
+# c.DummyAuthenticator.enable_auth_state = False
+{% endif %}
+
+## Let authenticator manage user groups
+#  See also: Authenticator.manage_groups
+{% if jupyterhub_dummyauthenticator_manage_groups is defined %}
+c.DummyAuthenticator.manage_groups = {{ jupyterhub_dummyauthenticator_manage_groups | bool }}
+{% else %}
+# c.DummyAuthenticator.manage_groups = False
+{% endif %}
+
+## Let authenticator manage roles
+#  See also: Authenticator.manage_roles
+{% if jupyterhub_dummyauthenticator_manage_roles is defined %}
+c.DummyAuthenticator.manage_roles = {{ jupyterhub_dummyauthenticator_manage_roles | bool }}
+{% else %}
+# c.DummyAuthenticator.manage_roles = False
+{% endif %}
+
+## 
+#  See also: Authenticator.otp_prompt
+{% if jupyterhub_dummyauthenticator_otp_prompt is defined %}
+c.DummyAuthenticator.otp_prompt = '{{ jupyterhub_dummyauthenticator_otp_prompt }}'
+{% else %}
+# c.DummyAuthenticator.otp_prompt = 'OTP:'
+{% endif %}
+
+## .. deprecated:: 5.3
+#  
+#      Setting a password in DummyAuthenticator is deprecated.
+#      Use `SharedPasswordAuthenticator` instead.
+#  Default: ''
+{% if jupyterhub_dummyauthenticator_password is defined %}
+c.DummyAuthenticator.password = '{{ jupyterhub_dummyauthenticator_password }}'
+{% else %}
+# c.DummyAuthenticator.password = ''
+{% endif %}
+
+## 
+#  See also: Authenticator.post_auth_hook
+{% if jupyterhub_dummyauthenticator_post_auth_hook is defined %}
+c.DummyAuthenticator.post_auth_hook = '{{ jupyterhub_dummyauthenticator_post_auth_hook }}'
+{% else %}
+# c.DummyAuthenticator.post_auth_hook = None
+{% endif %}
+
+## Force refresh of auth prior to spawn.
+#  See also: Authenticator.refresh_pre_spawn
+{% if jupyterhub_dummyauthenticator_refresh_pre_spawn is defined %}
+c.DummyAuthenticator.refresh_pre_spawn = {{ jupyterhub_dummyauthenticator_refresh_pre_spawn | bool }}
+{% else %}
+# c.DummyAuthenticator.refresh_pre_spawn = False
+{% endif %}
+
+## 
+#  See also: Authenticator.request_otp
+{% if jupyterhub_dummyauthenticator_request_otp is defined %}
+c.DummyAuthenticator.request_otp = {{ jupyterhub_dummyauthenticator_request_otp | bool }}
+{% else %}
+# c.DummyAuthenticator.request_otp = False
+{% endif %}
+
+## Reset managed roles to result of `load_managed_roles()` on startup.
+#  See also: Authenticator.reset_managed_roles_on_startup
+{% if jupyterhub_dummyauthenticator_reset_managed_roles_on_startup is defined %}
+c.DummyAuthenticator.reset_managed_roles_on_startup = {{ jupyterhub_dummyauthenticator_reset_managed_roles_on_startup | bool }}
+{% else %}
+# c.DummyAuthenticator.reset_managed_roles_on_startup = False
+{% endif %}
+
+## Dictionary mapping authenticator usernames to JupyterHub users.
+#  See also: Authenticator.username_map
+{% if jupyterhub_dummyauthenticator_username_map is defined %}
+c.DummyAuthenticator.username_map = {{ jupyterhub_dummyauthenticator_username_map }}
+{% else %}
+# c.DummyAuthenticator.username_map = {}
+{% endif %}
+
+## 
+#  See also: Authenticator.username_pattern
+{% if jupyterhub_dummyauthenticator_username_pattern is defined %}
+c.DummyAuthenticator.username_pattern = '{{ jupyterhub_dummyauthenticator_username_pattern }}'
+{% else %}
+# c.DummyAuthenticator.username_pattern = ''
+{% endif %}
+
+## Deprecated, use `Authenticator.allowed_users`
+#  See also: Authenticator.whitelist
+{% if jupyterhub_dummyauthenticator_whitelist is defined %}
+c.DummyAuthenticator.whitelist = {{ jupyterhub_dummyauthenticator_whitelist }}
+{% else %}
+# c.DummyAuthenticator.whitelist = set()
+{% endif %}
+
+#------------------------------------------------------------------------------
+# CryptKeeper(SingletonConfigurable) configuration
+#------------------------------------------------------------------------------
+## Encapsulate encryption configuration
+#  
+#      Use via the encryption_config singleton below.
+
+#  Default: []
+{% if jupyterhub_cryptkeeper_keys is defined %}
+c.CryptKeeper.keys = {{ jupyterhub_cryptkeeper_keys }}
+{% else %}
+# c.CryptKeeper.keys = []
+{% endif %}
+
+## The number of threads to allocate for encryption
+#  Default: 16
+{% if jupyterhub_cryptkeeper_n_threads is defined %}
+c.CryptKeeper.n_threads = {{ jupyterhub_cryptkeeper_n_threads }}
+{% else %}
+# c.CryptKeeper.n_threads = 16
+{% endif %}
+
+#------------------------------------------------------------------------------
+# Spawner(LoggingConfigurable) configuration
+#------------------------------------------------------------------------------
+## Base class for spawning single-user notebook servers.
+#  
+#      Subclass this, and override the following methods:
+#  
+#      - load_state
+#      - get_state
+#      - start
+#      - stop
+#      - poll
+#  
+#      As JupyterHub supports multiple users, an instance of the Spawner subclass
+#      is created for each user. If there are 20 JupyterHub users, there will be 20
+#      instances of the subclass.
+
+## Hook to apply inputs from user_options to the Spawner.
+#  
+#  Typically takes values in user_options, validates them, and updates Spawner
+#  attributes::
+#  
+#      def apply_user_options(spawner, user_options):
+#          if "image" in user_options and isinstance(user_options["image"], str):
+#              spawner.image = user_options["image"]
+#  
+#      c.Spawner.apply_user_options = apply_user_options
+#  
+#  `apply_user_options` *may* be async.
+#  
+#  Default: do nothing.
+#  
+#  Typically a callable which takes `(spawner: Spawner, user_options: dict)`, but
+#  for simple cases this can be a dict mapping user option fields to Spawner
+#  attribute names, e.g.::
+#  
+#      c.Spawner.apply_user_options = {"image_input": "image"}
+#      c.Spawner.options_from_form = "simple"
+#  
+#  allows users to specify the image attribute, but not any others. Because
+#  `user_options` generally comes in as strings in form data, the dictionary mode
+#  uses traitlets `from_string` to coerce strings to values, which allows setting
+#  simple values from strings (e.g. numbers) without needing to implement
+#  callable hooks.
+#  
+#  .. note::
+#  
+#      Because `user_options` is user input
+#      and may be set directly via the REST API,
+#      no assumptions should be made on its structure or contents.
+#      An empty dict should always be supported.
+#      Make sure to validate any inputs before applying them,
+#      either in this callable, or in whatever is consuming the value
+#      if this is a dict.
+#  
+#  .. versionadded:: 5.3
+#  
+#      Prior to 5.3, applying user options must be done in `Spawner.start()`
+#      or `Spawner.pre_spawn_hook()`.
+#  Default: None
+{% if jupyterhub_spawner_apply_user_options is defined %}
+c.Spawner.apply_user_options = '{{ jupyterhub_spawner_apply_user_options }}'
+{% else %}
+# c.Spawner.apply_user_options = None
+{% endif %}
+
+## Extra arguments to be passed to the single-user server.
+#  
+#  Some spawners allow shell-style expansion here, allowing you to use
+#  environment variables here. Most, including the default, do not. Consult the
+#  documentation for your spawner to verify!
+#  Default: []
+{% if jupyterhub_spawner_args is defined %}
+c.Spawner.args = {{ jupyterhub_spawner_args }}
+{% else %}
+# c.Spawner.args = []
+{% endif %}
+
+## An optional hook function that you can implement to pass `auth_state` to the
+#  spawner after it has been initialized but before it starts. The `auth_state`
+#  dictionary may be set by the `.authenticate()` method of the authenticator.
+#  This hook enables you to pass some or all of that information to your spawner.
+#  
+#  Example::
+#  
+#      def userdata_hook(spawner, auth_state):
+#          spawner.userdata = auth_state["userdata"]
+#  
+#      c.Spawner.auth_state_hook = userdata_hook
+#  Default: None
+{% if jupyterhub_spawner_auth_state_hook is defined %}
+c.Spawner.auth_state_hook = '{{ jupyterhub_spawner_auth_state_hook }}'
+{% else %}
+# c.Spawner.auth_state_hook = None
+{% endif %}
+
+## The command used for starting the single-user server.
+#  
+#  Provide either a string or a list containing the path to the startup script
+#  command. Extra arguments, other than this path, should be provided via `args`.
+#  
+#  This is usually set if you want to start the single-user server in a different
+#  python environment (with virtualenv/conda) than JupyterHub itself.
+#  
+#  Some spawners allow shell-style expansion here, allowing you to use
+#  environment variables. Most, including the default, do not. Consult the
+#  documentation for your spawner to verify!
+#  Default: ['jupyterhub-singleuser']
+{% if jupyterhub_spawner_cmd is defined %}
+c.Spawner.cmd = {{ jupyterhub_spawner_cmd }}
+{% else %}
+# c.Spawner.cmd = ['jupyterhub-singleuser']
+{% endif %}
+
+## Maximum number of consecutive failures to allow before shutting down
+#  JupyterHub.
+#  
+#  This helps JupyterHub recover from a certain class of problem preventing
+#  launch in contexts where the Hub is automatically restarted (e.g. systemd,
+#  docker, kubernetes).
+#  
+#  A limit of 0 means no limit and consecutive failures will not be tracked.
+#  Default: 0
+{% if jupyterhub_spawner_consecutive_failure_limit is defined %}
+c.Spawner.consecutive_failure_limit = {{ jupyterhub_spawner_consecutive_failure_limit }}
+{% else %}
+# c.Spawner.consecutive_failure_limit = 0
+{% endif %}
+
+## Minimum number of cpu-cores a single-user notebook server is guaranteed to
+#  have available.
+#  
+#  If this value is set to 0.5, allows use of 50% of one CPU. If this value is
+#  set to 2, allows use of up to 2 CPUs.
+#  
+#  **This is a configuration setting. Your spawner must implement support for the
+#  limit to work.** The default spawner, `LocalProcessSpawner`, does **not**
+#  implement this support. A custom spawner **must** add support for this setting
+#  for it to be enforced.
+#  Default: None
+{% if jupyterhub_spawner_cpu_guarantee is defined %}
+c.Spawner.cpu_guarantee = '{{ jupyterhub_spawner_cpu_guarantee }}'
+{% else %}
+# c.Spawner.cpu_guarantee = None
+{% endif %}
+
+## Maximum number of cpu-cores a single-user notebook server is allowed to use.
+#  
+#  If this value is set to 0.5, allows use of 50% of one CPU. If this value is
+#  set to 2, allows use of up to 2 CPUs.
+#  
+#  The single-user notebook server will never be scheduled by the kernel to use
+#  more cpu-cores than this. There is no guarantee that it can access this many
+#  cpu-cores.
+#  
+#  **This is a configuration setting. Your spawner must implement support for the
+#  limit to work.** The default spawner, `LocalProcessSpawner`, does **not**
+#  implement this support. A custom spawner **must** add support for this setting
+#  for it to be enforced.
+#  Default: None
+{% if jupyterhub_spawner_cpu_limit is defined %}
+c.Spawner.cpu_limit = '{{ jupyterhub_spawner_cpu_limit }}'
+{% else %}
+# c.Spawner.cpu_limit = None
+{% endif %}
+
+## Enable debug-logging of the single-user server
+#  Default: False
+{% if jupyterhub_spawner_debug is defined %}
+c.Spawner.debug = {{ jupyterhub_spawner_debug | bool }}
+{% else %}
+# c.Spawner.debug = False
+{% endif %}
+
+## The URL the single-user server should start in.
+#  
+#  `{username}` will be expanded to the user's username
+#  
+#  Example uses:
+#  
+#  - You can set `notebook_dir` to `/` and `default_url` to `/tree/home/{username}` to allow people to
+#    navigate the whole filesystem from their notebook server, but still start in their home directory.
+#  - Start with `/notebooks` instead of `/tree` if `default_url` points to a notebook instead of a directory.
+#  - You can set this to `/lab` to have JupyterLab start by default, rather than Jupyter Notebook.
+#  Default: ''
+{% if jupyterhub_spawner_default_url is defined %}
+c.Spawner.default_url = '{{ jupyterhub_spawner_default_url }}'
+{% else %}
+# c.Spawner.default_url = ''
+{% endif %}
+
+## Disable per-user configuration of single-user servers.
+#  
+#  When starting the user's single-user server, any config file found in the
+#  user's $HOME directory will be ignored.
+#  
+#  Note: a user could circumvent this if the user modifies their Python
+#  environment, such as when they have their own conda environments / virtualenvs
+#  / containers.
+#  Default: False
+{% if jupyterhub_spawner_disable_user_config is defined %}
+c.Spawner.disable_user_config = {{ jupyterhub_spawner_disable_user_config | bool }}
+{% else %}
+# c.Spawner.disable_user_config = False
+{% endif %}
+
+## List of environment variables for the single-user server to inherit from the
+#  JupyterHub process.
+#  
+#  This list is used to ensure that sensitive information in the JupyterHub
+#  process's environment (such as `CONFIGPROXY_AUTH_TOKEN`) is not passed to the
+#  single-user server's process.
+#  Default: ['JUPYTERHUB_SINGLEUSER_APP']
+{% if jupyterhub_spawner_env_keep is defined %}
+c.Spawner.env_keep = {{ jupyterhub_spawner_env_keep }}
+{% else %}
+# c.Spawner.env_keep = ['JUPYTERHUB_SINGLEUSER_APP']
+{% endif %}
+
+## Extra environment variables to set for the single-user server's process.
+#  
+#  Environment variables that end up in the single-user server's process come from 3 sources:
+#    - This `environment` configurable
+#    - The JupyterHub process' environment variables that are listed in `env_keep`
+#    - Variables to establish contact between the single-user notebook and the hub (such as JUPYTERHUB_API_TOKEN)
+#  
+#  The `environment` configurable should be set by JupyterHub administrators to
+#  add installation specific environment variables. It is a dict where the key is
+#  the name of the environment variable, and the value can be a string or a
+#  callable. If it is a callable, it will be called with one parameter (the
+#  spawner instance), and should return a string fairly quickly (no blocking
+#  operations please!).
+#  
+#  Note that the spawner class' interface is not guaranteed to be exactly same
+#  across upgrades, so if you are using the callable take care to verify it
+#  continues to work after upgrades!
+#  
+#  .. versionchanged:: 1.2
+#      environment from this configuration has highest priority,
+#      allowing override of 'default' env variables,
+#      such as JUPYTERHUB_API_URL.
+#  Default: {}
+{% if jupyterhub_spawner_environment is defined %}
+c.Spawner.environment = {{ jupyterhub_spawner_environment }}
+{% else %}
+# c.Spawner.environment = {}
+{% endif %}
+
+## Override specific traitlets based on group membership of the user.
+#  
+#  This can be a dict, or a callable that returns a dict. The keys of the dict
+#  are *only* used for lexicographical sorting, to guarantee consistent ordering
+#  of the overrides. If it is a callable, it may be async, and will be passed one
+#  parameter - the spawner instance. It should return a dictionary.
+#  
+#  The values of the dict are dicts with the following keys:
+#  
+#  - `"groups"` - If the user belongs to *any* of these groups, these overrides are
+#    applied to their server before spawning.
+#  - `"spawner_override"` - a dictionary with overrides to apply to the Spawner
+#    settings. Each value can be either the final value to change or a callable that
+#    take the `Spawner` instance as parameter and returns the final value.
+#    If the traitlet being overriden is a *dictionary*, the dictionary
+#    will be *recursively updated*, rather than overriden. If you want to
+#    remove a key, set its value to `None`.
+#  
+#  Example:
+#  
+#      The following example config will:
+#  
+#      1. Add the environment variable "AM_I_GROUP_ALPHA" to everyone in the "group-alpha" group
+#      2. Add the environment variable "AM_I_GROUP_BETA" to everyone in the "group-beta" group.
+#         If a user is part of both "group-beta" and "group-alpha", they will get *both* these env
+#         vars, due to the dictionary merging functionality.
+#      3. Add a higher memory limit for everyone in the "group-beta" group.
+#  
+#      ::
+#  
+#          c.Spawner.group_overrides = {
+#              "01-group-alpha-env-add": {
+#                  "groups": ["group-alpha"],
+#                  "spawner_override": {"environment": {"AM_I_GROUP_ALPHA": "yes"}},
+#              },
+#              "02-group-beta-env-add": {
+#                  "groups": ["group-beta"],
+#                  "spawner_override": {"environment": {"AM_I_GROUP_BETA": "yes"}},
+#              },
+#              "03-group-beta-mem-limit": {
+#                  "groups": ["group-beta"],
+#                  "spawner_override": {"mem_limit": "2G"}
+#              }
+#          }
+#  Default: traitlets.Undefined
+{% if jupyterhub_spawner_group_overrides is defined %}
+c.Spawner.group_overrides = {{ jupyterhub_spawner_group_overrides }}
+{% else %}
+# c.Spawner.group_overrides = traitlets.Undefined
+{% endif %}
+
+## Timeout (in seconds) before giving up on a spawned HTTP server
+#  
+#  Once a server has successfully been spawned, this is the amount of time we
+#  wait before assuming that the server is unable to accept connections.
+#  Default: 30
+{% if jupyterhub_spawner_http_timeout is defined %}
+c.Spawner.http_timeout = {{ jupyterhub_spawner_http_timeout }}
+{% else %}
+# c.Spawner.http_timeout = 30
+{% endif %}
+
+## The URL the single-user server should connect to the Hub.
+#  
+#  If the Hub URL set in your JupyterHub config is not reachable from spawned
+#  notebooks, you can set differnt URL by this config.
+#  
+#  Is None if you don't need to change the URL.
+#  Default: None
+{% if jupyterhub_spawner_hub_connect_url is defined %}
+c.Spawner.hub_connect_url = '{{ jupyterhub_spawner_hub_connect_url }}'
+{% else %}
+# c.Spawner.hub_connect_url = None
+{% endif %}
+
+## The IP address (or hostname) the single-user server should listen on.
+#  
+#  Usually either '127.0.0.1' (default) or '0.0.0.0'. On IPv6 only networks use
+#  '::1' or '::'.
+#  
+#  If the spawned singleuser server is running JupyterHub 5.3.0 later You can set
+#  this to the empty string '' to indicate both IPv4 and IPv6.
+#  
+#  The JupyterHub proxy implementation should be able to send packets to this
+#  interface.
+#  
+#  Subclasses which launch remotely or in containers should override the default
+#  to '0.0.0.0'.
+#  
+#  .. versionchanged:: 5.3
+#      An empty string '' means all interfaces (IPv4 and IPv6). Prior to this
+#      the behaviour of '' was not defined.
+#  
+#  .. versionchanged:: 2.0
+#      Default changed to '127.0.0.1', from unspecified.
+#  Default: '127.0.0.1'
+{% if jupyterhub_spawner_ip is defined %}
+c.Spawner.ip = '{{ jupyterhub_spawner_ip }}'
+{% else %}
+# c.Spawner.ip = '127.0.0.1'
+{% endif %}
+
+## Minimum number of bytes a single-user notebook server is guaranteed to have
+#  available.
+#  
+#  Allows the following suffixes:
+#    - K -> Kilobytes
+#    - M -> Megabytes
+#    - G -> Gigabytes
+#    - T -> Terabytes
+#  
+#  **This is a configuration setting. Your spawner must implement support for the
+#  limit to work.** The default spawner, `LocalProcessSpawner`, does **not**
+#  implement this support. A custom spawner **must** add support for this setting
+#  for it to be enforced.
+#  Default: None
+{% if jupyterhub_spawner_mem_guarantee is defined %}
+c.Spawner.mem_guarantee = '{{ jupyterhub_spawner_mem_guarantee }}'
+{% else %}
+# c.Spawner.mem_guarantee = None
+{% endif %}
+
+## Maximum number of bytes a single-user notebook server is allowed to use.
+#  
+#  Allows the following suffixes:
+#    - K -> Kilobytes
+#    - M -> Megabytes
+#    - G -> Gigabytes
+#    - T -> Terabytes
+#  
+#  If the single user server tries to allocate more memory than this, it will
+#  fail. There is no guarantee that the single-user notebook server will be able
+#  to allocate this much memory - only that it can not allocate more than this.
+#  
+#  **This is a configuration setting. Your spawner must implement support for the
+#  limit to work.** The default spawner, `LocalProcessSpawner`, does **not**
+#  implement this support. A custom spawner **must** add support for this setting
+#  for it to be enforced.
+#  Default: None
+{% if jupyterhub_spawner_mem_limit is defined %}
+c.Spawner.mem_limit = '{{ jupyterhub_spawner_mem_limit }}'
+{% else %}
+# c.Spawner.mem_limit = None
+{% endif %}
+
+## Path to the notebook directory for the single-user server.
+#  
+#  The user sees a file listing of this directory when the notebook interface is
+#  started. The current interface does not easily allow browsing beyond the
+#  subdirectories in this directory's tree.
+#  
+#  `~` will be expanded to the home directory of the user, and {username} will be
+#  replaced with the name of the user.
+#  
+#  Note that this does *not* prevent users from accessing files outside of this
+#  path! They can do so with many other means.
+#  Default: ''
+{% if jupyterhub_spawner_notebook_dir is defined %}
+c.Spawner.notebook_dir = '{{ jupyterhub_spawner_notebook_dir }}'
+{% else %}
+# c.Spawner.notebook_dir = ''
+{% endif %}
+
+## Allowed scopes for oauth tokens issued by this server's oauth client.
+#  
+#          This sets the maximum and default scopes
+#          assigned to oauth tokens issued by a single-user server's
+#          oauth client (i.e. tokens stored in browsers after authenticating with the server),
+#          defining what actions the server can take on behalf of logged-in users.
+#  
+#          Access to the current server will always be included in this list.
+#          This property contains additional scopes.
+#          Default is an empty list, meaning minimal permissions to identify users,
+#          no actions can be taken on their behalf.
+#  
+#          If callable, will be called with the Spawner as a single argument.
+#          Callables may be async.
+#  Default: traitlets.Undefined
+{% if jupyterhub_spawner_oauth_client_allowed_scopes is defined %}
+c.Spawner.oauth_client_allowed_scopes = {{ jupyterhub_spawner_oauth_client_allowed_scopes }}
+{% else %}
+# c.Spawner.oauth_client_allowed_scopes = traitlets.Undefined
+{% endif %}
+
+## Allowed roles for oauth tokens.
+#  
+#          Deprecated in 3.0: use oauth_client_allowed_scopes
+#  Default: traitlets.Undefined
+{% if jupyterhub_spawner_oauth_roles is defined %}
+c.Spawner.oauth_roles = {{ jupyterhub_spawner_oauth_roles }}
+{% else %}
+# c.Spawner.oauth_roles = traitlets.Undefined
+{% endif %}
+
+## An HTML form for options a user can specify on launching their server.
+#  
+#  The surrounding `<form>` element and the submit button are already provided.
+#  
+#  For example:
+#  
+#  .. code:: html
+#  
+#      Set your key:
+#      <input name="key" val="default_key"></input>
+#      <br>
+#      Choose a letter:
+#      <select name="letter" multiple="true">
+#        <option value="A">The letter A</option>
+#        <option value="B">The letter B</option>
+#      </select>
+#  
+#  The data from this form submission will be passed on to your spawner in
+#  `self.user_options`
+#  
+#  Instead of a form snippet string, this could also be a callable that takes as
+#  one parameter the current spawner instance and returns a string. The callable
+#  will be called asynchronously if it returns a future, rather than a str. Note
+#  that the interface of the spawner class is not deemed stable across versions,
+#  so using this functionality might cause your JupyterHub upgrades to break.
+#  Default: traitlets.Undefined
+{% if jupyterhub_spawner_options_form is defined %}
+c.Spawner.options_form = {{ jupyterhub_spawner_options_form }}
+{% else %}
+# c.Spawner.options_form = traitlets.Undefined
+{% endif %}
+
+## Interpret HTTP form data
+#  
+#  Form data will always arrive as a dict of lists of strings. Override this
+#  function to understand single-values, numbers, etc.
+#  
+#  This should coerce form data into the structure expected by self.user_options,
+#  which must be a dict, and should be JSON-serializeable, though it can contain
+#  bytes in addition to standard JSON data types.
+#  
+#  This method should not have any side effects. Any handling of `user_options`
+#  should be done in `.apply_user_options()` (JupyterHub 5.3) or `.start()`
+#  (JupyterHub 5.2 or older) to ensure consistent behavior across servers spawned
+#  via the API and form submission page.
+#  
+#  Instances will receive this data on self.user_options, after passing through
+#  this function, prior to `Spawner.start`.
+#  
+#  .. versionchanged:: 1.0
+#      user_options are persisted in the JupyterHub database to be reused
+#      on subsequent spawns if no options are given.
+#      user_options is serialized to JSON as part of this persistence
+#      (with additional support for bytes in case of uploaded file data),
+#      and any non-bytes non-jsonable values will be replaced with None
+#      if the user_options are re-used.
+#  
+#  .. versionadded:: 5.3
+#      The strings `'simple'` and `'passthrough'` may be specified to select some predefined behavior.
+#      These are the only string values accepted.
+#  
+#      `'passthrough'` is the longstanding default behavior,
+#      where form data is stored in `user_options` without modification.
+#      With `'passthrough'`, `user_options` from a form will always be a dict of lists of strings.
+#  
+#      `'simple'` applies some minimal processing that works for most simple
+#  forms:
+#  
+#      - Single-value fields get unpacked from lists.
+#        They are still always strings, no attempt is made to parse numbers, etc..
+#      - Multi-value fields are left alone.
+#      - The default checked value of "on" for a checkbox is converted to True.
+#        This is the only non-string value that can be produced.
+#  
+#      Example for `'simple'`::
+#  
+#          {
+#              "image": ["myimage"],
+#              "checked": ["on"], # checkbox
+#              "multi-select": ["a", "b"],
+#          }
+#          # becomes
+#          {
+#              "image": "myimage",
+#              "checked": True,
+#              "multi-select": ["a", "b"],
+#          }
+#  Default: traitlets.Undefined
+{% if jupyterhub_spawner_options_from_form is defined %}
+c.Spawner.options_from_form = {{ jupyterhub_spawner_options_from_form }}
+{% else %}
+# c.Spawner.options_from_form = traitlets.Undefined
+{% endif %}
+
+## Interval (in seconds) on which to poll the spawner for single-user server's
+#  status.
+#  
+#  At every poll interval, each spawner's `.poll` method is called, which checks
+#  if the single-user server is still running. If it isn't running, then
+#  JupyterHub modifies its own state accordingly and removes appropriate routes
+#  from the configurable proxy.
+#  Default: 30
+{% if jupyterhub_spawner_poll_interval is defined %}
+c.Spawner.poll_interval = {{ jupyterhub_spawner_poll_interval }}
+{% else %}
+# c.Spawner.poll_interval = 30
+{% endif %}
+
+## Jitter fraction for poll_interval.
+#  
+#  Avoids alignment of poll calls for many Spawners, e.g. when restarting
+#  JupyterHub, which restarts all polls for running Spawners.
+#  
+#  `poll_jitter=0` means no jitter, 0.1 means 10%, etc.
+#  Default: 0.1
+{% if jupyterhub_spawner_poll_jitter is defined %}
+c.Spawner.poll_jitter = {{ jupyterhub_spawner_poll_jitter }}
+{% else %}
+# c.Spawner.poll_jitter = 0.1
+{% endif %}
+
+## The port for single-user servers to listen on.
+#  
+#  Defaults to `0`, which uses a randomly allocated port number each time.
+#  
+#  If set to a non-zero value, all Spawners will use the same port, which only
+#  makes sense if each server is on a different address, e.g. in containers.
+#  
+#  New in version 0.7.
+#  Default: 0
+{% if jupyterhub_spawner_port is defined %}
+c.Spawner.port = {{ jupyterhub_spawner_port }}
+{% else %}
+# c.Spawner.port = 0
+{% endif %}
+
+## An optional hook function that you can implement to do work after the spawner
+#  stops.
+#  
+#  This can be set independent of any concrete spawner implementation.
+#  Default: None
+{% if jupyterhub_spawner_post_stop_hook is defined %}
+c.Spawner.post_stop_hook = '{{ jupyterhub_spawner_post_stop_hook }}'
+{% else %}
+# c.Spawner.post_stop_hook = None
+{% endif %}
+
+## An optional hook function that you can implement to do some bootstrapping work
+#  before the spawner starts. For example, create a directory for your user or
+#  load initial content.
+#  
+#  This can be set independent of any concrete spawner implementation.
+#  
+#  This maybe a coroutine.
+#  
+#  Example::
+#  
+#      def my_hook(spawner):
+#          username = spawner.user.name
+#          spawner.environment["GREETING"] = f"Hello {username}"
+#  
+#      c.Spawner.pre_spawn_hook = my_hook
+#  Default: None
+{% if jupyterhub_spawner_pre_spawn_hook is defined %}
+c.Spawner.pre_spawn_hook = '{{ jupyterhub_spawner_pre_spawn_hook }}'
+{% else %}
+# c.Spawner.pre_spawn_hook = None
+{% endif %}
+
+## An optional hook function that you can implement to modify the ready event,
+#  which will be shown to the user on the spawn progress page when their server
+#  is ready.
+#  
+#  This can be set independent of any concrete spawner implementation.
+#  
+#  This maybe a coroutine.
+#  
+#  Example::
+#  
+#      async def my_ready_hook(spawner, ready_event):
+#          ready_event["html_message"] = f"Server {spawner.name} is ready for {spawner.user.name}"
+#          return ready_event
+#  
+#      c.Spawner.progress_ready_hook = my_ready_hook
+#  Default: None
+{% if jupyterhub_spawner_progress_ready_hook is defined %}
+c.Spawner.progress_ready_hook = '{{ jupyterhub_spawner_progress_ready_hook }}'
+{% else %}
+# c.Spawner.progress_ready_hook = None
+{% endif %}
+
+## The list of scopes to request for $JUPYTERHUB_API_TOKEN
+#  
+#          If not specified, the scopes in the `server` role will be used
+#          (unchanged from pre-4.0).
+#  
+#          If callable, will be called with the Spawner instance as its sole argument
+#          (JupyterHub user available as spawner.user).
+#  
+#          JUPYTERHUB_API_TOKEN will be assigned the _subset_ of these scopes
+#          that are held by the user (as in oauth_client_allowed_scopes).
+#  
+#          .. versionadded:: 4.0
+#  Default: traitlets.Undefined
+{% if jupyterhub_spawner_server_token_scopes is defined %}
+c.Spawner.server_token_scopes = {{ jupyterhub_spawner_server_token_scopes }}
+{% else %}
+# c.Spawner.server_token_scopes = traitlets.Undefined
+{% endif %}
+
+## List of SSL alt names
+#  
+#          May be set in config if all spawners should have the same value(s),
+#          or set at runtime by Spawner that know their names.
+#  Default: []
+{% if jupyterhub_spawner_ssl_alt_names is defined %}
+c.Spawner.ssl_alt_names = {{ jupyterhub_spawner_ssl_alt_names }}
+{% else %}
+# c.Spawner.ssl_alt_names = []
+{% endif %}
+
+## Whether to include `DNS:localhost`, `IP:127.0.0.1` in alt names
+#  Default: True
+{% if jupyterhub_spawner_ssl_alt_names_include_local is defined %}
+c.Spawner.ssl_alt_names_include_local = {{ jupyterhub_spawner_ssl_alt_names_include_local | bool }}
+{% else %}
+# c.Spawner.ssl_alt_names_include_local = True
+{% endif %}
+
+## Timeout (in seconds) before giving up on starting of single-user server.
+#  
+#  This is the timeout for start to return, not the timeout for the server to
+#  respond. Callers of spawner.start will assume that startup has failed if it
+#  takes longer than this. start should return when the server process is started
+#  and its location is known.
+#  Default: 60
+{% if jupyterhub_spawner_start_timeout is defined %}
+c.Spawner.start_timeout = {{ jupyterhub_spawner_start_timeout }}
+{% else %}
+# c.Spawner.start_timeout = 60
+{% endif %}
+
+#------------------------------------------------------------------------------
+# SystemdSpawner(Spawner) configuration
+#------------------------------------------------------------------------------
+## 
+#  See also: Spawner.apply_user_options
+{% if jupyterhub_systemdspawner_apply_user_options is defined %}
+c.SystemdSpawner.apply_user_options = '{{ jupyterhub_systemdspawner_apply_user_options }}'
+{% else %}
+# c.SystemdSpawner.apply_user_options = None
+{% endif %}
+
+## 
+#  See also: Spawner.args
+{% if jupyterhub_systemdspawner_args is defined %}
+c.SystemdSpawner.args = {{ jupyterhub_systemdspawner_args }}
+{% else %}
+# c.SystemdSpawner.args = []
+{% endif %}
+
+## 
+#  See also: Spawner.auth_state_hook
+{% if jupyterhub_systemdspawner_auth_state_hook is defined %}
+c.SystemdSpawner.auth_state_hook = '{{ jupyterhub_systemdspawner_auth_state_hook }}'
+{% else %}
+# c.SystemdSpawner.auth_state_hook = None
+{% endif %}
+
+## 
+#  See also: Spawner.cmd
+{% if jupyterhub_systemdspawner_cmd is defined %}
+c.SystemdSpawner.cmd = {{ jupyterhub_systemdspawner_cmd }}
+{% else %}
+# c.SystemdSpawner.cmd = ['jupyterhub-singleuser']
+{% endif %}
+
+## 
+#  See also: Spawner.consecutive_failure_limit
+{% if jupyterhub_systemdspawner_consecutive_failure_limit is defined %}
+c.SystemdSpawner.consecutive_failure_limit = {{ jupyterhub_systemdspawner_consecutive_failure_limit }}
+{% else %}
+# c.SystemdSpawner.consecutive_failure_limit = 0
+{% endif %}
+
+## 
+#  See also: Spawner.cpu_guarantee
+{% if jupyterhub_systemdspawner_cpu_guarantee is defined %}
+c.SystemdSpawner.cpu_guarantee = '{{ jupyterhub_systemdspawner_cpu_guarantee }}'
+{% else %}
+# c.SystemdSpawner.cpu_guarantee = None
+{% endif %}
+
+## 
+#  See also: Spawner.cpu_limit
+{% if jupyterhub_systemdspawner_cpu_limit is defined %}
+c.SystemdSpawner.cpu_limit = '{{ jupyterhub_systemdspawner_cpu_limit }}'
+{% else %}
+# c.SystemdSpawner.cpu_limit = None
+{% endif %}
+
+## Enable debug-logging of the single-user server
+#  See also: Spawner.debug
+{% if jupyterhub_systemdspawner_debug is defined %}
+c.SystemdSpawner.debug = {{ jupyterhub_systemdspawner_debug | bool }}
+{% else %}
+# c.SystemdSpawner.debug = False
+{% endif %}
+
+## Default shell for users on the notebook terminal
+#  Default: '/bin/bash'
+{% if jupyterhub_systemdspawner_default_shell is defined %}
+c.SystemdSpawner.default_shell = '{{ jupyterhub_systemdspawner_default_shell }}'
+{% else %}
+# c.SystemdSpawner.default_shell = '/bin/bash'
+{% endif %}
+
+## 
+#  See also: Spawner.default_url
+{% if jupyterhub_systemdspawner_default_url is defined %}
+c.SystemdSpawner.default_url = '{{ jupyterhub_systemdspawner_default_url }}'
+{% else %}
+# c.SystemdSpawner.default_url = ''
+{% endif %}
+
+## 
+#  See also: Spawner.disable_user_config
+{% if jupyterhub_systemdspawner_disable_user_config is defined %}
+c.SystemdSpawner.disable_user_config = {{ jupyterhub_systemdspawner_disable_user_config | bool }}
+{% else %}
+# c.SystemdSpawner.disable_user_config = False
+{% endif %}
+
+## Set to true to disallow becoming root (or any other user) via sudo or other
+#  means from inside the notebook
+#  Default: True
+{% if jupyterhub_systemdspawner_disable_user_sudo is defined %}
+c.SystemdSpawner.disable_user_sudo = {{ jupyterhub_systemdspawner_disable_user_sudo | bool }}
+{% else %}
+# c.SystemdSpawner.disable_user_sudo = True
+{% endif %}
+
+## Allocate system users dynamically for each user.
+#  
+#  Uses the DynamicUser= feature of Systemd to make a new system user for each
+#  hub user dynamically. Their home directories are set up under
+#  /var/lib/{USERNAME}, and persist over time. The system user is deallocated
+#  whenever the user's server is not running.
+#  
+#  See http://0pointer.net/blog/dynamic-users-with-systemd.html for more
+#  information.
+#  Default: False
+{% if jupyterhub_systemdspawner_dynamic_users is defined %}
+c.SystemdSpawner.dynamic_users = {{ jupyterhub_systemdspawner_dynamic_users | bool }}
+{% else %}
+# c.SystemdSpawner.dynamic_users = False
+{% endif %}
+
+## 
+#  See also: Spawner.env_keep
+{% if jupyterhub_systemdspawner_env_keep is defined %}
+c.SystemdSpawner.env_keep = {{ jupyterhub_systemdspawner_env_keep }}
+{% else %}
+# c.SystemdSpawner.env_keep = ['JUPYTERHUB_SINGLEUSER_APP']
+{% endif %}
+
+## 
+#  See also: Spawner.environment
+{% if jupyterhub_systemdspawner_environment is defined %}
+c.SystemdSpawner.environment = {{ jupyterhub_systemdspawner_environment }}
+{% else %}
+# c.SystemdSpawner.environment = {}
+{% endif %}
+
+## Extra paths to prepend to the $PATH environment variable.
+#  
+#  {USERNAME} and {USERID} are expanded
+#  Default: []
+{% if jupyterhub_systemdspawner_extra_paths is defined %}
+c.SystemdSpawner.extra_paths = {{ jupyterhub_systemdspawner_extra_paths }}
+{% else %}
+# c.SystemdSpawner.extra_paths = []
+{% endif %}
+
+## 
+#  See also: Spawner.group_overrides
+{% if jupyterhub_systemdspawner_group_overrides is defined %}
+c.SystemdSpawner.group_overrides = {{ jupyterhub_systemdspawner_group_overrides }}
+{% else %}
+# c.SystemdSpawner.group_overrides = traitlets.Undefined
+{% endif %}
+
+## 
+#  See also: Spawner.http_timeout
+{% if jupyterhub_systemdspawner_http_timeout is defined %}
+c.SystemdSpawner.http_timeout = {{ jupyterhub_systemdspawner_http_timeout }}
+{% else %}
+# c.SystemdSpawner.http_timeout = 30
+{% endif %}
+
+## 
+#  See also: Spawner.hub_connect_url
+{% if jupyterhub_systemdspawner_hub_connect_url is defined %}
+c.SystemdSpawner.hub_connect_url = '{{ jupyterhub_systemdspawner_hub_connect_url }}'
+{% else %}
+# c.SystemdSpawner.hub_connect_url = None
+{% endif %}
+
+## 
+#  See also: Spawner.ip
+{% if jupyterhub_systemdspawner_ip is defined %}
+c.SystemdSpawner.ip = '{{ jupyterhub_systemdspawner_ip }}'
+{% else %}
+# c.SystemdSpawner.ip = '127.0.0.1'
+{% endif %}
+
+## Give each notebook user their own /dev, with a very limited set of devices
+#  mounted
+#  Default: False
+{% if jupyterhub_systemdspawner_isolate_devices is defined %}
+c.SystemdSpawner.isolate_devices = {{ jupyterhub_systemdspawner_isolate_devices | bool }}
+{% else %}
+# c.SystemdSpawner.isolate_devices = False
+{% endif %}
+
+## Give each notebook user their own /tmp, isolated from the system & each other
+#  Default: False
+{% if jupyterhub_systemdspawner_isolate_tmp is defined %}
+c.SystemdSpawner.isolate_tmp = {{ jupyterhub_systemdspawner_isolate_tmp | bool }}
+{% else %}
+# c.SystemdSpawner.isolate_tmp = False
+{% endif %}
+
+## 
+#  See also: Spawner.mem_guarantee
+{% if jupyterhub_systemdspawner_mem_guarantee is defined %}
+c.SystemdSpawner.mem_guarantee = '{{ jupyterhub_systemdspawner_mem_guarantee }}'
+{% else %}
+# c.SystemdSpawner.mem_guarantee = None
+{% endif %}
+
+## 
+#  See also: Spawner.mem_limit
+{% if jupyterhub_systemdspawner_mem_limit is defined %}
+c.SystemdSpawner.mem_limit = '{{ jupyterhub_systemdspawner_mem_limit }}'
+{% else %}
+# c.SystemdSpawner.mem_limit = None
+{% endif %}
+
+## 
+#  See also: Spawner.notebook_dir
+{% if jupyterhub_systemdspawner_notebook_dir is defined %}
+c.SystemdSpawner.notebook_dir = '{{ jupyterhub_systemdspawner_notebook_dir }}'
+{% else %}
+# c.SystemdSpawner.notebook_dir = ''
+{% endif %}
+
+## Allowed scopes for oauth tokens issued by this server's oauth client.
+#  See also: Spawner.oauth_client_allowed_scopes
+{% if jupyterhub_systemdspawner_oauth_client_allowed_scopes is defined %}
+c.SystemdSpawner.oauth_client_allowed_scopes = {{ jupyterhub_systemdspawner_oauth_client_allowed_scopes }}
+{% else %}
+# c.SystemdSpawner.oauth_client_allowed_scopes = traitlets.Undefined
+{% endif %}
+
+## Allowed roles for oauth tokens.
+#  See also: Spawner.oauth_roles
+{% if jupyterhub_systemdspawner_oauth_roles is defined %}
+c.SystemdSpawner.oauth_roles = {{ jupyterhub_systemdspawner_oauth_roles }}
+{% else %}
+# c.SystemdSpawner.oauth_roles = traitlets.Undefined
+{% endif %}
+
+## 
+#  See also: Spawner.options_form
+{% if jupyterhub_systemdspawner_options_form is defined %}
+c.SystemdSpawner.options_form = {{ jupyterhub_systemdspawner_options_form }}
+{% else %}
+# c.SystemdSpawner.options_form = traitlets.Undefined
+{% endif %}
+
+## 
+#  See also: Spawner.options_from_form
+{% if jupyterhub_systemdspawner_options_from_form is defined %}
+c.SystemdSpawner.options_from_form = {{ jupyterhub_systemdspawner_options_from_form }}
+{% else %}
+# c.SystemdSpawner.options_from_form = traitlets.Undefined
+{% endif %}
+
+## 
+#  See also: Spawner.poll_interval
+{% if jupyterhub_systemdspawner_poll_interval is defined %}
+c.SystemdSpawner.poll_interval = {{ jupyterhub_systemdspawner_poll_interval }}
+{% else %}
+# c.SystemdSpawner.poll_interval = 30
+{% endif %}
+
+## 
+#  See also: Spawner.poll_jitter
+{% if jupyterhub_systemdspawner_poll_jitter is defined %}
+c.SystemdSpawner.poll_jitter = {{ jupyterhub_systemdspawner_poll_jitter }}
+{% else %}
+# c.SystemdSpawner.poll_jitter = 0.1
+{% endif %}
+
+## 
+#  See also: Spawner.port
+{% if jupyterhub_systemdspawner_port is defined %}
+c.SystemdSpawner.port = {{ jupyterhub_systemdspawner_port }}
+{% else %}
+# c.SystemdSpawner.port = 0
+{% endif %}
+
+## 
+#  See also: Spawner.post_stop_hook
+{% if jupyterhub_systemdspawner_post_stop_hook is defined %}
+c.SystemdSpawner.post_stop_hook = '{{ jupyterhub_systemdspawner_post_stop_hook }}'
+{% else %}
+# c.SystemdSpawner.post_stop_hook = None
+{% endif %}
+
+## 
+#  See also: Spawner.pre_spawn_hook
+{% if jupyterhub_systemdspawner_pre_spawn_hook is defined %}
+c.SystemdSpawner.pre_spawn_hook = '{{ jupyterhub_systemdspawner_pre_spawn_hook }}'
+{% else %}
+# c.SystemdSpawner.pre_spawn_hook = None
+{% endif %}
+
+## 
+#  See also: Spawner.progress_ready_hook
+{% if jupyterhub_systemdspawner_progress_ready_hook is defined %}
+c.SystemdSpawner.progress_ready_hook = '{{ jupyterhub_systemdspawner_progress_ready_hook }}'
+{% else %}
+# c.SystemdSpawner.progress_ready_hook = None
+{% endif %}
+
+## List of paths that should be marked readonly from the user notebook.
+#  
+#  Subpaths maybe be made writeable by setting readwrite_paths
+#  Default: []
+{% if jupyterhub_systemdspawner_readonly_paths is defined %}
+c.SystemdSpawner.readonly_paths = {{ jupyterhub_systemdspawner_readonly_paths }}
+{% else %}
+# c.SystemdSpawner.readonly_paths = []
+{% endif %}
+
+## List of paths that should be marked read-write from the user notebook.
+#  
+#  Used to make a subpath of a readonly path writeable
+#  Default: []
+{% if jupyterhub_systemdspawner_readwrite_paths is defined %}
+c.SystemdSpawner.readwrite_paths = {{ jupyterhub_systemdspawner_readwrite_paths }}
+{% else %}
+# c.SystemdSpawner.readwrite_paths = []
+{% endif %}
+
+## The list of scopes to request for $JUPYTERHUB_API_TOKEN
+#  See also: Spawner.server_token_scopes
+{% if jupyterhub_systemdspawner_server_token_scopes is defined %}
+c.SystemdSpawner.server_token_scopes = {{ jupyterhub_systemdspawner_server_token_scopes }}
+{% else %}
+# c.SystemdSpawner.server_token_scopes = traitlets.Undefined
+{% endif %}
+
+## Ensure that all users that are created are run within a given slice. This
+#  allow global configuration of the maximum resources that all users
+#  collectively can use by creating a a slice beforehand.
+#  Default: None
+{% if jupyterhub_systemdspawner_slice is defined %}
+c.SystemdSpawner.slice = '{{ jupyterhub_systemdspawner_slice }}'
+{% else %}
+# c.SystemdSpawner.slice = None
+{% endif %}
+
+## List of SSL alt names
+#  See also: Spawner.ssl_alt_names
+{% if jupyterhub_systemdspawner_ssl_alt_names is defined %}
+c.SystemdSpawner.ssl_alt_names = {{ jupyterhub_systemdspawner_ssl_alt_names }}
+{% else %}
+# c.SystemdSpawner.ssl_alt_names = []
+{% endif %}
+
+## Whether to include `DNS:localhost`, `IP:127.0.0.1` in alt names
+#  See also: Spawner.ssl_alt_names_include_local
+{% if jupyterhub_systemdspawner_ssl_alt_names_include_local is defined %}
+c.SystemdSpawner.ssl_alt_names_include_local = {{ jupyterhub_systemdspawner_ssl_alt_names_include_local | bool }}
+{% else %}
+# c.SystemdSpawner.ssl_alt_names_include_local = True
+{% endif %}
+
+## 
+#  See also: Spawner.start_timeout
+{% if jupyterhub_systemdspawner_start_timeout is defined %}
+c.SystemdSpawner.start_timeout = {{ jupyterhub_systemdspawner_start_timeout }}
+{% else %}
+# c.SystemdSpawner.start_timeout = 60
+{% endif %}
+
+## Dict of extra properties for systemd-run --property=[...].
+#  
+#  Keys are property names, and values are either strings or list of strings (for
+#  multiple entries). When values are lists, ordering is guaranteed. Ordering
+#  across keys of the dictionary are *not* guaranteed.
+#  
+#  Used to add arbitrary properties for spawned Jupyter units. Read `man systemd-
+#  run` for details on per-unit properties available in transient units.
+#  Default: {}
+{% if jupyterhub_systemdspawner_unit_extra_properties is defined %}
+c.SystemdSpawner.unit_extra_properties = {{ jupyterhub_systemdspawner_unit_extra_properties }}
+{% else %}
+# c.SystemdSpawner.unit_extra_properties = {}
+{% endif %}
+
+## Template to use to make the systemd service names.
+#  
+#  {USERNAME} and {USERID} are expanded}
+#  Default: 'jupyter-{USERNAME}-singleuser'
+{% if jupyterhub_systemdspawner_unit_name_template is defined %}
+c.SystemdSpawner.unit_name_template = '{{ jupyterhub_systemdspawner_unit_name_template }}'
+{% else %}
+# c.SystemdSpawner.unit_name_template = 'jupyter-{USERNAME}-singleuser'
+{% endif %}
+
+## Path to start each notebook user on.
+#  
+#  {USERNAME} and {USERID} are expanded.
+#  
+#  Defaults to the home directory of the user.
+#  
+#  Not respected if dynamic_users is set to True.
+#  Default: None
+{% if jupyterhub_systemdspawner_user_workingdir is defined %}
+c.SystemdSpawner.user_workingdir = '{{ jupyterhub_systemdspawner_user_workingdir }}'
+{% else %}
+# c.SystemdSpawner.user_workingdir = None
+{% endif %}
+
+## Template for unix username each user should be spawned as.
+#  
+#  {USERNAME} and {USERID} are expanded.
+#  
+#  This user should already exist in the system.
+#  
+#  Not respected if dynamic_users is set to True
+#  Default: '{USERNAME}'
+{% if jupyterhub_systemdspawner_username_template is defined %}
+c.SystemdSpawner.username_template = '{{ jupyterhub_systemdspawner_username_template }}'
+{% else %}
+# c.SystemdSpawner.username_template = '{USERNAME}'
+{% endif %}
+
+#------------------------------------------------------------------------------
+# LocalProcessSpawner(Spawner) configuration
+#------------------------------------------------------------------------------
+## A Spawner that uses `subprocess.Popen` to start single-user servers as local
+#  processes.
+#  
+#  Requires local UNIX users matching the authenticated users to exist. Does not
+#  work on Windows.
+#  
+#  This is the default spawner for JupyterHub.
+#  
+#  Note: This spawner does not implement CPU / memory guarantees and limits.
+
+## 
+#  See also: Spawner.apply_user_options
+{% if jupyterhub_localprocessspawner_apply_user_options is defined %}
+c.LocalProcessSpawner.apply_user_options = '{{ jupyterhub_localprocessspawner_apply_user_options }}'
+{% else %}
+# c.LocalProcessSpawner.apply_user_options = None
+{% endif %}
+
+## 
+#  See also: Spawner.args
+{% if jupyterhub_localprocessspawner_args is defined %}
+c.LocalProcessSpawner.args = {{ jupyterhub_localprocessspawner_args }}
+{% else %}
+# c.LocalProcessSpawner.args = []
+{% endif %}
+
+## 
+#  See also: Spawner.auth_state_hook
+{% if jupyterhub_localprocessspawner_auth_state_hook is defined %}
+c.LocalProcessSpawner.auth_state_hook = '{{ jupyterhub_localprocessspawner_auth_state_hook }}'
+{% else %}
+# c.LocalProcessSpawner.auth_state_hook = None
+{% endif %}
+
+## 
+#  See also: Spawner.cmd
+{% if jupyterhub_localprocessspawner_cmd is defined %}
+c.LocalProcessSpawner.cmd = {{ jupyterhub_localprocessspawner_cmd }}
+{% else %}
+# c.LocalProcessSpawner.cmd = ['jupyterhub-singleuser']
+{% endif %}
+
+## 
+#  See also: Spawner.consecutive_failure_limit
+{% if jupyterhub_localprocessspawner_consecutive_failure_limit is defined %}
+c.LocalProcessSpawner.consecutive_failure_limit = {{ jupyterhub_localprocessspawner_consecutive_failure_limit }}
+{% else %}
+# c.LocalProcessSpawner.consecutive_failure_limit = 0
+{% endif %}
+
+## 
+#  See also: Spawner.cpu_guarantee
+{% if jupyterhub_localprocessspawner_cpu_guarantee is defined %}
+c.LocalProcessSpawner.cpu_guarantee = '{{ jupyterhub_localprocessspawner_cpu_guarantee }}'
+{% else %}
+# c.LocalProcessSpawner.cpu_guarantee = None
+{% endif %}
+
+## 
+#  See also: Spawner.cpu_limit
+{% if jupyterhub_localprocessspawner_cpu_limit is defined %}
+c.LocalProcessSpawner.cpu_limit = '{{ jupyterhub_localprocessspawner_cpu_limit }}'
+{% else %}
+# c.LocalProcessSpawner.cpu_limit = None
+{% endif %}
+
+## Enable debug-logging of the single-user server
+#  See also: Spawner.debug
+{% if jupyterhub_localprocessspawner_debug is defined %}
+c.LocalProcessSpawner.debug = {{ jupyterhub_localprocessspawner_debug | bool }}
+{% else %}
+# c.LocalProcessSpawner.debug = False
+{% endif %}
+
+## 
+#  See also: Spawner.default_url
+{% if jupyterhub_localprocessspawner_default_url is defined %}
+c.LocalProcessSpawner.default_url = '{{ jupyterhub_localprocessspawner_default_url }}'
+{% else %}
+# c.LocalProcessSpawner.default_url = ''
+{% endif %}
+
+## 
+#  See also: Spawner.disable_user_config
+{% if jupyterhub_localprocessspawner_disable_user_config is defined %}
+c.LocalProcessSpawner.disable_user_config = {{ jupyterhub_localprocessspawner_disable_user_config | bool }}
+{% else %}
+# c.LocalProcessSpawner.disable_user_config = False
+{% endif %}
+
+## 
+#  See also: Spawner.env_keep
+{% if jupyterhub_localprocessspawner_env_keep is defined %}
+c.LocalProcessSpawner.env_keep = {{ jupyterhub_localprocessspawner_env_keep }}
+{% else %}
+# c.LocalProcessSpawner.env_keep = ['JUPYTERHUB_SINGLEUSER_APP']
+{% endif %}
+
+## 
+#  See also: Spawner.environment
+{% if jupyterhub_localprocessspawner_environment is defined %}
+c.LocalProcessSpawner.environment = {{ jupyterhub_localprocessspawner_environment }}
+{% else %}
+# c.LocalProcessSpawner.environment = {}
+{% endif %}
+
+## 
+#  See also: Spawner.group_overrides
+{% if jupyterhub_localprocessspawner_group_overrides is defined %}
+c.LocalProcessSpawner.group_overrides = {{ jupyterhub_localprocessspawner_group_overrides }}
+{% else %}
+# c.LocalProcessSpawner.group_overrides = traitlets.Undefined
+{% endif %}
+
+## 
+#  See also: Spawner.http_timeout
+{% if jupyterhub_localprocessspawner_http_timeout is defined %}
+c.LocalProcessSpawner.http_timeout = {{ jupyterhub_localprocessspawner_http_timeout }}
+{% else %}
+# c.LocalProcessSpawner.http_timeout = 30
+{% endif %}
+
+## 
+#  See also: Spawner.hub_connect_url
+{% if jupyterhub_localprocessspawner_hub_connect_url is defined %}
+c.LocalProcessSpawner.hub_connect_url = '{{ jupyterhub_localprocessspawner_hub_connect_url }}'
+{% else %}
+# c.LocalProcessSpawner.hub_connect_url = None
+{% endif %}
+
+## Seconds to wait for single-user server process to halt after SIGINT.
+#  
+#  If the process has not exited cleanly after this many seconds, a SIGTERM is
+#  sent.
+#  Default: 10
+{% if jupyterhub_localprocessspawner_interrupt_timeout is defined %}
+c.LocalProcessSpawner.interrupt_timeout = {{ jupyterhub_localprocessspawner_interrupt_timeout }}
+{% else %}
+# c.LocalProcessSpawner.interrupt_timeout = 10
+{% endif %}
+
+## 
+#  See also: Spawner.ip
+{% if jupyterhub_localprocessspawner_ip is defined %}
+c.LocalProcessSpawner.ip = '{{ jupyterhub_localprocessspawner_ip }}'
+{% else %}
+# c.LocalProcessSpawner.ip = '127.0.0.1'
+{% endif %}
+
+## Seconds to wait for process to halt after SIGKILL before giving up.
+#  
+#  If the process does not exit cleanly after this many seconds of SIGKILL, it
+#  becomes a zombie process. The hub process will log a warning and then give up.
+#  Default: 5
+{% if jupyterhub_localprocessspawner_kill_timeout is defined %}
+c.LocalProcessSpawner.kill_timeout = {{ jupyterhub_localprocessspawner_kill_timeout }}
+{% else %}
+# c.LocalProcessSpawner.kill_timeout = 5
+{% endif %}
+
+## 
+#  See also: Spawner.mem_guarantee
+{% if jupyterhub_localprocessspawner_mem_guarantee is defined %}
+c.LocalProcessSpawner.mem_guarantee = '{{ jupyterhub_localprocessspawner_mem_guarantee }}'
+{% else %}
+# c.LocalProcessSpawner.mem_guarantee = None
+{% endif %}
+
+## 
+#  See also: Spawner.mem_limit
+{% if jupyterhub_localprocessspawner_mem_limit is defined %}
+c.LocalProcessSpawner.mem_limit = '{{ jupyterhub_localprocessspawner_mem_limit }}'
+{% else %}
+# c.LocalProcessSpawner.mem_limit = None
+{% endif %}
+
+## 
+#  See also: Spawner.notebook_dir
+{% if jupyterhub_localprocessspawner_notebook_dir is defined %}
+c.LocalProcessSpawner.notebook_dir = '{{ jupyterhub_localprocessspawner_notebook_dir }}'
+{% else %}
+# c.LocalProcessSpawner.notebook_dir = ''
+{% endif %}
+
+## Allowed scopes for oauth tokens issued by this server's oauth client.
+#  See also: Spawner.oauth_client_allowed_scopes
+{% if jupyterhub_localprocessspawner_oauth_client_allowed_scopes is defined %}
+c.LocalProcessSpawner.oauth_client_allowed_scopes = {{ jupyterhub_localprocessspawner_oauth_client_allowed_scopes }}
+{% else %}
+# c.LocalProcessSpawner.oauth_client_allowed_scopes = traitlets.Undefined
+{% endif %}
+
+## Allowed roles for oauth tokens.
+#  See also: Spawner.oauth_roles
+{% if jupyterhub_localprocessspawner_oauth_roles is defined %}
+c.LocalProcessSpawner.oauth_roles = {{ jupyterhub_localprocessspawner_oauth_roles }}
+{% else %}
+# c.LocalProcessSpawner.oauth_roles = traitlets.Undefined
+{% endif %}
+
+## 
+#  See also: Spawner.options_form
+{% if jupyterhub_localprocessspawner_options_form is defined %}
+c.LocalProcessSpawner.options_form = {{ jupyterhub_localprocessspawner_options_form }}
+{% else %}
+# c.LocalProcessSpawner.options_form = traitlets.Undefined
+{% endif %}
+
+## 
+#  See also: Spawner.options_from_form
+{% if jupyterhub_localprocessspawner_options_from_form is defined %}
+c.LocalProcessSpawner.options_from_form = {{ jupyterhub_localprocessspawner_options_from_form }}
+{% else %}
+# c.LocalProcessSpawner.options_from_form = traitlets.Undefined
+{% endif %}
+
+## 
+#  See also: Spawner.poll_interval
+{% if jupyterhub_localprocessspawner_poll_interval is defined %}
+c.LocalProcessSpawner.poll_interval = {{ jupyterhub_localprocessspawner_poll_interval }}
+{% else %}
+# c.LocalProcessSpawner.poll_interval = 30
+{% endif %}
+
+## 
+#  See also: Spawner.poll_jitter
+{% if jupyterhub_localprocessspawner_poll_jitter is defined %}
+c.LocalProcessSpawner.poll_jitter = {{ jupyterhub_localprocessspawner_poll_jitter }}
+{% else %}
+# c.LocalProcessSpawner.poll_jitter = 0.1
+{% endif %}
+
+## Extra keyword arguments to pass to Popen
+#  
+#          when spawning single-user servers.
+#  
+#          For example::
+#  
+#              popen_kwargs = dict(shell=True)
+#  Default: {}
+{% if jupyterhub_localprocessspawner_popen_kwargs is defined %}
+c.LocalProcessSpawner.popen_kwargs = {{ jupyterhub_localprocessspawner_popen_kwargs }}
+{% else %}
+# c.LocalProcessSpawner.popen_kwargs = {}
+{% endif %}
+
+## 
+#  See also: Spawner.port
+{% if jupyterhub_localprocessspawner_port is defined %}
+c.LocalProcessSpawner.port = {{ jupyterhub_localprocessspawner_port }}
+{% else %}
+# c.LocalProcessSpawner.port = 0
+{% endif %}
+
+## 
+#  See also: Spawner.post_stop_hook
+{% if jupyterhub_localprocessspawner_post_stop_hook is defined %}
+c.LocalProcessSpawner.post_stop_hook = '{{ jupyterhub_localprocessspawner_post_stop_hook }}'
+{% else %}
+# c.LocalProcessSpawner.post_stop_hook = None
+{% endif %}
+
+## 
+#  See also: Spawner.pre_spawn_hook
+{% if jupyterhub_localprocessspawner_pre_spawn_hook is defined %}
+c.LocalProcessSpawner.pre_spawn_hook = '{{ jupyterhub_localprocessspawner_pre_spawn_hook }}'
+{% else %}
+# c.LocalProcessSpawner.pre_spawn_hook = None
+{% endif %}
+
+## 
+#  See also: Spawner.progress_ready_hook
+{% if jupyterhub_localprocessspawner_progress_ready_hook is defined %}
+c.LocalProcessSpawner.progress_ready_hook = '{{ jupyterhub_localprocessspawner_progress_ready_hook }}'
+{% else %}
+# c.LocalProcessSpawner.progress_ready_hook = None
+{% endif %}
+
+## The list of scopes to request for $JUPYTERHUB_API_TOKEN
+#  See also: Spawner.server_token_scopes
+{% if jupyterhub_localprocessspawner_server_token_scopes is defined %}
+c.LocalProcessSpawner.server_token_scopes = {{ jupyterhub_localprocessspawner_server_token_scopes }}
+{% else %}
+# c.LocalProcessSpawner.server_token_scopes = traitlets.Undefined
+{% endif %}
+
+## Specify a shell command to launch.
+#  
+#          The single-user command will be appended to this list,
+#          so it sould end with `-c` (for bash) or equivalent.
+#  
+#          For example::
+#  
+#              c.LocalProcessSpawner.shell_cmd = ['bash', '-l', '-c']
+#  
+#          to launch with a bash login shell, which would set up the user's own
+#  complete environment.
+#  
+#          .. warning::
+#  
+#              Using shell_cmd gives users control over PATH, etc.,
+#              which could change what the jupyterhub-singleuser launch command does.
+#              Only use this for trusted users.
+#  Default: []
+{% if jupyterhub_localprocessspawner_shell_cmd is defined %}
+c.LocalProcessSpawner.shell_cmd = {{ jupyterhub_localprocessspawner_shell_cmd }}
+{% else %}
+# c.LocalProcessSpawner.shell_cmd = []
+{% endif %}
+
+## List of SSL alt names
+#  See also: Spawner.ssl_alt_names
+{% if jupyterhub_localprocessspawner_ssl_alt_names is defined %}
+c.LocalProcessSpawner.ssl_alt_names = {{ jupyterhub_localprocessspawner_ssl_alt_names }}
+{% else %}
+# c.LocalProcessSpawner.ssl_alt_names = []
+{% endif %}
+
+## Whether to include `DNS:localhost`, `IP:127.0.0.1` in alt names
+#  See also: Spawner.ssl_alt_names_include_local
+{% if jupyterhub_localprocessspawner_ssl_alt_names_include_local is defined %}
+c.LocalProcessSpawner.ssl_alt_names_include_local = {{ jupyterhub_localprocessspawner_ssl_alt_names_include_local | bool }}
+{% else %}
+# c.LocalProcessSpawner.ssl_alt_names_include_local = True
+{% endif %}
+
+## 
+#  See also: Spawner.start_timeout
+{% if jupyterhub_localprocessspawner_start_timeout is defined %}
+c.LocalProcessSpawner.start_timeout = {{ jupyterhub_localprocessspawner_start_timeout }}
+{% else %}
+# c.LocalProcessSpawner.start_timeout = 60
+{% endif %}
+
+## Seconds to wait for single-user server process to halt after SIGTERM.
+#  
+#  If the process does not exit cleanly after this many seconds of SIGTERM, a
+#  SIGKILL is sent.
+#  Default: 5
+{% if jupyterhub_localprocessspawner_term_timeout is defined %}
+c.LocalProcessSpawner.term_timeout = {{ jupyterhub_localprocessspawner_term_timeout }}
+{% else %}
+# c.LocalProcessSpawner.term_timeout = 5
+{% endif %}
+
+#------------------------------------------------------------------------------
+# SimpleLocalProcessSpawner(LocalProcessSpawner) configuration
+#------------------------------------------------------------------------------
+## A version of LocalProcessSpawner that doesn't require users to exist on the
+#  system beforehand.
+#  
+#  Only use this for testing.
+#  
+#  Note: DO NOT USE THIS FOR PRODUCTION USE CASES! It is very insecure, and
+#  provides absolutely no isolation between different users!
+
+## 
+#  See also: Spawner.apply_user_options
+{% if jupyterhub_simplelocalprocessspawner_apply_user_options is defined %}
+c.SimpleLocalProcessSpawner.apply_user_options = '{{ jupyterhub_simplelocalprocessspawner_apply_user_options }}'
+{% else %}
+# c.SimpleLocalProcessSpawner.apply_user_options = None
+{% endif %}
+
+## 
+#  See also: Spawner.args
+{% if jupyterhub_simplelocalprocessspawner_args is defined %}
+c.SimpleLocalProcessSpawner.args = {{ jupyterhub_simplelocalprocessspawner_args }}
+{% else %}
+# c.SimpleLocalProcessSpawner.args = []
+{% endif %}
+
+## 
+#  See also: Spawner.auth_state_hook
+{% if jupyterhub_simplelocalprocessspawner_auth_state_hook is defined %}
+c.SimpleLocalProcessSpawner.auth_state_hook = '{{ jupyterhub_simplelocalprocessspawner_auth_state_hook }}'
+{% else %}
+# c.SimpleLocalProcessSpawner.auth_state_hook = None
+{% endif %}
+
+## 
+#  See also: Spawner.cmd
+{% if jupyterhub_simplelocalprocessspawner_cmd is defined %}
+c.SimpleLocalProcessSpawner.cmd = {{ jupyterhub_simplelocalprocessspawner_cmd }}
+{% else %}
+# c.SimpleLocalProcessSpawner.cmd = ['jupyterhub-singleuser']
+{% endif %}
+
+## 
+#  See also: Spawner.consecutive_failure_limit
+{% if jupyterhub_simplelocalprocessspawner_consecutive_failure_limit is defined %}
+c.SimpleLocalProcessSpawner.consecutive_failure_limit = {{ jupyterhub_simplelocalprocessspawner_consecutive_failure_limit }}
+{% else %}
+# c.SimpleLocalProcessSpawner.consecutive_failure_limit = 0
+{% endif %}
+
+## 
+#  See also: Spawner.cpu_guarantee
+{% if jupyterhub_simplelocalprocessspawner_cpu_guarantee is defined %}
+c.SimpleLocalProcessSpawner.cpu_guarantee = '{{ jupyterhub_simplelocalprocessspawner_cpu_guarantee }}'
+{% else %}
+# c.SimpleLocalProcessSpawner.cpu_guarantee = None
+{% endif %}
+
+## 
+#  See also: Spawner.cpu_limit
+{% if jupyterhub_simplelocalprocessspawner_cpu_limit is defined %}
+c.SimpleLocalProcessSpawner.cpu_limit = '{{ jupyterhub_simplelocalprocessspawner_cpu_limit }}'
+{% else %}
+# c.SimpleLocalProcessSpawner.cpu_limit = None
+{% endif %}
+
+## Enable debug-logging of the single-user server
+#  See also: Spawner.debug
+{% if jupyterhub_simplelocalprocessspawner_debug is defined %}
+c.SimpleLocalProcessSpawner.debug = {{ jupyterhub_simplelocalprocessspawner_debug | bool }}
+{% else %}
+# c.SimpleLocalProcessSpawner.debug = False
+{% endif %}
+
+## 
+#  See also: Spawner.default_url
+{% if jupyterhub_simplelocalprocessspawner_default_url is defined %}
+c.SimpleLocalProcessSpawner.default_url = '{{ jupyterhub_simplelocalprocessspawner_default_url }}'
+{% else %}
+# c.SimpleLocalProcessSpawner.default_url = ''
+{% endif %}
+
+## 
+#  See also: Spawner.disable_user_config
+{% if jupyterhub_simplelocalprocessspawner_disable_user_config is defined %}
+c.SimpleLocalProcessSpawner.disable_user_config = {{ jupyterhub_simplelocalprocessspawner_disable_user_config | bool }}
+{% else %}
+# c.SimpleLocalProcessSpawner.disable_user_config = False
+{% endif %}
+
+## 
+#  See also: Spawner.env_keep
+{% if jupyterhub_simplelocalprocessspawner_env_keep is defined %}
+c.SimpleLocalProcessSpawner.env_keep = {{ jupyterhub_simplelocalprocessspawner_env_keep }}
+{% else %}
+# c.SimpleLocalProcessSpawner.env_keep = ['JUPYTERHUB_SINGLEUSER_APP']
+{% endif %}
+
+## 
+#  See also: Spawner.environment
+{% if jupyterhub_simplelocalprocessspawner_environment is defined %}
+c.SimpleLocalProcessSpawner.environment = {{ jupyterhub_simplelocalprocessspawner_environment }}
+{% else %}
+# c.SimpleLocalProcessSpawner.environment = {}
+{% endif %}
+
+## 
+#  See also: Spawner.group_overrides
+{% if jupyterhub_simplelocalprocessspawner_group_overrides is defined %}
+c.SimpleLocalProcessSpawner.group_overrides = {{ jupyterhub_simplelocalprocessspawner_group_overrides }}
+{% else %}
+# c.SimpleLocalProcessSpawner.group_overrides = traitlets.Undefined
+{% endif %}
+
+## Template to expand to set the user home. {username} is expanded to the
+#  jupyterhub username.
+#  Default: '/tmp/{username}'
+{% if jupyterhub_simplelocalprocessspawner_home_dir_template is defined %}
+c.SimpleLocalProcessSpawner.home_dir_template = '{{ jupyterhub_simplelocalprocessspawner_home_dir_template }}'
+{% else %}
+# c.SimpleLocalProcessSpawner.home_dir_template = '/tmp/{username}'
+{% endif %}
+
+## 
+#  See also: Spawner.http_timeout
+{% if jupyterhub_simplelocalprocessspawner_http_timeout is defined %}
+c.SimpleLocalProcessSpawner.http_timeout = {{ jupyterhub_simplelocalprocessspawner_http_timeout }}
+{% else %}
+# c.SimpleLocalProcessSpawner.http_timeout = 30
+{% endif %}
+
+## 
+#  See also: Spawner.hub_connect_url
+{% if jupyterhub_simplelocalprocessspawner_hub_connect_url is defined %}
+c.SimpleLocalProcessSpawner.hub_connect_url = '{{ jupyterhub_simplelocalprocessspawner_hub_connect_url }}'
+{% else %}
+# c.SimpleLocalProcessSpawner.hub_connect_url = None
+{% endif %}
+
+## 
+#  See also: LocalProcessSpawner.interrupt_timeout
+{% if jupyterhub_simplelocalprocessspawner_interrupt_timeout is defined %}
+c.SimpleLocalProcessSpawner.interrupt_timeout = {{ jupyterhub_simplelocalprocessspawner_interrupt_timeout }}
+{% else %}
+# c.SimpleLocalProcessSpawner.interrupt_timeout = 10
+{% endif %}
+
+## 
+#  See also: Spawner.ip
+{% if jupyterhub_simplelocalprocessspawner_ip is defined %}
+c.SimpleLocalProcessSpawner.ip = '{{ jupyterhub_simplelocalprocessspawner_ip }}'
+{% else %}
+# c.SimpleLocalProcessSpawner.ip = '127.0.0.1'
+{% endif %}
+
+## 
+#  See also: LocalProcessSpawner.kill_timeout
+{% if jupyterhub_simplelocalprocessspawner_kill_timeout is defined %}
+c.SimpleLocalProcessSpawner.kill_timeout = {{ jupyterhub_simplelocalprocessspawner_kill_timeout }}
+{% else %}
+# c.SimpleLocalProcessSpawner.kill_timeout = 5
+{% endif %}
+
+## 
+#  See also: Spawner.mem_guarantee
+{% if jupyterhub_simplelocalprocessspawner_mem_guarantee is defined %}
+c.SimpleLocalProcessSpawner.mem_guarantee = '{{ jupyterhub_simplelocalprocessspawner_mem_guarantee }}'
+{% else %}
+# c.SimpleLocalProcessSpawner.mem_guarantee = None
+{% endif %}
+
+## 
+#  See also: Spawner.mem_limit
+{% if jupyterhub_simplelocalprocessspawner_mem_limit is defined %}
+c.SimpleLocalProcessSpawner.mem_limit = '{{ jupyterhub_simplelocalprocessspawner_mem_limit }}'
+{% else %}
+# c.SimpleLocalProcessSpawner.mem_limit = None
+{% endif %}
+
+## 
+#  See also: Spawner.notebook_dir
+{% if jupyterhub_simplelocalprocessspawner_notebook_dir is defined %}
+c.SimpleLocalProcessSpawner.notebook_dir = '{{ jupyterhub_simplelocalprocessspawner_notebook_dir }}'
+{% else %}
+# c.SimpleLocalProcessSpawner.notebook_dir = ''
+{% endif %}
+
+## Allowed scopes for oauth tokens issued by this server's oauth client.
+#  See also: Spawner.oauth_client_allowed_scopes
+{% if jupyterhub_simplelocalprocessspawner_oauth_client_allowed_scopes is defined %}
+c.SimpleLocalProcessSpawner.oauth_client_allowed_scopes = {{ jupyterhub_simplelocalprocessspawner_oauth_client_allowed_scopes }}
+{% else %}
+# c.SimpleLocalProcessSpawner.oauth_client_allowed_scopes = traitlets.Undefined
+{% endif %}
+
+## Allowed roles for oauth tokens.
+#  See also: Spawner.oauth_roles
+{% if jupyterhub_simplelocalprocessspawner_oauth_roles is defined %}
+c.SimpleLocalProcessSpawner.oauth_roles = {{ jupyterhub_simplelocalprocessspawner_oauth_roles }}
+{% else %}
+# c.SimpleLocalProcessSpawner.oauth_roles = traitlets.Undefined
+{% endif %}
+
+## 
+#  See also: Spawner.options_form
+{% if jupyterhub_simplelocalprocessspawner_options_form is defined %}
+c.SimpleLocalProcessSpawner.options_form = {{ jupyterhub_simplelocalprocessspawner_options_form }}
+{% else %}
+# c.SimpleLocalProcessSpawner.options_form = traitlets.Undefined
+{% endif %}
+
+## 
+#  See also: Spawner.options_from_form
+{% if jupyterhub_simplelocalprocessspawner_options_from_form is defined %}
+c.SimpleLocalProcessSpawner.options_from_form = {{ jupyterhub_simplelocalprocessspawner_options_from_form }}
+{% else %}
+# c.SimpleLocalProcessSpawner.options_from_form = traitlets.Undefined
+{% endif %}
+
+## 
+#  See also: Spawner.poll_interval
+{% if jupyterhub_simplelocalprocessspawner_poll_interval is defined %}
+c.SimpleLocalProcessSpawner.poll_interval = {{ jupyterhub_simplelocalprocessspawner_poll_interval }}
+{% else %}
+# c.SimpleLocalProcessSpawner.poll_interval = 30
+{% endif %}
+
+## 
+#  See also: Spawner.poll_jitter
+{% if jupyterhub_simplelocalprocessspawner_poll_jitter is defined %}
+c.SimpleLocalProcessSpawner.poll_jitter = {{ jupyterhub_simplelocalprocessspawner_poll_jitter }}
+{% else %}
+# c.SimpleLocalProcessSpawner.poll_jitter = 0.1
+{% endif %}
+
+## Extra keyword arguments to pass to Popen
+#  See also: LocalProcessSpawner.popen_kwargs
+{% if jupyterhub_simplelocalprocessspawner_popen_kwargs is defined %}
+c.SimpleLocalProcessSpawner.popen_kwargs = {{ jupyterhub_simplelocalprocessspawner_popen_kwargs }}
+{% else %}
+# c.SimpleLocalProcessSpawner.popen_kwargs = {}
+{% endif %}
+
+## 
+#  See also: Spawner.port
+{% if jupyterhub_simplelocalprocessspawner_port is defined %}
+c.SimpleLocalProcessSpawner.port = {{ jupyterhub_simplelocalprocessspawner_port }}
+{% else %}
+# c.SimpleLocalProcessSpawner.port = 0
+{% endif %}
+
+## 
+#  See also: Spawner.post_stop_hook
+{% if jupyterhub_simplelocalprocessspawner_post_stop_hook is defined %}
+c.SimpleLocalProcessSpawner.post_stop_hook = '{{ jupyterhub_simplelocalprocessspawner_post_stop_hook }}'
+{% else %}
+# c.SimpleLocalProcessSpawner.post_stop_hook = None
+{% endif %}
+
+## 
+#  See also: Spawner.pre_spawn_hook
+{% if jupyterhub_simplelocalprocessspawner_pre_spawn_hook is defined %}
+c.SimpleLocalProcessSpawner.pre_spawn_hook = '{{ jupyterhub_simplelocalprocessspawner_pre_spawn_hook }}'
+{% else %}
+# c.SimpleLocalProcessSpawner.pre_spawn_hook = None
+{% endif %}
+
+## 
+#  See also: Spawner.progress_ready_hook
+{% if jupyterhub_simplelocalprocessspawner_progress_ready_hook is defined %}
+c.SimpleLocalProcessSpawner.progress_ready_hook = '{{ jupyterhub_simplelocalprocessspawner_progress_ready_hook }}'
+{% else %}
+# c.SimpleLocalProcessSpawner.progress_ready_hook = None
+{% endif %}
+
+## The list of scopes to request for $JUPYTERHUB_API_TOKEN
+#  See also: Spawner.server_token_scopes
+{% if jupyterhub_simplelocalprocessspawner_server_token_scopes is defined %}
+c.SimpleLocalProcessSpawner.server_token_scopes = {{ jupyterhub_simplelocalprocessspawner_server_token_scopes }}
+{% else %}
+# c.SimpleLocalProcessSpawner.server_token_scopes = traitlets.Undefined
+{% endif %}
+
+## Specify a shell command to launch.
+#  See also: LocalProcessSpawner.shell_cmd
+{% if jupyterhub_simplelocalprocessspawner_shell_cmd is defined %}
+c.SimpleLocalProcessSpawner.shell_cmd = {{ jupyterhub_simplelocalprocessspawner_shell_cmd }}
+{% else %}
+# c.SimpleLocalProcessSpawner.shell_cmd = []
+{% endif %}
+
+## List of SSL alt names
+#  See also: Spawner.ssl_alt_names
+{% if jupyterhub_simplelocalprocessspawner_ssl_alt_names is defined %}
+c.SimpleLocalProcessSpawner.ssl_alt_names = {{ jupyterhub_simplelocalprocessspawner_ssl_alt_names }}
+{% else %}
+# c.SimpleLocalProcessSpawner.ssl_alt_names = []
+{% endif %}
+
+## Whether to include `DNS:localhost`, `IP:127.0.0.1` in alt names
+#  See also: Spawner.ssl_alt_names_include_local
+{% if jupyterhub_simplelocalprocessspawner_ssl_alt_names_include_local is defined %}
+c.SimpleLocalProcessSpawner.ssl_alt_names_include_local = {{ jupyterhub_simplelocalprocessspawner_ssl_alt_names_include_local | bool }}
+{% else %}
+# c.SimpleLocalProcessSpawner.ssl_alt_names_include_local = True
+{% endif %}
+
+## 
+#  See also: Spawner.start_timeout
+{% if jupyterhub_simplelocalprocessspawner_start_timeout is defined %}
+c.SimpleLocalProcessSpawner.start_timeout = {{ jupyterhub_simplelocalprocessspawner_start_timeout }}
+{% else %}
+# c.SimpleLocalProcessSpawner.start_timeout = 60
+{% endif %}
+
+## 
+#  See also: LocalProcessSpawner.term_timeout
+{% if jupyterhub_simplelocalprocessspawner_term_timeout is defined %}
+c.SimpleLocalProcessSpawner.term_timeout = {{ jupyterhub_simplelocalprocessspawner_term_timeout }}
+{% else %}
+# c.SimpleLocalProcessSpawner.term_timeout = 5
+{% endif %}
