@@ -13,7 +13,7 @@
 - name: Copy example notebooks to JupyterLab directory
   copy:
     src: "{{ item }}"
-    dest: "{{ airflow_notebook_directory }}"
+    dest: "{{ airflow_notebook_directory }}/"
     mode: "0644"
   with_fileglob:
     - "notebooks/*.ipynb"
