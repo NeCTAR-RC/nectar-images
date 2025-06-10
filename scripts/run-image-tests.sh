@@ -179,10 +179,33 @@ cleanup_on_exit() {
 # Trap for cleanup on script exit
 trap 'cleanup_on_exit' EXIT
 
+
+# Discover user account from the image properties
+if [[ -z $USER_ACCOUNT ]]; then
+    USER_ACCOUNT=$(openstack image show -c properties -f value $IMAGE_ID | grep -oP "'default_user': *'\K[^']*")
+fi
+info "Using user account: '$USER_ACCOUNT'"
+
+
+
+
+# Get disk image size, and convert to GB
+DISK_BYTES=$(openstack image show -c virtual_size -f value $IMAGE_ID)
+DISK_SIZE=$(($DISK_BYTES / 1000000000))
+
+info "Disk image size is $DISK_SIZE"
+
+# If the size is > 30, we need to boot from volume
+BOOT_FROM_VOLUME=""
+if [ "$DISK_SIZE" -gt 30 ]; then
+    info "Using boot from volume"
+    BOOT_FROM_VOLUME="--boot-from-volume $DISK_SIZE"
+fi
+
 instance_name="TEST ${NAME}"
 action "Creating instance '$instance_name'..."
-debug "openstack server create --image $IMAGE_ID --flavor $OS_FLAVOR --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME --wait '$NAME'"
-INSTANCE_ID=$(openstack server create -f value -c id --image $IMAGE_ID --flavor $OS_FLAVOR --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME --wait "$NAME" | xargs echo)  # xargs because of leading newline
+debug "openstack server create --image $IMAGE_ID --flavor $OS_FLAVOR $BOOT_FROM_VOLUME --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME --wait '$NAME'"
+INSTANCE_ID=$(openstack server create -f value -c id --image $IMAGE_ID --flavor $OS_FLAVOR $BOOT_FROM_VOLUME --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME --wait "$NAME" | xargs echo)  # xargs because of leading newline
 
 if [[ ${INSTANCE_ID//-/} =~ ^[[:xdigit:]]{32}$ ]]; then
     info "Found instance ID: '$INSTANCE_ID'"

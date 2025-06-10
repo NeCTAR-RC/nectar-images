@@ -204,7 +204,7 @@ delete_instance() {
 # Function for cleanup on script exit
 cleanup_on_exit() {
     delete_instance $INSTANCE_ID
-    delete_image $INSTANCE_ID
+    #delete_image $INSTANCE_ID
 }
 
 # Trap for cleanup on script exit
@@ -233,10 +233,22 @@ if [[ -d $TAG_DIR ]]; then
     done
 fi
 
+# Get disk image size, and convert to GB
+DISK_SIZE=$(qemu-img info --output=json "$IMAGE_FILE" | jq '.["virtual-size"] / 1000000000 | floor')
+
+info "Disk image size is $DISK_SIZE"
+
+# If the size is > 30, we need to boot from volume
+BOOT_FROM_VOLUME=""
+if [ "$DISK_SIZE" -gt 30 ]; then
+    info "Using boot from volume"
+    BOOT_FROM_VOLUME="--boot-from-volume $DISK_SIZE"
+fi
+
 instance_name="test_${NAME}"
 action "Creating instance '$instance_name'..."
-debug "openstack server create --image $IMAGE_ID --flavor $OS_FLAVOR --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME --wait '$NAME'"
-INSTANCE_ID=$(openstack server create -f value -c id --image $IMAGE_ID --flavor $OS_FLAVOR --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME --wait "$NAME" | xargs echo)  # xargs because of leading newline
+debug "openstack server create --image $IMAGE_ID --flavor $OS_FLAVOR $BOOT_FROM_VOLUME --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME --wait '$NAME'"
+INSTANCE_ID=$(openstack server create -f value -c id --image $IMAGE_ID --flavor $OS_FLAVOR $BOOT_FROM_VOLUME --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME --wait "$NAME" | xargs echo)  # xargs because of leading newline
 
 if [[ -z $INSTANCE_ID ]]; then
     fatal "Instance ID not found!"
@@ -310,7 +322,6 @@ attempts=30
 attempt=1
 info "Checking for SSH port it open..."
 while [[ $attempt -le $attempts ]]; do
-    #ssh -q -oConnectTimeout=5 -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $USER_ACCOUNT@$ip exit 2>&1 >/dev/null
     nc -z -w5 $ip 22 2>&1 >/dev/null
     if [[ $? -eq 0 ]]; then
         info "SSH connection found in $((sleeptime*attempt))s"
@@ -318,7 +329,6 @@ while [[ $attempt -le $attempts ]]; do
     fi
     if [[ $attempt -eq $attempts ]]; then
         # One last attempt with output
-        #ssh -oConnectTimeout=5 -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $USER_ACCOUNT@$ip exit
         nc -z -w5 -v $ip 22
         fatal "Reached retry limit after 5 minutes"
     fi
@@ -338,5 +348,3 @@ debug "ssh -oConnectTimeout=5 -oIdentitiesOnly=yes -oBatchMode=yes -oStrictHostK
 ssh -oConnectTimeout=5 -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $USER_ACCOUNT@$ip "$TEST_CMD"
 
 # Complete
-delete_instance $INSTANCE_ID
-delete_image $IMAGE_ID
