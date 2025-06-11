@@ -18,6 +18,8 @@ nginx_vhosts:
   - listen: "80 default_server"
     root: "/var/www/html"
     extra_parameters: |
+      auth_pam "Authentication";
+      auth_pam_service_name "nginx";
       location /rstudio/ {
         rewrite ^/rstudio/(.*)$ /$1 break;
         proxy_pass http://127.0.0.1:8787;
@@ -46,13 +48,11 @@ nginx_vhosts:
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection $http_connection;
-        auth_pam "PAM Authentication";
-        auth_pam_service_name "nginx";
       }
       location /airflow/ {
-        rewrite ^/airflow/(.*)$ /$1 break;
         proxy_pass http://127.0.0.1:8080;
-        proxy_redirect http://127.0.0.1:8080/ $scheme://$host/airflow/;
+        include proxy_params;
+        proxy_redirect off;
         proxy_http_version 1.1;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header Upgrade $http_upgrade;
