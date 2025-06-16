@@ -240,7 +240,7 @@ info "Disk image size is $DISK_SIZE"
 
 # If the size is > 30, we need to boot from volume
 BOOT_FROM_VOLUME=""
-if [ "$DISK_SIZE" -gt 30 ]; then
+if [ "$DISK_SIZE" -gt 32 ]; then
     info "Using boot from volume"
     BOOT_FROM_VOLUME="--boot-from-volume $DISK_SIZE"
 fi
