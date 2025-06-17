@@ -60,7 +60,7 @@ help_text() {
 }
 
 # Environment vars
-: "${OS_AVAILABILITY_ZONE:=melbourne-qh2}"
+: "${OS_AVAILABILITY_ZONE:=ardc-syd-1}"
 : "${OS_SECGROUP:=image-build}"
 : "${OS_FLAVOR:=m3.small}"
 : "${OS_KEYNAME:=jenkins-image-testing}"
