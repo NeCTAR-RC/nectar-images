@@ -70,6 +70,22 @@ sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' $var_file
 sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' $var_file
 git_diff $var_file
 
+# AlmaLinux 10
+distro=almalinux
+ver=10
+action "Checking $distro $ver"
+var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
+base_url="http://mirror.aarnet.edu.au/pub/$distro/$ver/isos/x86_64"
+output=$(curl -s -L "$base_url/CHECKSUM" | grep -E 'SHA256.*boot.iso' | grep -v latest | sed -n 's/^SHA256 (\(.*\)) = \([[:alnum:]]\+\)$/\1 \2/p')
+IFS=" " read -ra details <<< $(echo "$output")
+iso_url="$base_url/${details[0]}"
+iso_checksum="sha256:${details[1]}"
+debug "url: $iso_url"
+debug "checksum: $iso_checksum"
+sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' $var_file
+sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' $var_file
+git_diff $var_file
+
 # CentOS Stream 9
 distro=centos-stream
 ver=9
@@ -179,6 +195,22 @@ ver=9
 action "Checking $distro $ver"
 var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
 base_url="http://mirror.aarnet.edu.au/pub/$distro/9/isos/x86_64"
+output=$(curl -s -L "$base_url/CHECKSUM" | grep -E 'SHA256.*boot.iso' | grep -v latest | sed -n 's/^SHA256 (\(.*\)) = \([[:alnum:]]\+\)$/\1 \2/p')
+IFS=" " read -ra details <<< $(echo "$output")
+iso_url="$base_url/${details[0]}"
+iso_checksum="sha256:${details[1]}"
+debug "url: $iso_url"
+debug "checksum: $iso_checksum"
+sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' $var_file
+sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' $var_file
+git_diff $var_file
+
+# Rocky 10
+distro=rocky
+ver=10
+action "Checking $distro $ver"
+var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
+base_url="http://mirror.aarnet.edu.au/pub/$distro/$ver/isos/x86_64"
 output=$(curl -s -L "$base_url/CHECKSUM" | grep -E 'SHA256.*boot.iso' | grep -v latest | sed -n 's/^SHA256 (\(.*\)) = \([[:alnum:]]\+\)$/\1 \2/p')
 IFS=" " read -ra details <<< $(echo "$output")
 iso_url="$base_url/${details[0]}"
