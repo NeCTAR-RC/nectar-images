@@ -121,43 +121,26 @@ sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' $var_file
 sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' $var_file
 git_diff $var_file
 
-# Fedora 39
-distro=fedora
-ver=39
-action "Checking $distro $ver"
-var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
-base_url="http://mirror.aarnet.edu.au/pub/fedora/linux/releases/$ver/Server/x86_64/iso"
-checksum_file=$(curl -s -L $base_url | grep CHECKSUM | sed -n 's#^.*<a href="\(Fedora-Server-'$ver'.*\)">Fedora-Server-'$ver'.*</a>.*$#\1#p')
-output=$(curl -s "$base_url/$checksum_file" | grep -E 'SHA256.*Fedora-Server-netinst' | sed -n 's/^SHA256 (\(.*\)) = \([[:alnum:]]\+\)$/\1 \2/p')
-IFS=" " read -ra details <<< $(echo "$output")
-iso_url="$base_url/${details[0]}"
-iso_checksum="sha256:${details[1]}"
-debug "url: $iso_url"
-debug "checksum: $iso_checksum"
-sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' $var_file
-sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' $var_file
-git_diff $var_file
-
-# Fedora 40
-distro=fedora
-ver=40
-action "Checking $distro $ver"
-var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
-base_url="http://mirror.aarnet.edu.au/pub/fedora/linux/releases/$ver/Server/x86_64/iso"
-checksum_file=$(curl -s -L $base_url | grep CHECKSUM | sed -n 's#^.*<a href="\(Fedora-Server-'$ver'.*\)">Fedora-Server-'$ver'.*</a>.*$#\1#p')
-output=$(curl -s "$base_url/$checksum_file" | grep -E 'SHA256.*Fedora-Server-netinst' | sed -n 's/^SHA256 (\(.*\)) = \([[:alnum:]]\+\)$/\1 \2/p')
-IFS=" " read -ra details <<< $(echo "$output")
-iso_url="$base_url/${details[0]}"
-iso_checksum="sha256:${details[1]}"
-debug "url: $iso_url"
-debug "checksum: $iso_checksum"
-sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' $var_file
-sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' $var_file
-git_diff $var_file
-
 # Fedora 41
 distro=fedora
 ver=41
+action "Checking $distro $ver"
+var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
+base_url="http://mirror.aarnet.edu.au/pub/fedora/linux/releases/$ver/Server/x86_64/iso"
+checksum_file=$(curl -s -L $base_url | grep CHECKSUM | sed -n 's#^.*<a href="\(Fedora-Server-'$ver'.*\)">Fedora-Server-'$ver'.*</a>.*$#\1#p')
+output=$(curl -s "$base_url/$checksum_file" | grep -E 'SHA256.*Fedora-Server-netinst' | sed -n 's/^SHA256 (\(.*\)) = \([[:alnum:]]\+\)$/\1 \2/p')
+IFS=" " read -ra details <<< $(echo "$output")
+iso_url="$base_url/${details[0]}"
+iso_checksum="sha256:${details[1]}"
+debug "url: $iso_url"
+debug "checksum: $iso_checksum"
+sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' $var_file
+sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' $var_file
+git_diff $var_file
+
+# Fedora 422
+distro=fedora
+ver=42
 action "Checking $distro $ver"
 var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
 base_url="http://mirror.aarnet.edu.au/pub/fedora/linux/releases/$ver/Server/x86_64/iso"
