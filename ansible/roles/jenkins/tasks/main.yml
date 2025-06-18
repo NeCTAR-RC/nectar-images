@@ -53,11 +53,6 @@
     filename: nodejs
   when: nodejs_repo is defined
 
-- name: Add ansible PPA
-  apt_repository:
-    repo: "{{ ansible_ppa }}"
-  when: ansible_ppa is defined
-
 - name: Perform an apt-update
   apt:
     update_cache: yes
@@ -111,4 +106,7 @@
 
 - name: Install packer
   include_tasks: packer.yml
+
+- name: Install ansible
+  include_tasks: ansible.yml
 

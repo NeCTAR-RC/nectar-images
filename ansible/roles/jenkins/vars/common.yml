@@ -37,7 +37,6 @@ common_packages:
   - libaugeas-dev
   - mariadb-server
   - mariadb-client
-  - ansible
   - tox
   - virtualenv
   - nodejs
