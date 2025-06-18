@@ -8,7 +8,7 @@ load_examples = True
 [webserver]
 web_server_port = {{ airflow_port }}
 config_file = {{ airflow_home }}/webserver_config.py
-base_url = http://localhost:{{ airflow_port }}
+base_url = http://localhost:{{ airflow_port }}/airflow
 authenticate = True
 auth_backends = airflow.api.auth.backend.default
 
