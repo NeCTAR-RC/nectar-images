@@ -4,8 +4,8 @@
     repo: "{{ ansible_ppa }}"
   when: ansible_ppa is defined
 
-- name: Install Packer
+- name: Install Ansible
   ansible.builtin.apt:
-    name: packer
+    name: ansible
     state: present
 
