@@ -18,14 +18,3 @@
       - grafana
     state: present
     update_cache: yes
-
-- name: Check if CUDA is installed
-  shell: which nvcc
-  register: cuda_check
-  ignore_errors: true
-
-- name: Install NVIDIA DCGM Exporter if CUDA is present
-  apt:
-    name: nvidia-dcgm
-    state: present
-  when: cuda_check.rc == 0

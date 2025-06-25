@@ -6,9 +6,5 @@ mlflow_db_user: mlflow
 mlflow_db_password: password
 mlflow_db_name: mlflow
 mlflow_backend_uri: "postgresql://{{ mlflow_db_user }}:{{ mlflow_db_password }}@localhost/{{ mlflow_db_name }}"
-mlflow_group: mlflow
-mlflow_user: mlflow
-mlflow_user_password: password
-mlflow_home: "/home/{{ mlflow_user }}"
 mlflow_system_folder: /etc/mlflow
 mlflow_env_path: "{{ mlflow_system_folder }}/mlflow.env"

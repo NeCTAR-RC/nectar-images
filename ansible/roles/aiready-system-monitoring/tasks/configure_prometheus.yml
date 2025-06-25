@@ -3,3 +3,27 @@
     src: prometheus.yml
     dest: /etc/prometheus/prometheus.yml
   notify: Restart Prometheus
+
+- name: Ensure Grafana service is running
+  ansible.builtin.service:
+    name: grafana-server
+    state: started
+    enabled: yes
+
+- name: Wait for Grafana API to be ready
+  ansible.builtin.wait_for:
+    host: localhost
+    port: 3000
+    delay: 30
+    timeout: 60
+
+- name: Add Prometheus datasource to Grafana
+  community.grafana.grafana_datasource:
+    name: Prometheus
+    ds_type: prometheus
+    uid: "{{ prometheus_datasource_uid }}"
+    access: proxy
+    ds_url: "{{ grafana_prometheus_url }}"
+    grafana_url: http://localhost:3000
+    is_default: true
+    state: present

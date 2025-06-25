@@ -5,22 +5,6 @@
       - psycopg2
     executable: "{{ anaconda_link_dir }}/bin/pip"
 
-- name: Create mlflow group
-  group:
-    name: "{{ mlflow_group }}"
-    state: present
-    system: yes
-
-- name: Create mlflow user
-  user:
-    name: "{{ mlflow_user }}"
-    password: "{{ mlflow_user_password }}"
-    group: "{{ mlflow_group }}"
-    home: "{{ mlflow_home }}"
-    system: yes
-    create_home: yes
-    shell: /bin/bash
-
 - name: Create PostgreSQL user for mlflow
   become_user: postgres
   postgresql_user:
@@ -44,8 +28,6 @@
   file:
     path: "{{ mlflow_system_folder }}"
     state: directory
-    owner: "{{ mlflow_user }}"
-    group: "{{ mlflow_group }}"
     mode: '0750'
 
 - name: Create mlflow .env file
@@ -53,8 +35,7 @@
     dest: "{{ mlflow_env_path }}"
     content: |
       MLFLOW_FLASK_SERVER_SECRET_KEY={{ mlflow_secret_key.stdout }}
-    owner: "{{ mlflow_user }}"
-    group: "{{ mlflow_group }}"
+      MLFLOW_ARTIFACT_ROOT={{ mlflow_artifact_root }}
     mode: '0600'
 
 - name: Create systemd service for mlflow

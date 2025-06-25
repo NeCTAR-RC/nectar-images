@@ -18,6 +18,14 @@
   with_fileglob:
     - "notebooks/*.ipynb"
 
+- name: Copy example DAGs to Airflow directory
+  copy:
+    src: "{{ item }}"
+    dest: "{{ airflow_home }}/dags"
+    mode: "0644"
+  with_fileglob:
+    - "*.py"
+
 - name: Install Airflow with dependencies
   ansible.builtin.pip:
     executable: "{{ anaconda_link_dir }}/bin/pip"

@@ -13,7 +13,7 @@
     system: yes
     create_home: yes
     shell: /bin/bash
-   
+
 - name: Ensure PostgreSQL is running
   service:
     name: postgresql

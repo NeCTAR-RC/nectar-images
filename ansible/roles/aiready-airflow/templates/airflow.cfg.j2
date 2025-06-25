@@ -1,9 +1,9 @@
 [core]
-executor = SequentialExecutor
+executor = LocalExecutor
 
 dags_folder = {{ airflow_home }}/dags
 plugins_folder = {{ airflow_home }}/plugins
-load_examples = True
+load_examples = False
 
 [webserver]
 web_server_port = {{ airflow_port }}

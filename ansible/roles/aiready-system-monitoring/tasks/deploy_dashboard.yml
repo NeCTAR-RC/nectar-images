@@ -12,7 +12,7 @@
     mode: "0755"
 
 - name: Deploy Grafana Dashboard
-  ansible.builtin.copy:
-    src: dashboard.json
+  ansible.builtin.template:
+    src: system-dashboard.json.j2
     dest: /var/lib/grafana/dashboards/system-metrics.json
   notify: Restart Grafana

@@ -10,7 +10,7 @@ ExecStart={{ anaconda_link_dir }}/bin/mlflow server \
     --host {{ mlflow_host }} \
     --port {{ mlflow_port }} \
     --backend-store-uri {{ mlflow_backend_uri }} \
-    --default-artifact-root {{ mlflow_artifact_root }}
+    --default-artifact-root ${MLFLOW_ARTIFACT_ROOT} \
 Restart=always
 
 [Install]
