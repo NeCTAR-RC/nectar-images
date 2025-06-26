@@ -16,9 +16,3 @@
     src: nginx/pam
     dest: /etc/pam.d/nginx
     mode: 0644
-
-- name: Install testing script
-  copy:
-    src: testing/tests.d/012-single-user-home-dir.sh
-    dest: /usr/nectar/tests.d
-    mode: 0755

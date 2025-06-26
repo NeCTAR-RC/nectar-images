@@ -8,3 +8,11 @@
     name: shiny-server
     state: started
     enabled: true
+
+# Shiny server will make a home directory, so override our single
+# home dir test to expect two
+- name: Install testing script
+  copy:
+    src: testing/tests.d/012-single-user-home-dir.sh
+    dest: /usr/nectar/tests.d
+    mode: 0755
