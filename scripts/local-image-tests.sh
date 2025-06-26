@@ -204,7 +204,7 @@ delete_instance() {
 # Function for cleanup on script exit
 cleanup_on_exit() {
     delete_instance $INSTANCE_ID
-    #delete_image $INSTANCE_ID
+    delete_image $INSTANCE_ID
 }
 
 # Trap for cleanup on script exit
