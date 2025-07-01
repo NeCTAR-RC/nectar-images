@@ -1,0 +1,15 @@
+- name: Install llm packages using pip
+  ansible.builtin.pip:
+    name: "{{ item }}"
+    executable: "{{ anaconda_link_dir }}/bin/pip"
+  loop: "{{ llm_packages }}"
+  become: true
+
+- name: Copy example notebooks to JupyterLab directory
+  become: yes
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/skel/examples/"
+    mode: '0644'
+  with_fileglob:
+    - "notebooks/*.ipynb"

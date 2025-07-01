@@ -1,0 +1,30 @@
+---
+# Default variables for the deep learning role
+dl_home: "/etc/skel/examples/"
+
+python_version: "3.11"
+pytorch_version: "2.4.0"
+cuda_version: "12.4" # Adjust based on your GPU/NVIDIA driver compatibility
+cuda_enabled: true # Set to true if CUDA is required
+
+dl_packages:
+  # Machine Learning Frameworks
+  - scikit-learn
+  # Data handling and preprocessing
+  - numpy<2
+  - h5py
+  - scipy
+  - pandas
+  - pandas-profiling
+  - pillow
+  # Visualization and plotting
+  - matplotlib
+  - seaborn
+  - plotly
+  - bokeh
+  # Additional tools
+  - wandb
+  - tqdm
+  - requests
+  - widgetsnbextension
+  - ipywidgets

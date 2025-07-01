@@ -1,0 +1,15 @@
+#!/bin/bash
+# Environment setup script for deep learning
+
+# Add Anaconda to PATH
+export PATH="{{ anaconda_link_dir }}/bin:$PATH"
+
+{% if cuda_enabled %}
+export CUDA_HOME=/usr/local/cuda
+export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
+{% endif %}
+
+echo "Image Processing (Torch) environment activated"
+echo "Using Python from: $(which python)"
+python --version
+python -c "import torch; print('PyTorch version:', torch.__version__); import torchvision; print('TorchVision version:', torchvision.__version__); print('CUDA available:', torch.cuda.is_available())"
