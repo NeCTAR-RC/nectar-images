@@ -9,8 +9,7 @@ load_examples = False
 web_server_port = {{ airflow_port }}
 config_file = {{ airflow_home }}/webserver_config.py
 base_url = http://localhost:{{ airflow_port }}/airflow
-authenticate = True
-auth_backends = airflow.api.auth.backend.default
+auth_backends = airflow.www.auth.backend.session
 
 [database]
 sql_alchemy_conn = postgresql+psycopg2://{{ airflow_db_user }}:{{ airflow_db_password }}@{{ airflow_db_host }}/{{ airflow_db_name }}

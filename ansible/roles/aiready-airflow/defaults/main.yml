@@ -2,5 +2,5 @@
 # Default variables
 airflow_version: "2.9.3"
 airflow_home: "/opt/airflow"
-airflow_notebook_directory: "/etc/skel/airflow"
+airflow_notebook_directory: "/etc/skel/examples/
 airflow_port: 8080

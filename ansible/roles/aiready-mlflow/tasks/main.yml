@@ -53,7 +53,7 @@
 - name: Copy example notebooks to JupyterLab directory
   copy:
     src: "{{ item }}"
-    dest: "/etc/skel/"
+    dest: "/etc/skel/examples"
     mode: '0644'
   with_fileglob:
     - "notebooks/*.ipynb"
