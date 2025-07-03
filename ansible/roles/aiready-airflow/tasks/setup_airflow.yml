@@ -8,6 +8,15 @@
     - restart airflow webserver
     - restart airflow scheduler
 
+- name: Copy airflow webserver configuration
+  template:
+    src: webserver_config.py.j2
+    dest: "{{ airflow_home }}/webserver_config.py 
+    mode: "0644"
+  notify:
+    - restart airflow webserver
+    - restart airflow scheduler
+
 - name: Set correct permissions
   file:
     path: "{{ airflow_home }}"
