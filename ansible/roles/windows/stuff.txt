@@ -1,4 +1,4 @@
-    
+
   roles:
     - role: ansible-role-virtio-win
       virtio_win_iso_path: 'E:\\virtio-win\\'
@@ -136,4 +136,4 @@
     - name: Windows reboot
       ansible.windows.win_reboot:
         reboot_timeout: 10000
-      when: windows_updates.reboot_required and allow_windows_reboot_during_win_updates    
+      when: windows_updates.reboot_required and allow_windows_reboot_during_win_updates

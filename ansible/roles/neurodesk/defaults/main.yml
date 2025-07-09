@@ -15,7 +15,7 @@ micromamba_packages:
   - mamba
   - python=3.12
 
-# This is constructed from 
+# This is constructed from
 # https://github.com/jupyter/docker-stacks/blob/main/images/docker-stacks-foundation/initial-condarc
 # https://github.com/NeuroDesk/neurodesktop/blob/main/Dockerfile#L198
 micromamba_root_prefix_condarc:
@@ -43,7 +43,7 @@ neurodesk_python_packages:
   - ipyniivue
   - jupyter-server-proxy
   - jupyterlmod==4.0.3
-  - jupyterlab-git 
+  - jupyterlab-git
   - jupyterlab_rise
   - ipycanvas
   - jupyter-resource-usage
@@ -60,5 +60,3 @@ neurodesk_python_packages:
 
 neurodesk_conda_packages:
   - nb_conda_kernels
-
-

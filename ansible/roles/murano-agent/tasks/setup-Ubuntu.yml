@@ -66,5 +66,3 @@
   copy:
     src: murano-agent-logrotate
     dest: /etc/logrotate.d/murano-agent
-
-

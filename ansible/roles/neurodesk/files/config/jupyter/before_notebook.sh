@@ -19,7 +19,7 @@ if [ ! -d "/cvmfs/neurodesk.ardc.edu.au/neurodesk-modules/" ]; then
 
             echo "probing if the latency of direct connection or the latency of a CDN is better"
             DIRECT=cvmfs-geoproximity.neurodesk.org
-            DIRECT_url="http://${DIRECT}/cvmfs/neurodesk.ardc.edu.au/.cvmfspublished" 
+            DIRECT_url="http://${DIRECT}/cvmfs/neurodesk.ardc.edu.au/.cvmfspublished"
             CDN=cvmfs.neurodesk.org
             CDN_url="http://${CDN}/cvmfs/neurodesk.ardc.edu.au/.cvmfspublished"
 
@@ -29,7 +29,7 @@ if [ ! -d "/cvmfs/neurodesk.ardc.edu.au/neurodesk-modules/" ]; then
             echo "[DEBUG]: Resolved DNS for $CDN: $resolved_dns"
             CDN_url_latency=$(curl -s -w %{time_total}\\n -o /dev/null "$CDN_url")
             echo $CDN_url_latency
-            
+
             echo testing $DIRECT_url
             echo "Resolving DNS name"
             resolved_dns=$(dig +short $DIRECT)

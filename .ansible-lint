@@ -1,0 +1,39 @@
+---
+# .ansible-lint
+# This configuration aims to act primarily as a syntax checker by skipping most linting rules.
+
+skip_list:
+  - command-instead-of-module
+  - command-instead-of-shell
+  - deprecated-local-action
+  - fqcn[action]
+  - fqcn[action-core]
+  - fqcn[canonical]
+  - jinja[spacing]
+  - ignore-errors
+  - key-order[task]
+  - latest[git]
+  - literal-compare
+  - name[casing]
+  - name[missing]
+  - name[play]
+  - no-changed-when
+  - no-free-form
+  - no-handler
+  - no-tabs
+  - package-latest
+  - partial-become[task]
+  - risky-file-permissions
+  - risky-octal
+  - risky-shell-pipe
+  - role-name
+  - role-name[path]
+  - schema[meta]
+  - schema[tasks]
+  - var-naming[no-role-prefix]
+  - yaml[comments]
+  - yaml[empty-lines]
+  - yaml[indentation]
+  - yaml[line-length]
+  - yaml[octal-values]
+  - yaml[truthy]

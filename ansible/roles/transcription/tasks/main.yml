@@ -20,7 +20,7 @@
     url: https://object-store.rc.nectar.org.au/v1/AUTH_7235235757f84bf4b748be08a1e8eed5/transcription/ggml-large-v3-turbo.bin
     dest: /usr/local/share/vibe/ggml-large-v3-turbo.bin
 
-# Due to Vibe v2.4 having outdated/broken URLs for diarisation models, we are pre-downloading them from up-to-date URLs. 
+# Due to Vibe v2.4 having outdated/broken URLs for diarisation models, we are pre-downloading them from up-to-date URLs.
 - name: Pre-download diarisation embedding model
   get_url:
     url: https://object-store.rc.nectar.org.au/v1/AUTH_7235235757f84bf4b748be08a1e8eed5/transcription/wespeaker_en_voxceleb_CAM++.onnx

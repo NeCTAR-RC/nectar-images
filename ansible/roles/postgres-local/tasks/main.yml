@@ -43,7 +43,7 @@
 
 - name: Set password for postgres user
   become_user: postgres
-  postgresql_user:
+  community.general.postgresql_user:
     name: postgres
     password: "{{ postgres_password | default('postgres') }}"
     state: present

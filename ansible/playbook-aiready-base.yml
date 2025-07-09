@@ -23,7 +23,7 @@
     # Python
     - role: anaconda
     - role: jupyterhub
-    # infastructure layers    
+    # infastructure layers
     - role: postgres-local
     - role: aiready-base
     - role: aiready-airflow

@@ -57,10 +57,10 @@ do
 	    echo 'Package: '"$PACKAGE"
     	echo 'Version: '"$VERSION"
     	echo 'Build date: '"$BUILDDATE"
-		
+
 		# create and change to package subdir
 		subdir="$PACKAGE"_"$VERSION"_"$BUILDDATE"
-		
+
 		if ! [ -d "$subdir" ]
 		then
 			mkdir "$subdir"
@@ -72,10 +72,10 @@ do
 			#fi
 			test_cmd='singularity --silent exec --pwd '"$PWD"' /cvmfs/neurodesk.ardc.edu.au/containers/'"$PACKAGE"'_'"$VERSION"'_'"$BUILDDATE"'/'"$PACKAGE"'_'"$VERSION"'_'"$BUILDDATE"'.simg /bin/bash -e /neurodesk/app_test.sh'
 			export PWD=`pwd -P`
-			
+
 			echo 'running test script (only showing stderr; to track stdout, run "tail -f '"$PWD"'/'"$LOGFILE"'"):'
 			echo "$test_cmd"
-			
+
 			# execute test script inside $subdir, sending stdout to a file, and stderr to a file and terminal
 			# providing $INPUT as input, in case a new line or other input is required
 			if echo "$INPUT" | ${test_cmd} 2>&1 1>"$LOGFILE" | tee "$ERRLOGFILE"

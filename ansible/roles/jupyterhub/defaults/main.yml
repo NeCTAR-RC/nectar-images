@@ -468,4 +468,3 @@ jupyterhub_authenticator_allow_all: True
 #jupyterhub_simplelocalprocessspawner_ssl_alt_names_include_local: True
 #jupyterhub_simplelocalprocessspawner_start_timeout: 60
 #jupyterhub_simplelocalprocessspawner_term_timeout: 5
-

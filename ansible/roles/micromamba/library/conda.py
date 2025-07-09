@@ -9,7 +9,7 @@ description:
   >
     Manage Python libraries via conda.
     Can install, update, and remove packages.
-author: 
+author:
   - Synthicity
   - Colin Nolan (@colin-nolan)
 notes:
@@ -23,9 +23,9 @@ options:
     description: The specific version of a package to install.
     required: false
   state:
-    description: State in which to leave the Python package. "present" will install a package of the specified version 
-                 if it is not installed (will not upgrade to latest if version is unspecified - will only install  
-                 latest); "latest" will both install and subsequently upgrade a package to the latest version on each 
+    description: State in which to leave the Python package. "present" will install a package of the specified version
+                 if it is not installed (will not upgrade to latest if version is unspecified - will only install
+                 latest); "latest" will both install and subsequently upgrade a package to the latest version on each
                  run; "absent" will uninstall the package if installed.
     required: false
     default: present
@@ -43,18 +43,18 @@ options:
 
 EXAMPLES = """
 - name: install numpy via conda
-  conda: 
+  conda:
     name: numpy
     state: latest
 
 - name: install scipy 0.14 via conda
-  conda: 
-    name: scipy 
+  conda:
+    name: scipy
     version: "0.14"
 
 - name: remove matplotlib from conda
-  conda: 
-    name: matplotlib 
+  conda:
+    name: matplotlib
     state: absent
 """
 

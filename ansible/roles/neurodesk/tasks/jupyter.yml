@@ -39,4 +39,3 @@
 #    path: /etc/jupyter/jupyter_server_config.py
 #    regexp: '^c.FileContentsManager.delete_to_trash = False'
 #    line: 'c.FileContentsManager.always_delete_dir = True'
-

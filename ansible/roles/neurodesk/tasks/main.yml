@@ -53,7 +53,7 @@
       dest: /usr/share/test_neurodesktop.sh
     - src: config/itksnap
       dest: /etc/skel/.config/.itksnap.org
-    # VSCode    
+    # VSCode
     - src: config/vscode/settings.json
       dest: /etc/skel/.config/Code/User/settings.json
 

@@ -11,8 +11,6 @@
   loop:
   - auth-mysql.yml
   - auth-openid.yml
-  when: 
+  when:
   - guacamole_auth is defined
   - guacamole_auth == 'oidc'
-
-

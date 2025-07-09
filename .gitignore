@@ -16,4 +16,5 @@ iso
 builds/
 .facts
 .tags
+.ansible
 __pycache__

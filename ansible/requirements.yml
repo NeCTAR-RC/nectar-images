@@ -1,0 +1,5 @@
+collections:
+  - name: ansible.windows
+  - name: ansible.builtin # This is usually implicitly available, but good to include if explicitly referenced and failing
+  - name: community.general
+  - name: community.postgresql # For postgresql_user

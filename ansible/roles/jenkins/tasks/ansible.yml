@@ -8,4 +8,3 @@
   ansible.builtin.apt:
     name: ansible
     state: present
-

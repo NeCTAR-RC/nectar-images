@@ -384,7 +384,7 @@
     </mousebind>
     <mousebind button="A-Right" action="Drag">
       <action name="Resize"/>
-    </mousebind> 
+    </mousebind>
 
     <mousebind button="A-Middle" action="Press">
       <action name="Lower"/>
@@ -636,7 +636,7 @@
     <!-- Menus -->
     <mousebind button="Middle" action="Press">
       <action name="ShowMenu"><menu>client-list-combined-menu</menu></action>
-    </mousebind> 
+    </mousebind>
     <mousebind button="Right" action="Press">
       <action name="ShowMenu"><menu>root-menu</menu></action>
     </mousebind>
@@ -710,7 +710,7 @@
   #    or desktop
   # when multiple rules match a window, they will all be applied, in the
   # order that they appear in this list
-    # each rule element can be left out or set to 'default' to specify to not 
+    # each rule element can be left out or set to 'default' to specify to not
     # change that attribute of the window
     <decor>yes</decor>
     # enable or disable window decorations

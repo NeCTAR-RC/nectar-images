@@ -31,7 +31,7 @@
           Package: *
           Pin: release o=LP-PPA-mozillateam
           Pin-Priority: 100
-          
+
           Package: firefox
           Pin: version 1:1snap1*
           Pin-Priority: -1

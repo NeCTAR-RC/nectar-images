@@ -29,7 +29,7 @@
 - name: Install Cloudbase-init
   ansible.windows.win_package:
     path: "{{ installer.dest }}"
-    log_path: "{{ ansible_env['SystemDrive'] }}\logs\cloudbase-install.log"
+    log_path: "{{ ansible_env['SystemDrive'] }}\\logs\\cloudbase-install.log"
 
 - name: Set up cloudbase-init unattend configuration
   ansible.windows.win_template:

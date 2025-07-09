@@ -11,7 +11,7 @@ fi
 if [ -f '/usr/share/module.sh' ]; then
         if [ ! -d /cvmfs/neurodesk.ardc.edu.au/neurodesk-modules ]; then
                 MODULEPATH=/neurodesktop-storage/containers/modules/*
-                export MODULEPATH=`echo $MODULEPATH | sed 's/ /:/g'`              
+                export MODULEPATH=`echo $MODULEPATH | sed 's/ /:/g'`
                 export CVMFS_DISABLE=true
         else
                 MODULEPATH=/cvmfs/neurodesk.ardc.edu.au/neurodesk-modules/*
@@ -19,7 +19,7 @@ if [ -f '/usr/share/module.sh' ]; then
         fi
 
         echo 'Neuroimaging tools are accessible via the Neurodesktop Applications menu and running them through the menu will provide help and setup instructions. If you are familiar with the tools and you want to combine multiple tools in one script, you can run "ml av" to see which tools are available and then use "ml <tool>/<version>" to load them. '
-        
+
         # check if $CVMFS_DISABLE is set to true
         if [[ "$CVMFS_DISABLE" == "true" ]]; then
                 echo "CVMFS is disabled. Using local containers stored in $MODULEPATH"
@@ -50,7 +50,7 @@ export PATH=$PATH:/home/${NB_USER}/.local/bin:/opt/conda/bin:/opt/conda/condabin
 # fi
 # Test this in jupyter terminal, desktop terminal and a notebook:
 # !echo $neurodesk_singularity_opts
-# test if the workaround is still needed: ml fsl; fslmaths or 
+# test if the workaround is still needed: ml fsl; fslmaths or
 # import lmod
 # await lmod.load('fsl/6.0.4')
 # await lmod.list()

@@ -46,7 +46,7 @@ if [ -f $CONFIG_FILE ]; then
     . "$CONFIG_FILE"
 else
     echo "Config file $CONFIG_FILE not found."
-fi 
+fi
 
 read_packer_var() {
     jq -r ".builders[0].${1}" $PACKER_WORKING_FILE

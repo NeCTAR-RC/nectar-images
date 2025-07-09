@@ -21,7 +21,7 @@
   args:
     chdir: "/tmp/guacamole-server-{{ guacamole_version }}"
     creates: "{{ guacamole_install_prefix }}/sbin/guacd"
-  with_items: 
+  with_items:
     - "./configure --prefix={{ guacamole_install_prefix }} --with-systemd-dir=/etc/systemd/system"
     - "make -j {{ ansible_processor_vcpus }}"
     - make install

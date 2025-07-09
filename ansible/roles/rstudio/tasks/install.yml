@@ -34,4 +34,3 @@
   file:
     path: "/tmp/rstudio-{{ rstudio_version }}-amd64.deb"
     state: absent
-

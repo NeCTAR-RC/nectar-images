@@ -5,7 +5,7 @@
 
 # Copy homedirectory files if they don't exist yet
 # Check for missing conda-readme.md in persisting homedir
-if [ ! -f "${HOME}/conda-readme.md" ] 
+if [ ! -f "${HOME}/conda-readme.md" ]
 then
     mkdir -p ${HOME}
     sudo cp -rpn /tmp/${NB_USER} $(dirname "${HOME}")
