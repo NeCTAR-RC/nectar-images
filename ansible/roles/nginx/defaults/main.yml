@@ -25,7 +25,8 @@ nginx_keepalive_requests: "100"
 
 nginx_client_max_body_size: "64m"
 
-nginx_server_names_hash_bucket_size: "64"
+# allow for long fqdns (> 47 chars)
+nginx_server_names_hash_bucket_size: "128"
 
 nginx_proxy_cache_path: ""
 
