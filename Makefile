@@ -150,13 +150,8 @@ init: # Installs and upgrades Packer Plugins
 ifneq (,$(findstring windows,$(packer_var_target)))
 # Get a local writable copy of the UEFI OVMF VARS if it doesn't exist already
 ifeq (,$(wildcard ./builds/build_files/efivars.fd))
-    # Shell script to check for the first available file
-    @for path in /usr/share/OVMF/OVMF_VARS_4M.fd /usr/share/OVMF/OVMF_VARS.fd /usr/share/edk2/x64/OVMF_VARS.4m.fd; do \
-        if [ -f $$path ]; then \
-            cp $$path ./builds/build_files/efivars.fd; \
-            break; \
-        fi; \
-    done
+	echo "Copying OVMF EFI vars file..."
+	cp -v /usr/share/OVMF/OVMF_VARS_4M.fd ./builds/build_files/efivars.fd
 	chmod 0644 ./builds/build_files/efivars.fd
 endif
 endif
@@ -164,7 +159,6 @@ endif
 ifeq (,$(wildcard ./builds/build_files/virtio-win.iso))
 	echo "Downloading virtio-win.iso..."
 	curl -s -L -o ./builds/build_files/virtio-win.iso https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso
-endif
 endif
 	# Ensure mode 0600 for packer-ssh-key
 	chmod 0600 ./packer/packer-ssh-key
