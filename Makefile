@@ -150,8 +150,15 @@ init: # Installs and upgrades Packer Plugins
 ifneq (,$(findstring windows,$(packer_var_target)))
 # Get a local writable copy of the UEFI OVMF VARS if it doesn't exist already
 ifeq (,$(wildcard ./builds/build_files/efivars.fd))
-	cp /usr/share/OVMF/OVMF_VARS.fd ./builds/build_files/efivars.fd
+    # Shell script to check for the first available file
+    @for path in /usr/share/OVMF/OVMF_VARS_4M.fd /usr/share/OVMF/OVMF_VARS.fd /usr/share/edk2/x64/OVMF_VARS.4m.fd; do \
+        if [ -f $$path ]; then \
+            cp $$path ./builds/build_files/efivars.fd; \
+            break; \
+        fi; \
+    done
 	chmod 0644 ./builds/build_files/efivars.fd
+endif
 endif
 # Download VirtIO Win ISO if it doesn't exist already
 ifeq (,$(wildcard ./builds/build_files/virtio-win.iso))
