@@ -48,8 +48,8 @@ neurodesk_extra_packages:
   - lsb-release
   - davfs2
   - python3-setuptools
-# Install base image dependencies
-# https://github.com/NeuroDesk/neurodesktop/blob/main/Dockerfile#L13
+  # Install base image dependencies
+  # https://github.com/neurodesk/neurodesktop/blob/main/Dockerfile#L13
   - software-properties-common
   - openjdk-21-jre
   - build-essential
@@ -66,8 +66,8 @@ neurodesk_extra_packages:
   - gpg
   - gpg-agent
   - apt-transport-https
-# Install Tools and Libs
-# https://github.com/NeuroDesk/neurodesktop/blob/main/Dockerfile#L121
+  # Install Tools and Libs
+  # https://github.com/neurodesk/neurodesktop/blob/main/Dockerfile#L121
   - aria2
   - bc
   - davfs2
@@ -119,3 +119,4 @@ neurodesk_extra_packages:
   - xdg-utils
   - yarn
   - zip
+  - tcsh

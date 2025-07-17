@@ -9,7 +9,7 @@
 # -r, --rdp  add RDP connection to Guacamole
 # -s, --ssh  add SSH connection to Guacamole
 # -h, --help      print out this help
-# For more information see: https://github.com/NeuroDesk/neurodesktop"
+# For more information see: https://github.com/neurodesk/neurodesktop"
 # }
 
 open_guacmole_conf () {

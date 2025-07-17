@@ -1,11 +1,12 @@
 ---
 - name: Clone NeuroDesk repository
-  git:
-    repo: https://github.com/NeuroDesk/neurocommand.git
+  ansible.builtin.git:
+    repo: https://github.com/neurodesk/neurocommand.git
     dest: /neurocommand
+    version: main
 
 - name: Install NeuroCommand
-  shell: "{{ item }}"
+  ansible.builtin.command: "{{ item }}"
   args:
     chdir: /neurocommand
     creates: /usr/share/applications/neurodesk
@@ -14,23 +15,24 @@
     - ./install.sh
 
 - name: Prepare a container directory for users developing their own containers and testing them before release
-  file:
+  ansible.builtin.file:
     path: /neurocommand/local/containers
     state: directory
-    mode: '0777'
+    mode: "0777"
 
 - name: Copy Neurocommand update script
-  copy:
+  ansible.builtin.copy:
     src: neurocommand-update.sh
     dest: /usr/local/sbin/neurocommand-update.sh
-    mode: '0755'
+    mode: "0755"
 
 - name: Copy Neurocommand update systemd unit file
-  copy:
+  ansible.builtin.copy:
     src: neurocommand-update.service
     dest: /etc/systemd/system/neurocommand-update.service
+    mode: "0644"
 
 - name: Enable Neurocommand update service
-  systemd:
+  ansible.builtin.systemd:
     name: neurocommand-update
-    enabled: yes
+    enabled: true

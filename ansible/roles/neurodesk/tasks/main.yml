@@ -1,21 +1,21 @@
 ---
 - name: Include OS-specific variables
-  include_vars: "{{ item }}"
+  ansible.builtin.include_vars: "{{ item }}"
   with_first_found:
     - "{{ ansible_distribution | lower }}.yml"
     - "{{ ansible_os_family | lower }}.yml"
     - "default.yml"
 
-- name: install extra packages
-  package:
+- name: Install extra packages
+  ansible.builtin.package:
     name: "{{ neurodesk_extra_packages }}"
     state: present
 
 - name: Create directories
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    mode: '0755'
+    mode: "0755"
   with_items:
     - /data
     - /opt/neurodesktop
@@ -26,9 +26,10 @@
     - /etc/skel/.config/Code/User
 
 - name: Copy config files
-  copy:
+  ansible.builtin.copy:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
+    mode: "0644"
   with_items:
     - src: config/lxde/background.png
       dest: /usr/share/lxde/wallpapers/desktop_wallpaper.png
@@ -42,9 +43,11 @@
       dest: /etc/skel/.config/libfm
     - src: config/lxde/rc.xml
       dest: /etc/xdg/openbox/LXDE/rc.xml
-    # bashrc
-    - src: config/lxde/.bashrc
-      dest: /etc/skel/.bashrc
+    # bashrc - breaks lots of things, so Andy disabled
+    # - src: config/lxde/.bashrc
+    #   dest: /etc/skel/.bashrc
+    - src: config/neurodesktop.sh
+      dest: /etc/profile.d/neurodesktop.sh
     # mineapps
     - src: config/lxde/mimeapps.list
       dest: /etc/skel/.config/mimeapps.list
@@ -58,53 +61,70 @@
       dest: /etc/skel/.config/Code/User/settings.json
 
 - name: Copy module system
-  copy:
+  ansible.builtin.copy:
     src: config/lmod/module.sh
     dest: /usr/share/
+    mode: "0755"
 
 - name: Create storage directory
-  file:
+  ansible.builtin.file:
     path: /neurodesktop-storage
     state: directory
     mode: "0777"
 
 - name: Create storage directory
-  file:
+  ansible.builtin.file:
     path: /etc/skel/Desktop
     state: directory
+    mode: "0755"
 
 - name: Create a symbolic link to upload directory (has to be forced because home does not yet exist at buildtime)
-  file:
+  ansible.builtin.file:
     src: /neurodesktop-storage
     dest: /etc/skel/Desktop/neurodesktop-storage
     state: link
 
 - name: Create a symbolic link
-  file:
+  ansible.builtin.file:
     src: /home/vdiuser/thinclient_drives/GUACFS
     dest: /etc/skel/Desktop/transfer
     state: link
     force: true
+    follow: false
 
-#TODO(andybotting): Not needed outside a container?
+# TODO(andybotting): Not needed outside a container?
 # Allow the root user to access the sshfs mount
-# https://github.com/NeuroDesk/neurodesk/issues/47
+# https://github.com/neurodesk/neurodesk/issues/47
 - name: Ensure SELinux is set to enforcing mode
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/fuse.conf
-    regexp: '#user_allow_other'
-    line: 'user_allow_other'
+    regexp: "#user_allow_other"
+    line: "user_allow_other"
 
-- include_tasks: globus.yml
-- include_tasks: cvmfs.yml
-- include_tasks: apptainer.yml
-- include_tasks: julia.yml
-- include_tasks: conda.yml
-- include_tasks: jupyter.yml
-- include_tasks: neurocommand.yml
+- name: Include globus
+  ansible.builtin.include_tasks: globus.yml
+
+- name: Include CVMFS
+  ansible.builtin.include_tasks: cvmfs.yml
+
+- name: Include Apptainer
+  ansible.builtin.include_tasks: apptainer.yml
+
+- name: Include Julia
+  ansible.builtin.include_tasks: julia.yml
+
+- name: Include Conda
+  ansible.builtin.include_tasks: conda.yml
+
+- name: Include Jupyter
+  ansible.builtin.include_tasks: jupyter.yml
+
+- name: Include NeuroCommand
+  ansible.builtin.include_tasks: neurocommand.yml
 
 - name: Clone NeuroDesk example-notebooks
-  git:
-    repo: https://github.com/NeuroDesk/example-notebooks
+  ansible.builtin.git:
+    repo: https://github.com/neurodesk/example-notebooks
     dest: /etc/skel/example-notebooks
+    version: main
     depth: 1

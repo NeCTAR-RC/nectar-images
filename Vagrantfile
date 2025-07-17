@@ -574,13 +574,15 @@ Vagrant.configure("2") do |config|
     c.vm.box = "cloud-image/ubuntu-24.04"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
+      ansible.extra_vars = { ansible_python_interpreter: "/usr/bin/python3",
+                             nectar_test_build: true,
                              nectar_image_name: "Neurodesktop" }
       ansible.playbook = "ansible/playbook-bumblebee-neurodesk.yml"
       ansible.become = true
+      ansible.verbose = true
     end
     c.vm.provision "shell" do |shell|
-      shell.inline = "cp -rT /etc/skel /home/vagrant"
+      shell.inline = "cp -rT /etc/skel /home/vagrant || true"
       shell.privileged = false
     end
   config.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'

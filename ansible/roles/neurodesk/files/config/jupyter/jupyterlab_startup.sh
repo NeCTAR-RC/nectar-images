@@ -134,5 +134,5 @@ mamba init bash
 #     cd /home/${NB_USER}/example-notebooks
 #     git pull
 # else
-#     git clone https://github.com/NeuroDesk/example-notebooks /home/${NB_USER}/example-notebooks
+#     git clone https://github.com/neurodesk/example-notebooks /home/${NB_USER}/example-notebooks
 # fi

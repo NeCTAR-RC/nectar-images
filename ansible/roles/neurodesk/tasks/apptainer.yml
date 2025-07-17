@@ -6,7 +6,7 @@
 
 - name: Add Apptainer PPA
   ansible.builtin.apt_repository:
-    repo: 'ppa:apptainer/ppa'
+    repo: "ppa:apptainer/ppa"
 
 - name: Install Apptainer
   ansible.builtin.apt:
@@ -14,4 +14,4 @@
       - apptainer
       - apptainer-suid
     state: present
-    update_cache: yes
+    update_cache: true

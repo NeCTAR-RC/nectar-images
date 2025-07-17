@@ -6,19 +6,19 @@
   with_items: "{{ neurodesk_python_packages }}"
 
 - name: Create Jupyter directories
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    mode: '0755'
+    mode: "0755"
   with_items:
     - /usr/local/bin/start-notebook.d
     - /usr/local/bin/before-notebook.d
 
 - name: Copy Jupyter scripts
-  copy:
+  ansible.builtin.copy:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
-    mode: '0755'
+    mode: "0755"
   with_items:
     - src: config/jupyter/start_notebook.sh
       dest: /usr/local/bin/start-notebook.d/
@@ -30,12 +30,3 @@
       dest: /opt/neurodesktop/jupyterlab_startup.sh
     - src: config/jupyter/environment_variables.sh
       dest: /opt/neurodesktop/environment_variables.sh
-
-# Not found the right package to install to get this config file
-## Enable deletion of non-empty-directories in JupyterLab
-## https://github.com/jupyter/notebook/issues/4916
-#- name: Update jupyter_server_config.py to always delete directory
-#  lineinfile:
-#    path: /etc/jupyter/jupyter_server_config.py
-#    regexp: '^c.FileContentsManager.delete_to_trash = False'
-#    line: 'c.FileContentsManager.always_delete_dir = True'

@@ -1,8 +1,8 @@
 ---
 firefox_prefs:
-  browser.aboutwelcome.enabled: 'true'
+  browser.aboutwelcome.enabled: "true"
   browser.startup.homepage: '"https://www.neurodesk.org"'
-  browser.startup.firstrunSkipsHomepage: 'true'
+  browser.startup.firstrunSkipsHomepage: "true"
   startup.homepage_welcome_url: '"https://www.neurodesk.org"'
 
 # Settings from the base image that Neurodesk uses
@@ -17,7 +17,7 @@ micromamba_packages:
 
 # This is constructed from
 # https://github.com/jupyter/docker-stacks/blob/main/images/docker-stacks-foundation/initial-condarc
-# https://github.com/NeuroDesk/neurodesktop/blob/main/Dockerfile#L198
+# https://github.com/neurodesk/neurodesktop/blob/main/Dockerfile#L198
 micromamba_root_prefix_condarc:
   auto_update_conda: false
   show_channel_urls: true
@@ -27,10 +27,13 @@ micromamba_root_prefix_condarc:
     - ~/conda-environments
 
 # https://julialang.org/downloads - latest LTS release
-neurodesk_julia_version: 1.10.8
+neurodesk_julia_version: 1.10.10
+neurodesk_julia_major_version: "{{ neurodesk_julia_version | regex_replace('^([0-9])\\.([0-9]*).*', '\\1.\\2') }}"
+#neurodesk_julia_download_url: "https://julialang-s3.julialang.org/bin/linux/x64//{{ neurodesk_julia_major_version }}/julia-{{ neurodesk_julia_version }}-linux-x86_64.tar.gz"
+neurodesk_julia_download_url: "https://julialang-s3.julialang.org/bin/linux/x64/1.10/julia-1.10.10-linux-x86_64.tar.gz"
 
 # Mamba install of packages from these Docker files
-# https://github.com/NeuroDesk/neurodesktop/blob/main/Dockerfile#L200
+# https://github.com/neurodesk/neurodesktop/blob/main/Dockerfile#L200
 # https://github.com/jupyter/docker-stacks/blob/main/images/docker-stacks-foundation/Dockerfile#L122
 # https://github.com/jupyter/docker-stacks/blob/main/images/base-notebook/Dockerfile#L41
 neurodesk_python_packages:
@@ -52,7 +55,7 @@ neurodesk_python_packages:
   - ipywidgets
   - ipyvolume
   - jupyterlab_widgets
-#  - jupyterhub-singleuser - only a metapackage for jupyterlab
+  #  - jupyterhub-singleuser - only a metapackage for jupyterlab
   - jupyterlab
   - jupyter-server
   - nbclassic
