@@ -8,7 +8,7 @@ locals {
   qemuargs = var.qemuargs == null ? (
     var.qemu_efi_boot == true && var.is_windows ? [
       ["-drive", "if=pflash,format=raw,readonly=on,file=${var.qemu_efi_firmware_code}"],
-      ["-drive", "if=pflash,format=raw,file=${path.cwd}/builds/build_files/efivars.fd"],
+      ["-drive", "if=pflash,format=raw,file=${path.cwd}/builds/build_files/${local.build_name}-efivars.fd"],
       ["-drive", "file=${path.cwd}/builds/build_files/virtio-win.iso,media=cdrom,index=3"],
       ["-drive", "file=${var.iso_url},media=cdrom,index=2"],
       ["-drive", "file=${local.output_directory}/{{ .Name }},if=virtio,cache=writeback,discard=ignore,format=${var.qemu_format},index=1"],

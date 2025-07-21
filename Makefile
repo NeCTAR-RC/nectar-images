@@ -20,6 +20,11 @@ define missing_target
 	$(error Missing target. Specify with `target=<provider>`)
 endef
 
+# convenience function for a missing vars file
+define missing_target_vars
+	$(error Packer target not found. Ensure vars file exists.)
+endef
+
 .SILENT .PHONY: clear
 clear:
 	clear
@@ -111,7 +116,14 @@ packer_test_build =
 endif
 
 # expose build target to Packer
+ifdef target
 packer_var_target = $(target)
+packer_target_file = ./vars/$(target).pkrvars.hcl
+else
+packer_var_target =
+packer_target_file =
+windows_iso_file =
+endif
 
 ifdef var-file
 packer_var_file = -var-file=$(var-file)
@@ -119,10 +131,18 @@ else
 packer_var_file =
 endif
 
+# Set Windows ISO filename variable
+ifneq ($(findstring windows,$(packer_var_target)),)
+$(if $(target),,$(call missing_target))
+$(if $(wildcard $(packer_target_file)),,$(call missing_target_vars))
+windows_iso_file := $(shell sed -n 's/iso_url.*=\s*"\([^"]*\)".*/\1/p' $(packer_target_file))
+endif
+
 # see https://www.packer.io/docs/commands/build
 .PHONY: build
 build: # Builds an Image with Packer
 	$(if $(target),,$(call missing_target))
+	$(if $(wildcard $(packer_target_file)),,$(call missing_target_vars))
 	rm -frv ./builds/build_files/packer-$(packer_var_target); \
 	export PACKER_LOG=$(packer_verbose); \
 	packer build $(packer_debug) \
@@ -132,7 +152,7 @@ build: # Builds an Image with Packer
 			$(packer_test_build) \
 			$(packer_only) \
 			$(packer_var_file) \
-			-var-file="./vars/$(packer_var_target).pkrvars.hcl" \
+			-var-file=$(packer_target_file) \
 			./packer
 
 .PHONY: test
@@ -144,21 +164,29 @@ test: # Builds an Image with Packer
 
 # see https://www.packer.io/docs/commands/init
 .PHONY: init
-init: # Installs and upgrades Packer Plugins
-	# Download virtio-win ISO for Windows builds
-	$(if $(target),,$(call missing_target))
-ifneq (,$(findstring windows,$(packer_var_target)))
-# Get a local writable copy of the UEFI OVMF VARS if it doesn't exist already
-ifeq (,$(wildcard ./builds/build_files/efivars.fd))
-	echo "Copying OVMF EFI vars file..."
-	cp -v /usr/share/OVMF/OVMF_VARS_4M.fd ./builds/build_files/efivars.fd
-	chmod 0644 ./builds/build_files/efivars.fd
-endif
-endif
-# Download VirtIO Win ISO if it doesn't exist already
-ifeq (,$(wildcard ./builds/build_files/virtio-win.iso))
-	echo "Downloading virtio-win.iso..."
-	curl -s -L -o ./builds/build_files/virtio-win.iso https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso
+init:                  # Installs and upgrades Packer Plugins
+	$(if $(packer_var_target),,$(call missing_target))
+	$(if $(wildcard $(packer_target_file)),,$(call missing_target_vars))
+
+ifneq ($(findstring windows,$(packer_var_target)),)
+	# Get a local writable copy of the UEFI OVMF VARS if it doesn't exist already
+	if [ ! -f ./builds/build_files/$(packer_var_target)-efivars.fd ]; then \
+	  echo "Copying OVMF EFI vars file..."; \
+	  cp /usr/share/OVMF/OVMF_VARS_4M.fd ./builds/build_files/$(packer_var_target)-efivars.fd; \
+	  chmod 0644 ./builds/build_files/$(packer_var_target)-efivars.fd; \
+	fi
+	# Download Windows ISO if it doesn't exist already
+	if [ ! -f ./builds/build_files/$(windows_iso_file) ]; then \
+	  echo "Downloading Windows ISO $(windows_iso_file)..."; \
+	  openstack object save iso $(windows_iso_file) \
+	    --file ./builds/build_files/$(windows_iso_file); \
+	fi
+	# Download VirtIO Win ISO if it doesn't exist already
+	if [ ! -f ./builds/build_files/virtio-win.iso ]; then \
+	  echo "Downloading VirtIO Win ISO..."; \
+	  openstack object save iso virtio-win-0.1.271.iso \
+	    --file ./builds/build_files/virtio-win.iso; \
+	fi
 endif
 	# Ensure mode 0600 for packer-ssh-key
 	chmod 0600 ./packer/packer-ssh-key
@@ -169,9 +197,10 @@ endif
 .PHONY: lint
 lint: # Formats and validates Packer Template
 	$(if $(target),,$(call missing_target))
+	$(if $(wildcard $(packer_target_file)),,$(call missing_target_vars))
 	packer validate $(packer_only) \
 			$(packer_var_file) \
-			-var-file="./vars/$(packer_var_target).pkrvars.hcl" \
+			-var-file=$(packer_target_file) \
 			./packer
 
 .PHONY: vagrant-init
