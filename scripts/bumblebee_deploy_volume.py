@@ -51,6 +51,7 @@ def parse_date(ds):
 
 
 def do_stuff(args):
+    error = False
     conn = openstack.connect(cloud='envvars')
     gc = glance_client.Client('2', session=conn.session)
     cc = cinder_client.Client('3', session=conn.session)
@@ -103,7 +104,10 @@ def do_stuff(args):
                         LOG.info('Created volume %s', vol.id)
                     else:
                         LOG.error('Error creating volume: %s', vol.id)
-                        raise SystemExit(1)
+                        error = True
+
+    if error:
+        raise SystemExit(1)
 
 
 def main():
