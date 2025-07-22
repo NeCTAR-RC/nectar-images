@@ -135,7 +135,8 @@ endif
 ifneq ($(findstring windows,$(packer_var_target)),)
 $(if $(target),,$(call missing_target))
 $(if $(wildcard $(packer_target_file)),,$(call missing_target_vars))
-windows_iso_file := $(shell sed -n 's/iso_url.*=\s*"\([^"]*\)".*/\1/p' $(packer_target_file))
+# Get filename part only from iso_url field of the vars file
+windows_iso_file := $(shell sed -n 's|.*iso_url.*=\s*".*/\([^"/]*\)".*|\1|p' $(packer_target_file))
 endif
 
 # see https://www.packer.io/docs/commands/build
