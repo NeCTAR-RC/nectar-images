@@ -1,5 +1,5 @@
 ---
-nectar_image_name: Neurodesk
+nectar_image_name: Neurodesktop
 organisation_name: Bumblebee
 locale: en_AU.UTF-8
 
@@ -22,3 +22,14 @@ micromamba_packages:
   - conda
   - mamba
   - python=3.12
+
+# This is constructed from
+# https://github.com/jupyter/docker-stacks/blob/main/images/docker-stacks-foundation/initial-condarc
+# https://github.com/neurodesk/neurodesktop/blob/main/Dockerfile#L198
+micromamba_root_prefix_condarc:
+  auto_update_conda: false
+  show_channel_urls: true
+  channels:
+    - conda-forge
+  envs_dirs:
+    - ~/conda-environments

@@ -1,31 +1,4 @@
 ---
-firefox_prefs:
-  browser.aboutwelcome.enabled: "true"
-  browser.startup.homepage: '"https://www.neurodesk.org"'
-  browser.startup.firstrunSkipsHomepage: "true"
-  startup.homepage_welcome_url: '"https://www.neurodesk.org"'
-
-# Settings from the base image that Neurodesk uses
-# https://github.com/jupyter/docker-stacks/blob/main/images/docker-stacks-foundation/Dockerfile#L122
-micromamba_dest: /tmp/micromamba
-micromamba_root_prefix: /opt/conda
-micromamba_packages:
-  - jupyter_core
-  - conda
-  - mamba
-  - python=3.12
-
-# This is constructed from
-# https://github.com/jupyter/docker-stacks/blob/main/images/docker-stacks-foundation/initial-condarc
-# https://github.com/neurodesk/neurodesktop/blob/main/Dockerfile#L198
-micromamba_root_prefix_condarc:
-  auto_update_conda: false
-  show_channel_urls: true
-  channels:
-    - conda-forge
-  envs_dirs:
-    - ~/conda-environments
-
 # https://julialang.org/downloads - latest LTS release
 neurodesk_julia_version: 1.10.10
 neurodesk_julia_major_version: "{{ neurodesk_julia_version | regex_replace('^([0-9])\\.([0-9]*).*', '\\1.\\2') }}"

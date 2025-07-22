@@ -5,7 +5,7 @@
 
   vars_files:
     - vars/main.yml
-    - vars/neurodesk.yml
+    - vars/bumblebee-neurodesktop.yml
 
   roles:
     - image-name
