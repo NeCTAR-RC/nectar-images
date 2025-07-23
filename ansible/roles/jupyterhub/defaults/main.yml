@@ -43,7 +43,6 @@ jupyterhub_config_file: /etc/jupyterhub/jupyterhub_config.py
 jupyterhub_base_url: '/jupyterhub'
 jupyterhub_bind_url: 'http://127.0.0.1:8000'
 jupyterhub_spawner_class: 'systemdspawner.SystemdSpawner'
-jupyterhub_systemdspawner_readwrite_paths: "['/home/{USERNAME}']"
 jupyterhub_authenticator_allow_all: True
 
 
