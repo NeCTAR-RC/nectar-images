@@ -179,25 +179,19 @@ cleanup_on_exit() {
 # Trap for cleanup on script exit
 trap 'cleanup_on_exit' EXIT
 
-
-# Discover user account from the image properties
-if [[ -z $USER_ACCOUNT ]]; then
-    USER_ACCOUNT=$(openstack image show -c properties -f value $IMAGE_ID | grep -oP "'default_user': *'\K[^']*")
-fi
-info "Using user account: '$USER_ACCOUNT'"
-
-
-
+# Get flavor disk size
+FLAVOR_DISK_SIZE=$(openstack flavor show $OS_FLAVOR -c disk -f value)
+info "Flavor disk size is $FLAVOR_DISK_SIZE GiB"
 
 # Get disk image size, and convert to GB
 DISK_BYTES=$(openstack image show -c virtual_size -f value $IMAGE_ID)
-DISK_SIZE=$(($DISK_BYTES / 1000000000))
+DISK_SIZE=$(($DISK_BYTES / 1073741824))
 
-info "Disk image size is $DISK_SIZE"
+info "Image disk size is $DISK_SIZE GiB"
 
-# If the size is > 32, we need to boot from volume
+# If the size is > 30, we need to boot from volume
 BOOT_FROM_VOLUME=""
-if [ "$DISK_SIZE" -gt 32 ]; then
+if [ "$DISK_SIZE" -gt "$FLAVOR_DISK_SIZE" ]; then
     info "Using boot from volume"
     BOOT_FROM_VOLUME="--boot-from-volume $DISK_SIZE"
 fi
