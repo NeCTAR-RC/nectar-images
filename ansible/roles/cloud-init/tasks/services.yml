@@ -2,9 +2,9 @@
 - name: Ensure cloud-init set to start on boot
   service:
     name: "{{ item }}"
-    enabled: "{% if nectar_test_build | default(false) %}no{% else %}yes{% endif %}"
-  with_items:
+    enabled: "{{ not (nectar_test_build | default(false)) }}"
+  loop:
     - cloud-config
     - cloud-init-local
-    - cloud-init
     - cloud-final
+    - "{{ 'cloud-init-main' if (cloudinit_version.stdout is version_compare('24.2', '>')) else 'cloud-init' }}"
