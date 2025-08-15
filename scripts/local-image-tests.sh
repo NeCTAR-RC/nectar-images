@@ -233,14 +233,17 @@ if [[ -d $TAG_DIR ]]; then
     done
 fi
 
+# Get flavor disk size
+FLAVOR_DISK_SIZE=$(openstack flavor show $OS_FLAVOR -c disk -f value)
+info "Flavor disk size is $FLAVOR_DISK_SIZE GiB"
+
 # Get disk image size, and convert to GB
-DISK_SIZE=$(qemu-img info --output=json "$IMAGE_FILE" | jq '.["virtual-size"] / 1000000000 | floor')
+DISK_SIZE=$(qemu-img info --output=json "$IMAGE_FILE" | jq '.["virtual-size"] / 1073741824 | floor')
+info "Disk image size is $DISK_SIZE GiB"
 
-info "Disk image size is $DISK_SIZE"
-
-# If the size is > 30, we need to boot from volume
+# If the size is > flavor disk, we need to boot from volume
 BOOT_FROM_VOLUME=""
-if [ "$DISK_SIZE" -gt 32 ]; then
+if [ "$DISK_SIZE" -gt "$FLAVOR_DISK_SIZE" ]; then
     info "Using boot from volume"
     BOOT_FROM_VOLUME="--boot-from-volume $DISK_SIZE"
 fi
