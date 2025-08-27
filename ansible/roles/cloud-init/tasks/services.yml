@@ -1,4 +1,6 @@
 ---
+# Cloud-init upstream changed cloud-init to cloud-init-main in v24.3+
+# so try both and ignore any failures
 - name: Ensure cloud-init set to start on boot
   service:
     name: "{{ item }}"
@@ -6,5 +8,7 @@
   loop:
     - cloud-config
     - cloud-init-local
+    - cloud-init
+    - cloud-init-main
     - cloud-final
-    - "{{ 'cloud-init-main' if (cloudinit_version.stdout is version_compare('24.2', '>')) else 'cloud-init' }}"
+  ignore_errors: false
