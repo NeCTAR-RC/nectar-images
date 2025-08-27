@@ -11,4 +11,4 @@
     - cloud-init
     - cloud-init-main
     - cloud-final
-  ignore_errors: false
+  ignore_errors: true
