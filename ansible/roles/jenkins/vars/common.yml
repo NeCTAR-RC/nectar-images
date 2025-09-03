@@ -50,3 +50,5 @@ common_packages:
   - mtools
   - quilt
   - texinfo
+  - libgpgme-dev
+  - golang-go
