@@ -179,6 +179,8 @@ build {
 
     post-processor "shell-local" {
       inline = [
+        "echo 'Cleaning up any left-over volumes...'"
+        "openstack volume list --status available -f value -c ID -c Name | awk '/packer_/ {print $1}' | xargs -r openstack volume delete"
         "IMAGE_ID=$(jq -r '.builds[-1].artifact_id' ${local.output_directory}/manifest.json)",
         "echo 'Downloading image...'",
         "openstack image save --file ${local.output_directory}/image $IMAGE_ID",
