@@ -71,6 +71,7 @@ USER_ACCOUNT=
 
 # Globals
 INSTANCE_ID=
+VOLUME_ID=
 
 # Args
 while getopts ":hdi:n:u:" option; do
@@ -148,6 +149,8 @@ delete_instance() {
         openstack console log show $1
         openstack server delete $1
         INSTANCE_ID=
+        [[ -n "$VOLUME_ID" ]] && openstack volume delete $VOLUME_ID
+        VOLUME_ID=
     else
         # Running locally, so can prompt user
         if [[ $DEBUG ]]; then
@@ -165,6 +168,8 @@ delete_instance() {
             debug "openstack server delete $1"
             openstack server delete $1
             INSTANCE_ID=
+            [[ -n "$VOLUME_ID" ]] && openstack volume delete $VOLUME_ID
+            VOLUME_ID=
         else
             warn "Not deleting instance $1..."
         fi
@@ -205,6 +210,10 @@ if [[ ${INSTANCE_ID//-/} =~ ^[[:xdigit:]]{32}$ ]]; then
     info "Found instance ID: '$INSTANCE_ID'"
 else
     fatal "Instance ID not found! $INSTANCE_ID"
+fi
+
+if [[ -n "$BOOT_FROM_VOLUME" ]]; then
+    VOLUME_ID=$(openstack server show "$INSTANCE_ID" -f json | jq -r '.os-extended-volumes:volumes_attached[].id')
 fi
 
 sleeptime=10

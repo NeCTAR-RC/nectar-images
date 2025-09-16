@@ -74,6 +74,7 @@ USER_ACCOUNT=
 
 # Globals
 INSTANCE_ID=
+VOLUME_ID=
 IMAGE_ID=
 
 
@@ -196,6 +197,8 @@ delete_instance() {
         debug "openstack server delete $1"
         openstack server delete $1
         INSTANCE_ID=
+        [[ -n "$VOLUME_ID" ]] && openstack volume delete $VOLUME_ID
+        VOLUME_ID=
     else
         warn "Not deleting instance $1..."
     fi
@@ -257,6 +260,10 @@ if [[ -z $INSTANCE_ID ]]; then
     fatal "Instance ID not found!"
 else
     info "Found instance ID: '$INSTANCE_ID'"
+fi
+
+if [[ -n "$BOOT_FROM_VOLUME" ]]; then
+    VOLUME_ID=$(openstack server show "$INSTANCE_ID" -f json | jq -r '.os-extended-volumes:volumes_attached[].id')
 fi
 
 set +e
