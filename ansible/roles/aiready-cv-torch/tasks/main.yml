@@ -39,31 +39,10 @@
   loop: "{{ cv_packages }}"
   when: anaconda_pip_exists.stat.exists
 
-- name: Create directory structure
-  file:
-    path: "{{ item }}"
-    state: directory
-    mode: '0755'
-  loop:
-    - "{{ cv_home }}"
-    - "{{ cv_home }}/Notebooks"
-
-- name: Copy requirements file
-  copy:
-    src: requirements.txt
-    dest: "{{ cv_home }}/requirements.txt"
-    mode: '0644'
-
 - name: Copy example notebooks to JupyterLab directory
   copy:
     src: "{{ item }}"
-    dest: "{{ cv_home }}/Notebooks"
+    dest: "{{ examples_directory }}"
     mode: '0644'
   with_fileglob:
     - "notebooks/*.ipynb"
-
-- name: Template environment setup script
-  template:
-    src: environment_setup.sh.j2
-    dest: "{{ cv_home }}/setup_env.sh"
-    mode: '0755'

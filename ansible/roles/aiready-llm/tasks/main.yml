@@ -9,7 +9,7 @@
   become: yes
   copy:
     src: "{{ item }}"
-    dest: "/etc/skel/examples/"
+    dest: "{{ examples_directory }}"
     mode: '0644'
   with_fileglob:
     - "notebooks/*.ipynb"

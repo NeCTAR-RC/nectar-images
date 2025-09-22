@@ -1,5 +1,7 @@
 ---
 # Save these vars for setting as image properties
+examples_directory: /etc/skel/examples/
+
 image_properties:
   hw_qemu_guest_agent: 'yes'
 

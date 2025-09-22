@@ -16,3 +16,9 @@
     src: nginx/pam
     dest: /etc/pam.d/nginx
     mode: 0644
+
+- name: Create examples directory structure
+  ansible.builtin.file:
+    path: "{{ examples_directory }}"
+    state: directory
+    mode: "0755"

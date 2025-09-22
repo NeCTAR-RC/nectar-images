@@ -1,7 +1,5 @@
 ---
 # Default variables for the deep learning role
-dl_home: "/etc/skel/examples/"
-
 python_version: "3.11"
 pytorch_version: "2.4.0"
 cuda_version: "12.4" # Adjust based on your GPU/NVIDIA driver compatibility

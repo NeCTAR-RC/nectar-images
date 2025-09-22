@@ -1,7 +1,5 @@
 ---
 # Default variables for the deep learning role
-cv_home: "/etc/skel/examples/"
-
 python_version: "3.11"
 pytorch_version: "2.4.0"
 torchvision_version: "0.19.0"
