@@ -33,6 +33,7 @@
       - "apache-airflow[postgres,spark,databricks]=={{ airflow_version }}"
       - psycopg2-binary
       - statsd
+      - flask_limiter==3.12
     state: present
   register: airflow_install
   changed_when: airflow_install.changed
