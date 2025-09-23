@@ -161,7 +161,6 @@ build {
     user              = local.ansible_user
     playbook_file     = local.playbook_file
     use_proxy         = "false"
-    max_retries       = 3
   }
 
   provisioner "shell" {

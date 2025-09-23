@@ -73,6 +73,9 @@ USER_ACCOUNT=
 INSTANCE_ID=
 VOLUME_ID=
 
+# Limit width of output of OpenStack commands
+CLIFF_MAX_TERM_WIDTH=160
+
 # Args
 while getopts ":hdi:n:u:" option; do
     case $option in
@@ -178,6 +181,7 @@ delete_instance() {
 
 # Function for cleanup on script exit
 cleanup_on_exit() {
+    info "Running cleanup process..."
     delete_instance $INSTANCE_ID
 }
 

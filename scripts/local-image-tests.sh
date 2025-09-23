@@ -77,7 +77,6 @@ INSTANCE_ID=
 VOLUME_ID=
 IMAGE_ID=
 
-
 # Args
 while getopts ":hdf:n:u:" option; do
     case $option in
@@ -206,6 +205,7 @@ delete_instance() {
 
 # Function for cleanup on script exit
 cleanup_on_exit() {
+    info "Running cleanup process..."
     delete_instance $INSTANCE_ID
     delete_image $IMAGE_ID
 }
