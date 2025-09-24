@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2086,SC2329
 
 ## Colours
 all_off="$(tput sgr0)"
@@ -13,9 +14,6 @@ blue="${bold}$(tput setaf 4)"
 DEBUG=
 
 # Message helpers
-msg() {
-    printf "%s\n" "$1"
-}
 debug() {
     [[ $DEBUG ]] && printf "%s:: %s%s\n" "${black}" "$1" "${all_off}"
 }
@@ -24,9 +22,6 @@ info() {
 }
 action() {
     printf "%s==>%s %s%s\n" "${green}" "${bold}" "$1" "${all_off}"
-}
-question() {
-    printf "%s==>%s %s%s\n" "${yellow}" "${bold}" "$1" "${all_off}"
 }
 warn() {
     printf "%sWARNING%s %s%s\n" "${yellow}" "${bold}" "$1" "${all_off}"
@@ -74,7 +69,7 @@ INSTANCE_ID=
 VOLUME_ID=
 
 # Limit width of output of OpenStack commands
-CLIFF_MAX_TERM_WIDTH=160
+export CLIFF_MAX_TERM_WIDTH=160
 
 # Args
 while getopts ":hdi:n:u:" option; do
@@ -124,8 +119,7 @@ else
 fi
 
 # Test secgroup is available
-sg=$(openstack security group show -f value -c name "$OS_SECGROUP" 2>&1)
-if [[ $? -eq 0 ]]; then
+if sg=$(openstack security group show -f value -c name "$OS_SECGROUP" 2>&1); then
     info "Found security group: '$sg'"
 else
     fatal "Testing security group '$OS_SECGROUP' not found"
@@ -194,7 +188,7 @@ info "Flavor disk size is $FLAVOR_DISK_SIZE GiB"
 
 # Get disk image size, and convert to GB
 DISK_BYTES=$(openstack image show -c virtual_size -f value $IMAGE_ID)
-DISK_SIZE=$(($DISK_BYTES / 1073741824))
+DISK_SIZE=$((DISK_BYTES / 1073741824))
 
 info "Image disk size is $DISK_SIZE GiB"
 
@@ -264,8 +258,7 @@ attempts=20
 attempt=1
 info "Waiting for instance to finish boot..."
 while [[ $attempt -le $attempts ]]; do
-    openstack console log show $INSTANCE_ID | grep -Eoq "$READY_MESSAGE" 2>&1 >/dev/null
-    if [[ $? -eq 0 ]]; then
+    if openstack console log show $INSTANCE_ID | grep -Eoq "$READY_MESSAGE" >/dev/null 2>&1; then
         info "Boot finished in $((sleeptime*attempt))s"
         break
     fi
@@ -283,8 +276,7 @@ attempts=30
 attempt=1
 info "Checking for SSH port open..."
 while [[ $attempt -le $attempts ]]; do
-    nc -z -w5 $ip 22 2>&1 >/dev/null
-    if [[ $? -eq 0 ]]; then
+    if nc -z -w5 $ip 22 >/dev/null 2>&1; then
         info "SSH connection found in $((sleeptime*attempt))s"
         break
     fi

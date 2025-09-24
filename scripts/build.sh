@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2086,SC2329
 
 ERROR=0
 FILE=$1
@@ -43,6 +44,7 @@ ORGANISATION=NeCTAR
 CONFIG_FILE="$(basename $0 .sh).cfg"
 if [ -f $CONFIG_FILE ]; then
     echo "Loading config from $CONFIG_FILE..."
+    # shellcheck source=/dev/null
     . "$CONFIG_FILE"
 else
     echo "Config file $CONFIG_FILE not found."
@@ -168,8 +170,8 @@ rm -f ${OUTPUT_DIR}/${BUILD_NAME}.qcow2
 
 # Set extra properties from Ansible facts (see Ansible facts role)
 if [ -d $FACT_DIR ]; then
-    find $FACT_DIR -type f -printf "%f\n" | while read FACT; do
-        read VAL < $FACT_DIR/$FACT
+    find $FACT_DIR -type f -printf "%f\n" | while read -r FACT; do
+        read -r VAL < $FACT_DIR/$FACT
         echo "Setting property $FACT=$VAL"
         openstack image set --property $FACT=$"$VAL" $IMAGE_ID || true
     done
@@ -177,7 +179,7 @@ fi
 
 # Set tags from Ansible facts (see Ansible facts role)
 if [ -d $TAG_DIR ]; then
-    find $TAG_DIR -type f -printf "%f\n" | while read TAG; do
+    find $TAG_DIR -type f -printf "%f\n" | while read -r TAG; do
         echo "Setting tag $TAG"
         openstack image set --tag $TAG $IMAGE_ID || true
     done
@@ -252,8 +254,9 @@ ATTEMPT=1
 echo -n "Checking for SSH connection $USER_ACCOUNT@$IP_ADDRESS"
 while [ $ATTEMPT -le $ATTEMPTS ]; do
     echo -n '.'
-    ssh -q -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $USER_ACCOUNT@$IP_ADDRESS exit 2>&1 >/dev/null
-    [ $? -eq 0 ] && break
+    if ssh -q -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $USER_ACCOUNT@$IP_ADDRESS exit >/dev/null 2>&1; then
+        break
+    fi
     if [ $ATTEMPT -eq $ATTEMPTS ]; then
       # One last attempt with output
       echo -e "\nERROR: reached maximum attempts ($ATTEMPTS)"

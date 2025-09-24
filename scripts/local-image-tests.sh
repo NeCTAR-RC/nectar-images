@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2086
 
 ## Colours
 all_off="$(tput sgr0)"
@@ -141,8 +142,7 @@ else
 fi
 
 # Test secgroup is available
-sg=$(openstack security group show -f value -c name "$OS_SECGROUP" 2>&1)
-if [[ $? -eq 0 ]]; then
+if sg=$(openstack security group show -f value -c name "$OS_SECGROUP" 2>&1); then
     info "Found security group: '$sg'"
 else
     fatal "Testing security group '$OS_SECGROUP' not found"
@@ -221,8 +221,8 @@ info "Found image ID: '$IMAGE_ID'"
 
 # Set extra properties from Ansible facts (see Ansible facts role)
 if [[ -d $FACT_DIR ]]; then
-    find $FACT_DIR -type f -printf "%f\n" | while read FACT; do
-        read VAL < $FACT_DIR/$FACT
+    find $FACT_DIR -type f -printf "%f\n" | while read -r FACT; do
+        read -r VAL < $FACT_DIR/$FACT
         info "Setting property: $FACT='$VAL'"
         openstack image set --property $FACT=$"$VAL" $IMAGE_ID || true
     done
@@ -230,7 +230,7 @@ fi
 
 # Set tags from Ansible facts (see Ansible facts role)
 if [[ -d $TAG_DIR ]]; then
-    find $TAG_DIR -type f -printf "%f\n" | while read TAG; do
+    find $TAG_DIR -type f -printf "%f\n" | while read -r TAG; do
         info "Setting tag: '$TAG'"
         openstack image set --tag $TAG $IMAGE_ID || true
     done
@@ -312,8 +312,7 @@ attempts=20
 attempt=1
 info "Waiting for instance to finish boot..."
 while [[ $attempt -le $attempts ]]; do
-    openstack console log show $INSTANCE_ID | grep -Eoq "$READY_MESSAGE" 2>&1 >/dev/null
-    if [[ $? -eq 0 ]]; then
+    if openstack console log show $INSTANCE_ID | grep -Eoq "$READY_MESSAGE" >/dev/null 2>&1; then
         info "Boot finished in $((sleeptime*attempt))s"
         break
     fi
@@ -332,8 +331,7 @@ attempts=30
 attempt=1
 info "Checking for SSH port it open..."
 while [[ $attempt -le $attempts ]]; do
-    nc -z -w5 $ip 22 2>&1 >/dev/null
-    if [[ $? -eq 0 ]]; then
+    if nc -z -w5 $ip 22 >/dev/null 2>&1; then
         info "SSH connection found in $((sleeptime*attempt))s"
         break
     fi

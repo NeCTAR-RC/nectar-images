@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2086,SC2329
 
 set -o errexit
 set -o nounset
@@ -13,7 +14,6 @@ bold="${all_off}$(tput bold)"
 black="${bold}$(tput setaf 0)"
 red="${bold}$(tput setaf 1)"
 green="${bold}$(tput setaf 2)"
-yellow="${bold}$(tput setaf 3)"
 blue="${bold}$(tput setaf 4)"
 
 # Message helpers

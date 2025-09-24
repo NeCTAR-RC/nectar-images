@@ -1,12 +1,12 @@
 #!/bin/bash -e
-
+# shellcheck disable=SC2086,SC2329
 
 NAME="NeCTAR Windows Server 2022 $(date --iso)"
 BUILD_DIR="builds/build_files/packer-windows-2022"
 
 PROPERTIES=""
 # Loop through and apply facts as image properties
-for FACT in $BUILD_DIR/.facts/*; do
+for FACT in "$BUILD_DIR"/.facts/*; do
     KEY=${FACT##*/}
     VAL=$(cat $FACT)
     # Skip nectar_name

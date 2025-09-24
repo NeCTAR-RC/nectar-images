@@ -6,6 +6,7 @@ repos:
       - id: check-yaml
       - id: end-of-file-fixer
       - id: trailing-whitespace
+
   - repo: https://github.com/ansible/ansible-lint.git
     rev: v25.6.1
     hooks:
@@ -15,3 +16,9 @@ repos:
         additional_dependencies:
           - ansible
         types: [file]
+
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1
+    hooks:
+    - id: shellcheck
+      files: ^scripts/.*\.sh$
