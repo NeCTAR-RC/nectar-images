@@ -263,7 +263,7 @@ else
 fi
 
 if [[ -n "$BOOT_FROM_VOLUME" ]]; then
-    VOLUME_ID=$(openstack server show "$INSTANCE_ID" -f json | jq -r '.os-extended-volumes:volumes_attached[].id')
+    VOLUME_ID=$(openstack server show "$INSTANCE_ID" -f json | jq -r '.volumes_attached[].id')
 fi
 
 set +e
