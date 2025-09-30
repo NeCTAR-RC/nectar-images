@@ -1,0 +1,18 @@
+---
+- name: Disable IPv6 transition technologies - 6to4
+  ansible.windows.win_shell: Set-Net6to4Configuration -State disabled
+
+- name: Disable IPv6 transition technologies - Teredo
+  ansible.windows.win_shell: Set-NetTeredoConfiguration -Type disabled
+
+- name: Disable IPv6 transition technologies - ISATAP
+  ansible.windows.win_shell: Set-NetIsatapConfiguration -State disabled
+
+- name: Enable ICMP Echo Request for IPv4
+  ansible.windows.win_shell: netsh advfirewall firewall set rule name="File and Printer Sharing (Echo Request - ICMPv4-In)" new enable=yes
+
+- name: Enable ICMP Echo Request for IPv6
+  ansible.windows.win_shell: netsh advfirewall firewall set rule name="File and Printer Sharing (Echo Request - ICMPv6-In)" new enable=yes
+
+- name: Disable Network Discovery firewall rules
+  ansible.windows.win_shell: netsh advfirewall firewall set rule group="Network Discovery" new enable=No

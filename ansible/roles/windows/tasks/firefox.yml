@@ -1,0 +1,11 @@
+---
+- name: Download Firefox installer
+  ansible.windows.win_get_url:
+    url: 'https://download.mozilla.org/?product=firefox-msi-latest-ssl&os=win64&lang=en-US'
+    dest: 'C:\Windows\Temp\firefox.msi'
+
+- name: Install Firefox MSI
+  ansible.windows.win_package:
+    path: 'C:\Windows\Temp\firefox.msi'
+    state: present
+    arguments: '/quiet'

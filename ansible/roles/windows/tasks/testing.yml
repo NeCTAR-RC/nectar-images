@@ -1,0 +1,11 @@
+---
+- name: Install NuGet package provider
+  ansible.windows.win_shell: Install-PackageProvider -Name NuGet -Force
+
+- name: Install Pester testing framework
+  ansible.windows.win_shell: Install-Module Pester -Force -SkipPublisherCheck
+
+- name: Install testing scripts
+  ansible.windows.win_copy:
+    src: testing/
+    dest: C:\ProgramData\Nectar\

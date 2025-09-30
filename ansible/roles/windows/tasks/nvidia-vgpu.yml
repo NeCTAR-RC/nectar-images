@@ -1,0 +1,17 @@
+---
+- name: Copy NVIDIA VGPU Driver install script
+  ansible.windows.win_copy:
+    src: nvidia_vgpu_driver_install.ps1
+    dest: C:\ProgramData\Nectar\nvidia_vgpu_driver_install.ps1
+
+- name: Create Registry Entry for the NVIDIA VGPU License token
+  ansible.windows.win_regedit:
+    path: 'HKLM:\Software\NVIDIA Corporation\vGPU Licensing\ClientConfigToken\GridLicensing'
+    name: FeatureType
+    type: dword
+    data: 1
+
+- name: Create the NVIDIA VGPU License token directory
+  ansible.windows.win_file:
+    path: 'C:\Program Files\NVIDIA Corporation\vGPU Licensing\ClientConfigToken'
+    state: directory

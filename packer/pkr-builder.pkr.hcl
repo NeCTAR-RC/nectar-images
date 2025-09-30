@@ -62,7 +62,7 @@ build {
     user              = local.ansible_user
     playbook_file     = local.playbook_file
     use_proxy         = "false"
-    max_retries       = 3
+    max_retries       = 1
   }
 
   # Windows provisioning
@@ -70,23 +70,12 @@ build {
     elevated_user     = var.winrm_username
     elevated_password = var.winrm_password
     scripts           = [
-      "${path.root}/scripts/windows/ui-tweaks.ps1",
-      "${path.root}/scripts/windows/enable-sshd.ps1",
       "${path.root}/scripts/windows/install-virtio-tools.ps1",
-      "${path.root}/scripts/windows/eject-media.ps1"
+      "${path.root}/scripts/windows/eject-media.ps1",
+      "${path.root}/scripts/windows/enable-sshd.ps1",
+      "${path.root}/scripts/windows/cloudbase-init.ps1"
     ]
     except            = var.is_windows ? null : ["qemu.vm"]  # Windows
-    max_retries       = 1
-  }
-
-  provisioner "powershell" {
-    elevated_user     = "Administrator"
-    elevated_password = var.winrm_password
-    scripts           = [
-      "${path.root}/scripts/windows/cloudbase-init.ps1",
-      "${path.root}/scripts/windows/nectar-specifics.ps1"
-    ]
-    except            = var.is_windows ? null : ["qemu.vm"]
     max_retries       = 1
   }
 
@@ -102,10 +91,7 @@ build {
   }
 
   provisioner "file" {
-    sources           = [
-      "${path.root}/scripts/windows/init.ps1",
-      "${path.root}/win_answer_files/background.png"
-    ]
+    source            = "${path.root}/scripts/windows/init.ps1"
     destination       = "C:\\ProgramData\\Nectar\\"
     except            = var.is_windows ? null : ["qemu.vm"]
     max_retries       = 1
@@ -119,7 +105,6 @@ build {
     elevated_user     = var.winrm_username
     elevated_password = var.winrm_password
     scripts = [
-      "${path.root}/scripts/windows/set-background.ps1",
       "${path.root}/scripts/windows/cleanup.ps1",
       "${path.root}/scripts/windows/optimize.ps1",
       "${path.root}/scripts/windows/run-sysprep.ps1"
@@ -129,7 +114,7 @@ build {
   }
 
   provisioner "shell" {
-    script            = "${path.root}/scripts/_common/cleanup.sh"
+    script            = "${path.root}/scripts/linux/cleanup.sh"
     except            = var.is_windows ? ["qemu.vm"] : null  # Linux only
   }
 
@@ -165,7 +150,7 @@ build {
 
   provisioner "shell" {
     execute_command   = "{{ .Vars }} sudo -S -E bash '{{ .Path }}'"
-    script            = "${path.root}/scripts/_common/cleanup.sh"
+    script            = "${path.root}/scripts/linux/cleanup.sh"
     except            = var.is_windows ? ["qemu.vm"] : null  # Linux only
   }
 

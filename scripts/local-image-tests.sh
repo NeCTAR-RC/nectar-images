@@ -166,16 +166,16 @@ delete_image() {
     [[ -z "$IMAGE_ID" ]] && return  # No image ID set
     delete=1
     if [[ $DEBUG ]]; then
-        read -r -p "${yellow}==>${bold} Would you like to clean up the image '$1'? [y/N] ${all_off}" response
+        read -r -p "${yellow}==>${bold} Would you like to clean up the image '$IMAGE_ID'? [y/N] ${all_off}" response
         [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]] || delete=0
     fi
     if [[ $delete -eq 1 ]]; then
-        action "Deleting image '$1'..."
-        debug "openstack image delete $1"
-        openstack image delete $1
+        action "Deleting image '$IMAGE_ID'..."
+        debug "openstack image delete $IMAGE_ID"
+        openstack image delete $IMAGE_ID
         IMAGE_ID=
     else
-        warn "Not deleting image $1..."
+        warn "Not deleting image $IMAGE_ID..."
     fi
 }
 
@@ -183,31 +183,35 @@ delete_instance() {
     [[ -z "$INSTANCE_ID" ]] && return  # No instance ID set
     if [[ $DEBUG ]]; then
         echo "Saving instance/server log to: '$BASE_DIR/console.txt'"
-        openstack server show $1 > $BASE_DIR/console.txt
-        openstack console log show $1 >> $BASE_DIR/console.txt
+        openstack server show $INSTANCE_ID > $BASE_DIR/console.txt
+        openstack console log show $INSTANCE_ID >> $BASE_DIR/console.txt
     fi
     delete=1
     if [[ $DEBUG ]]; then
-        read -r -p "${yellow}==>${bold} Would you like to clean up the instance '$1'? [y/N] ${all_off}" response
+        read -r -p "${yellow}==>${bold} Would you like to clean up the instance '$INSTANCE_ID'? [y/N] ${all_off}" response
         [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]] || delete=0
     fi
     if [[ $delete -eq 1 ]]; then
-        action "Deleting instance '$1'..."
-        debug "openstack server delete $1"
-        openstack server delete $1
+        action "Deleting instance '$INSTANCE_ID'..."
+        debug "openstack server delete $INSTANCE_ID"
+        openstack server delete $INSTANCE_ID
         INSTANCE_ID=
-        [[ -n "$VOLUME_ID" ]] && openstack volume delete $VOLUME_ID
-        VOLUME_ID=
+        if [[ -n "$VOLUME_ID" ]]; then
+            action "Deleting volume: '$VOLUME_ID'..."
+            debug "openstack volume delete $VOLUME_ID"
+            openstack volume delete $VOLUME_ID
+            VOLUME_ID=
+        fi
     else
-        warn "Not deleting instance $1..."
+        warn "Not deleting instance $INSTANCE_ID..."
     fi
 }
 
 # Function for cleanup on script exit
 cleanup_on_exit() {
     info "Running cleanup process..."
-    delete_instance $INSTANCE_ID
-    delete_image $IMAGE_ID
+    delete_instance
+    delete_image
 }
 
 # Trap for cleanup on script exit

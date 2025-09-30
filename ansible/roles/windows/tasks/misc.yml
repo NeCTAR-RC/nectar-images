@@ -1,0 +1,8 @@
+---
+- name: Disable Server Manager startup
+  ansible.windows.win_shell: Disable-ScheduledTask -TaskName "\Microsoft\Windows\Server Manager\ServerManager"
+
+- name: Enable the Windows Audio service
+  ansible.windows.win_service:
+    name: AudioSrv
+    start_mode: auto

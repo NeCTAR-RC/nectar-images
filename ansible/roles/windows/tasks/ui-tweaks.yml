@@ -1,0 +1,130 @@
+---
+- name: Show file extensions
+  ansible.windows.win_regedit:
+    key: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
+    value: HideFileExt
+    data: 0
+    datatype: dword
+
+- name: Show hidden files
+  ansible.windows.win_regedit:
+    key: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
+    value: Hidden
+    data: 1
+    datatype: dword
+
+- name: Launch explorer to the PC not the user
+  ansible.windows.win_regedit:
+    key: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
+    value: LaunchTo
+    data: 1
+    datatype: dword
+
+- name: Show full path in address bar
+  ansible.windows.win_regedit:
+    key: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
+    value: FullPathAddress
+    data: 1
+    datatype: dword
+
+- name: Disable notification popups
+  ansible.windows.win_regedit:
+    key: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
+    value: EnableBalloonTips
+    data: 0
+    datatype: dword
+
+- name: Disable error reporting UI
+  ansible.windows.win_regedit:
+    key: 'HKCU:\Software\Microsoft\Windows\Windows Error Reporting'
+    value: DontShowUI
+    data: 0
+    datatype: dword
+
+- name: Disable prompting for shutdown reason
+  ansible.windows.win_regedit:
+    key: 'HKLM:\Software\Policies\Microsoft\Windows NT\Reliability'
+    value: ShutdownReasonOn
+    data: 0
+    datatype: dword
+
+- name: Set visual effects to best performance
+  ansible.windows.win_regedit:
+    key: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects'
+    value: VisualFXSetting
+    data: 2
+    datatype: dword
+
+- name: Keep visual styles on windows and buttons
+  ansible.windows.win_regedit:
+    key: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\ThemeManager'
+    value: ThemeActive
+    data: 1
+    datatype: dword
+
+- name: Disable common tasks in folders
+  ansible.windows.win_regedit:
+    key: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
+    value: WebView
+    data: 0
+    datatype: dword
+
+- name: Disable drop shadows for icon labels
+  ansible.windows.win_regedit:
+    key: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
+    value: ListviewShadow
+    data: 0
+    datatype: dword
+
+- name: Disable background image for folders
+  ansible.windows.win_regedit:
+    key: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
+    value: ListviewWatermark
+    data: 0
+    datatype: dword
+
+- name: Disable taskbar button animations
+  ansible.windows.win_regedit:
+    key: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
+    value: TaskbarAnimations
+    data: 0
+    datatype: dword
+
+- name: Disable window minimize/maximize animations
+  ansible.windows.win_regedit:
+    key: 'HKCU:\Control Panel\Desktop\WindowMetrics'
+    value: MinAnimate
+    data: '0'
+    datatype: string
+
+- name: Disable showing window contents while dragging
+  ansible.windows.win_regedit:
+    key: 'HKCU:\Control Panel\Desktop'
+    value: DragFullWindows
+    data: '0'
+    datatype: string
+
+- name: Disable font smoothing
+  ansible.windows.win_regedit:
+    key: 'HKCU:\Control Panel\Desktop'
+    value: FontSmoothing
+    data: '0'
+    datatype: string
+
+- name: Set user preferences mask for performance
+  ansible.windows.win_regedit:
+    key: 'HKCU:\Control Panel\Desktop'
+    value: UserPreferencesMask
+    data: '90120180'
+    datatype: binary
+
+- name: Disable the "Allow your PC to be discoverable" message
+  ansible.windows.win_regedit:
+    path: 'HKLM:\System\CurrentControlSet\Control\Network\NewNetworkWindowOff'
+
+- name: Hide Network Location Wizard
+  ansible.windows.win_regedit:
+    key: 'HKLM:\SYSTEM\CurrentControlSet\Control\Network\NetworkLocationWizard'
+    value: HideWizard
+    data: 1
+    datatype: dword

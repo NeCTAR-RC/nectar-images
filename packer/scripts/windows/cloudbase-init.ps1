@@ -33,6 +33,7 @@ $commonContent = @"
 username=Administrator
 groups=Administrators
 inject_user_password=true
+first_logon_behaviour=clear
 bsdtar_path=C:\Program Files\Cloudbase Solutions\Cloudbase-Init\bin\bsdtar.exe
 mtools_path=C:\Program Files\Cloudbase Solutions\Cloudbase-Init\bin\
 verbose=false

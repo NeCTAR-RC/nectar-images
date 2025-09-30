@@ -178,7 +178,7 @@ ifneq ($(findstring windows,$(packer_var_target)),)
 	fi
 	# Download Windows ISO if it doesn't exist already
 	if [ ! -f ./builds/build_files/$(windows_iso_file) ]; then \
-	  echo "Downloading Windows ISO $(windows_iso_file)..."; \
+	  echo "Downloading Windows ISO $(windows_iso_file)... (NOTE: Needs NeCTAR-Images project creds)"; \
 	  openstack object save iso $(windows_iso_file) \
 	    --file ./builds/build_files/$(windows_iso_file); \
 	fi

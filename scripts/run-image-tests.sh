@@ -68,9 +68,6 @@ USER_ACCOUNT=
 INSTANCE_ID=
 VOLUME_ID=
 
-# Limit width of output of OpenStack commands
-export CLIFF_MAX_TERM_WIDTH=160
-
 # Args
 while getopts ":hdi:n:u:" option; do
     case $option in
@@ -142,33 +139,43 @@ delete_instance() {
 
     # Running under Jenkins, so different rules apply
     if [[ -n "$WORKSPACE" ]]; then
-        openstack server show $1
-        openstack console log show $1
-        openstack server delete $1
+        # Limit width of output of OpenStack commands for Jenkins log
+        export CLIFF_MAX_TERM_WIDTH=160
+        openstack server show $INSTANCE_ID
+        openstack console log show $INSTANCE_ID
+        action "Deleting instance: '$INSTANCE_ID'..."
+        openstack server delete $INSTANCE_ID
         INSTANCE_ID=
-        [[ -n "$VOLUME_ID" ]] && openstack volume delete $VOLUME_ID
-        VOLUME_ID=
+        if [[ -n "$VOLUME_ID" ]]; then
+            action "Deleting volume: '$VOLUME_ID'..."
+            openstack volume delete $VOLUME_ID
+            VOLUME_ID=
+        fi
     else
         # Running locally, so can prompt user
         if [[ $DEBUG ]]; then
             echo "Saving instance/server log to: 'console.txt'"
-            openstack server show $1 > console.txt
-            openstack console log show $1 >> console.txt
+            openstack server show $INSTANCE_ID > console.txt
+            openstack console log show $INSTANCE_ID >> console.txt
         fi
         delete=1
         if [[ $DEBUG ]]; then
-            read -r -p "${yellow}==>${bold} Would you like to clean up the instance '$1'? [y/N] ${all_off}" response
+            read -r -p "${yellow}==>${bold} Would you like to clean up the instance '$INSTANCE_ID'? [y/N] ${all_off}" response
             [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]] || delete=0
         fi
         if [[ $delete -eq 1 ]]; then
-            action "Deleting instance '$1'..."
-            debug "openstack server delete $1"
-            openstack server delete $1
+            action "Deleting instance '$INSTANCE_ID'..."
+            debug "openstack server delete $INSTANCE_ID"
+            openstack server delete $INSTANCE_ID
             INSTANCE_ID=
-            [[ -n "$VOLUME_ID" ]] && openstack volume delete $VOLUME_ID
-            VOLUME_ID=
+            if [[ -n "$VOLUME_ID" ]]; then
+                action "Deleting volume: '$VOLUME_ID'..."
+                debug "openstack volume delete $VOLUME_ID"
+                openstack volume delete $VOLUME_ID
+                VOLUME_ID=
+            fi
         else
-            warn "Not deleting instance $1..."
+            warn "Not deleting instance $INSTANCE_ID..."
         fi
     fi
 }
@@ -176,7 +183,7 @@ delete_instance() {
 # Function for cleanup on script exit
 cleanup_on_exit() {
     info "Running cleanup process..."
-    delete_instance $INSTANCE_ID
+    delete_instance
 }
 
 # Trap for cleanup on script exit

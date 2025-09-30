@@ -1,0 +1,17 @@
+---
+- name: Enable Remote Desktop
+  ansible.windows.win_regedit:
+    key: 'HKLM:\System\CurrentControlSet\Control\Terminal Server'
+    value: fDenyTSConnections
+    data: 0
+    datatype: dword
+
+- name: Enable Remote Desktop firewall rule
+  ansible.windows.win_shell: Enable-NetFirewallRule -DisplayGroup 'Remote Desktop'
+
+- name: Enable NLA for RDP
+  ansible.windows.win_regedit:
+    key: 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp'
+    value: UserAuthentication
+    data: 1
+    datatype: dword
