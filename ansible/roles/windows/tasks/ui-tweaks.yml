@@ -104,12 +104,12 @@
     data: '0'
     datatype: string
 
-- name: Disable font smoothing
-  ansible.windows.win_regedit:
-    key: 'HKCU:\Control Panel\Desktop'
-    value: FontSmoothing
-    data: '0'
-    datatype: string
+#- name: Disable font smoothing
+#  ansible.windows.win_regedit:
+#    key: 'HKCU:\Control Panel\Desktop'
+#    value: FontSmoothing
+#    data: '0'
+#    datatype: string
 
 - name: Set user preferences mask for performance
   ansible.windows.win_regedit:
