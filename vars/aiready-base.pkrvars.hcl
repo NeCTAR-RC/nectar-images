@@ -6,4 +6,4 @@ source_image_name = "NeCTAR Ubuntu 22.04 LTS (Jammy) amd64 (NVIDIA vGPU)"
 ssh_username      = "ubuntu"
 profile           = "aiready-base"
 profile_args      = ["nectar_image_name='AI Ready Base'"]
-disk_size         = "40"
+disk_size         = "50"
