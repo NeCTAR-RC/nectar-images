@@ -16,6 +16,10 @@
     - role: ntp
     - role: nginx
     - role: certbot
+    # Desktop
+    - role: xfce4-desktop
+    - role: xrdp
+    - role: desktop-common
     # R
     - role: r
     - role: rstudio

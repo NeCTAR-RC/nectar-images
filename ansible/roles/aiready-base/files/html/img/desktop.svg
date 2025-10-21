@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.0"
+   width="100"
+   height="100"
+   viewBox="0 0 100 100.00001"
+   id="Layer_1"
+   xml:space="preserve"
+   sodipodi:docname="desktop.svg"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+   id="namedview1"
+   pagecolor="#ffffff"
+   bordercolor="#000000"
+   borderopacity="0.25"
+   inkscape:showpageshadow="2"
+   inkscape:pageopacity="0.0"
+   inkscape:pagecheckerboard="false"
+   inkscape:deskcolor="#d1d1d1"
+   showgrid="false"
+   showborder="true"
+   inkscape:zoom="7.0507293"
+   inkscape:cx="3.0493299"
+   inkscape:cy="46.945498"
+   inkscape:window-width="2048"
+   inkscape:window-height="1207"
+   inkscape:window-x="0"
+   inkscape:window-y="0"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="Layer_1" /><defs
+   id="defs2053" />
+<linearGradient
+   x1="41.1348"
+   y1="50.836899"
+   x2="41.1348"
+   y2="72.086899"
+   id="XMLID_7_"
+   gradientUnits="userSpaceOnUse">
+	<stop
+   style="stop-color:#e8e8e8;stop-opacity:1"
+   offset="0"
+   id="stop2005" />
+	<stop
+   style="stop-color:#8a8a8a;stop-opacity:1"
+   offset="1"
+   id="stop2007" />
+</linearGradient>
+
+<linearGradient
+   x1="41.1348"
+   y1="69.336899"
+   x2="41.1348"
+   y2="73.086899"
+   id="XMLID_8_"
+   gradientUnits="userSpaceOnUse">
+	<stop
+   style="stop-color:#e8e8e8;stop-opacity:1"
+   offset="0"
+   id="stop2012" />
+	<stop
+   style="stop-color:#8a8a8a;stop-opacity:1"
+   offset="1"
+   id="stop2014" />
+</linearGradient>
+
+
+<linearGradient
+   x1="41.1348"
+   y1="5.5883999"
+   x2="41.1348"
+   y2="61.087399"
+   id="XMLID_11_"
+   gradientUnits="userSpaceOnUse">
+	<stop
+   style="stop-color:#e8e8e8;stop-opacity:1"
+   offset="0"
+   id="stop2046" />
+	<stop
+   style="stop-color:#a3a3a3;stop-opacity:1"
+   offset="1"
+   id="stop2048" />
+</linearGradient>
+<g
+   id="g1"
+   transform="matrix(1.4035088,0,0,1.459854,-7.7333333,-7.4291971)"><rect
+     width="21.25"
+     height="21.25"
+     x="30.51"
+     y="50.839001"
+     style="fill:url(#XMLID_7_);stroke:#7d7d7d"
+     id="rect2009" /><path
+     d="m 68.51,71.214 c 0,1.034 -0.841,1.875 -1.875,1.875 h -51 c -1.036,0 -1.875,-0.841 -1.875,-1.875 v 0 c 0,-1.037 0.839,-1.875 1.875,-1.875 h 51 c 1.034,0 1.875,0.838 1.875,1.875 z"
+     style="fill:url(#XMLID_8_);stroke:#7d7d7d"
+     id="path2016" /><g
+     id="g2018">
+	<defs
+   id="defs2020">
+		<path
+   d="m 76.26,56.089 c 0,2.76 -2.24,5 -5,5 H 11.01 c -2.761,0 -5,-2.24 -5,-5 v -45.5 c 0,-2.762 2.239,-5 5,-5 h 60.25 c 2.76,0 5,2.238 5,5 z"
+   id="XMLID_3_" />
+	</defs>
+	<clipPath
+   id="XMLID_9_">
+		<use
+   id="use2024"
+   x="0"
+   y="0"
+   width="83"
+   height="73.588997"
+   xlink:href="#XMLID_3_" />
+	</clipPath>
+	<radialGradient
+   cx="41.5"
+   cy="32.9995"
+   r="37.491402"
+   id="XMLID_10_"
+   gradientUnits="userSpaceOnUse">
+		<stop
+   style="stop-color:#3f94ff;stop-opacity:1"
+   offset="0.0056"
+   id="stop2027" />
+		<stop
+   style="stop-color:#3f7fff;stop-opacity:1"
+   offset="0.3933"
+   id="stop2029" />
+		<stop
+   style="stop-color:#3f85ff;stop-opacity:1"
+   offset="0.54549998"
+   id="stop2031" />
+		<stop
+   style="stop-color:#3f94ff;stop-opacity:1"
+   offset="0.736"
+   id="stop2033" />
+		<stop
+   style="stop-color:#3f7fff;stop-opacity:1"
+   offset="0.8933"
+   id="stop2035" />
+		<stop
+   style="stop-color:#3f85ff;stop-opacity:1"
+   offset="0.93699998"
+   id="stop2037" />
+		<stop
+   style="stop-color:#3f94ff;stop-opacity:1"
+   offset="0.99260002"
+   id="stop2039" />
+		<stop
+   style="stop-color:#3f97ff;stop-opacity:1"
+   offset="1"
+   id="stop2041" />
+	</radialGradient>
+	<rect
+   width="83"
+   height="65.999001"
+   x="0"
+   y="0"
+   clip-path="url(#XMLID_9_)"
+   style="fill:url(#XMLID_10_)"
+   id="rect2043" />
+</g><path
+     d="M 71.26,5.589 H 11.01 c -2.761,0 -5,2.238 -5,5 v 45.5 c 0,2.76 2.239,5 5,5 h 60.25 c 2.76,0 5,-2.24 5,-5 v -45.5 c 0,-2.761 -2.24,-5 -5,-5 z m 1.983,50.75 c 0,1.104 -0.896,2 -2,2 h -60.25 c -1.105,0 -2,-0.896 -2,-2 v -46 c 0,-1.104 0.895,-2 2,-2 h 60.25 c 1.104,0 2,0.896 2,2 z"
+     style="fill:url(#XMLID_11_);stroke:#7d7d7d"
+     id="path2050" /></g>
+</svg>
