@@ -20,6 +20,7 @@
     - role: xfce4-desktop
     - role: xrdp
     - role: desktop-common
+    - role: guacamole
     # R
     - role: r
     - role: rstudio

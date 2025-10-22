@@ -9,7 +9,7 @@ guacamole_auth: pam
 
 rstudio_server_www_root_path: /rstudio
 
-airflow_port: 8081
+airflow_port: 7000
 
 nginx_package_name: nginx-extras
 nginx_remove_default_vhost: true
