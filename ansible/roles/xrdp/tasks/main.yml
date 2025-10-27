@@ -4,39 +4,14 @@
   with_first_found:
     - "{{ ansible_distribution }}_{{ ansible_distribution_version }}.yml"
     - "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
     - "{{ ansible_distribution }}.yml"
     - "{{ ansible_os_family }}.yml"
-    - "default.yml"
-
-# Add the https://launchpad.net/~johnmullen/+archive/ubuntu/xrdp PPA for newer XRDP
-# as 0.9.12 has broken RDP drive support
-- name: Add XRDP PPA for Ubuntu
-  apt_repository:
-    repo: 'ppa:johnmullen/xrdp'
-    state: present
-  when: ansible_distribution == 'Ubuntu' and ansible_distribution_major_version < '22'
 
 - name: Install XRDP
   package:
     name: '{{ xrdp_packages }}'
     state: present
-
-# Take this out as soon as XRDP https://koji.fedoraproject.org/koji/buildinfo?buildID=2204549
-# migrates from testing to main
-- name: Install fixed version of XRDP
-  ansible.builtin.yum:
-    name: https://kojipkgs.fedoraproject.org/packages/xrdp/0.9.22.1/2.el7/x86_64/xrdp-0.9.22.1-2.el7.x86_64.rpm
-  when:
-    - ansible_os_family == 'RedHat'
-    - ansible_distribution_major_version == '7'
-
-- name: Add XRDP PPA for Ubuntu
-  apt_repository:
-    repo: 'ppa:johnmullen/xrdp'
-    state: absent
-  when:
-    - ansible_distribution == 'Ubuntu'
-    - ansible_distribution_major_version < '22'
 
 # Without this, TLS negotiation fails as the XRDP user is unable to read
 # the self-signed cert/key

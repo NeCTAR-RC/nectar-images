@@ -1,0 +1,13 @@
+[Unit]
+Description=Setup CVMFS
+After=network.target
+Before=bumblebee-phone-home.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+StandardOutput=journal+console
+ExecStart=/usr/local/sbin/setup-cvmfs.sh
+
+[Install]
+WantedBy=default.target

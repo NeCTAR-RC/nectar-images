@@ -4,7 +4,10 @@ users:
  - default
 
 disable_root: true
+
 ssh_pwauth: false
+
+package_update: true
 
 {% if ansible_os_family == "RedHat" %}
 resize_rootfs_tmp: /dev
@@ -13,7 +16,6 @@ resize_rootfs_tmp: /dev
 syslog_fix_perms: root:root
 
 {% elif ansible_os_family == "Debian" %}
-package_update: true
 apt:
   preserve_sources_list: true
 

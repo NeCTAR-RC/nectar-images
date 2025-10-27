@@ -97,8 +97,55 @@ base OS aren't updated automatically, so you'll need to handle those yourself.
 (e.g. VGPU images, Jenkins slaves, etc)
 
 
+Debugging a local Packer build
+------------------------------
+
+To get more information on what packer is doing, add the following environment
+variables:
+
+```
+export PACKER_LOG=1
+export PACKER_LOG_FILE=/tmp/packer
+```
+
+The log will be written to a file prefixed with `/tmp/packer`.  However, most of
+the work of the build is done on virtual machine.  To see what is going one there,
+you need to connect to the VNC port as per the output of the build.  For example,
+given
+
+```
+...
+==> qemu.vm: Starting VM, booting from CD-ROM
+    qemu.vm: The VM will be run headless, without a GUI. If you want to
+    qemu.vm: view the screen of the VM, connect via VNC without a password to
+    qemu.vm: vnc://0.0.0.0:5936
+...
+```
+
+and you are running the build on a machine with a display, you could use the
+following to view the VNC console.
+
+```
+vncviewer vnc://0.0.0.0:5936
+```
+
+(Note that the port number is different each time.)  If you are running the
+build on a headless box, you need to set up a (temporary) SSH tunnel; e.g.
+
+```
+# on your laptop
+$ ssh -L 5900:127.0.0.1:5936 ... <remote-user>@<remote-host>
+```
+
+Then in a separate local shell:
+
+```
+# on your laptop
+$ vncviewer 127.0.0.1::5900
+```
+
 Development
--------
+-----------
 
 Developing and fixing image build issues can be a long slow process.
 Because of this, we include a Vagrant file is which is useful for testing the

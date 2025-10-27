@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2086,SC2329
 
 ERROR=0
 FILE=$1
@@ -28,11 +29,13 @@ TAG_DIR=$OUTPUT_DIR/.tags
 DEBUG=1
 
 # Run tests?
-RUN_TESTS=true
-AVAILABILITY_ZONE=melbourne-qh2
-SECGROUP=image-build
-FLAVOR=m3.small
-SSH_KEY=jenkins-image-testing
+
+# Environment vars
+: "${RUN_TESTS:=true}"
+: "${OS_AVAILABILITY_ZONE:=ardc-syd-1}"
+: "${OS_SECGROUP:=image-build}"
+: "${OS_FLAVOR:=m3.small}"
+: "${OS_KEYNAME:=jenkins-image-testing}"
 BUILD_PROPERTY=nectar_build
 ORGANISATION=NeCTAR
 
@@ -41,10 +44,11 @@ ORGANISATION=NeCTAR
 CONFIG_FILE="$(basename $0 .sh).cfg"
 if [ -f $CONFIG_FILE ]; then
     echo "Loading config from $CONFIG_FILE..."
+    # shellcheck source=/dev/null
     . "$CONFIG_FILE"
 else
     echo "Config file $CONFIG_FILE not found."
-fi 
+fi
 
 read_packer_var() {
     jq -r ".builders[0].${1}" $PACKER_WORKING_FILE
@@ -103,12 +107,12 @@ if [ -z "$OS_USERNAME" ]; then
 fi
 
 # Test keypair is available
-if [ -n "$SSH_KEY" ]; then
-    KEY=$(openstack keypair show -f value -c name "$SSH_KEY")
+if [ -n "$OS_KEYNAME" ]; then
+    KEY=$(openstack keypair show -f value -c name "$OS_KEYNAME")
     if [ -n "$KEY" ]; then
         echo "Found keypair: $KEY"
     else
-        echo "Testing keypair $SSH_KEY not found"
+        echo "Testing keypair $OS_KEYNAME not found"
         exit 1
     fi
 fi
@@ -130,9 +134,9 @@ if [ "${BUILDER_TYPE}" == "qemu" ]; then
     fi
 else
     # OpenStack builder
-    write_packer_var flavor "${FLAVOR}"
+    write_packer_var flavor "${OS_FLAVOR}"
     write_packer_var image_name "${BUILD_NAME}"
-    write_packer_var availability_zone "${AVAILABILITY_ZONE}"
+    write_packer_var availability_zone "${OS_AVAILABILITY_ZONE}"
 fi
 
 echo "Building image ${NAME}..."
@@ -166,8 +170,8 @@ rm -f ${OUTPUT_DIR}/${BUILD_NAME}.qcow2
 
 # Set extra properties from Ansible facts (see Ansible facts role)
 if [ -d $FACT_DIR ]; then
-    find $FACT_DIR -type f -printf "%f\n" | while read FACT; do
-        read VAL < $FACT_DIR/$FACT
+    find $FACT_DIR -type f -printf "%f\n" | while read -r FACT; do
+        read -r VAL < $FACT_DIR/$FACT
         echo "Setting property $FACT=$VAL"
         openstack image set --property $FACT=$"$VAL" $IMAGE_ID || true
     done
@@ -175,7 +179,7 @@ fi
 
 # Set tags from Ansible facts (see Ansible facts role)
 if [ -d $TAG_DIR ]; then
-    find $TAG_DIR -type f -printf "%f\n" | while read TAG; do
+    find $TAG_DIR -type f -printf "%f\n" | while read -r TAG; do
         echo "Setting tag $TAG"
         openstack image set --tag $TAG $IMAGE_ID || true
     done
@@ -187,9 +191,9 @@ if [ ! -z $BUILD_PROPERTY ]; then
 fi
 
 echo "Creating instance \"test_${NAME}_${BUILD_NUMBER}\"..."
-[ -z $AVAILABILITY_ZONE ] || AZ_OPT="--availability-zone $AVAILABILITY_ZONE"
-echo "--> openstack server create --image ${IMAGE_ID} --flavor ${FLAVOR} ${AZ_OPT} --security-group ${SECGROUP} --key-name ${SSH_KEY} --wait \"${BUILD_NAME}\""
-INSTANCE_ID=$(openstack server create -f value -c id --image ${IMAGE_ID} --flavor ${FLAVOR} ${AZ_OPT} --security-group ${SECGROUP} --key-name ${SSH_KEY} "${BUILD_NAME}")
+[ -z $OS_AVAILABILITY_ZONE ] || AZ_OPT="--availability-zone $OS_AVAILABILITY_ZONE"
+echo "--> openstack server create --image ${IMAGE_ID} --flavor ${OS_FLAVOR} ${AZ_OPT} --security-group ${OS_SECGROUP} --key-name ${OS_KEYNAME} --wait \"${BUILD_NAME}\""
+INSTANCE_ID=$(openstack server create -f value -c id --image ${IMAGE_ID} --flavor ${OS_FLAVOR} ${AZ_OPT} --security-group ${OS_SECGROUP} --key-name ${OS_KEYNAME} "${BUILD_NAME}")
 echo "Found instance ID: ${INSTANCE_ID}"
 
 set +e
@@ -250,8 +254,9 @@ ATTEMPT=1
 echo -n "Checking for SSH connection $USER_ACCOUNT@$IP_ADDRESS"
 while [ $ATTEMPT -le $ATTEMPTS ]; do
     echo -n '.'
-    ssh -q -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $USER_ACCOUNT@$IP_ADDRESS exit 2>&1 >/dev/null
-    [ $? -eq 0 ] && break
+    if ssh -q -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $USER_ACCOUNT@$IP_ADDRESS exit >/dev/null 2>&1; then
+        break
+    fi
     if [ $ATTEMPT -eq $ATTEMPTS ]; then
       # One last attempt with output
       echo -e "\nERROR: reached maximum attempts ($ATTEMPTS)"

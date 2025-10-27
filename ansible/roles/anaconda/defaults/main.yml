@@ -6,7 +6,7 @@ anaconda_mirror: https://repo.anaconda.com/archive
 anaconda_python_ver: 3
 
 # anaconda version
-anaconda_ver: '2022.10'
+anaconda_ver: '2024.10-1'
 
 # when downloading the anaconda binary it might take a while
 # don't let you less great network connection cause the role to falter

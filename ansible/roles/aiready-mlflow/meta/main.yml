@@ -1,0 +1,4 @@
+---
+dependencies:
+  - role: postgres-local
+  - role: anaconda

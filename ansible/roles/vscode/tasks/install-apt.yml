@@ -1,25 +1,29 @@
 ---
-- name: install dependencies (apt)
-  become: yes
-  apt:
-    name: "{{ vscode_deps }}"
-    state: present
+- name: Create apt keyrings directory
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
 
-- name: install key (apt)
-  become: yes
-  apt_key:
+- name: Install Microsoft apt repo key
+  ansible.builtin.get_url:
     url: '{{ vscode_mirror }}/keys/microsoft.asc'
-    state: present
+    dest: /etc/apt/keyrings/
+    mode: '0644'
 
-- name: install VS Code repo (apt)
-  become: yes
-  apt_repository:
-    repo: 'deb [arch=amd64] {{ vscode_mirror }}/repos/code stable main'
+- name: Install VS Code repo (apt)
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/microsoft.asc] {{ vscode_mirror }}/repos/code stable main"
     filename: vscode
     state: present
 
-- name: install VS Code (apt)
-  become: yes
-  apt:
+- name: install dependencies (apt)
+  ansible.builtin.apt:
+    name: "{{ vscode_deps }}"
+    state: present
+
+- name: Install VS Code (apt)
+  ansible.builtin.apt:
     name: "{{ vscode_package }}"
     state: present
+    update_cache: yes

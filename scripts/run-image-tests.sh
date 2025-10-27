@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2086,SC2329
 
 ## Colours
 all_off="$(tput sgr0)"
@@ -13,9 +14,6 @@ blue="${bold}$(tput setaf 4)"
 DEBUG=
 
 # Message helpers
-msg() {
-    printf "%s\n" "$1"
-}
 debug() {
     [[ $DEBUG ]] && printf "%s:: %s%s\n" "${black}" "$1" "${all_off}"
 }
@@ -24,9 +22,6 @@ info() {
 }
 action() {
     printf "%s==>%s %s%s\n" "${green}" "${bold}" "$1" "${all_off}"
-}
-question() {
-    printf "%s==>%s %s%s\n" "${yellow}" "${bold}" "$1" "${all_off}"
 }
 warn() {
     printf "%sWARNING%s %s%s\n" "${yellow}" "${bold}" "$1" "${all_off}"
@@ -60,7 +55,7 @@ help_text() {
 }
 
 # Environment vars
-: "${OS_AVAILABILITY_ZONE:=melbourne-qh2}"
+: "${OS_AVAILABILITY_ZONE:=ardc-syd-1}"
 : "${OS_SECGROUP:=image-build}"
 : "${OS_FLAVOR:=m3.small}"
 : "${OS_KEYNAME:=jenkins-image-testing}"
@@ -71,6 +66,7 @@ USER_ACCOUNT=
 
 # Globals
 INSTANCE_ID=
+VOLUME_ID=
 
 # Args
 while getopts ":hdi:n:u:" option; do
@@ -120,8 +116,7 @@ else
 fi
 
 # Test secgroup is available
-sg=$(openstack security group show -f value -c name "$OS_SECGROUP" 2>&1)
-if [[ $? -eq 0 ]]; then
+if sg=$(openstack security group show -f value -c name "$OS_SECGROUP" 2>&1); then
     info "Found security group: '$sg'"
 else
     fatal "Testing security group '$OS_SECGROUP' not found"
@@ -144,50 +139,86 @@ delete_instance() {
 
     # Running under Jenkins, so different rules apply
     if [[ -n "$WORKSPACE" ]]; then
-        openstack server show $1
-        openstack console log show $1
-        openstack server delete $1
+        # Limit width of output of OpenStack commands for Jenkins log
+        export CLIFF_MAX_TERM_WIDTH=160
+        openstack server show $INSTANCE_ID
+        openstack console log show $INSTANCE_ID
+        action "Deleting instance: '$INSTANCE_ID'..."
+        openstack server delete $INSTANCE_ID
         INSTANCE_ID=
+        if [[ -n "$VOLUME_ID" ]]; then
+            action "Deleting volume: '$VOLUME_ID'..."
+            openstack volume delete $VOLUME_ID
+            VOLUME_ID=
+        fi
     else
         # Running locally, so can prompt user
         if [[ $DEBUG ]]; then
             echo "Saving instance/server log to: 'console.txt'"
-            openstack server show $1 > console.txt
-            openstack console log show $1 >> console.txt
+            openstack server show $INSTANCE_ID > console.txt
+            openstack console log show $INSTANCE_ID >> console.txt
         fi
         delete=1
         if [[ $DEBUG ]]; then
-            read -r -p "${yellow}==>${bold} Would you like to clean up the instance '$1'? [y/N] ${all_off}" response
+            read -r -p "${yellow}==>${bold} Would you like to clean up the instance '$INSTANCE_ID'? [y/N] ${all_off}" response
             [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]] || delete=0
         fi
         if [[ $delete -eq 1 ]]; then
-            action "Deleting instance '$1'..."
-            debug "openstack server delete $1"
-            openstack server delete $1
+            action "Deleting instance '$INSTANCE_ID'..."
+            debug "openstack server delete $INSTANCE_ID"
+            openstack server delete $INSTANCE_ID
             INSTANCE_ID=
+            if [[ -n "$VOLUME_ID" ]]; then
+                action "Deleting volume: '$VOLUME_ID'..."
+                debug "openstack volume delete $VOLUME_ID"
+                openstack volume delete $VOLUME_ID
+                VOLUME_ID=
+            fi
         else
-            warn "Not deleting instance $1..."
+            warn "Not deleting instance $INSTANCE_ID..."
         fi
     fi
 }
 
 # Function for cleanup on script exit
 cleanup_on_exit() {
-    delete_instance $INSTANCE_ID
+    info "Running cleanup process..."
+    delete_instance
 }
 
 # Trap for cleanup on script exit
 trap 'cleanup_on_exit' EXIT
 
+# Get flavor disk size
+FLAVOR_DISK_SIZE=$(openstack flavor show $OS_FLAVOR -c disk -f value)
+info "Flavor disk size is $FLAVOR_DISK_SIZE GiB"
+
+# Get disk image size, and convert to GB
+DISK_BYTES=$(openstack image show -c virtual_size -f value $IMAGE_ID)
+DISK_SIZE=$((DISK_BYTES / 1073741824))
+
+info "Image disk size is $DISK_SIZE GiB"
+
+# If the size is > 30, we need to boot from volume
+BOOT_FROM_VOLUME=""
+if [ "$DISK_SIZE" -gt "$FLAVOR_DISK_SIZE" ]; then
+    info "Using boot from volume"
+    BOOT_FROM_VOLUME="--boot-from-volume $DISK_SIZE"
+fi
+
 instance_name="TEST ${NAME}"
 action "Creating instance '$instance_name'..."
-debug "openstack server create --image $IMAGE_ID --flavor $OS_FLAVOR --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME --wait '$NAME'"
-INSTANCE_ID=$(openstack server create -f value -c id --image $IMAGE_ID --flavor $OS_FLAVOR --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME --wait "$NAME" | xargs echo)  # xargs because of leading newline
+debug "openstack server create --image $IMAGE_ID --flavor $OS_FLAVOR $BOOT_FROM_VOLUME --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME --wait '$NAME'"
+INSTANCE_ID=$(openstack server create -f value -c id --image $IMAGE_ID --flavor $OS_FLAVOR $BOOT_FROM_VOLUME --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME --wait "$NAME" | xargs echo)  # xargs because of leading newline
 
 if [[ ${INSTANCE_ID//-/} =~ ^[[:xdigit:]]{32}$ ]]; then
     info "Found instance ID: '$INSTANCE_ID'"
 else
     fatal "Instance ID not found! $INSTANCE_ID"
+fi
+
+if [[ -n "$BOOT_FROM_VOLUME" ]]; then
+    VOLUME_ID=$(openstack server show "$INSTANCE_ID" -f json | jq -r '.volumes_attached[].id')
 fi
 
 sleeptime=10
@@ -234,8 +265,7 @@ attempts=20
 attempt=1
 info "Waiting for instance to finish boot..."
 while [[ $attempt -le $attempts ]]; do
-    openstack console log show $INSTANCE_ID | grep -Eoq "$READY_MESSAGE" 2>&1 >/dev/null
-    if [[ $? -eq 0 ]]; then
+    if openstack console log show $INSTANCE_ID | grep -Eoq "$READY_MESSAGE" >/dev/null 2>&1; then
         info "Boot finished in $((sleeptime*attempt))s"
         break
     fi
@@ -253,8 +283,7 @@ attempts=30
 attempt=1
 info "Checking for SSH port open..."
 while [[ $attempt -le $attempts ]]; do
-    nc -z -w5 $ip 22 2>&1 >/dev/null
-    if [[ $? -eq 0 ]]; then
+    if nc -z -w5 $ip 22 >/dev/null 2>&1; then
         info "SSH connection found in $((sleeptime*attempt))s"
         break
     fi

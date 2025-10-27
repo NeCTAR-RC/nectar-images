@@ -1,61 +1,32 @@
 ---
-- name: Enable Remote Desktop
-  ansible.windows.win_regedit:
-    key: 'HKLM:\System\CurrentControlSet\Control\Terminal Server'
-    value: fDenyTSConnections
-    data: 0
-    datatype: dword
-
-- name: Disable the "Allow your PC to be discoverable" message
-  ansible.windows.win_regedit:
-    path: 'HKLM:\System\CurrentControlSet\Control\Network\NewNetworkWindowOff'
-
-- name: Enable Remote Desktop firewall rule
-  ansible.windows.win_shell: Enable-NetFirewallRule -DisplayGroup 'Remote Desktop'
-
-#- name: Install the VirtIO Windows Guest Tools
-#  ansible.windows.win_package:
-#    path: "{{ virtio_win_iso_path }}\\virtio-win-guest-tools.exe"
-#    arguments: /install /passive /norestart /quiet
-
-#- name: Install QEMU Guest Agent
-#  ansible.windows.win_package:
-#    path: "{{ virtio_win_iso_path }}\\guest-agent\\qemu-ga-x86_64.msi"
-#    creates_path: "{{ ansible_env['ProgramFiles'] }}\\qemu-ga"
-
-- name: Enable the Windows Audio service
-  ansible.windows.win_service:
-    name: AudioSrv
-    start_mode: auto
-
-- name: Deploy sshd config
-  copy:
-    src: sshd_config
-    dest: "{{ ansible_env['ProgramData'] }}\\ssh\\sshd_config"
-
 - name: Create C:\ProgramData\Nectar directory
   ansible.windows.win_file:
     path: C:\ProgramData\Nectar
     state: directory
 
-- name: Copy NVIDIA VGPU Driver install script
-  ansible.windows.win_copy:
-    src: nvidia_vgpu_driver_install.ps1
-    dest: C:\ProgramData\Nectar\nvidia_vgpu_driver_install.ps1
+- name: Include UI tweaks tasks
+  ansible.builtin.include_tasks: ui-tweaks.yml
 
-- name: Install testing scripts
-  ansible.windows.win_copy:
-    src: testing/
-    dest: C:\ProgramData\Nectar\
+#- name: Include SSH daemon tasks
+#  ansible.builtin.include_tasks: sshd.yml
 
-- name: Create Registry Entry for the NVIDIA VGPU License token
-  ansible.windows.win_regedit:
-    path: 'HKLM:\Software\NVIDIA Corporation\vGPU Licensing\ClientConfigToken\GridLicensing'
-    name: FeatureType
-    type: dword
-    data: 1
+- name: Include background image tasks
+  ansible.builtin.include_tasks: background.yml
 
-- name: Create the NVIDIA VGPU Licence token directory
-  ansible.windows.win_file:
-    path: 'C:\Program Files\NVIDIA Corporation\vGPU Licensing\ClientConfigToken'
-    state: directory
+- name: Include RDP configuration tasks
+  ansible.builtin.include_tasks: rdp.yml
+
+- name: Include networking and firewall tasks
+  ansible.builtin.include_tasks: networking.yml
+
+- name: Include miscellaneous tasks
+  ansible.builtin.include_tasks: misc.yml
+
+- name: Include NVIDIA vGPU tasks
+  ansible.builtin.include_tasks: nvidia-vgpu.yml
+
+- name: Include Firefox installation tasks
+  ansible.builtin.include_tasks: firefox.yml
+
+- name: Include testing framework tasks
+  ansible.builtin.include_tasks: testing.yml

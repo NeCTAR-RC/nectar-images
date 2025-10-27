@@ -1,0 +1,13 @@
+[Unit]
+Description=Neurocommand update
+After=network.target
+Before=bumblebee-phone-home.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+StandardOutput=journal+console
+ExecStart=/usr/local/sbin/neurocommand-update.sh
+
+[Install]
+WantedBy=default.target

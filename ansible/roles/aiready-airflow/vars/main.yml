@@ -1,0 +1,10 @@
+---
+airflow_admin_username: admin
+airflow_admin_firstname: Admin
+airflow_admin_lastname: User
+airflow_admin_email: admin@example.com
+airflow_admin_password: admin  # Change this to a secure password
+airflow_db_user: airflow
+airflow_db_password: airflow  # Use a secure password
+airflow_db_name: airflow
+airflow_db_host: localhost  # Adjust if PostgreSQL is on a different host

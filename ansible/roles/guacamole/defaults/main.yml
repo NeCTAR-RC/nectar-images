@@ -8,11 +8,11 @@ guacamole_guacd_hostname: 127.0.0.1
 guacample_guacd_listen: 127.0.0.1
 guacamole_guacd_port: 4822
 
-guacamole_openid_authorization_endpoint: 
-guacamole_jwks_endpoint: 
-guacamole_openid_issuer: 
-guacamole_openid_client_id: 
-guacamole_openid_redirect_uri: 
+guacamole_openid_authorization_endpoint:
+guacamole_jwks_endpoint:
+guacamole_openid_issuer:
+guacamole_openid_client_id:
+guacamole_openid_redirect_uri:
 guacamole_claim_type: email
 guacamole_openid_scope: openid email profile
 guacamole_openid_allowed_clock_skew: 500

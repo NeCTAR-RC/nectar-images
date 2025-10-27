@@ -21,4 +21,3 @@
     - /etc/netplan/01-netcfg.yaml
     - /var/lib/dbus/machine-id
     - /var/lib/systemd/random-seed  # recommended by systemd for base images
-

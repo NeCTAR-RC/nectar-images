@@ -1,0 +1,19 @@
+---
+- name: Install dependencies for Globus client
+  ansible.builtin.package:
+    name:
+      - tk
+      - tcllib
+    state: present
+
+- name: Create singularity mount points
+  ansible.builtin.file:
+    path: /opt/globusconnectpersonal
+    state: directory
+    mode: "0755"
+
+- name: Download and extract Globus client
+  ansible.builtin.unarchive:
+    src: https://downloads.globus.org/globus-connect-personal/linux/stable/globusconnectpersonal-latest.tgz
+    dest: /opt/globusconnectpersonal
+    remote_src: true

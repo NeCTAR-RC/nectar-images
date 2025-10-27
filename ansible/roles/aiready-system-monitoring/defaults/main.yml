@@ -1,0 +1,2 @@
+grafana_prometheus_url: "http://localhost:9090"
+prometheus_datasource_uid: "prometheus-aiready"

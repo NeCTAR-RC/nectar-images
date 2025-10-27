@@ -17,7 +17,6 @@ xfce_packages:
 - seahorse
 - pcp-selinux
 - lightdm
-- firefox
 - rocky-backgrounds
 - parole
 - xfce4-taskmanager

@@ -1,0 +1,17 @@
+---
+- name: Install tensorflow (GPU version)
+  ansible.builtin.pip:
+    name:
+      - tensorflow[and-cuda]
+    executable: "{{ anaconda_link_dir }}/bin/pip"
+  when:
+    - cuda_enabled | bool
+
+
+- name: Copy example notebooks to JupyterLab directory
+  copy:
+    src: "{{ item }}"
+    dest: "{{ examples_directory }}"
+    mode: '0644'
+  with_fileglob:
+    - "notebooks/*.ipynb"

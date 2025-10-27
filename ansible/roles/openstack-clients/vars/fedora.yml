@@ -14,5 +14,5 @@ openstack_clients_packages:
   - python3-swiftclient
   - python3-troveclient
 # Not available on F36
-#  - python3-ceilometerclient 
-#  - python3-muranoclient 
+#  - python3-ceilometerclient
+#  - python3-muranoclient

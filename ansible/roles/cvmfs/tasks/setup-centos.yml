@@ -1,0 +1,9 @@
+---
+- name: Install CVMFS release
+  yum:
+    name: https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest.noarch.rpm
+
+- name: Install CVMFS
+  yum:
+    name: cvmfs
+    state: present

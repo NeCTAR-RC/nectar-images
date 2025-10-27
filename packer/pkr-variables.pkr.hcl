@@ -113,8 +113,8 @@ variable "communicator" {
 }
 
 variable "disk_size" {
-  type    = string
-  default = "10G"
+  type    = number
+  default = "10"
 }
 
 variable "floppy_files" {
@@ -213,7 +213,7 @@ variable "vnc_bind_address" {
 # OpenStack
 variable "availability_zone" {
   type    = string
-  default = "melbourne-qh2"
+  default = "ardc-syd-1"
 }
 
 variable "flavor" {

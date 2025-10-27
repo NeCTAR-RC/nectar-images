@@ -1,0 +1,22 @@
+---
+- name: Ensure PostgreSQL is running
+  service:
+    name: postgresql
+    state: started
+    enabled: yes
+
+- name: Create PostgreSQL user for Airflow
+  become_user: postgres
+  postgresql_user:
+    name: "{{ airflow_db_user }}"
+    password: "{{ airflow_db_password }}"
+    state: present
+    encrypted: yes
+  no_log: true
+
+- name: Create PostgreSQL database for Airflow
+  become_user: postgres
+  postgresql_db:
+    name: "{{ airflow_db_name }}"
+    owner: "{{ airflow_db_user }}"
+    state: present

@@ -29,4 +29,3 @@
     content: 'nectar ALL=(ALL)   NOPASSWD:ALL'
     mode: 0440
     validate: 'visudo -cf %s'
-

@@ -1,0 +1,48 @@
+---
+- name: Update apt cache and install system dependencies
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+    name:
+      - python3-pip
+      - python3-dev
+      - python3-venv
+      - libpq-dev
+      - build-essential
+      - curl
+      - libgl1-mesa-glx
+      - libglib2.0-0
+    state: present
+
+- name: Check if Anaconda/Conda pip is available
+  stat:
+    path: "{{ anaconda_link_dir }}/bin/pip"
+  register: anaconda_pip_exists
+
+- name: Check if Anaconda/Conda pip is available
+  stat:
+    path: "{{ anaconda_link_dir }}/bin/pip"
+  register: anaconda_pip_exists
+
+- name: Install PyTorch (GPU version)
+  shell: "{{ anaconda_link_dir }}/bin/pip install torch=={{ pytorch_version }} torchvision=={{torchvision_version}} --index-url https://download.pytorch.org/whl/cu{{ cuda_version | replace('.', '') }}"
+  when:
+    - anaconda_pip_exists.stat.exists
+    - cuda_enabled | bool
+  args:
+    executable: /bin/bash
+
+- name: Install CV packages using pip
+  ansible.builtin.pip:
+    name: "{{ item }}"
+    executable: "{{ anaconda_link_dir }}/bin/pip"
+  loop: "{{ cv_packages }}"
+  when: anaconda_pip_exists.stat.exists
+
+- name: Copy example notebooks to JupyterLab directory
+  copy:
+    src: "{{ item }}"
+    dest: "{{ examples_directory }}"
+    mode: '0644'
+  with_fileglob:
+    - "notebooks/*.ipynb"

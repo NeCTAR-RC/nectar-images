@@ -73,9 +73,9 @@ c.NotebookApp.allow_credentials = {{ jupyter_lab_notebookapp_allow_credentials |
 {% endif %}
 
 ## Set the Access-Control-Allow-Origin header
-#  
+#
 #  Use '*' to allow any origin to access your server.
-#  
+#
 #  Takes precedence over allow_origin_pat.
 {% if jupyter_lab_notebookapp_allow_origin is defined %}
 c.NotebookApp.allow_origin = '{{ jupyter_lab_notebookapp_allow_origin }}'
@@ -84,13 +84,13 @@ c.NotebookApp.allow_origin = '{{ jupyter_lab_notebookapp_allow_origin }}'
 {% endif %}
 
 ## Use a regular expression for the Access-Control-Allow-Origin header
-#  
+#
 #  Requests from an origin matching the expression will get replies with:
-#  
+#
 #      Access-Control-Allow-Origin: origin
-#  
+#
 #  where `origin` is the origin of the request.
-#  
+#
 #  Ignored if allow_origin is set.
 {% if jupyter_lab_notebookapp_allow_origin_pat is defined %}
 c.NotebookApp.allow_origin_pat = '{{ jupyter_lab_notebookapp_allow_origin_pat }}'
@@ -99,11 +99,11 @@ c.NotebookApp.allow_origin_pat = '{{ jupyter_lab_notebookapp_allow_origin_pat }}
 {% endif %}
 
 ## Allow password to be changed at login for the notebook server.
-#  
+#
 #  While loggin in with a token, the notebook server UI will give the opportunity
 #  to the user to enter a new password at the same time that will replace the
 #  token login mechanism.
-#  
+#
 #  This can be set to false to prevent changing password from the UI/API.
 {% if jupyter_lab_notebookapp_allow_password_change is defined %}
 c.NotebookApp.allow_password_change = {{ jupyter_lab_notebookapp_allow_password_change | bool }}
@@ -112,15 +112,15 @@ c.NotebookApp.allow_password_change = {{ jupyter_lab_notebookapp_allow_password_
 {% endif %}
 
 ## Allow requests where the Host header doesn't point to a local server
-#  
+#
 #  By default, requests get a 403 forbidden response if the 'Host' header shows
 #  that the browser thinks it's on a non-local domain. Setting this option to
 #  True disables this check.
-#  
+#
 #  This protects against 'DNS rebinding' attacks, where a remote web server
 #  serves you a page and then changes its DNS to send later requests to a local
 #  IP, bypassing same-origin checks.
-#  
+#
 #  Local IP addresses (such as 127.0.0.1 and ::1) are allowed as local, along
 #  with hostnames configured in local_hostnames.
 {% if jupyter_lab_notebookapp_allow_remote_access is defined %}
@@ -144,7 +144,7 @@ c.NotebookApp.base_project_url = '{{ jupyter_lab_notebookapp_base_project_url }}
 {% endif %}
 
 ## The base URL for the notebook server.
-#  
+#
 #  Leading and trailing slashes can be omitted, and will automatically be added.
 {% if jupyter_lab_notebookapp_base_url is defined %}
 c.NotebookApp.base_url = '{{ jupyter_lab_notebookapp_base_url }}'
@@ -202,7 +202,7 @@ c.NotebookApp.cookie_options = {{ jupyter_lab_notebookapp_cookie_options }}
 ## The random bytes used to secure cookies. By default this is a new random
 #  number every time you start the Notebook. Set it to a value in a config file
 #  to enable logins to persist across server sessions.
-#  
+#
 #  Note: Cookie secrets should be kept private, do not share config files with
 #  cookie_secret stored in plaintext (you can read the value from a file).
 {% if jupyter_lab_notebookapp_cookie_secret is defined %}
@@ -219,12 +219,12 @@ c.NotebookApp.cookie_secret_file = '{{ jupyter_lab_notebookapp_cookie_secret_fil
 {% endif %}
 
 ## Override URL shown to users.
-#  
+#
 #  Replace actual URL, including protocol, address, port and base URL, with the
 #  given value when displaying URL to the users. Do not change the actual
 #  connection URL. If authentication token is enabled, the token is added to the
 #  custom URL automatically.
-#  
+#
 #  This option is intended to be used when the URL to display to the user cannot
 #  be determined reliably by the Jupyter notebook server (proxified or
 #  containerized setups for example).
@@ -242,13 +242,13 @@ c.NotebookApp.default_url = '{{ jupyter_lab_notebookapp_default_url }}'
 {% endif %}
 
 ## Disable cross-site-request-forgery protection
-#  
+#
 #  Jupyter notebook 4.3.1 introduces protection from cross-site request
 #  forgeries, requiring API requests to either:
-#  
+#
 #  - originate from pages served by this server (validated with XSRF cookie and
 #  token), or - authenticate with a token
-#  
+#
 #  Some anonymous compute resources still desire the ability to run code,
 #  completely without authentication. These services can disable all
 #  authentication and security checks, with the full knowledge of what that
@@ -260,11 +260,11 @@ c.NotebookApp.disable_check_xsrf = {{ jupyter_lab_notebookapp_disable_check_xsrf
 {% endif %}
 
 ## Whether to enable MathJax for typesetting math/TeX
-#  
+#
 #  MathJax is the javascript library Jupyter uses to render math/LaTeX. It is
 #  very large, so you may want to disable it if you have a slow internet
 #  connection, or for offline use of the notebook.
-#  
+#
 #  When disabled, equations etc. will appear as their untransformed TeX source.
 {% if jupyter_lab_notebookapp_enable_mathjax is defined %}
 c.NotebookApp.enable_mathjax = {{ jupyter_lab_notebookapp_enable_mathjax | bool }}
@@ -287,7 +287,7 @@ c.NotebookApp.extra_services = {{ jupyter_lab_notebookapp_extra_services }}
 {% endif %}
 
 ## Extra paths to search for serving static files.
-#  
+#
 #  This allows adding javascript/css to be available from the notebook server
 #  machine, or overriding individual files in the IPython
 {% if jupyter_lab_notebookapp_extra_static_paths is defined %}
@@ -297,7 +297,7 @@ c.NotebookApp.extra_static_paths = {{ jupyter_lab_notebookapp_extra_static_paths
 {% endif %}
 
 ## Extra paths to search for serving jinja templates.
-#  
+#
 #  Can be used to override templates from notebook.templates.
 {% if jupyter_lab_notebookapp_extra_template_paths is defined %}
 c.NotebookApp.extra_template_paths = {{ jupyter_lab_notebookapp_extra_template_paths }}
@@ -305,7 +305,7 @@ c.NotebookApp.extra_template_paths = {{ jupyter_lab_notebookapp_extra_template_p
 #c.NotebookApp.extra_template_paths = []
 {% endif %}
 
-## 
+##
 {% if jupyter_lab_notebookapp_file_to_run is defined %}
 c.NotebookApp.file_to_run = '{{ jupyter_lab_notebookapp_file_to_run }}'
 {% else %}
@@ -374,7 +374,7 @@ c.NotebookApp.kernel_manager_class = '{{ jupyter_lab_notebookapp_kernel_manager_
 
 ## The kernel spec manager class to use. Should be a subclass of
 #  `jupyter_client.kernelspec.KernelSpecManager`.
-#  
+#
 #  The Api of KernelSpecManager is provisional and might change without warning
 #  between this version of Jupyter and the next stable one.
 {% if jupyter_lab_notebookapp_kernel_spec_manager_class is defined %}
@@ -391,7 +391,7 @@ c.NotebookApp.keyfile = '{{ jupyter_lab_notebookapp_keyfile }}'
 {% endif %}
 
 ## Hostnames to allow as local when allow_remote_access is False.
-#  
+#
 #  Local IP addresses (such as 127.0.0.1 and ::1) are automatically accepted as
 #  local as well.
 {% if jupyter_lab_notebookapp_local_hostnames is defined %}
@@ -432,7 +432,7 @@ c.NotebookApp.mathjax_url = '{{ jupyter_lab_notebookapp_mathjax_url }}'
 ## Sets the maximum allowed size of the client request body, specified in  the
 #  Content-Length request header field. If the size in a request  exceeds the
 #  configured value, a malformed HTTP message is returned to the client.
-#  
+#
 #  Note: max_body_size is applied even in streaming mode.
 {% if jupyter_lab_notebookapp_max_body_size is defined %}
 c.NotebookApp.max_body_size = {{ jupyter_lab_notebookapp_max_body_size }}
@@ -484,11 +484,11 @@ c.NotebookApp.open_browser = {{ jupyter_lab_notebookapp_open_browser | bool }}
 {% endif %}
 
 ## Hashed password to use for web authentication.
-#  
+#
 #  To generate, type in a python/IPython shell:
-#  
+#
 #    from notebook.auth import passwd; passwd()
-#  
+#
 #  The string should be of the form type:salt:hashed-password.
 {% if jupyter_lab_notebookapp_password is defined %}
 c.NotebookApp.password = '{{ jupyter_lab_notebookapp_password }}'
@@ -499,7 +499,7 @@ c.NotebookApp.password = '{{ jupyter_lab_notebookapp_password }}'
 ## Forces users to use a password for the Notebook server. This is useful in a
 #  multi user environment, for instance when everybody in the LAN can access each
 #  other's machine through ssh.
-#  
+#
 #  In such a case, server the notebook server on localhost is not secure since
 #  any user can connect to the notebook server via ssh.
 {% if jupyter_lab_notebookapp_password_required is defined %}
@@ -592,10 +592,10 @@ c.NotebookApp.terminado_settings = {{ jupyter_lab_notebookapp_terminado_settings
 {% endif %}
 
 ## Set to False to disable terminals.
-#  
+#
 #  This does *not* make the notebook server more secure by itself. Anything the
 #  user can in a terminal, they can also do in a notebook.
-#  
+#
 #  Terminals may also be automatically disabled if the terminado package is not
 #  available.
 {% if jupyter_lab_notebookapp_terminals_enabled is defined %}
@@ -605,9 +605,9 @@ c.NotebookApp.terminals_enabled = {{ jupyter_lab_notebookapp_terminals_enabled |
 {% endif %}
 
 ## Token used for authenticating first-time connections to the server.
-#  
+#
 #  When no password is enabled, the default is to generate a new, random token.
-#  
+#
 #  Setting to an empty string disables authentication altogether, which is NOT
 #  RECOMMENDED.
 {% if jupyter_lab_notebookapp_token is defined %}
@@ -634,17 +634,17 @@ c.NotebookApp.trust_xheaders = {{ jupyter_lab_notebookapp_trust_xheaders | bool 
 {% endif %}
 
 ## Disable launching browser by redirect file
-#  
+#
 #  For versions of notebook > 5.7.2, a security feature measure was added that
 #  prevented the authentication token used to launch the browser from being
 #  visible. This feature makes it difficult for other users on a multi-user
 #  system from running code in your Jupyter session as you.
-#  
+#
 #  However, some environments (like Windows Subsystem for Linux (WSL) and
 #  Chromebooks), launching a browser using a redirect file can lead the browser
 #  failing to load.  This is because of the difference in file structures/paths
 #  between the runtime and  the browser.
-#  
+#
 #  Disabling this setting to False will disable this behavior, allowing the
 #  browser  to launch by using a URL and visible token (as before).
 {% if jupyter_lab_notebookapp_use_redirect_file is defined %}
@@ -663,11 +663,11 @@ c.NotebookApp.webapp_settings = {{ jupyter_lab_notebookapp_webapp_settings }}
 ## Specify Where to open the notebook on startup. This is the `new` argument
 #  passed to the standard library method `webbrowser.open`. The behaviour is not
 #  guaranteed, but depends on browser support. Valid values are:
-#  
+#
 #   - 2 opens a new tab,
 #   - 1 opens a new window,
 #   - 0 opens in an existing window.
-#  
+#
 #  See the `webbrowser.open` documentation for details.
 {% if jupyter_lab_notebookapp_webbrowser_open_new is defined %}
 c.NotebookApp.webbrowser_open_new = {{ jupyter_lab_notebookapp_webbrowser_open_new }}
@@ -676,11 +676,11 @@ c.NotebookApp.webbrowser_open_new = {{ jupyter_lab_notebookapp_webbrowser_open_n
 {% endif %}
 
 ## Set the tornado compression options for websocket connections.
-#  
+#
 #  This value will be returned from
 #  :meth:`WebSocketHandler.get_compression_options`. None (default) will disable
 #  compression. A dict (even an empty one) will enable compression.
-#  
+#
 #  See the tornado docs for WebSocketHandler.get_compression_options for details.
 {% if jupyter_lab_notebookapp_websocket_compression_options is defined %}
 c.NotebookApp.websocket_compression_options = '{{ jupyter_lab_notebookapp_websocket_compression_options }}'
@@ -690,7 +690,7 @@ c.NotebookApp.websocket_compression_options = '{{ jupyter_lab_notebookapp_websoc
 
 ## The base URL for websockets, if it differs from the HTTP server (hint: it
 #  almost certainly doesn't).
-#  
+#
 #  Should be in the form of an HTTP origin: ws[s]://hostname[:port]
 {% if jupyter_lab_notebookapp_websocket_url is defined %}
 c.NotebookApp.websocket_url = '{{ jupyter_lab_notebookapp_websocket_url }}'
@@ -779,7 +779,7 @@ c.LabApp.workspaces_dir = '{{ jupyter_lab_labapp_workspaces_dir }}'
 ## Mixin for configurable classes that work with connection files
 
 ## JSON file in which to store connection info [default: kernel-<pid>.json]
-#  
+#
 #  This file will contain the IP, ports, and authentication key needed to connect
 #  clients to this kernel. By default, this file will be created in the security
 #  dir of the current profile, but can be specified by absolute path.
@@ -833,7 +833,7 @@ c.ConnectionFileMixin.stdin_port = {{ jupyter_lab_connectionfilemixin_stdin_port
 #c.ConnectionFileMixin.stdin_port = 0
 {% endif %}
 
-## 
+##
 {% if jupyter_lab_connectionfilemixin_transport is defined %}
 c.ConnectionFileMixin.transport = '{{ jupyter_lab_connectionfilemixin_transport }}'
 {% else %}
@@ -845,7 +845,7 @@ c.ConnectionFileMixin.transport = '{{ jupyter_lab_connectionfilemixin_transport 
 #------------------------------------------------------------------------------
 
 ## Manages a single kernel in a subprocess on this host.
-#  
+#
 #  This version starts kernels with Popen.
 
 ## Should we autorestart the kernel if it dies.
@@ -856,7 +856,7 @@ c.KernelManager.autorestart = {{ jupyter_lab_kernelmanager_autorestart | bool }}
 {% endif %}
 
 ## DEPRECATED: Use kernel_name instead.
-#  
+#
 #  The Popen Command to launch the kernel. Override this if you have a custom
 #  kernel. If kernel_cmd is specified in a configuration file, Jupyter does not
 #  pass any arguments to the kernel, because it cannot make any assumptions about
@@ -881,27 +881,27 @@ c.KernelManager.shutdown_wait_time = {{ jupyter_lab_kernelmanager_shutdown_wait_
 #------------------------------------------------------------------------------
 
 ## Object for handling serialization and sending of messages.
-#  
+#
 #  The Session object handles building messages and sending them with ZMQ sockets
 #  or ZMQStream objects.  Objects can communicate with each other over the
 #  network via Session objects, and only need to work with the dict-based IPython
 #  message spec. The Session will handle serialization/deserialization, security,
 #  and metadata.
-#  
+#
 #  Sessions support configurable serialization via packer/unpacker traits, and
 #  signing with HMAC digests via the key/keyfile traits.
-#  
+#
 #  Parameters ----------
-#  
+#
 #  debug : bool
 #      whether to trigger extra debugging statements
 #  packer/unpacker : str : 'json', 'pickle' or import_string
 #      importstrings for methods to serialize message parts.  If just
 #      'json' or 'pickle', predefined JSON and pickle packers will be used.
 #      Otherwise, the entire importstring must be used.
-#  
+#
 #      The functions must accept at least valid JSON input, and output *bytes*.
-#  
+#
 #      For example, to use msgpack:
 #      packer = 'msgpack.packb', unpacker='msgpack.unpackb'
 #  pack/unpack : callables
@@ -926,7 +926,7 @@ c.Session.buffer_threshold = {{ jupyter_lab_session_buffer_threshold }}
 {% endif %}
 
 ## Whether to check PID to protect against calls after fork.
-#  
+#
 #  This check can be disabled if fork-safety is handled elsewhere.
 {% if jupyter_lab_session_check_pid is defined %}
 c.Session.check_pid = {{ jupyter_lab_session_check_pid | bool }}
@@ -949,7 +949,7 @@ c.Session.debug = {{ jupyter_lab_session_debug | bool }}
 {% endif %}
 
 ## The maximum number of digests to remember.
-#  
+#
 #  The digest history will be culled when it exceeds this value.
 {% if jupyter_lab_session_digest_history_size is defined %}
 c.Session.digest_history_size = {{ jupyter_lab_session_digest_history_size }}
@@ -1069,10 +1069,10 @@ c.MappingKernelManager.allowed_message_types = {{ jupyter_lab_mappingkernelmanag
 
 ## Whether messages from kernels whose frontends have disconnected should be
 #  buffered in-memory.
-#  
+#
 #  When True (default), messages are buffered and replayed on reconnect, avoiding
 #  lost messages due to interrupted connectivity.
-#  
+#
 #  Disable if long-running kernels will produce too much output while no
 #  frontends are connected.
 {% if jupyter_lab_mappingkernelmanager_buffer_offline_messages is defined %}
@@ -1115,7 +1115,7 @@ c.MappingKernelManager.cull_interval = {{ jupyter_lab_mappingkernelmanager_cull_
 {% endif %}
 
 ## Timeout for giving up on a kernel (in seconds).
-#  
+#
 #  On starting and restarting kernels, we check whether the kernel is running and
 #  responsive by sending kernel_info_requests. This sets the timeout in seconds
 #  for how long the kernel can take before being presumed dead. This affects the
@@ -1127,7 +1127,7 @@ c.MappingKernelManager.kernel_info_timeout = {{ jupyter_lab_mappingkernelmanager
 #c.MappingKernelManager.kernel_info_timeout = 60
 {% endif %}
 
-## 
+##
 {% if jupyter_lab_mappingkernelmanager_root_dir is defined %}
 c.MappingKernelManager.root_dir = '{{ jupyter_lab_mappingkernelmanager_root_dir }}'
 {% else %}
@@ -1155,7 +1155,7 @@ c.KernelSpecManager.kernel_spec_class = '{{ jupyter_lab_kernelspecmanager_kernel
 {% endif %}
 
 ## Whitelist of allowed kernel names.
-#  
+#
 #  By default, all installed kernels are allowed.
 {% if jupyter_lab_kernelspecmanager_whitelist is defined %}
 c.KernelSpecManager.whitelist = {{ jupyter_lab_kernelspecmanager_whitelist }}
@@ -1168,13 +1168,13 @@ c.KernelSpecManager.whitelist = {{ jupyter_lab_kernelspecmanager_whitelist }}
 #------------------------------------------------------------------------------
 
 ## Base class for serving files and directories.
-#  
+#
 #  This serves any text or binary file, as well as directories, with special
 #  handling for JSON notebook documents.
-#  
+#
 #  Most APIs take a path argument, which is always an API-style unicode path, and
 #  always refers to a directory.
-#  
+#
 #  - unicode, not url-escaped
 #  - '/'-separated
 #  - leading and trailing '/' will be stripped
@@ -1188,21 +1188,21 @@ c.ContentsManager.allow_hidden = {{ jupyter_lab_contentsmanager_allow_hidden | b
 #c.ContentsManager.allow_hidden = False
 {% endif %}
 
-## 
+##
 {% if jupyter_lab_contentsmanager_checkpoints is defined %}
 c.ContentsManager.checkpoints = '{{ jupyter_lab_contentsmanager_checkpoints }}'
 {% else %}
 #c.ContentsManager.checkpoints = None
 {% endif %}
 
-## 
+##
 {% if jupyter_lab_contentsmanager_checkpoints_class is defined %}
 c.ContentsManager.checkpoints_class = '{{ jupyter_lab_contentsmanager_checkpoints_class }}'
 {% else %}
 #c.ContentsManager.checkpoints_class = 'notebook.services.contents.checkpoints.Checkpoints'
 {% endif %}
 
-## 
+##
 {% if jupyter_lab_contentsmanager_checkpoints_kwargs is defined %}
 c.ContentsManager.checkpoints_kwargs = {{ jupyter_lab_contentsmanager_checkpoints_kwargs }}
 {% else %}
@@ -1210,13 +1210,13 @@ c.ContentsManager.checkpoints_kwargs = {{ jupyter_lab_contentsmanager_checkpoint
 {% endif %}
 
 ## handler class to use when serving raw file requests.
-#  
+#
 #  Default is a fallback that talks to the ContentsManager API, which may be
 #  inefficient, especially for large files.
-#  
+#
 #  Local files-based ContentsManagers can use a StaticFileHandler subclass, which
 #  will be much more efficient.
-#  
+#
 #  Access to these files should be Authenticated.
 {% if jupyter_lab_contentsmanager_files_handler_class is defined %}
 c.ContentsManager.files_handler_class = '{{ jupyter_lab_contentsmanager_files_handler_class }}'
@@ -1225,7 +1225,7 @@ c.ContentsManager.files_handler_class = '{{ jupyter_lab_contentsmanager_files_ha
 {% endif %}
 
 ## Extra parameters to pass to files_handler_class.
-#  
+#
 #  For example, StaticFileHandlers generally expect a `path` argument specifying
 #  the root directory from which to serve files.
 {% if jupyter_lab_contentsmanager_files_handler_params is defined %}
@@ -1242,16 +1242,16 @@ c.ContentsManager.hide_globs = {{ jupyter_lab_contentsmanager_hide_globs }}
 {% endif %}
 
 ## Python callable or importstring thereof
-#  
+#
 #  To be called on a contents model prior to save.
-#  
+#
 #  This can be used to process the structure, such as removing notebook outputs
 #  or other side effects that should not be saved.
-#  
+#
 #  It will be called as (all arguments passed by keyword)::
-#  
+#
 #      hook(path=path, model=model, contents_manager=self)
-#  
+#
 #  - model: the model to be saved. Includes file contents.
 #    Modifying this dict will affect the file that is stored.
 #  - path: the API path of the save destination
@@ -1262,7 +1262,7 @@ c.ContentsManager.pre_save_hook = '{{ jupyter_lab_contentsmanager_pre_save_hook 
 #c.ContentsManager.pre_save_hook = None
 {% endif %}
 
-## 
+##
 {% if jupyter_lab_contentsmanager_root_dir is defined %}
 c.ContentsManager.root_dir = '{{ jupyter_lab_contentsmanager_root_dir }}'
 {% else %}
@@ -1295,17 +1295,17 @@ c.ContentsManager.untitled_notebook = '{{ jupyter_lab_contentsmanager_untitled_n
 #------------------------------------------------------------------------------
 
 ## Mixin for ContentsAPI classes that interact with the filesystem.
-#  
+#
 #  Provides facilities for reading, writing, and copying both notebooks and
 #  generic files.
-#  
+#
 #  Shared by FileContentsManager and FileCheckpoints.
-#  
+#
 #  Note ---- Classes using this mixin must provide the following attributes:
-#  
+#
 #  root_dir : unicode
 #      A directory against against which API-style paths are to be resolved.
-#  
+#
 #  log : logging.Logger
 
 ## By default notebooks are saved on disk on a temporary file and then if
@@ -1334,16 +1334,16 @@ c.FileContentsManager.delete_to_trash = {{ jupyter_lab_filecontentsmanager_delet
 {% endif %}
 
 ## Python callable or importstring thereof
-#  
+#
 #  to be called on the path of a file just saved.
-#  
+#
 #  This can be used to process the file on disk, such as converting the notebook
 #  to a script or HTML via nbconvert.
-#  
+#
 #  It will be called as (all arguments passed by keyword)::
-#  
+#
 #      hook(os_path=os_path, model=model, contents_manager=instance)
-#  
+#
 #  - path: the filesystem path to the file just written - model: the model
 #  representing the file - contents_manager: this ContentsManager instance
 {% if jupyter_lab_filecontentsmanager_post_save_hook is defined %}
@@ -1352,7 +1352,7 @@ c.FileContentsManager.post_save_hook = '{{ jupyter_lab_filecontentsmanager_post_
 #c.FileContentsManager.post_save_hook = None
 {% endif %}
 
-## 
+##
 {% if jupyter_lab_filecontentsmanager_root_dir is defined %}
 c.FileContentsManager.root_dir = '{{ jupyter_lab_filecontentsmanager_root_dir }}'
 {% else %}

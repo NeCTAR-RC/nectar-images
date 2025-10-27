@@ -1,0 +1,19 @@
+---
+xrdp_packages:
+  - adduser
+  - init-system-helpers
+  - libfuse2
+  - libjpeg8
+  - libopus0
+  - libpam0g
+  - libx11-6
+  - libxfixes3
+  - libxrandr2
+  - xserver-xorg-core
+  - xrdp
+  - xorgxrdp
+
+xorg_path: /usr/lib/xorg/Xorg
+
+pipewire_files_dir: "{{ ansible_distribution }}_{{ ansible_distribution_release }}"
+pipewire_modules_dir: /usr/lib/x86_64-linux-gnu/pipewire-0.3

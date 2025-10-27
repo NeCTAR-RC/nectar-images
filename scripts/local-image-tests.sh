@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2086
 
 ## Colours
 all_off="$(tput sgr0)"
@@ -60,7 +61,7 @@ help_text() {
 }
 
 # Environment vars
-: "${OS_AVAILABILITY_ZONE:=melbourne-qh2}"
+: "${OS_AVAILABILITY_ZONE:=ardc-syd-1}"
 : "${OS_SECGROUP:=image-build}"
 : "${OS_FLAVOR:=m3.small}"
 : "${OS_KEYNAME:=jenkins-image-testing}"
@@ -74,8 +75,8 @@ USER_ACCOUNT=
 
 # Globals
 INSTANCE_ID=
+VOLUME_ID=
 IMAGE_ID=
-
 
 # Args
 while getopts ":hdf:n:u:" option; do
@@ -141,8 +142,7 @@ else
 fi
 
 # Test secgroup is available
-sg=$(openstack security group show -f value -c name "$OS_SECGROUP" 2>&1)
-if [[ $? -eq 0 ]]; then
+if sg=$(openstack security group show -f value -c name "$OS_SECGROUP" 2>&1); then
     info "Found security group: '$sg'"
 else
     fatal "Testing security group '$OS_SECGROUP' not found"
@@ -166,16 +166,16 @@ delete_image() {
     [[ -z "$IMAGE_ID" ]] && return  # No image ID set
     delete=1
     if [[ $DEBUG ]]; then
-        read -r -p "${yellow}==>${bold} Would you like to clean up the image '$1'? [y/N] ${all_off}" response
+        read -r -p "${yellow}==>${bold} Would you like to clean up the image '$IMAGE_ID'? [y/N] ${all_off}" response
         [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]] || delete=0
     fi
     if [[ $delete -eq 1 ]]; then
-        action "Deleting image '$1'..."
-        debug "openstack image delete $1"
-        openstack image delete $1
+        action "Deleting image '$IMAGE_ID'..."
+        debug "openstack image delete $IMAGE_ID"
+        openstack image delete $IMAGE_ID
         IMAGE_ID=
     else
-        warn "Not deleting image $1..."
+        warn "Not deleting image $IMAGE_ID..."
     fi
 }
 
@@ -183,28 +183,35 @@ delete_instance() {
     [[ -z "$INSTANCE_ID" ]] && return  # No instance ID set
     if [[ $DEBUG ]]; then
         echo "Saving instance/server log to: '$BASE_DIR/console.txt'"
-        openstack server show $1 > $BASE_DIR/console.txt
-        openstack console log show $1 >> $BASE_DIR/console.txt
+        openstack server show $INSTANCE_ID > $BASE_DIR/console.txt
+        openstack console log show $INSTANCE_ID >> $BASE_DIR/console.txt
     fi
     delete=1
     if [[ $DEBUG ]]; then
-        read -r -p "${yellow}==>${bold} Would you like to clean up the instance '$1'? [y/N] ${all_off}" response
+        read -r -p "${yellow}==>${bold} Would you like to clean up the instance '$INSTANCE_ID'? [y/N] ${all_off}" response
         [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]] || delete=0
     fi
     if [[ $delete -eq 1 ]]; then
-        action "Deleting instance '$1'..."
-        debug "openstack server delete $1"
-        openstack server delete $1
+        action "Deleting instance '$INSTANCE_ID'..."
+        debug "openstack server delete $INSTANCE_ID"
+        openstack server delete $INSTANCE_ID
         INSTANCE_ID=
+        if [[ -n "$VOLUME_ID" ]]; then
+            action "Deleting volume: '$VOLUME_ID'..."
+            debug "openstack volume delete $VOLUME_ID"
+            openstack volume delete $VOLUME_ID
+            VOLUME_ID=
+        fi
     else
-        warn "Not deleting instance $1..."
+        warn "Not deleting instance $INSTANCE_ID..."
     fi
 }
 
 # Function for cleanup on script exit
 cleanup_on_exit() {
-    delete_instance $INSTANCE_ID
-    delete_image $INSTANCE_ID
+    info "Running cleanup process..."
+    delete_instance
+    delete_image
 }
 
 # Trap for cleanup on script exit
@@ -218,8 +225,8 @@ info "Found image ID: '$IMAGE_ID'"
 
 # Set extra properties from Ansible facts (see Ansible facts role)
 if [[ -d $FACT_DIR ]]; then
-    find $FACT_DIR -type f -printf "%f\n" | while read FACT; do
-        read VAL < $FACT_DIR/$FACT
+    find $FACT_DIR -type f -printf "%f\n" | while read -r FACT; do
+        read -r VAL < $FACT_DIR/$FACT
         info "Setting property: $FACT='$VAL'"
         openstack image set --property $FACT=$"$VAL" $IMAGE_ID || true
     done
@@ -227,21 +234,40 @@ fi
 
 # Set tags from Ansible facts (see Ansible facts role)
 if [[ -d $TAG_DIR ]]; then
-    find $TAG_DIR -type f -printf "%f\n" | while read TAG; do
+    find $TAG_DIR -type f -printf "%f\n" | while read -r TAG; do
         info "Setting tag: '$TAG'"
         openstack image set --tag $TAG $IMAGE_ID || true
     done
 fi
 
+# Get flavor disk size
+FLAVOR_DISK_SIZE=$(openstack flavor show $OS_FLAVOR -c disk -f value)
+info "Flavor disk size is $FLAVOR_DISK_SIZE GiB"
+
+# Get disk image size, and convert to GB
+DISK_SIZE=$(qemu-img info --output=json "$IMAGE_FILE" | jq '.["virtual-size"] / 1073741824 | floor')
+info "Disk image size is $DISK_SIZE GiB"
+
+# If the size is > flavor disk, we need to boot from volume
+BOOT_FROM_VOLUME=""
+if [ "$DISK_SIZE" -gt "$FLAVOR_DISK_SIZE" ]; then
+    info "Using boot from volume"
+    BOOT_FROM_VOLUME="--boot-from-volume $DISK_SIZE"
+fi
+
 instance_name="test_${NAME}"
 action "Creating instance '$instance_name'..."
-debug "openstack server create --image $IMAGE_ID --flavor $OS_FLAVOR --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME --wait '$NAME'"
-INSTANCE_ID=$(openstack server create -f value -c id --image $IMAGE_ID --flavor $OS_FLAVOR --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME --wait "$NAME" | xargs echo)  # xargs because of leading newline
+debug "openstack server create --image $IMAGE_ID --flavor $OS_FLAVOR $BOOT_FROM_VOLUME --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME --wait '$NAME'"
+INSTANCE_ID=$(openstack server create -f value -c id --image $IMAGE_ID --flavor $OS_FLAVOR $BOOT_FROM_VOLUME --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME --wait "$NAME" | xargs echo)  # xargs because of leading newline
 
 if [[ -z $INSTANCE_ID ]]; then
     fatal "Instance ID not found!"
 else
     info "Found instance ID: '$INSTANCE_ID'"
+fi
+
+if [[ -n "$BOOT_FROM_VOLUME" ]]; then
+    VOLUME_ID=$(openstack server show "$INSTANCE_ID" -f json | jq -r '.volumes_attached[].id')
 fi
 
 set +e
@@ -290,8 +316,7 @@ attempts=20
 attempt=1
 info "Waiting for instance to finish boot..."
 while [[ $attempt -le $attempts ]]; do
-    openstack console log show $INSTANCE_ID | grep -Eoq "$READY_MESSAGE" 2>&1 >/dev/null
-    if [[ $? -eq 0 ]]; then
+    if openstack console log show $INSTANCE_ID | grep -Eoq "$READY_MESSAGE" >/dev/null 2>&1; then
         info "Boot finished in $((sleeptime*attempt))s"
         break
     fi
@@ -310,15 +335,12 @@ attempts=30
 attempt=1
 info "Checking for SSH port it open..."
 while [[ $attempt -le $attempts ]]; do
-    #ssh -q -oConnectTimeout=5 -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $USER_ACCOUNT@$ip exit 2>&1 >/dev/null
-    nc -z -w5 $ip 22 2>&1 >/dev/null
-    if [[ $? -eq 0 ]]; then
+    if nc -z -w5 $ip 22 >/dev/null 2>&1; then
         info "SSH connection found in $((sleeptime*attempt))s"
         break
     fi
     if [[ $attempt -eq $attempts ]]; then
         # One last attempt with output
-        #ssh -oConnectTimeout=5 -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $USER_ACCOUNT@$ip exit
         nc -z -w5 -v $ip 22
         fatal "Reached retry limit after 5 minutes"
     fi
@@ -338,5 +360,3 @@ debug "ssh -oConnectTimeout=5 -oIdentitiesOnly=yes -oBatchMode=yes -oStrictHostK
 ssh -oConnectTimeout=5 -oBatchMode=yes -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null $USER_ACCOUNT@$ip "$TEST_CMD"
 
 # Complete
-delete_instance $INSTANCE_ID
-delete_image $IMAGE_ID

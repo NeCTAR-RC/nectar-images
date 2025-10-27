@@ -1,0 +1,21 @@
+---
+llm_packages:
+  - datasets
+  - matplotlib
+  - nltk
+  - numpy
+  - pandas
+  - plotly
+  - regex
+  - rouge_score
+  - safetensors
+  - scikit-learn
+  - seaborn
+  - torch
+  - tqdm
+  - "transformers[torch]"
+  - wordcloud
+  - textblob
+  - gensim
+  - sentencepiece
+  - sentence-transformers

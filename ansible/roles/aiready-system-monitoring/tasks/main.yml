@@ -1,0 +1,12 @@
+---
+- name: Install and configure system monitoring tools
+  include_tasks: install.yml
+
+- name: Configure Grafana and start the service
+  include_tasks: configure_grafana.yml
+
+- name: Configure Prometheus and Grafana datasource
+  include_tasks: configure_prometheus.yml
+
+- name: Deploy the System Monitoring Dashboard
+  include_tasks: deploy_dashboard.yml

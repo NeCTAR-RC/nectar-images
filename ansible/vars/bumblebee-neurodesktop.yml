@@ -1,0 +1,35 @@
+---
+nectar_image_name: Neurodesktop
+organisation_name: Bumblebee
+locale: en_AU.UTF-8
+
+# Save these vars for setting as image properties
+image_properties:
+  hw_qemu_guest_agent: 'yes'
+
+firefox_prefs:
+  browser.aboutwelcome.enabled: 'true'
+  browser.startup.homepage: '"https://www.neurodesk.org"'
+  browser.startup.firstrunSkipsHomepage: 'true'
+  startup.homepage_welcome_url: '"https://www.neurodesk.org"'
+
+# Settings from the base image that Neurodesk uses
+# https://github.com/jupyter/docker-stacks/blob/main/images/docker-stacks-foundation/Dockerfile#L122
+micromamba_dest: /tmp/micromamba
+micromamba_root_prefix: /opt/conda
+micromamba_packages:
+  - jupyter_core
+  - conda
+  - mamba
+  - python=3.12
+
+# This is constructed from
+# https://github.com/jupyter/docker-stacks/blob/main/images/docker-stacks-foundation/initial-condarc
+# https://github.com/neurodesk/neurodesktop/blob/main/Dockerfile#L198
+micromamba_root_prefix_condarc:
+  auto_update_conda: false
+  show_channel_urls: true
+  channels:
+    - conda-forge
+  envs_dirs:
+    - ~/conda-environments

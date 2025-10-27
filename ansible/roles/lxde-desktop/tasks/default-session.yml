@@ -1,0 +1,6 @@
+---
+- name: Set LXDE as the default desktop on Debian
+  alternatives:
+    name: x-session-manager
+    path: /usr/bin/startlxde
+  when: ansible_os_family == 'Debian'

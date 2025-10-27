@@ -1,0 +1,10 @@
+---
+- name: Add ansible PPA
+  apt_repository:
+    repo: "{{ ansible_ppa }}"
+  when: ansible_ppa is defined
+
+- name: Install Ansible
+  ansible.builtin.apt:
+    name: ansible
+    state: present

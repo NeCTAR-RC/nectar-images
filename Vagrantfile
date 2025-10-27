@@ -201,7 +201,24 @@ Vagrant.configure("2") do |config|
 
   # Rocky Linux 9
   config.vm.define "rocky-9" do |c|
-    c.vm.box = "generic/rocky9"
+    c.vm.box = "rockylinux/9"
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true }
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook-standard.yml"
+      ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
+    end
+  end
+
+  # Rocky Linux 10
+  config.vm.define "rocky-10" do |c|
+    c.vm.box = "rockylinux/10"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
@@ -250,26 +267,9 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Fedora 39
-  config.vm.define "fedora-39" do |c|
-    c.vm.box = "fedora/39-cloud-base"
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-standard.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
-  # Fedora 40
-  config.vm.define "fedora-40" do |c|
-    c.vm.box = "fedora/40-cloud-base"
+  # Alma Linux 10
+  config.vm.define "almalinux-10" do |c|
+    c.vm.box = "almalinux/10"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = { nectar_test_build: true }
@@ -287,6 +287,26 @@ Vagrant.configure("2") do |config|
   # Fedora 41
   config.vm.define "fedora-41" do |c|
     c.vm.box = "fedora/41-cloud-base"
+    c.vm.provision "shell" do |shell|
+      shell.inline = "sudo dnf install -y python3-libdnf5"  # https://github.com/ansible/ansible/issues/84206
+    end
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true }
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook-standard.yml"
+      ansible.become = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "/usr/nectar/run_tests.sh"
+      shell.privileged = false
+      shell.env = { "NECTAR_TEST_BUILD": 1 }
+    end
+  end
+
+  # Fedora 42
+  config.vm.define "fedora-42" do |c|
+    c.vm.box = "fedora/42-cloud-base"
     c.vm.provision "shell" do |shell|
       shell.inline = "sudo dnf install -y python3-libdnf5"  # https://github.com/ansible/ansible/issues/84206
     end
@@ -536,6 +556,37 @@ Vagrant.configure("2") do |config|
     config.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
   end
 
+  # Bumblebee Ubuntu 24.04 LTS (Noble)
+  config.vm.define "bumblebee-ubuntu-24.04" do |c|
+    c.vm.box = "cloud-image/ubuntu-24.04"
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { nectar_test_build: true,
+                             nectar_image_name: "Ubuntu 24.04 LTS (Noble) Virtual Desktop" }
+      ansible.playbook = "ansible/playbook-bumblebee-desktop.yml"
+      ansible.become = true
+    end
+    config.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
+  end
+
+  # Bumblebee Neurodesktop
+  config.vm.define "bumblebee-neurodesk" do |c|
+    c.vm.box = "cloud-image/ubuntu-24.04"
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = { ansible_python_interpreter: "/usr/bin/python3",
+                             nectar_test_build: true,
+                             nectar_image_name: "Neurodesktop" }
+      ansible.playbook = "ansible/playbook-bumblebee-neurodesk.yml"
+      ansible.become = true
+      ansible.verbose = true
+    end
+    c.vm.provision "shell" do |shell|
+      shell.inline = "cp -rT /etc/skel /home/vagrant || true"
+      shell.privileged = false
+    end
+  config.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
+  end
 
   # Ubuntu 22.04 (jammy) - transcription desktop
   config.vm.define "bumblebee-transcription" do |c|
@@ -559,10 +610,12 @@ Vagrant.configure("2") do |config|
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
+  config.vm.disk :disk, size: "20GB", primary: true
+
   config.vm.provider :libvirt do |v|
     v.memory = 4096
     v.cpus = 2
-    v.machine_virtual_size = 4  # 4GB disk
+    v.machine_virtual_size = 20  # 4GB disk
     v.graphics_type = "spice"
   end
 

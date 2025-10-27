@@ -1,0 +1,48 @@
+- name: Create Grafana group
+  group:
+    name: "{{ grafana_group }}"
+    state: present
+    system: yes
+
+- name: Create grafana user
+  user:
+    name: "{{ grafana_user }}"
+    password: "{{ grafana_user_password }}"
+    group: "{{ grafana_group }}"
+    home: "{{ grafana_home }}"
+    system: yes
+    create_home: yes
+    shell: /bin/bash
+
+- name: Ensure PostgreSQL is running
+  service:
+    name: postgresql
+    state: started
+    enabled: yes
+
+- name: Create PostgreSQL user for grafana
+  become_user: postgres
+  postgresql_user:
+    name: "{{ grafana_db_user }}"
+    password: "{{ grafana_db_password }}"
+    encrypted: yes
+    state: present
+
+- name: Create PostgreSQL database for grafana
+  become_user: postgres
+  postgresql_db:
+    name: "{{ grafana_db_name }}"
+    owner: "{{ grafana_db_user }}"
+    state: present
+
+- name: Configure Grafana
+  template:
+    src: grafana.ini.j2
+    dest: /etc/grafana/grafana.ini
+  notify: Restart Grafana
+
+- name: Ensure Grafana is enabled
+  service:
+    name: grafana-server
+    state: started
+    enabled: yes

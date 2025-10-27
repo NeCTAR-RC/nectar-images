@@ -1,0 +1,32 @@
+---
+- name: Install Python packages
+  ansible.builtin.pip:
+    name: "{{ item }}"
+    executable: /opt/conda/bin/pip
+  with_items: "{{ neurodesk_python_packages }}"
+
+- name: Create Jupyter directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  with_items:
+    - /usr/local/bin/start-notebook.d
+    - /usr/local/bin/before-notebook.d
+
+- name: Copy Jupyter scripts
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "0755"
+  with_items:
+    - src: config/jupyter/start_notebook.sh
+      dest: /usr/local/bin/start-notebook.d/
+    - src: config/jupyter/before_notebook.sh
+      dest: /usr/local/bin/before-notebook.d/
+    - src: config/jupyter/jupyter_notebook_config.py
+      dest: /etc/jupyter/jupyter_notebook_config.py
+    - src: config/jupyter/jupyterlab_startup.sh
+      dest: /opt/neurodesktop/jupyterlab_startup.sh
+    - src: config/jupyter/environment_variables.sh
+      dest: /opt/neurodesktop/environment_variables.sh

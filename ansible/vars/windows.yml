@@ -8,5 +8,5 @@ image_properties:
   hw_firmware_type: uefi
   os_require_quiesce: yes
   trait:CUSTOM_NECTAR_WINDOWS: required
-  
+
 default_user: Administrator

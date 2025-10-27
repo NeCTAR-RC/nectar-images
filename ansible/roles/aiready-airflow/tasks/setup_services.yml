@@ -1,0 +1,32 @@
+---
+- name: Deploy Airflow services
+  block:
+    - name: Copy Airflow webserver systemd service
+      template:
+        src: airflow-webserver.service.j2
+        dest: /etc/systemd/system/airflow-webserver.service
+        mode: '0644'
+      notify: restart airflow webserver
+
+    - name: Copy Airflow scheduler systemd service
+      template:
+        src: airflow-scheduler.service.j2
+        dest: /etc/systemd/system/airflow-scheduler.service
+        mode: '0644'
+      notify: restart airflow scheduler
+
+    - name: Reload systemd daemon
+      systemd:
+        daemon_reload: yes
+
+    - name: Enable and start Airflow webserver service
+      systemd:
+        name: airflow-webserver
+        enabled: yes
+        state: started
+
+    - name: Enable and start Airflow scheduler service
+      systemd:
+        name: airflow-scheduler
+        enabled: yes
+        state: started

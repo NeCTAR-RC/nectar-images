@@ -1,0 +1,52 @@
+---
+- name: Copy background image to Nectar directory
+  ansible.windows.win_copy:
+    src: background.png
+    dest: C:\ProgramData\Nectar\background.png
+
+- name: Create PersonalizationCSP registry key
+  ansible.windows.win_regedit:
+    key: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\PersonalizationCSP'
+    state: present
+
+- name: Set lock screen image path
+  ansible.windows.win_regedit:
+    key: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\PersonalizationCSP'
+    value: LockScreenImagePath
+    data: 'C:\ProgramData\Nectar\background.png'
+    datatype: string
+
+- name: Set lock screen image URL
+  ansible.windows.win_regedit:
+    key: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\PersonalizationCSP'
+    value: LockScreenImageUrl
+    data: 'C:\ProgramData\Nectar\background.png'
+    datatype: string
+
+- name: Set lock screen image status
+  ansible.windows.win_regedit:
+    key: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\PersonalizationCSP'
+    value: LockScreenImageStatus
+    data: 1
+    datatype: dword
+
+- name: Set desktop image path
+  ansible.windows.win_regedit:
+    key: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\PersonalizationCSP'
+    value: DesktopImagePath
+    data: 'C:\ProgramData\Nectar\background.png'
+    datatype: string
+
+- name: Set desktop image URL
+  ansible.windows.win_regedit:
+    key: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\PersonalizationCSP'
+    value: DesktopImageUrl
+    data: 'C:\ProgramData\Nectar\background.png'
+    datatype: string
+
+- name: Set desktop image status
+  ansible.windows.win_regedit:
+    key: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\PersonalizationCSP'
+    value: DesktopImageStatus
+    data: 1
+    datatype: dword

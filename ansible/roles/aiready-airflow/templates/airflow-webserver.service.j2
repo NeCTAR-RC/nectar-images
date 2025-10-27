@@ -1,0 +1,13 @@
+[Unit]
+Description=Airflow Webserver
+After=network.target
+
+[Service]
+WorkingDirectory={{ airflow_home }}
+Environment="AIRFLOW_HOME={{ airflow_home }}"
+ExecStart={{ anaconda_link_dir }}/bin/airflow webserver --port {{ airflow_port }} --hostname 0.0.0.0
+Restart=always
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

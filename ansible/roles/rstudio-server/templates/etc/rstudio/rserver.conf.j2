@@ -6,6 +6,9 @@ www-address={{ rstudio_server_www_address }}
 {% if rstudio_server_auth_required_user_group is defined %}
 auth-required-user-group={{ rstudio_server_auth_required_user_group }}
 {% endif %}
+{% if rstudio_server_www_root_path is defined %}
+www-root-path={{ rstudio_server_www_root_path }}
+{% endif %}
 
 {% if rstudio_server_admin_enabled is defined %}
 # Admin console

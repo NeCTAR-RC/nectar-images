@@ -1,12 +1,10 @@
 ---
 - name: install dependencies (yum)
-  become: yes
   yum:
     name: which
     state: present
 
 - name: install VS Code repo (yum)
-  become: yes
   yum_repository:
     name: code
     description: Visual Studio Code repo
@@ -16,7 +14,6 @@
     gpgcheck: yes
 
 - name: install VS Code (yum)
-  become: yes
   yum:
     name: "{{ vscode_package }}"
     state: present

@@ -3,6 +3,8 @@ user  {{ nginx_user }};
 error_log  {{ nginx_error_log }};
 pid        {{ nginx_pidfile }};
 
+include /etc/nginx/modules-enabled/*.conf;
+
 worker_processes  {{ nginx_worker_processes }};
 
 events {

@@ -1,0 +1,26 @@
+# Machine Learning Frameworks
+scikit-learn
+# Computer Vision
+scikit-image
+opencv-python
+pillow
+timm
+albumentations
+# Data handling and preprocessing
+imageio
+numpy<2
+h5py
+scipy
+pandas
+pandas-profiling
+# Visualization and plotting
+matplotlib
+seaborn
+plotly
+bokeh
+# Additional tools
+wandb
+tqdm
+requests
+widgetsnbextension
+ipywidgets

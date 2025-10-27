@@ -1,10 +1,14 @@
 ---
+# Cloud-init upstream changed cloud-init to cloud-init-main in v24.3+
+# so try both and ignore any failures
 - name: Ensure cloud-init set to start on boot
   service:
     name: "{{ item }}"
-    enabled: "{% if nectar_test_build | default(false) %}no{% else %}yes{% endif %}"
-  with_items:
+    enabled: "{{ not (nectar_test_build | default(false)) }}"
+  loop:
     - cloud-config
     - cloud-init-local
     - cloud-init
+    - cloud-init-main
     - cloud-final
+  ignore_errors: true

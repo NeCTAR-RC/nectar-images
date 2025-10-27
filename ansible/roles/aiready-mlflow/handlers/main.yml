@@ -1,0 +1,6 @@
+---
+- name: Restart mlflow
+  systemd:
+    name: mlflow
+    state: restarted
+    daemon_reload: true

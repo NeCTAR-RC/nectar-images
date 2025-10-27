@@ -1,0 +1,32 @@
+---
+- name: Install JupyterHub packages using pip
+  ansible.builtin.pip:
+    name: "{{ item }}"
+    executable: "{{ anaconda_link_dir }}/bin/pip"
+  loop: "{{ jupyterhub_packages }}"
+
+- name: Create JupyterHub config directory
+  file:
+    path: /etc/jupyterhub
+    state: directory
+
+- name: Create JupyterHub working directory
+  file:
+    path: /var/lib/jupyterhub
+    state: directory
+
+- name: Install JupyterHub config
+  template:
+    src: jupyterhub_config.py.j2
+    dest: /etc/jupyterhub/jupyterhub_config.py
+
+- name: Install JupyterHub systemd service
+  template:
+    src: jupyterhub.service.j2
+    dest: /etc/systemd/system/jupyterhub.service
+
+- name: Enable and start JupyterHub service
+  service:
+    name: jupyterhub
+    enabled: yes
+    state: restarted

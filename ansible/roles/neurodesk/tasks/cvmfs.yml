@@ -1,0 +1,33 @@
+---
+- name: Copy CVMFS config files
+  ansible.builtin.copy:
+    src: cvmfs
+    dest: /etc
+    mode: "0755"
+
+- name: Run cvmfs_config setup
+  ansible.builtin.command: cvmfs_config setup
+  args:
+    creates: /etc/auto.master.d/cvmfs.autofs
+
+- name: Copy CVMFS setup script
+  ansible.builtin.copy:
+    src: setup-cvmfs.sh
+    dest: /usr/local/sbin/setup-cvmfs.sh
+    mode: "0755"
+
+- name: Copy CVMFS setup systemd unit file
+  ansible.builtin.copy:
+    src: setup-cvmfs.service
+    dest: /etc/systemd/system/setup-cvmfs.service
+    mode: "0644"
+
+- name: Enable CVMFS setup service
+  ansible.builtin.systemd:
+    name: setup-cvmfs
+    enabled: true
+
+- name: Disable autofs
+  ansible.builtin.systemd:
+    name: autofs
+    enabled: false

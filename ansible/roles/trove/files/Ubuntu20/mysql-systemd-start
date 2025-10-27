@@ -33,4 +33,3 @@ case $1 in
   "pre")  sanity ;;
   "post") pinger ;;
 esac
-

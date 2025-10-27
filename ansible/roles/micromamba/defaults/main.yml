@@ -1,0 +1,7 @@
+---
+micromamba_arch: linux-64
+micromamba_version: latest
+micromamba_dest: /usr/local/bin/micromamba
+micromamba_channels:
+  - conda-forge
+micromamba_packages: []

@@ -29,4 +29,3 @@
   with_items:
     - docker.service
     - containerd.service
-

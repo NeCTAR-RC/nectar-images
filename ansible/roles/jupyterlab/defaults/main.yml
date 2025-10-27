@@ -17,14 +17,16 @@ jupyter_lab_packages:
   - h5py
   - ipympl
   - ipywidgets
-  - matplotlib-base
+  - matplotlib
   - numba
+  - numpy
   - numexpr
   - openpyxl
   - pandas
   - patsy
+  - plotly
   - protobuf
-  - pytables
+  - tables
   - scikit-image
   - scikit-learn
   - scipy

@@ -1,0 +1,10 @@
+---
+mlflow_port: 5000
+mlflow_host: 0.0.0.0
+mlflow_artifact_root: /var/mlflow
+mlflow_db_user: mlflow
+mlflow_db_password: password
+mlflow_db_name: mlflow
+mlflow_backend_uri: "postgresql://{{ mlflow_db_user }}:{{ mlflow_db_password }}@localhost/{{ mlflow_db_name }}"
+mlflow_system_folder: /etc/mlflow
+mlflow_env_path: "{{ mlflow_system_folder }}/mlflow.env"

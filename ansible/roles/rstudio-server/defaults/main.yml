@@ -1,11 +1,11 @@
 ---
 # https://posit.co/download/rstudio-server/
-rstudio_server_version: 2023.06.1-524
+rstudio_server_version: 2025.05.0-496
 rstudio_server_install: []
 
 rstudio_server_www_port: 8787
 rstudio_server_www_address: 0.0.0.0
 
-# Yes, we use Bionic even for Focal
-rstudio_server_distro: "{% if ansible_distribution_major_version|int < 22 %}bionic{% else %}jammy{% endif %}"
+# R-Studio package URLs always use jammy, even for noble
+rstudio_server_distro: jammy
 rstudio_server_package_url: "https://download2.rstudio.org/server/{{ rstudio_server_distro }}/amd64/rstudio-server-{{ rstudio_server_version }}-amd64.deb"

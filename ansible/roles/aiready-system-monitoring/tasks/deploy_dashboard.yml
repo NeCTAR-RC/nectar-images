@@ -1,0 +1,18 @@
+- name: Update dashboards configuration sample yaml
+  ansible.builtin.copy:
+    src: dashboard.yml
+    dest: /etc/grafana/provisioning/dashboards/sample.yaml
+
+- name: Ensure the Grafana dashboards directory exists
+  file:
+    path: /var/lib/grafana/dashboards
+    state: directory
+    owner: grafana
+    group: grafana
+    mode: "0755"
+
+- name: Deploy Grafana Dashboard
+  ansible.builtin.template:
+    src: system-dashboard.json.j2
+    dest: /var/lib/grafana/dashboards/system-metrics.json
+  notify: Restart Grafana

@@ -1,0 +1,24 @@
+---
+- name: Install html pages
+  copy:
+    src: html
+    dest: /var/www/
+    mode: 0755
+
+- name: Adding user www-data to group shadow for nginx pam
+  user:
+    name: www-data
+    groups: shadow
+    append: yes
+
+- name: Add PAM config for nginx
+  copy:
+    src: nginx/pam
+    dest: /etc/pam.d/nginx
+    mode: 0644
+
+- name: Create examples directory structure
+  ansible.builtin.file:
+    path: "{{ examples_directory }}"
+    state: directory
+    mode: "0755"

@@ -1,0 +1,12 @@
+numpy<2
+pillow
+pandas
+pandas-profiling
+matplotlib
+ipywidgets
+widgetsnbextension
+scikit-learn
+seaborn
+requests
+wandb
+tqdm

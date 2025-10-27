@@ -1,0 +1,12 @@
+---
+- name: Download and extract Julia tarball
+  ansible.builtin.unarchive:
+    src: "{{ neurodesk_julia_download_url }}"
+    dest: /opt
+    remote_src: true
+
+- name: Create a symbolic link
+  ansible.builtin.file:
+    src: "/opt/julia-{{ neurodesk_julia_version }}"
+    dest: /opt/julia-latest
+    state: link

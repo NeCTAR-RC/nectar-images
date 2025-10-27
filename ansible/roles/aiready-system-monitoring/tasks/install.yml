@@ -1,0 +1,20 @@
+- name: Add Grafana APT repository key
+  ansible.builtin.get_url:
+    url: "https://apt.grafana.com/gpg.key"
+    dest: /etc/apt/keyrings/grafana.asc
+    mode: '0644'
+    force: true
+
+- name: Add Grafana APT repository
+  apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/grafana.asc] https://packages.grafana.com/oss/deb stable main"
+    state: present
+
+- name: Install required packages
+  apt:
+    name:
+      - prometheus
+      - prometheus-node-exporter
+      - grafana
+    state: present
+    update_cache: yes

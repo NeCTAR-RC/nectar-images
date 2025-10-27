@@ -9,9 +9,3 @@
     name: www-data
     groups: shadow
     append: yes
-
-- name: Install testing script
-  copy:
-    src: testing/tests.d/012-single-user-home-dir.sh
-    dest: /usr/nectar/tests.d
-    mode: 0755
