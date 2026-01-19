@@ -2,7 +2,7 @@
 guacamole_install_prefix: /usr/local
 
 guacamole_home: /etc/guacamole
-guacamole_version: 1.5.5
+guacamole_version: 1.6.0
 
 guacamole_guacd_hostname: 127.0.0.1
 guacample_guacd_listen: 127.0.0.1

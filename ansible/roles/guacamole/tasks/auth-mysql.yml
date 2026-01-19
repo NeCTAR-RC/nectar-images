@@ -2,30 +2,58 @@
 - name: Download Guacamole JDBC auth plugin
   get_url:
     url: "https://archive.apache.org/dist/guacamole/{{ guacamole_version }}/binary/guacamole-auth-jdbc-{{ guacamole_version }}.tar.gz"
-    dest: /tmp
+    dest: "/tmp/guacamole-auth-jdbc-{{ guacamole_version }}.tar.gz"
+    mode: '0644'
 
 - name: Extract Guacamole JDBC auth plugin
   unarchive:
     src: "/tmp/guacamole-auth-jdbc-{{ guacamole_version }}.tar.gz"
-    copy: no
     dest: /tmp
-
-- name: Install Guacamole JDBC auth plugin
-  copy:
-    src: "/tmp/guacamole-auth-jdbc-{{ guacamole_version }}/mysql/guacamole-auth-jdbc-mysql-{{ guacamole_version }}.jar"
-    dest: /etc/guacamole/extensions
     remote_src: yes
 
-- name: Install MySQL Java connector
+#
+# Jakarta EE migration for the MySQL JDBC plugin
+#
+
+- name: Migrate Guacamole JDBC MySQL plugin to Jakarta EE
+  command:
+    cmd: >
+      java -jar /tmp/jakartaee-migration.jar
+      /tmp/guacamole-auth-jdbc-{{ guacamole_version }}/mysql/guacamole-auth-jdbc-mysql-{{ guacamole_version }}.jar
+      /tmp/guacamole-auth-jdbc-mysql-{{ guacamole_version }}-jakarta.jar
+    creates: "/tmp/guacamole-auth-jdbc-mysql-{{ guacamole_version }}-jakarta.jar"
+
+- name: Verify migrated JDBC plugin JAR
+  command:
+    cmd: unzip -tq /tmp/guacamole-auth-jdbc-mysql-{{ guacamole_version }}-jakarta.jar
+
+- name: Install Jakarta-migrated Guacamole JDBC MySQL plugin
+  copy:
+    src: "/tmp/guacamole-auth-jdbc-mysql-{{ guacamole_version }}-jakarta.jar"
+    dest: "/etc/guacamole/extensions/guacamole-auth-jdbc-mysql-{{ guacamole_version }}.jar"
+    remote_src: yes
+    mode: '0644'
+  notify: restart tomcat
+
+#
+# MySQL / MariaDB JDBC driver
+#
+
+- name: Install MySQL Java connector symlink
   file:
     src: /usr/share/java/mariadb-java-client.jar
     path: /etc/guacamole/lib/mariadb-java-client.jar
     state: link
 
+#
+# Cleanup
+#
+
 - name: Clean up Guacamole JDBC auth temp files
   file:
     path: "{{ item }}"
     state: absent
-  with_items:
+  loop:
     - "/tmp/guacamole-auth-jdbc-{{ guacamole_version }}.tar.gz"
     - "/tmp/guacamole-auth-jdbc-{{ guacamole_version }}"
+    - "/tmp/guacamole-auth-jdbc-mysql-{{ guacamole_version }}-jakarta.jar"

@@ -1,9 +1,8 @@
 ---
-guacamole_tomcat_package: tomcat9
+guacamole_tomcat_package: tomcat10
 
 # List of deps can be found at:
 #  https://guacamole.apache.org/doc/gug/installing-guacamole.html
-# Modified slightly for specific versions in Bionic
 guacamole_packages:
   - autoconf
   - build-essential
@@ -14,7 +13,8 @@ guacamole_packages:
   - libavformat-dev
   - libavutil-dev
   - libcairo2-dev
-  - freerdp2-dev
+  - freerdp3-dev
+  - freerdp3-x11
   - libjpeg-dev
   - libjpeg-turbo8-dev
   - libossp-uuid-dev

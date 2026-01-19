@@ -12,8 +12,16 @@
     state: present
     update_cache: true
 
-- name: repository | add c2d4u repository
+# Add r2u repo for deb packages for R modules. NOTE: c2d4u is no longer being updated
+- name: Download cranapt repository signing key
+  get_url:
+    url: https://eddelbuettel.github.io/r2u/assets/dirk_eddelbuettel_key.asc
+    dest: /usr/share/keyrings/cranapt-archive-keyring.asc
+    mode: '0644'
+
+- name: Add cranapt (r2u) apt repository
   apt_repository:
-    repo: 'ppa:c2d4u.team/c2d4u4.0+'
+    repo: deb [arch=amd64 signed-by=/usr/share/keyrings/cranapt-archive-keyring.asc] https://r2u.stat.illinois.edu/ubuntu noble main
+    filename: cranapt
     state: present
-    update_cache: true
+    update_cache: yes

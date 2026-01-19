@@ -1,6 +1,6 @@
 ---
 # https://posit.co/download/rstudio-desktop/
-rstudio_version: 2025.05.0-496
+rstudio_version: 2026.01.0-392
 rstudio_install: []
 
 rstudio_disable_check_for_updates: 1

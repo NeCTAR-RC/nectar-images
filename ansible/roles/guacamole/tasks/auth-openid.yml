@@ -2,24 +2,40 @@
 - name: Download Guacamole OIDC auth plugin
   get_url:
     url: "https://archive.apache.org/dist/guacamole/{{ guacamole_version }}/binary/guacamole-auth-sso-{{ guacamole_version }}.tar.gz"
-    dest: /tmp
+    dest: "/tmp/guacamole-auth-sso-{{ guacamole_version }}.tar.gz"
+    mode: '0644'
 
 - name: Extract Guacamole OIDC auth plugin
   unarchive:
     src: "/tmp/guacamole-auth-sso-{{ guacamole_version }}.tar.gz"
-    copy: no
     dest: /tmp
+    remote_src: yes
 
-- name: Extract Guacamole OIDC auth plugin
+- name: Migrate Guacamole OIDC plugin to Jakarta EE
+  command:
+    cmd: >
+      java -jar /tmp/jakartaee-migration.jar
+      /tmp/guacamole-auth-sso-{{ guacamole_version }}/openid/guacamole-auth-sso-openid-{{ guacamole_version }}.jar
+      /tmp/guacamole-auth-sso-openid-{{ guacamole_version }}-jakarta.jar
+    creates: "/tmp/guacamole-auth-sso-openid-{{ guacamole_version }}-jakarta.jar"
+
+- name: Verify migrated OIDC plugin JAR
+  command:
+    cmd: unzip -tq /tmp/guacamole-auth-sso-openid-{{ guacamole_version }}-jakarta.jar
+
+- name: Install Jakarta-migrated Guacamole OIDC plugin
   copy:
-    src: "/tmp/guacamole-auth-sso-{{ guacamole_version }}/openid/guacamole-auth-sso-openid-{{ guacamole_version }}.jar"
+    src: "/tmp/guacamole-auth-sso-openid-{{ guacamole_version }}-jakarta.jar"
     dest: "/etc/guacamole/extensions/guacamole-auth-sso-openid-{{ guacamole_version }}.jar"
     remote_src: yes
+    mode: '0644'
+  notify: restart tomcat
 
 - name: Clean up Guacamole OIDC auth plugin temp files
   file:
     path: "{{ item }}"
     state: absent
-  with_items:
+  loop:
     - "/tmp/guacamole-auth-sso-{{ guacamole_version }}.tar.gz"
     - "/tmp/guacamole-auth-sso-{{ guacamole_version }}"
+    - "/tmp/guacamole-auth-sso-openid-{{ guacamole_version }}-jakarta.jar"

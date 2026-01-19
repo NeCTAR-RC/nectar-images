@@ -1,24 +1,71 @@
 ---
 # https://github.com/voegelas/guacamole-auth-pam
-- name: Download PAM Auth
+- name: Copy Guacamole PAM auth plugin (Java EE)
   copy:
     src: files/auth-pam/guacamole-auth-pam-1.2.0.jar
-    dest: "{{ guacamole_home }}/extensions/"
+    dest: /tmp/guacamole-auth-pam-1.2.0.jar
+    mode: '0644'
+
+#
+# Jakarta EE migration for PAM plugin
+#
+
+- name: Migrate Guacamole PAM plugin to Jakarta EE
+  command:
+    cmd: >
+      java -jar /tmp/jakartaee-migration.jar
+      /tmp/guacamole-auth-pam-1.2.0.jar
+      /tmp/guacamole-auth-pam-1.2.0-jakarta.jar
+    creates: "/tmp/guacamole-auth-pam-1.2.0-jakarta.jar"
+
+- name: Verify migrated PAM plugin JAR
+  command:
+    cmd: unzip -tq /tmp/guacamole-auth-pam-1.2.0-jakarta.jar
+
+- name: Install Jakarta-migrated Guacamole PAM auth plugin
+  copy:
+    src: "/tmp/guacamole-auth-pam-1.2.0-jakarta.jar"
+    dest: "{{ guacamole_home }}/extensions/guacamole-auth-pam-1.2.0.jar"
+    remote_src: yes
+    mode: '0644'
+  notify: restart tomcat
+
+#
+# PAM configuration
+#
 
 - name: Install Guacamole pam.d config
   copy:
     src: files/auth-pam/pamd-guacamole
     dest: /etc/pam.d/guacamole
+    mode: '0644'
 
 - name: Install Guacamole PAM auth config
   copy:
     src: files/auth-pam/unix-user-mapping.xml
     dest: "{{ guacamole_home }}/unix-user-mapping.xml"
+    mode: '0644'
   notify: restart tomcat
 
-- name: Adding tomcat user to shadow group
+#
+# Permissions
+#
+
+- name: Add tomcat user to shadow group
   user:
     name: tomcat
     groups: shadow
     append: yes
   notify: restart tomcat
+
+#
+# Cleanup
+#
+
+- name: Clean up PAM plugin temp files
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - "/tmp/guacamole-auth-pam-1.2.0.jar"
+    - "/tmp/guacamole-auth-pam-1.2.0-jakarta.jar"

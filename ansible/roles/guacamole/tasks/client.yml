@@ -10,7 +10,7 @@
     dest: "/etc/default/{{ guacamole_tomcat_package }}"
     state: present
     regexp: '^JAVA_OPTS=.*'
-    line: 'JAVA_OPTS="-Djava.awt.headless=true -Xmx128m -XX:+UseConcMarkSweepGC -Djava.security.egd=file:/dev/./urandom"'
+    line: 'JAVA_OPTS="-Djava.awt.headless=true -Xms128m -Xmx256m -Djava.security.egd=file:/dev/./urandom"'
 
 - name: Remove existing Tomcat root webapp
   file:
@@ -18,11 +18,33 @@
     state: absent
 
 # Deploy Guacamole as ROOT.war, which means host as the "root" app, not at /guacamole
-- name: Download Guacamole client
+- name: Download Guacamole client WAR
   get_url:
     url: "https://archive.apache.org/dist/guacamole/{{ guacamole_version }}/binary/guacamole-{{ guacamole_version }}.war"
-    #url: "https://github.com/NeCTAR-RC/guacamole-client/releases/download/nectar%2F{{ guacamole_version }}/guacamole-{{ guacamole_version }}.war"
+    dest: "/tmp/guacamole-{{ guacamole_version }}.war"
+    mode: '0644'
+
+- name: Download Jakarta EE migration tool
+  get_url:
+    url: "https://repo1.maven.org/maven2/org/apache/tomcat/jakartaee-migration/1.0.9/jakartaee-migration-1.0.9-shaded.jar"
+    dest: "/tmp/jakartaee-migration.jar"
+    mode: '0755'
+
+- name: Migrate Guacamole WAR to Jakarta EE (Tomcat 10)
+  command:
+    cmd: >
+      java -jar /tmp/jakartaee-migration.jar
+      /tmp/guacamole-{{ guacamole_version }}.war
+      /tmp/guacamole-{{ guacamole_version }}-jakarta.war
+    creates: "/tmp/guacamole-{{ guacamole_version }}-jakarta.war"
+
+- name: Deploy Guacamole Jakarta WAR as ROOT.war
+  copy:
+    src: "/tmp/guacamole-{{ guacamole_version }}-jakarta.war"
     dest: "/var/lib/{{ guacamole_tomcat_package }}/webapps/ROOT.war"
+    remote_src: yes
+    mode: '0644'
+  notify: restart tomcat
 
 - name: Make Guacamole home directory
   file:
