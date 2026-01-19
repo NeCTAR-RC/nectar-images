@@ -1,25 +1,9 @@
 Vagrant.configure("2") do |config|
 
-  # Debian 11 (bullseye)
-  config.vm.define "debian-11" do |c|
-    c.vm.box = "debian/bullseye64"
-    c.vm.provision "shell" do |shell|
-      shell.inline = "apt update"  # fix lsb-release
-    end
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             ansible_python_interpreter: "/usr/bin/python3" }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-standard.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
+  GLOBAL_ANSIBLE_VARS = {
+    nectar_test_build: true,
+    default_user: "vagrant",
+  }
 
   # Debian 12 (bookworm)
   config.vm.define "debian-12" do |c|
@@ -29,7 +13,7 @@ Vagrant.configure("2") do |config|
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
@@ -41,38 +25,17 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Ubuntu 20.04 (focal)
-  config.vm.define "ubuntu-20.04" do |c|
-    c.vm.box = "generic/ubuntu2004"
-    c.vm.provider "virtualbox" do |v, override|
-      override.vm.box = "ubuntu/focal64"
+  # Debian 13 (trixie)
+  config.vm.define "debian-13" do |c|
+    c.vm.box = "debian/trixie64"
+    c.vm.provision "shell" do |shell|
+      shell.inline = "apt update"  # fix lsb-release
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-standard.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
-  # Ubuntu 20.04 (focal) with NVIDIA vGPU
-  config.vm.define "ubuntu-20.04-nvidia-vgpu" do |c|
-    c.vm.box = "generic/ubuntu2004"
-    c.vm.provider "virtualbox" do |v, override|
-      override.vm.box = "ubuntu/focal64"
-    end
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             nectar_image_name: "Ubuntu 20.04 LTS (Jammy) amd64 (NVIDIA vGPU)" }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-nvidia-vgpu.yml"
       ansible.become = true
     end
     c.vm.provision "shell" do |shell|
@@ -84,13 +47,13 @@ Vagrant.configure("2") do |config|
 
   # Ubuntu 22.04 (jammy)
   config.vm.define "ubuntu-22.04" do |c|
-    c.vm.box = "generic/ubuntu2204"
+    c.vm.box = "cloud-image/ubuntu-22.04"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/jammy64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
@@ -104,15 +67,16 @@ Vagrant.configure("2") do |config|
 
   # Ubuntu 22.04 (jammy) with Docker
   config.vm.define "ubuntu-22.04-docker" do |c|
-    c.vm.box = "generic/ubuntu2204"
+    c.vm.box = "cloud-image/ubuntu-22.04"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/jammy64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             murano_image_type: "Docker",
-                             nectar_image_name: "Ubuntu 22.04 LTS (Jammy) amd64 (with Docker)" }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS.merge(
+        murano_image_type: "Docker",
+        nectar_image_name: "Ubuntu 22.04 LTS (Jammy) amd64 (with Docker)"
+      )
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-docker.yml"
       ansible.become = true
@@ -126,14 +90,15 @@ Vagrant.configure("2") do |config|
 
   # Ubuntu 22.04 (jammy) with NVIDIA vGPU
   config.vm.define "ubuntu-22.04-nvidia-vgpu" do |c|
-    c.vm.box = "generic/ubuntu2204"
+    c.vm.box = "cloud-image/ubuntu-22.04"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/jammy64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             nectar_image_name: "Ubuntu 22.04 LTS (Jammy) amd64 (NVIDIA vGPU)" }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS.merge(
+        nectar_image_name: "Ubuntu 22.04 LTS (Jammy) amd64 (NVIDIA vGPU)"
+      )
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-nvidia-vgpu.yml"
       ansible.become = true
@@ -153,7 +118,7 @@ Vagrant.configure("2") do |config|
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
@@ -170,7 +135,7 @@ Vagrant.configure("2") do |config|
     c.vm.box = "generic/centos9s"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
@@ -187,7 +152,7 @@ Vagrant.configure("2") do |config|
     c.vm.box = "rockylinux/8"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
@@ -204,7 +169,7 @@ Vagrant.configure("2") do |config|
     c.vm.box = "rockylinux/9"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
@@ -221,7 +186,7 @@ Vagrant.configure("2") do |config|
     c.vm.box = "rockylinux/10"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
@@ -238,7 +203,7 @@ Vagrant.configure("2") do |config|
     c.vm.box = "almalinux/8"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
@@ -255,7 +220,7 @@ Vagrant.configure("2") do |config|
     c.vm.box = "almalinux/9"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
@@ -272,7 +237,7 @@ Vagrant.configure("2") do |config|
     c.vm.box = "almalinux/10"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
@@ -292,7 +257,7 @@ Vagrant.configure("2") do |config|
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
@@ -312,7 +277,7 @@ Vagrant.configure("2") do |config|
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-standard.yml"
       ansible.become = true
@@ -326,13 +291,13 @@ Vagrant.configure("2") do |config|
 
   # JupyterLab
   config.vm.define "jupyterlab" do |c|
-    c.vm.box = "generic/ubuntu2204"  # doesn't exist yet
+    c.vm.box = "cloud-image/ubuntu-22.04"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/jammy64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-jupyterlab.yml"
       ansible.become = true
@@ -341,14 +306,13 @@ Vagrant.configure("2") do |config|
 
   # R-Studio
   config.vm.define "rstudio" do |c|
-    c.vm.box = "generic/ubuntu2204"  # doesn't exist yet
+    c.vm.box = "cloud-image/ubuntu-24.04"
     c.vm.provider "virtualbox" do |v, override|
-      override.vm.box = "ubuntu/jammy64"
+      override.vm.box = "ubuntu/noble64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
-      ansible.config_file = "ansible/ansible.cfg"
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
       ansible.playbook = "ansible/playbook-rstudio.yml"
       ansible.become = true
     end
@@ -363,63 +327,31 @@ Vagrant.configure("2") do |config|
 
   # Octavia Amphora (Ubuntu 22.04 focal)
   config.vm.define "octavia-amphora" do |c|
-    c.vm.box = "generic/ubuntu2204"
+    c.vm.box = "cloud-image/ubuntu-22.04"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/jammy64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             ansible_python_interpreter: "/usr/bin/python3",
-                             driver: "haproxy"}
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS.merge(
+        ansible_python_interpreter: "/usr/bin/python3",
+        driver: "haproxy"
+      )
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-octavia-amphora.yml"
       ansible.become = true
     end
   end
 
-  # Manila Share Server (Ubuntu 20.04 focal)
-  config.vm.define "ubuntu-20.04-manila-share-server" do |c|
-    c.vm.box = "generic/ubuntu2004"
-    c.vm.provider "virtualbox" do |v, override|
-      override.vm.box = "ubuntu/focal64"
-    end
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             ansible_python_interpreter: "/usr/bin/python3"}
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-manila.yml"
-      ansible.become = true
-    end
-  end
-
-  # Ubuntu 20.04 (focal) Jenkins slave
-  config.vm.define "jenkins-slave-ubuntu-20.04" do |c|
-    c.vm.box = "generic/ubuntu2004"
-    c.vm.provider "virtualbox" do |v, override|
-      override.vm.box = "ubuntu/focal64"
-    end
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             ansible_python_interpreter: "/usr/bin/python3" }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-jenkins-slave.yml"
-      ansible.become = true
-    end
-  end
-
   # Ubuntu 22.04 (jammy) Jenkins slave
   config.vm.define "jenkins-slave-ubuntu-22.04" do |c|
-    c.vm.box = "generic/ubuntu2204"
+    c.vm.box = "cloud-image/ubuntu-22.04"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/jammy64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-jenkins-slave.yml"
       ansible.become = true
@@ -434,39 +366,22 @@ Vagrant.configure("2") do |config|
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-jenkins-slave.yml"
       ansible.become = true
     end
   end
 
-  # Undercloud Ubuntu 20.04 (focal)
-  config.vm.define "undercloud-ubuntu-20.04" do |c|
-    c.vm.box = "generic/ubuntu2004"
-    c.vm.provider "virtualbox" do |v, override|
-      override.vm.box = "ubuntu/focal64"
-    end
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             ansible_python_interpreter: "/usr/bin/python3" }
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-undercloud.yml"
-      ansible.become = true
-    end
-  end
-
   # Undercloud Ubuntu 22.04 (jammy)
   config.vm.define "undercloud-ubuntu-22.04" do |c|
-    c.vm.box = "generic/ubuntu2204"
+    c.vm.box = "cloud-image/ubuntu-22.04"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/jammy64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-undercloud.yml"
       ansible.become = true
@@ -481,7 +396,7 @@ Vagrant.configure("2") do |config|
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-undercloud.yml"
       ansible.become = true
@@ -493,7 +408,7 @@ Vagrant.configure("2") do |config|
     c.vm.box = "peru/windows-server-2022-standard-x64-eval"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-windows.yml"
     end
@@ -501,14 +416,13 @@ Vagrant.configure("2") do |config|
 
   # Bumblebee Guacamole Server
   config.vm.define "bumblebee-guacamole" do |c|
-    c.vm.box = "generic/ubuntu2204"
+    c.vm.box = "cloud-image/ubuntu-22.04"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/jammy64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             ansible_python_interpreter: "/usr/bin/python3" }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
       ansible.playbook = "ansible/playbook-bumblebee-guacamole.yml"
       ansible.become = true
     end
@@ -516,14 +430,15 @@ Vagrant.configure("2") do |config|
 
   # Bumblebee Scientific Toolbox
   config.vm.define "bumblebee-scientific-toolbox" do |c|
-    c.vm.box = "generic/ubuntu2204"
+    c.vm.box = "cloud-image/ubuntu-22.04"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/jammy64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             nectar_image_name: "Scientific Toolbox" }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS.merge(
+        nectar_image_name: "Scientific Toolbox"
+      )
       ansible.playbook = "ansible/playbook-bumblebee-scientific-toolbox.yml"
       ansible.become = true
     end
@@ -535,8 +450,9 @@ Vagrant.configure("2") do |config|
     c.vm.box = "generic/rocky9"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             nectar_image_name: "Rocky Linux 9 Virtual Desktop" }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS.merge(
+        nectar_image_name: "Rocky Linux 9 Virtual Desktop"
+      )
       ansible.playbook = "ansible/playbook-bumblebee-desktop.yml"
       ansible.become = true
     end
@@ -545,11 +461,12 @@ Vagrant.configure("2") do |config|
 
   # Bumblebee Ubuntu 22.04 LTS (Jammy)
   config.vm.define "bumblebee-ubuntu-22.04" do |c|
-    c.vm.box = "generic/ubuntu2204"
+    c.vm.box = "cloud-image/ubuntu-22.04"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             nectar_image_name: "Ubuntu 22.04 LTS (Jammy) Virtual Desktop" }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS.merge(
+        nectar_image_name: "Ubuntu 22.04 LTS (Jammy) Virtual Desktop"
+      )
       ansible.playbook = "ansible/playbook-bumblebee-desktop.yml"
       ansible.become = true
     end
@@ -561,8 +478,9 @@ Vagrant.configure("2") do |config|
     c.vm.box = "cloud-image/ubuntu-24.04"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             nectar_image_name: "Ubuntu 24.04 LTS (Noble) Virtual Desktop" }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS.merge(
+        nectar_image_name: "Ubuntu 24.04 LTS (Noble) Virtual Desktop"
+      )
       ansible.playbook = "ansible/playbook-bumblebee-desktop.yml"
       ansible.become = true
     end
@@ -574,9 +492,9 @@ Vagrant.configure("2") do |config|
     c.vm.box = "cloud-image/ubuntu-24.04"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { ansible_python_interpreter: "/usr/bin/python3",
-                             nectar_test_build: true,
-                             nectar_image_name: "Neurodesktop" }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS.merge(
+        nectar_image_name: "Neurodesktop"
+      )
       ansible.playbook = "ansible/playbook-bumblebee-neurodesk.yml"
       ansible.become = true
       ansible.verbose = true
@@ -590,14 +508,15 @@ Vagrant.configure("2") do |config|
 
   # Ubuntu 22.04 (jammy) - transcription desktop
   config.vm.define "bumblebee-transcription" do |c|
-    c.vm.box = "generic/ubuntu2204"
+    c.vm.box = "cloud-image/ubuntu-22.04"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/jammy64"
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = { nectar_test_build: true,
-                             nectar_image_name: "Transcription desktop" }
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS.merge(
+        nectar_image_name: "Transcription desktop"
+      )
       ansible.playbook = "ansible/playbook-bumblebee-transcription.yml"
       ansible.become = true
     end
