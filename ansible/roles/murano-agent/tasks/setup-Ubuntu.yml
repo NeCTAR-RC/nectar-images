@@ -19,6 +19,7 @@
     id: ABC968C25CDB0CDD6254F46A129CF4A68FA8FC77
     url: http://download.rc.nectar.org.au/nectar-archive-key-2016.gpg
     state: present
+  when: ansible_distribution_major_version == '22'
 
 - name: Add Nectar apt repositories
   apt_repository:
@@ -27,7 +28,9 @@
   with_items:
     - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }} main"
     - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }}-{{ openstack_version }} main"
-  when: openstack_version is defined
+  when:
+    - openstack_version is defined
+    - ansible_distribution_major_version == '22'
 
 - name: Install Murano Guest agent
   package:
@@ -54,7 +57,9 @@
   with_items:
     - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }} main"
     - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }}-{{ openstack_version }} main"
-  when: openstack_version is defined
+  when:
+    - openstack_version is defined
+    - ansible_distribution_major_version == '22'
 
 - name: Install updated systemd service config
   template:

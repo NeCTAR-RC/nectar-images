@@ -1,4 +1,3 @@
 ---
-openstack_version: ussuri  # for our own agent package
 murano_agent_package_name: murano-agent
 murano_agent_service_name: murano-agent
