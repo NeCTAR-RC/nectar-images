@@ -50,16 +50,6 @@ locals {
       var.is_windows ? null : "${path.root}/packer-ssh-key"
   ) : var.ssh_private_key_file
 
-  # This is not working yet. Packer bug?
-  #source_image_filter = var.source_image != null ? (
-  #  { "filters": {
-  #      "name": var.source_image,
-  #      "visibility": "public"
-  #    },
-  #    "most_recent": true
-  #  }
-  #): null
-
   # Default flavors have only 30GB disk. For builds that require more disk space,
   # automatically enable the Packer OpenStack builder option 'use_blockstorage_volume'
   use_volume = var.disk_size > 30 ? true : false
@@ -116,8 +106,13 @@ source "openstack" "vm" {
   flavor                  = var.flavor
   image_name              = local.build_name
   security_groups         = local.security_groups
-  source_image_name       = var.source_image_name
   ssh_username            = var.ssh_username
   use_blockstorage_volume = local.use_volume
   volume_size             = local.volume_size
+  source_image_filter {
+    filters {
+      name       = var.source_image_name
+      visibility = "public"
+    }
+  }
 }
