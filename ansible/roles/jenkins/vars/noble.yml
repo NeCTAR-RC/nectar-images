@@ -27,6 +27,7 @@ packages:
   - dh-python
   - qemu-system-x86
   - pre-commit
+  - nodejs
 
 selenium: False
 
