@@ -33,3 +33,5 @@ selenium: False
 gem_packages:
   - { name: puppet }
   - { name: puppetlabs_spec_helper }
+
+nodejs_repo: node_24.x
