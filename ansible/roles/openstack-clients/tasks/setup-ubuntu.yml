@@ -7,7 +7,7 @@
 
 - name: Add Ubuntu cloud archive repository
   apt_repository:
-    repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_distribution_release }}-updates/{{ openstack_clients_version }} main"
+    repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_facts['distribution_release'] }}-updates/{{ openstack_clients_version }} main"
     update_cache: yes
   when: openstack_clients_version is defined
 

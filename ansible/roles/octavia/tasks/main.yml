@@ -7,7 +7,7 @@
     - "default.yml"
 
 # OS setup
-- include_tasks: "setup-{{ ansible_distribution|lower }}.yml"
+- include_tasks: "setup-{{ ansible_facts['distribution']|lower }}.yml"
 
 # Engine setup
 - include_tasks: "setup-{{ driver }}.yml"

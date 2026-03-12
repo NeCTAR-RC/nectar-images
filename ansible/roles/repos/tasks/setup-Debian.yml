@@ -19,7 +19,7 @@
 - name: Set up mirror
   apt_repository:
     repo: "{{ item }}"
-    filename: "{{ ansible_distribution|lower }}"
+    filename: "{{ ansible_facts['distribution']|lower }}"
     update_cache: true
   with_items: "{{ apt_repositories }}"
 

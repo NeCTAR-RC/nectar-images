@@ -7,10 +7,10 @@
     - "default.yml"
 
 # OS setup
-- include_tasks: "setup-{{ ansible_distribution }}.yml"
+- include_tasks: "setup-{{ ansible_facts['distribution'] }}.yml"
 
 # Datastore setup
-- include_tasks: "setup-{{ datastore }}-{{ ansible_distribution }}.yml"
+- include_tasks: "setup-{{ datastore }}-{{ ansible_facts['distribution'] }}.yml"
 
 # Datastore version setup
-- include_tasks: "setup-{{ datastore }}-{{ datastore_version }}-{{ ansible_distribution }}.yml"
+- include_tasks: "setup-{{ datastore }}-{{ datastore_version }}-{{ ansible_facts['distribution'] }}.yml"

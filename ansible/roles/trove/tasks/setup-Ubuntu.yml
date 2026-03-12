@@ -10,9 +10,9 @@
     repo: "{{ item }}"
     update_cache: yes
   with_items:
-    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }} main"
-    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }}-{{ trove_openstack_version }} main"
-    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }}-{{ trove_openstack_version }}-testing main"
+    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_facts['distribution_release'] }} main"
+    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_facts['distribution_release'] }}-{{ trove_openstack_version }} main"
+    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_facts['distribution_release'] }}-{{ trove_openstack_version }}-testing main"
 
 - name: Add Ubuntu cloud archive key
   apt_key:
@@ -48,7 +48,7 @@
 
 - name: Install new systemd service config
   copy:
-    src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/trove-guestagent.service"
+    src: "{{ ansible_facts['distribution'] }}{{ ansible_facts['distribution_major_version'] }}/trove-guestagent.service"
     dest: /etc/systemd/system/trove-guestagent.service
 
 - name: Enable trove guest agent service

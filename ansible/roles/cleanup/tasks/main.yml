@@ -2,8 +2,8 @@
 - name: Set distro-specific variables
   include_vars: '{{ item }}'
   with_first_found:
-    - '{{ ansible_distribution }}.yml'
-    - '{{ ansible_os_family }}.yml'
+    - '{{ ansible_facts["distribution"] }}.yml'
+    - '{{ ansible_facts["os_family"] }}.yml'
     - default.yml
 
 - name: Clean up logs keys and configs
@@ -26,8 +26,8 @@
   include_tasks: "{{ tasks_item }}"
   with_first_found:
     - files:
-      - "cleanup-{{ ansible_distribution }}.yml"
-      - "cleanup-{{ ansible_os_family }}.yml"
+      - "cleanup-{{ ansible_facts['distribution'] }}.yml"
+      - "cleanup-{{ ansible_facts['os_family'] }}.yml"
       skip: true
   loop_control:
     loop_var: tasks_item

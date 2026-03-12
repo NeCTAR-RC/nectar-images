@@ -1,5 +1,5 @@
 ---
-facts_architecture: "{{ ansible_architecture }}"
-facts_os_distro: "{{ ansible_distribution|lower }}"
-facts_os_version: "{% if ansible_distribution == 'Ubuntu' %}{{ ansible_distribution_version }}{% else %}{{ ansible_distribution_major_version }}{% endif %}"
+facts_architecture: "{{ ansible_facts['architecture'] }}"
+facts_os_distro: "{{ ansible_facts['distribution']|lower }}"
+facts_os_version: "{% if ansible_facts['distribution'] == 'Ubuntu' %}{{ ansible_facts['distribution_version'] }}{% else %}{{ ansible_facts['distribution_major_version'] }}{% endif %}"
 facts_nectar_name: "{{ nectar_name }}"

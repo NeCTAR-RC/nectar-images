@@ -9,9 +9,9 @@
 
 - name: Add Ubuntu cloud archive repository
   apt_repository:
-    repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_distribution_release }}-updates/{{ octavia_openstack_version }} main"
+    repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_facts['distribution_release'] }}-updates/{{ octavia_openstack_version }} main"
     update_cache: true
-  when: not (ansible_distribution_release == 'jammy' and octavia_openstack_version == 'yoga')
+  when: not (ansible_facts['distribution_release'] == 'jammy' and octavia_openstack_version == 'yoga')
 
 - name: Add Nectar archive keys
   apt_key:
@@ -24,9 +24,9 @@
     repo: "{{ item }}"
     update_cache: yes
   with_items:
-    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }} main"
-    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }}-{{ octavia_openstack_version }} main"
-    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }}-{{ octavia_openstack_version }}-testing main"
+    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_facts['distribution_release'] }} main"
+    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_facts['distribution_release'] }}-{{ octavia_openstack_version }} main"
+    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_facts['distribution_release'] }}-{{ octavia_openstack_version }}-testing main"
 
 - name: Install Octavia amphora agent
   package:

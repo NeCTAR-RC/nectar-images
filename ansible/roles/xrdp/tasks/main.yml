@@ -2,11 +2,11 @@
 - name: Include OS-specific variables
   include_vars: "{{ item }}"
   with_first_found:
-    - "{{ ansible_distribution }}_{{ ansible_distribution_version }}.yml"
-    - "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
-    - "{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
+    - "{{ ansible_facts['distribution'] }}_{{ ansible_facts['distribution_version'] }}.yml"
+    - "{{ ansible_facts['distribution'] }}_{{ ansible_facts['distribution_major_version'] }}.yml"
+    - "{{ ansible_facts['distribution'] }}_{{ ansible_facts['distribution_release'] }}.yml"
+    - "{{ ansible_facts['distribution'] }}.yml"
+    - "{{ ansible_facts['os_family'] }}.yml"
 
 - name: Install XRDP
   package:
@@ -20,11 +20,11 @@
     name: xrdp
     groups: ssl-cert
     append: yes
-  when: ansible_distribution == 'Ubuntu'
+  when: ansible_facts['distribution'] == 'Ubuntu'
 
 - name: Allow non-root users to login with xwrapper
   shell: 'echo "xserver-xorg-legacy xserver-xorg-legacy/xwrapper/allowed_users select Anybody" | debconf-set-selections'
-  when: ansible_distribution == 'Ubuntu'
+  when: ansible_facts['distribution'] == 'Ubuntu'
 
 - name: Add XRDP config files
   template:

@@ -12,7 +12,7 @@
 # See timesyncd.conf(5) for details.
 
 [Time]
-{% if ansible_distribution_release in [ 'jessie', 'trusty' ] %}
+{% if ansible_facts['distribution_release'] in [ 'jessie', 'trusty' ] %}
 Servers={{ ntp_servers | join(' ') }}
 {% else %}
 NTP={{ ntp_servers | join(' ') }}

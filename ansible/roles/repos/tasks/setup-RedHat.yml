@@ -9,16 +9,16 @@
     name: dnf-plugins-core
     state: present
   when:
-    - ansible_os_family == 'RedHat'
-    - ansible_distribution_major_version >= '8'
+    - ansible_facts['os_family'] == 'RedHat'
+    - ansible_facts['distribution_major_version'] >= '8'
 
 # PowerTools is the CentOS version of RHEL's CodeReadyBuilder repo
 - name: Enable PowerTools repository
   command: dnf config-manager --enable powertools
   changed_when: false
   when:
-    - ansible_os_family == 'RedHat'
-    - ansible_distribution_major_version == '8'
+    - ansible_facts['os_family'] == 'RedHat'
+    - ansible_facts['distribution_major_version'] == '8'
 
 # RockyLinux from 9+ adopt the CRB name for PowerTools
 # https://wiki.rockylinux.org/rocky/repo/#notes-on-crb
@@ -26,8 +26,8 @@
   command: dnf config-manager --enable crb
   changed_when: false
   when:
-    - ansible_os_family == 'RedHat'
-    - ansible_distribution_major_version > '8'
+    - ansible_facts['os_family'] == 'RedHat'
+    - ansible_facts['distribution_major_version'] > '8'
 
 - name: Perform a full upgrade
   yum:

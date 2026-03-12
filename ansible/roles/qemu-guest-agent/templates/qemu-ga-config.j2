@@ -11,12 +11,12 @@
 # There should be no spaces between commas and commands in the blacklist.
 BLACKLIST_RPC={{ qemu_ga_blacklist|join(',') }}
 
-{% if ansible_os_family == "Debian" %}
+{% if ansible_facts['os_family'] == "Debian" %}
 # Final string for daemon arguments for Debian/Ubuntu init.d script
 DAEMON_ARGS="--blacklist=${BLACKLIST_RPC}"
 {% endif %}
 
-{% if ansible_os_family == 'RedHat' %}
+{% if ansible_facts['os_family'] == 'RedHat' %}
 # Disabled fsfreeze hook, as we don't ship any hooks
 FSFREEZE_HOOK_PATHNAME=/dev/null
 {% endif %}

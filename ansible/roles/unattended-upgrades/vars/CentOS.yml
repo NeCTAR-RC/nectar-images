@@ -1,6 +1,6 @@
 ---
 # Don't apply updates automatically for CentOS Stream, but yes for CentOS
-enable_unattended_updates: "{{ 'Stream' not in ansible_distribution_release }}"
+enable_unattended_updates: "{{ 'Stream' not in ansible_facts['distribution_release'] }}"
 
 # For CentOS, we use the default channel because we don't have
 # security classification in the yum/dnf repo.

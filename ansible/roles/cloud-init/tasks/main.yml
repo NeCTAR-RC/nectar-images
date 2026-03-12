@@ -2,8 +2,8 @@
 - name: Include OS-specific tasks
   include_tasks: "{{ task_item }}"
   with_first_found:
-    - "setup-{{ ansible_distribution }}.yml"
-    - "setup-{{ ansible_os_family }}.yml"
+    - "setup-{{ ansible_facts['distribution'] }}.yml"
+    - "setup-{{ ansible_facts['os_family'] }}.yml"
     - setup.yml
   loop_control:
     loop_var: task_item

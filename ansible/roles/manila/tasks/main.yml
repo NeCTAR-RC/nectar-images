@@ -7,7 +7,7 @@
 
 - name: Add Nectar repositories
   apt_repository:
-    repo: "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }} main"
+    repo: "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_facts['distribution_release'] }} main"
     update_cache: yes
 
 - name: Add Ubuntu cloud archive key

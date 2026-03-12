@@ -2,9 +2,9 @@
 - name: Include OS-specific variables
   include_vars: "{{ vars_item }}"
   with_first_found:
-    - "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
-    - "{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
-    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_facts['distribution'] }}_{{ ansible_facts['distribution_major_version'] }}.yml"
+    - "{{ ansible_facts['distribution'] }}_{{ ansible_facts['distribution_release'] }}.yml"
+    - "{{ ansible_facts['distribution'] }}.yml"
     - default.yml
   loop_control:
     loop_var: vars_item
@@ -16,9 +16,9 @@
       include_tasks: "{{ tasks_item }}"
       with_first_found:
         - files:
-          - "setup-{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
-          - "setup-{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
-          - "setup-{{ ansible_distribution }}.yml"
+          - "setup-{{ ansible_facts['distribution'] }}_{{ ansible_facts['distribution_major_version'] }}.yml"
+          - "setup-{{ ansible_facts['distribution'] }}_{{ ansible_facts['distribution_release'] }}.yml"
+          - "setup-{{ ansible_facts['distribution'] }}.yml"
           skip: true
       loop_control:
         loop_var: tasks_item

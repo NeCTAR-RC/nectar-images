@@ -9,13 +9,13 @@ ssh_pwauth: false
 
 package_update: true
 
-{% if ansible_os_family == "RedHat" %}
+{% if ansible_facts['os_family'] == "RedHat" %}
 resize_rootfs_tmp: /dev
 
-{% elif ansible_os_family == "Suse" %}
+{% elif ansible_facts['os_family'] == "Suse" %}
 syslog_fix_perms: root:root
 
-{% elif ansible_os_family == "Debian" %}
+{% elif ansible_facts['os_family'] == "Debian" %}
 apt:
   preserve_sources_list: true
 
@@ -76,14 +76,14 @@ system_info:
   default_user:
     name: {{ default_user }}
     lock_passwd: True
-    gecos: {{ ansible_distribution }}
+    gecos: {{ ansible_facts['distribution'] }}
     groups: [{{ user_groups|join(', ')}}]
     sudo: "ALL=(ALL) NOPASSWD:ALL"
     shell: /bin/bash
   paths:
      cloud_dir: /var/lib/cloud/
      templates_dir: /etc/cloud/templates/
-{% if ansible_distribution == "Ubuntu" %}
+{% if ansible_facts['distribution'] == "Ubuntu" %}
      upstart_dir: /etc/init/
 {% endif %}
   ssh_svcname: {{ ssh_svcname }}

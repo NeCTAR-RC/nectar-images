@@ -2,8 +2,8 @@
 - name: Include OS-specific variables
   include_vars: "{{ var_item }}"
   with_first_found:
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
+    - "{{ ansible_facts['distribution'] }}.yml"
+    - "{{ ansible_facts['os_family'] }}.yml"
     - default.yml
   loop_control:
     loop_var: var_item

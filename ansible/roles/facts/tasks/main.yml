@@ -2,61 +2,83 @@
 - name: Include OS-specific variables
   include_vars: "{{ var_item }}"
   with_first_found:
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
+    - "{{ ansible_facts['distribution'] }}.yml"
+    - "{{ ansible_facts['os_family'] }}.yml"
     - default.yml
   loop_control:
     loop_var: var_item
 
-- name: "Create facts and tags directories"
-  local_action:
-    module: file
+- name: Create facts and tags directories
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-  with_items:
+    mode: "0755"
+  loop:
     - "{{ fact_dir }}"
     - "{{ tag_dir }}"
-  become: False
+  delegate_to: localhost
+  become: false
+  run_once: true
 
 # Common facts we want to apply to all images
-- include_tasks: facts.yml
+- ansible.builtin.include_tasks: facts.yml
 
-# We lookup any facts starting with nectar_image_property_ and read those
-# into files, stripping off the prefix.
+# Prepare lists of dynamic keys we’ll use more than once
+- name: Build list of nectar fact keys
+  ansible.builtin.set_fact:
+    nectar_fact_keys: >-
+      {{ vars | dict2items
+             | selectattr('key', 'match', '^nectar_image_property_.*')
+             | map(attribute='key') | list }}
+
+- name: Build list of nectar tag keys
+  ansible.builtin.set_fact:
+    nectar_tag_keys: >-
+      {{ vars | dict2items
+             | selectattr('key', 'match', '^nectar_image_tag_.*')
+             | map(attribute='key') | list }}
+
+# We lookup any facts starting with nectar_image_property_ and write them to files
 - name: Save facts
-  local_action:
-    module: copy
+  ansible.builtin.copy:
     content: "{{ vars[item] }}"
     dest: "{{ fact_dir }}/{{ item | regex_replace('^nectar_image_property_', '') }}"
-  become: False
-  with_items: "{{ vars | select('match', '^nectar_image_property_.*') | list }}"
+    mode: "0644"
+  loop: "{{ nectar_fact_keys }}"
+  delegate_to: localhost
+  become: false
+  run_once: true
 
-# Any values given as part of the image_properties var we'll also write
-# as facts
+# Any values given as part of the image_properties var we'll also write as facts
 - name: Save image properties
-  local_action:
-    module: copy
-    content: "{{ image_properties[item] }}"
-    dest: "{{ fact_dir }}/{{ item }}"
-  become: False
-  with_items: "{{ image_properties }}"
+  ansible.builtin.copy:
+    content: "{{ item.value }}"
+    dest: "{{ fact_dir }}/{{ item.key }}"
+    mode: "0644"
+  loop: "{{ image_properties | dict2items }}"
+  delegate_to: localhost
+  become: false
+  run_once: true
 
-# We lookup any tags starting with nectar_image_tag_ and read those
-# into files, stripping off the prefix.
+# We lookup any tags starting with nectar_image_tag_ and write them to files
 - name: Save tags
-  local_action:
-    module: copy
-    content: ''  # empty
+  ansible.builtin.copy:
+    content: ""
     dest: "{{ tag_dir }}/{{ item | regex_replace('^nectar_image_tag_', '') }}"
-  become: False
-  with_items: "{{ vars | select('match', '^nectar_image_tag_.*') | list }}"
+    mode: "0644"
+  loop: "{{ nectar_tag_keys }}"
+  delegate_to: localhost
+  become: false
+  run_once: true
 
 - name: Print facts
-  debug:
+  ansible.builtin.debug:
     msg: "{{ item | regex_replace('^nectar_image_property_', '') }} = {{ vars[item] }}"
-  with_items: "{{ vars | select('match', '^nectar_image_property_.*') | list }}"
+  loop: "{{ nectar_fact_keys }}"
+  run_once: true
 
 - name: Print image properties
-  debug:
-    msg: "{{ item }} = {{ image_properties[item] }}"
-  with_items: "{{ image_properties }}"
+  ansible.builtin.debug:
+    msg: "{{ item.key }} = {{ item.value }}"
+  loop: "{{ image_properties | dict2items }}"
+  run_once: true

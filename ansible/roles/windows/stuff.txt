@@ -2,7 +2,7 @@
   roles:
     - role: ansible-role-virtio-win
       virtio_win_iso_path: 'E:\\virtio-win\\'
-      when: ansible_system_vendor == "QEMU"
+      when: ansible_facts['system_vendor'] == "QEMU"
 
   tasks:
     - name: Enable Remote Desktop
@@ -32,7 +32,7 @@
       ansible.windows.win_user:
         name: Administrator
         account_disabled: false
-      when: ansible_distribution is search("Microsoft Windows 10")
+      when: ansible_facts['distribution'] is search("Microsoft Windows 10")
 
     - name: Remove all current pagefiles
       community.windows.win_pagefile:
@@ -43,7 +43,7 @@
     - name: Disable Hibernate Mode
       ansible.windows.win_command: powercfg -h off
       changed_when: false
-      when: ansible_distribution is search("Microsoft Windows 10")
+      when: ansible_facts['distribution'] is search("Microsoft Windows 10")
 
     - name: Download BleachBit
       ansible.windows.win_get_url:

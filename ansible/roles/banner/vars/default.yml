@@ -1,2 +1,2 @@
 ---
-distro_label: "{{ ansible_distribution }} {{ ansible_distribution_version }}"
+distro_label: "{{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_version'] }}"

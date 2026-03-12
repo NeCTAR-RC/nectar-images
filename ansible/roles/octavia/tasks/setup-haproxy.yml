@@ -1,6 +1,6 @@
 ---
 - name: Include vars
-  include_vars: "{{ ansible_distribution|lower }}.yml"
+  include_vars: "{{ ansible_facts['distribution']|lower }}.yml"
 
 - name: Install HAProxy packages
   package:

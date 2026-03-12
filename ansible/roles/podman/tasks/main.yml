@@ -2,9 +2,9 @@
 - name: Include OS-specific variables
   include_vars: "{{ vars_item }}"
   with_first_found:
-    - "{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
+    - "{{ ansible_facts['distribution'] }}_{{ ansible_facts['distribution_release'] }}.yml"
+    - "{{ ansible_facts['distribution'] }}.yml"
+    - "{{ ansible_facts['os_family'] }}.yml"
   loop_control:
     loop_var: vars_item
 
@@ -15,7 +15,7 @@
 
 - name: Add Podman apt repository key
   ansible.builtin.get_url:
-    url: "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_{{ ansible_distribution_version }}/Release.key"
+    url: "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_{{ ansible_facts['distribution_version'] }}/Release.key"
     dest: /usr/share/keyrings/devel_kubic_libcontainers-keyring.asc
   when: podman_repository_key is defined
 

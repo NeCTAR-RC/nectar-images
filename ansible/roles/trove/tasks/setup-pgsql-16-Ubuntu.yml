@@ -11,7 +11,7 @@
 
 - name: Install postgres logrotate config
   copy:
-    src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/pgsql-16-logrotate"
+    src: "{{ ansible_facts['distribution'] }}{{ ansible_facts['distribution_major_version'] }}/pgsql-16-logrotate"
     dest: /etc/logrotate.d/postgresql-common
 
 - name: Install older pgsql-server

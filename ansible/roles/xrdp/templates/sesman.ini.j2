@@ -3,7 +3,7 @@ ListenAddress=127.0.0.1
 ListenPort=3350
 EnableUserWindowManager=true
 UserWindowManager=startwm.sh
-{% if ansible_distribution == 'CentOS' %}
+{% if ansible_facts['distribution'] == 'CentOS' %}
 DefaultWindowManager=startwm-bash.sh
 {% else %}
 DefaultWindowManager=startwm.sh
@@ -32,11 +32,11 @@ LogLevel=INFO
 EnableConsole=true
 
 [Xorg]
-{% if ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7' %}
+{% if ansible_facts['os_family'] == 'RedHat' and ansible_facts['distribution_major_version'] == '7' %}
 param=Xorg
-{% elif ansible_os_family == 'RedHat' %}
+{% elif ansible_facts['os_family'] == 'RedHat' %}
 param=/usr/libexec/Xorg
-{% elif ansible_os_family == 'Debian' %}
+{% elif ansible_facts['os_family'] == 'Debian' %}
 param=/usr/lib/xorg/Xorg
 {% endif %}
 param=-config

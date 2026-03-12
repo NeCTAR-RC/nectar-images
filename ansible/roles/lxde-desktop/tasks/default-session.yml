@@ -3,4 +3,4 @@
   alternatives:
     name: x-session-manager
     path: /usr/bin/startlxde
-  when: ansible_os_family == 'Debian'
+  when: ansible_facts['os_family'] == 'Debian'

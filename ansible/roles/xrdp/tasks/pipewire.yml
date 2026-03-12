@@ -5,14 +5,14 @@
     name: pipewire
     state: present
     allowerasing: true
-  when: ansible_os_family == 'RedHat'
+  when: ansible_facts['os_family'] == 'RedHat'
 
 # Ensure Pipewire is installed on Ubuntu
 - name: Install pipewire
   ansible.builtin.apt:
     name: pipewire
     state: present
-  when: ansible_os_family == 'Debian'
+  when: ansible_facts['os_family'] == 'Debian'
 
 # To build, follow the instructions from
 #  https://github.com/neutrinolabs/pipewire-module-xrdp/wiki/README

@@ -1,7 +1,7 @@
 ---
 openstack_version: ussuri
 
-puppet_repo: "deb http://apt.puppetlabs.com {{ ansible_distribution_release }} puppet7"
+puppet_repo: "deb http://apt.puppetlabs.com {{ ansible_facts['distribution_release'] }} puppet7"
 
 ansible_ppa: 'ppa:ansible/ansible'
 

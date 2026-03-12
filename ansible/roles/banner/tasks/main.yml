@@ -2,7 +2,7 @@
 - name: Include OS-specific variables
   include_vars: "{{ item }}"
   with_first_found:
-    - "{{ ansible_os_family }}.yml"
+    - "{{ ansible_facts['os_family'] }}.yml"
     - "default.yml"
 
 - name: Set banner file (non-Ubuntu)
@@ -10,11 +10,11 @@
     src: banner.j2
     dest: /etc/motd
     force: yes
-  when: ansible_distribution != 'Ubuntu'
+  when: ansible_facts['distribution'] != 'Ubuntu'
 
 - name: Set banner file (Ubuntu)
   template:
     src: banner-Ubuntu.j2
     dest: /etc/update-motd.d/00-header
     force: yes
-  when: ansible_distribution == 'Ubuntu'
+  when: ansible_facts['distribution'] == 'Ubuntu'

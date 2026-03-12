@@ -6,7 +6,7 @@
 
 - name: Add repositories (Percona)
   apt_repository:
-    repo: "deb http://repo.percona.com/apt {{ ansible_distribution_release }} main"
+    repo: "deb http://repo.percona.com/apt {{ ansible_facts['distribution_release'] }} main"
     update_cache: yes
 
 - name: Add repository public keys (MySQL)
@@ -16,7 +16,7 @@
 
 - name: Add repositories (MySQL)
   apt_repository:
-    repo: "deb http://repo.mysql.com/apt/ubuntu/ {{ ansible_distribution_release }} mysql-8.0"
+    repo: "deb http://repo.mysql.com/apt/ubuntu/ {{ ansible_facts['distribution_release'] }} mysql-8.0"
     update_cache: yes
 
 - name: Install Percona Xtrabackup
@@ -34,7 +34,7 @@
 - name: Write MySQL password to security file
   copy:
     dest: /root/.mysql_secret
-    content: "# The random password set for the root user at {{ ansible_date_time.date }} (local time): {{ trove_generated_password }}\n"
+    content: "# The random password set for the root user at {{ ansible_facts['date_time']['date'] }} (local time): {{ trove_generated_password }}\n"
 
 - name: Install mysql-server
   package:
@@ -43,10 +43,10 @@
 
 - name: Write base MySQL config
   copy:
-    src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/my-8.0.cnf"
+    src: "{{ ansible_facts['distribution'] }}{{ ansible_facts['distribution_major_version'] }}/my-8.0.cnf"
     dest: /etc/mysql/my.cnf
 
 - name: Write base MySQL config
   copy:
-    src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}/my-8.0.cnf"
+    src: "{{ ansible_facts['distribution'] }}{{ ansible_facts['distribution_major_version'] }}/my-8.0.cnf"
     dest: /etc/mysql/mysql.cnf

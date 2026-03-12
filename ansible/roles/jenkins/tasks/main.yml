@@ -2,7 +2,7 @@
 - name: Include OS-specific variables
   include_vars: "{{ item }}"
   with_items:
-    - "{{ ansible_distribution_release }}.yml"
+    - "{{ ansible_facts['distribution_release'] }}.yml"
     - "common.yml"
 
 - name: Disable unattended upgrades
@@ -24,9 +24,9 @@
     repo: "{{ item }}"
     update_cache: yes
   with_items:
-    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }} main"
-    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }}-{{ openstack_version }} main"
-    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_distribution_release }}-{{ openstack_version }}-testing main"
+    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_facts['distribution_release'] }} main"
+    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_facts['distribution_release'] }}-{{ openstack_version }} main"
+    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_facts['distribution_release'] }}-{{ openstack_version }}-testing main"
   when: openstack_version is defined
 
 - name: Add Puppet Key
@@ -72,7 +72,7 @@
   apt:
     name: "{{ backport_packages }}"
     state: latest
-    default_release: "{{ ansible_distribution_release }}-backports"
+    default_release: "{{ ansible_facts['distribution_release'] }}-backports"
   when: backport_packages is defined
 
 - name: Install pip packages
