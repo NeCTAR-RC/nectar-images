@@ -13,6 +13,9 @@ done
 # Truncate any log files
 find /var/log -type f -print0 | xargs -0 truncate -s0
 
+# delete tmp files
+rm -fr /tmp/* /var/tmp/*
+
 # Minimize
 dd if=/dev/zero of=/EMPTY bs=1M
 rm -f /EMPTY
