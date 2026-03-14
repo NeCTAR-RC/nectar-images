@@ -7,16 +7,18 @@ rm -fr /root/'~'*
 
 # Clean up any default users
 for U in ec2-user debian fedora ubuntu rocky almalinux; do
-  userdel -rf $U || true
+    id $U &>/dev/null && userdel -rf $U || true
 done
 
 # Truncate any log files
 find /var/log -type f -print0 | xargs -0 truncate -s0
 
-# delete tmp files
-rm -fr /tmp/* /var/tmp/*
+# Truncate resolv.conf if it exists
+# https://bugs.centos.org/view.php?id=14369
+truncate -c -s 0 /etc/resolv.conf
 
-# Minimize
-dd if=/dev/zero of=/EMPTY bs=1M
+# Set all of the remaining disk space to zeros
+dd if=/dev/zero of=/EMPTY bs=1M || true
 rm -f /EMPTY
+
 sync
