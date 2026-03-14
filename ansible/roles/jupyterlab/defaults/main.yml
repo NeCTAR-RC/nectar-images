@@ -1,5 +1,5 @@
 ---
-jupyter_user: "{{ ansible_env.SUDO_USER }}"
+jupyter_user: "{{ lookup('ansible.builtin.env', 'SUDO_USER') }}"
 
 jupter_lab_port: 8888
 

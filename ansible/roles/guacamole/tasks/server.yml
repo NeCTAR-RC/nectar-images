@@ -23,7 +23,7 @@
     creates: "{{ guacamole_install_prefix }}/sbin/guacd"
   with_items:
     - "./configure --prefix={{ guacamole_install_prefix }} --with-systemd-dir=/etc/systemd/system"
-    - "make -j {{ ansible_processor_vcpus }}"
+    - "make -j {{ ansible_facts['processor_vcpus'] }}"
     - make install
     - ldconfig
 

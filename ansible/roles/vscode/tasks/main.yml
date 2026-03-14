@@ -7,8 +7,8 @@
   loop_control:
     loop_var: vars_item
 
-- name: 'install ({{ ansible_pkg_mgr }})'
-  include_tasks: 'install-{{ ansible_pkg_mgr }}.yml'
+- name: "install ({{ ansible_facts['pkg_mgr'] }})"
+  include_tasks: "install-{{ ansible_facts['pkg_mgr'] }}.yml"
 
 #- import_tasks: install-extensions.yml
 #- import_tasks: write-settings.yml
