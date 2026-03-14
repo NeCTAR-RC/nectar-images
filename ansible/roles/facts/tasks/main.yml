@@ -26,22 +26,16 @@
 # Prepare lists of dynamic keys we’ll use more than once
 - name: Build list of nectar fact keys
   ansible.builtin.set_fact:
-    nectar_fact_keys: >-
-      {{ vars | dict2items
-             | selectattr('key', 'match', '^nectar_image_property_.*')
-             | map(attribute='key') | list }}
+    nectar_fact_keys: "{{ query('varnames', '^nectar_image_property_.*') }}"
 
 - name: Build list of nectar tag keys
   ansible.builtin.set_fact:
-    nectar_tag_keys: >-
-      {{ vars | dict2items
-             | selectattr('key', 'match', '^nectar_image_tag_.*')
-             | map(attribute='key') | list }}
+    nectar_tag_keys: "{{ query('varnames', '^nectar_image_tag_.*') }}"
 
 # We lookup any facts starting with nectar_image_property_ and write them to files
 - name: Save facts
   ansible.builtin.copy:
-    content: "{{ vars[item] }}"
+    content: "{{ lookup('vars', item) }}"
     dest: "{{ fact_dir }}/{{ item | regex_replace('^nectar_image_property_', '') }}"
     mode: "0644"
   loop: "{{ nectar_fact_keys }}"
@@ -73,7 +67,7 @@
 
 - name: Print facts
   ansible.builtin.debug:
-    msg: "{{ item | regex_replace('^nectar_image_property_', '') }} = {{ vars[item] }}"
+    msg: "{{ item | regex_replace('^nectar_image_property_', '') }} = {{ lookup('vars', item) }}"
   loop: "{{ nectar_fact_keys }}"
   run_once: true
 
