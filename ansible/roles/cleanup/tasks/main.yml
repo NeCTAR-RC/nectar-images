@@ -36,11 +36,3 @@
   with_items:
     - passwd -d root
     - passwd -l root
-
-- name: Remove the default user
-  user:
-    name: "{{ default_user }}"
-    state: absent
-    remove: yes
-  when: default_user != "vagrant"
-  ignore_errors: yes
