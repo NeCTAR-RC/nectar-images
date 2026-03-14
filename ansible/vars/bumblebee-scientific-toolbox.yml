@@ -7,6 +7,7 @@ r_cran_mirror: https://mirror.aarnet.edu.au/pub/CRAN
 r_install_dev: true
 
 r_install:
+  - cmake
 #  - gdal
   - libhdf4-0-alt
   - hdf4-tools
@@ -25,6 +26,9 @@ r_install:
   - libv8-dev          # required by crawl package
   - libssl-dev         # required by devtools,httr package
   - libsodium-dev      # required by sodium for cloudstoR
+  - libfribidi-dev     #
+  - libharfbuzz-dev    #
+  - libabsl-dev        # exactextractr,gstat
 
 
 r_packages:
@@ -41,7 +45,6 @@ r_packages:
   - name: caTools
   - name: changepoint
   - name: CircStats
-  - name: cloudstoR
   - name: coda
   - name: colorspace
   - name: crawl
@@ -58,8 +61,8 @@ r_packages:
   - name: FNN
   - name: foreach
   - name: formatR
-  - name: gdalUtils
-  - name: GeoLight
+#  - name: gdalUtils  # not available for this version of R
+#  - name: GeoLight  # not available for this version of R
   - name: geometry
   - name: geosphere
   - name: ggplot2
@@ -78,7 +81,7 @@ r_packages:
   - name: magic
   - name: mapdata
   - name: maps
-  - name: maptools
+#  - name: maptools  # not available for this version of R
   - name: markdown
   - name: memoise
   - name: mime
@@ -96,8 +99,8 @@ r_packages:
   - name: Rcpp
   - name: RCurl
   - name: reshape2
-  - name: rgdal
-  - name: rgeos
+#  - name: rgdal  # not available for this version of R
+#  - name: rgeos  # not available for this version of R
   - name: RJSONIO
   - name: rmarkdown
   - name: R.methodsS3

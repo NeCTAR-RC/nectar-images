@@ -53,13 +53,13 @@
   when: ansible_facts['distribution'] == 'Ubuntu'
 
 - name: Set Firefox system-wide preferences
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/firefox/syspref.js
-    regexp: '^pref\(\"{{ item }}\",.*'
-    line: 'pref("{{ item }}", {{ firefox_prefs[item] }});'
+    regexp: '^pref\("{{ item.key }}",.*'
+    line: 'pref("{{ item.key }}", {{ item.value }});'
     create: yes
     mode: '0644'
-  with_items: "{{ firefox_prefs }}"
+  with_dict: "{{ firefox_prefs }}"
   when:
     - firefox_prefs is defined
-    - firefox_prefs != ""
+    - firefox_prefs | length > 0

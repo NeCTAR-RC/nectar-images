@@ -16,15 +16,18 @@
   command: >-
     find /etc/apt/sources.list.d -type f -delete
 
-- name: Set up mirror
+- name: Set up apt repos
   apt_repository:
     repo: "{{ item }}"
     filename: "{{ ansible_facts['distribution']|lower }}"
     update_cache: true
   with_items: "{{ apt_repositories }}"
 
+# Update cache in a separate step so we can set a long lock timeout
+# in case the VM is running unattended updates
 - name: Perform an apt update
   apt:
+    lock_timeout: 600
     update_cache: yes
 
 - name: Perform a full upgrade
