@@ -6,7 +6,7 @@
 nvidia_vgpu_software_version: 19.4
 
 # Version of the Linux driver from the VGPU package
-nvidia_grid_driver_version: 580.126.08
+nvidia_grid_driver_version: 580.126.09
 
 # This should be the latest version that is supposed by the driver version
 # See https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html#id4
