@@ -104,13 +104,13 @@ git_diff $var_file
 # Debian 11
 # TODO(andy) It's complicated as the old release is from the debian archive
 
-# Debian 12
+# Debian 13
 distro=debian
-ver=12
+ver=13
 action "Checking $distro $ver"
 var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
 base_url="http://mirror.aarnet.edu.au/pub/debian-cd/current/amd64/iso-cd"
-output=$(curl -s -L "$base_url/SHA256SUMS" | grep -E 'debian-12')
+output=$(curl -s -L "$base_url/SHA256SUMS" | grep -E "$distro-$ver")
 IFS=" " read -ra details <<< "$output"
 iso_url="$base_url/${details[1]}"
 iso_checksum="sha256:${details[0]}"
@@ -120,9 +120,9 @@ sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' $var_file
 sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' $var_file
 git_diff $var_file
 
-# Fedora 41
+# Fedora 42
 distro=fedora
-ver=41
+ver=42
 action "Checking $distro $ver"
 var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
 base_url="http://mirror.aarnet.edu.au/pub/fedora/linux/releases/$ver/Server/x86_64/iso"
@@ -137,9 +137,9 @@ sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' $var_file
 sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' $var_file
 git_diff $var_file
 
-# Fedora 422
+# Fedora 43
 distro=fedora
-ver=42
+ver=43
 action "Checking $distro $ver"
 var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
 base_url="http://mirror.aarnet.edu.au/pub/fedora/linux/releases/$ver/Server/x86_64/iso"
@@ -159,7 +159,7 @@ distro=rocky
 ver=8
 action "Checking $distro $ver"
 var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
-base_url="http://mirror.aarnet.edu.au/pub/$distro/8/isos/x86_64"
+base_url="http://mirror.aarnet.edu.au/pub/$distro/$ver/isos/x86_64"
 output=$(curl -s -L "$base_url/CHECKSUM" | grep -E 'SHA256.*boot.iso' | grep -v latest | sed -n 's/^SHA256 (\(.*\)) = \([[:alnum:]]\+\)$/\1 \2/p')
 IFS=" " read -ra details <<< "$output"
 iso_url="$base_url/${details[0]}"
@@ -176,7 +176,7 @@ distro=rocky
 ver=9
 action "Checking $distro $ver"
 var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
-base_url="http://mirror.aarnet.edu.au/pub/$distro/9/isos/x86_64"
+base_url="http://mirror.aarnet.edu.au/pub/$distro/$ver/isos/x86_64"
 output=$(curl -s -L "$base_url/CHECKSUM" | grep -E 'SHA256.*boot.iso' | grep -v latest | sed -n 's/^SHA256 (\(.*\)) = \([[:alnum:]]\+\)$/\1 \2/p')
 IFS=" " read -ra details <<< "$output"
 iso_url="$base_url/${details[0]}"
