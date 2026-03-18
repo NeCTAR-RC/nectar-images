@@ -3,6 +3,7 @@
   dnf:
     name: "centos-release-openstack-{{ openstack_clients_version }}"
     state: present
+  when: openstack_clients_version is defined
 
 - name: Install OpenStack client packages
   dnf:

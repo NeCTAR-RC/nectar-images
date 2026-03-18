@@ -1,19 +1,17 @@
 ---
-openstack_clients_version: zed
-
 openstack_clients_packages:
-  - python-ceilometerclient
-  - python-cinderclient
-  - python-designateclient
-  - python-glanceclient
-  - python-heatclient
-  - python-keystoneclient
-  - python-manilaclient
-  - python-mistralclient
-  - python-muranoclient
-  - python-neutronclient
-  - python-novaclient
-  - python-openstackclient
-  - python-saharaclient
-  - python-swiftclient
-  - python-troveclient
+  - python3-aodhclient
+  - python3-barbicanclient
+  - python3-cinderclient
+  - python3-designateclient
+  - python3-glanceclient
+  - python3-heatclient
+  - python3-keystoneclient
+  - python3-manilaclient
+  - python3-muranoclient
+  - python3-neutronclient
+  - python3-novaclient
+  - python3-octaviaclient
+  - python3-openstackclient
+  - python3-swiftclient
+  - python3-troveclient
