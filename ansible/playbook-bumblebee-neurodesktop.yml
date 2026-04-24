@@ -10,6 +10,7 @@
   roles:
     - image-name
     - default-user
+    - repos
     - lxde-desktop
     - cvmfs
     - neurodesk

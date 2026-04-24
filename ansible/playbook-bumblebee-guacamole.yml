@@ -9,6 +9,7 @@
 
   roles:
     - image-name
+    - repos
     - default-user
     - guacamole
     - nectar-user

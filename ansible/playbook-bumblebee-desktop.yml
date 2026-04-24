@@ -10,6 +10,7 @@
   roles:
     - image-name
     - default-user
+    - repos
     - xfce4-desktop
     - xrdp
     - openstack-clients
