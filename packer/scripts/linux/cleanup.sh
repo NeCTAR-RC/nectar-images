@@ -1,13 +1,16 @@
-#!/bin/bash -x
+#!/bin/bash
 
 # Clean up leftover build files
-rm -fr /home/*/{.ssh,.ansible,.cache}
-rm -fr /root/{.ssh,.ansible,.cache}
-rm -fr /root/'~'*
+echo "Cleaning up Ansible build files..."
+rm -frv /home/*/{.ssh,.ansible,.cache} /root/{.ssh,.ansible,.cache} /root/'~'*
 
 # Clean up any default users
+echo "Cleaning up default users..."
 for U in ec2-user debian fedora ubuntu rocky almalinux; do
-    id $U &>/dev/null && userdel -rf $U || true
+    if id $U &>/dev/null; then
+        echo "Cleaning up user: $U"
+        userdel -rf $U || true
+    fi
 done
 
 # Truncate any log files
