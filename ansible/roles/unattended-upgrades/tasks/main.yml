@@ -1,12 +1,12 @@
 ---
 - include_tasks: setup-apt.yml
-  when: ansible_pkg_mgr == 'apt'
+  when: ansible_facts['pkg_mgr'] == 'apt'
 
 - include_tasks: setup-yum.yml
-  when: ansible_pkg_mgr == 'yum'
+  when: ansible_facts['pkg_mgr'] == 'yum'
 
 - include_tasks: setup-dnf.yml
-  when: ansible_pkg_mgr == 'dnf'
+  when: ansible_facts['pkg_mgr'] == 'dnf'
 
 - name: Set automatic_updates image property
   set_fact:
