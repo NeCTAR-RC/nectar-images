@@ -4,13 +4,18 @@
     src: cloud.cfg.j2
     dest: /etc/cloud/cloud.cfg
 
-- name: Don't requiretty for sudo
+- name: Detect sudo implementation
+  command: sudo --version
+  register: sudo_version_output
+  changed_when: false
+
+# New sudo-rs in Ubuntu 26.04 doesn't support the requiretty option
+- name: Don't requiretty for sudo (Legacy C-Sudo only)
   lineinfile:
-    path: /etc/sudoers
-    regexp: '^Defaults\t!requiretty$'
-    insertafter: '^Defaults\s+env_reset$'
-    line: 'Defaults !requiretty'
+    dest: /etc/sudoers
+    line: "Defaults !requiretty"
     validate: 'visudo -cf %s'
+  when: "'sudo-rs' not in sudo_version_output.stdout"
 
 - name: Get cloud-init version
   shell: "cloud-init --version 2>&1 | awk '{print $NF}'"
