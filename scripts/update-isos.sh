@@ -120,11 +120,13 @@ write_vars() {
 }
 
 # Update every ISO-based vars file, keyed off the os_name/os_version/os_arch it
-# declares. Files without an iso_url build from a cloud image and are left alone.
-# Lookups are memoised so OSes shared by many variants are fetched only once.
+# declares. Files without an iso_url, or that build from a cloud image
+# (qemu_disk_image), are left alone. Lookups are memoised so OSes shared by
+# many variants are fetched only once.
 declare -A iso_cache
 for var_file in "$VARS_DIR"/*.pkrvars.hcl; do
     grep -q '^iso_url' "$var_file" || continue
+    grep -q '^qemu_disk_image' "$var_file" && continue  # cloud-image build, not an ISO
     os_name=$(field os_name "$var_file")
     os_version=$(field os_version "$var_file")
     os_arch=$(field os_arch "$var_file")

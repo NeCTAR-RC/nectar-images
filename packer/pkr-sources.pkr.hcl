@@ -38,6 +38,13 @@ locals {
 
   http_directory = var.http_directory == null ? "${path.root}/http" : var.http_directory
 
+  # NoCloud seed CD for cloud-init based images (e.g. Fedora Cloud qcow2)
+  cd_files = var.cloud_init_dir == null ? null : [
+    "${path.root}/http/${var.cloud_init_dir}/meta-data",
+    "${path.root}/http/${var.cloud_init_dir}/user-data",
+  ]
+  cd_label = var.cloud_init_dir == null ? null : "cidata"
+
   security_groups = var.security_group != null ? [var.security_group] : null
 
   shutdown_command = var.shutdown_command == null ? (
@@ -76,6 +83,8 @@ source "qemu" "vm" {
   qemuargs             = local.qemuargs
   boot_command         = var.boot_command
   boot_wait            = local.boot_wait
+  cd_files             = local.cd_files
+  cd_label             = local.cd_label
   cpus                 = var.cpus
   communicator         = local.communicator
   disk_size            = local.disk_size

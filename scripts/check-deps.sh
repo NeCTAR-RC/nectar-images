@@ -81,4 +81,14 @@ for tool in openstack nc; do
     fi
 done
 
+# xorriso or mkisofs is required by Packer's cd_files option (used for
+# cloud-init NoCloud seed CDs on qcow2-based builds, e.g. Fedora Cloud).
+if hash xorriso >/dev/null 2>&1; then
+    success "xorriso found."
+elif hash mkisofs >/dev/null 2>&1; then
+    success "mkisofs found."
+else
+    error "Packer cd_files requires xorriso or mkisofs. Neither found in path."
+fi
+
 exit $ERROR

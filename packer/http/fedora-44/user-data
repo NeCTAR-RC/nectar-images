@@ -1,0 +1,13 @@
+#cloud-config
+disable_root: false
+ssh_pwauth: false
+users:
+  - name: root
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDrBPobebA5Bn6b2jW6OxeZqbi9F1l5GyDsokDHzJ745 packer
+packages:
+  - python3-libdnf5
+runcmd:
+  - sed -i 's/^#*PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
+  - systemctl restart sshd
+  - grubby --update-kernel=ALL --args="console=tty0 console=ttyS0 consoleblank=0 systemd.log_color=no net.ifnames=0"

@@ -133,6 +133,12 @@ variable "http_directory" {
   default = null
 }
 
+variable "cloud_init_dir" {
+  type        = string
+  default     = null
+  description = "Directory under http/ with NoCloud meta-data and user-data for the cloud-init seed CD"
+}
+
 variable "iso_checksum" {
   type        = string
   default     = null
