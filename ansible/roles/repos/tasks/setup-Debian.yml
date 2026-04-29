@@ -1,10 +1,15 @@
 ---
-# This dummy resource ensures the python apt support is installed
-# before we wipe the sources list in the next step
-- name: Ensure python apt support is installed
-  apt_repository:
-    repo: deb http://dummy repo test
-    state: absent
+# Install the python support needed by the apt and deb822_repository modules
+# while the image's original sources still exist, before we wipe them below.
+# Long lock timeout in case the VM is running unattended updates.
+- name: Install python apt and deb822 support
+  apt:
+    name:
+      - python3-apt
+      - python3-debian
+    state: present
+    update_cache: yes
+    lock_timeout: 600
 
 - name: Wipe existing sources.list
   copy:
@@ -16,25 +21,30 @@
   command: >-
     find /etc/apt/sources.list.d -type f -delete
 
+- name: Create apt keyrings directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /etc/apt/keyrings
+    - /usr/share/keyrings
+
+- name: Set up apt repos
+  deb822_repository:
+    name: "{{ ansible_facts['distribution']|lower }}"
+    types: "{{ apt_repo_types }}"
+    uris: "{{ apt_repo_uris }}"
+    suites: "{{ apt_repo_suites }}"
+    components: "{{ apt_repo_components }}"
+    enabled: true
+
 # Update cache in a separate step so we can set a long lock timeout
 # in case the VM is running unattended updates
 - name: Perform an apt update
   apt:
     lock_timeout: 600
     update_cache: yes
-
-- name: Set up apt repos
-  apt_repository:
-    repo: "{{ item }}"
-    filename: "{{ ansible_facts['distribution']|lower }}"
-    update_cache: true
-  with_items: "{{ apt_repositories }}"
-
-# Required by the deb822_repository module
-- name: Install python3-debian
-  apt:
-    name: python3-debian
-    state: present
 
 - name: Perform a full upgrade
   apt:

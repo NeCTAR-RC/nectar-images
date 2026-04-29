@@ -1,10 +1,17 @@
 ---
 - name: Add ansible PPA
-  apt_repository:
-    repo: "{{ ansible_ppa }}"
-  when: ansible_ppa is defined
+  deb822_repository:
+    name: ansible-ppa
+    types: [deb]
+    uris: https://ppa.launchpadcontent.net/ansible/ansible/ubuntu
+    suites: "{{ ansible_facts['distribution_release'] }}"
+    components: [main]
+    signed_by: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x6125E2A8C77F2818FB7BD15B93C4A3FD7BB9C367
+    enabled: true
+  when: ansible_ppa_use | default(false)
 
 - name: Install Ansible
   ansible.builtin.apt:
     name: ansible
     state: present
+    update_cache: true

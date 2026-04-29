@@ -9,26 +9,26 @@
   ansible.builtin.apt:
     deb: "{{ nvidia_grid_driver_url_path }}/grid-drivers/{{ nvidia_vgpu_software_version }}/nvidia-linux-grid-{{ nvidia_grid_driver_version.split('.')[0] }}_{{ nvidia_grid_driver_version }}_amd64.deb"
 
-- name: Add CUDA apt repository key
-  ansible.builtin.get_url:
-    url: "{{ nvidia_cuda_keyring_url }}"
-    dest: /usr/share/keyrings/cuda-archive-keyring.gpg
-
 - name: Add pin file to prioritize CUDA repository
   ansible.builtin.get_url:
     url: "{{ nvidia_cuda_apt_pin_url }}"
     dest: /etc/apt/preferences.d/cuda-repository-pin-600
 
 - name: Add CUDA apt repository
-  ansible.builtin.apt_repository:
-    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/cuda-archive-keyring.gpg] {{ nvidia_cuda_apt_repo_url }}"
-    state: present
-    update_cache: true
+  ansible.builtin.deb822_repository:
+    name: cuda
+    types: [deb]
+    uris: "{{ nvidia_cuda_apt_repo_url }}"
+    suites: ['/']
+    architectures: [amd64]
+    signed_by: "{{ nvidia_cuda_keyring_url }}"
+    enabled: true
 
 - name: Install CUDA toolkit packages
   ansible.builtin.apt:
     name: "cuda-toolkit-{{ item|replace('.', '-') }}"
     state: present
+    update_cache: true
   with_items: "{{ nvidia_cuda_versions }}"
 
 # Rsyslog can't log to /dev/console as is with Jammy or maybe Focal

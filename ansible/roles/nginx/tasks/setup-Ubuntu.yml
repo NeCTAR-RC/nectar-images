@@ -1,9 +1,13 @@
 ---
 - name: Add PPA for Nginx.
-  apt_repository:
-    repo: 'ppa:nginx/{{ nginx_ppa_version }}'
-    state: present
-    update_cache: yes
+  deb822_repository:
+    name: nginx-ppa
+    types: [deb]
+    uris: "https://ppa.launchpadcontent.net/nginx/{{ nginx_ppa_version }}/ubuntu"
+    suites: "{{ ansible_facts['distribution_release'] }}"
+    components: [main]
+    signed_by: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xCE930E275FC4DE69BFC8B9FF6ABFA6073131CE23
+    enabled: true
   register: nginx_ppa_added
   when: nginx_ppa_use
 
@@ -11,4 +15,11 @@
   apt:
     name: nginx
     state: absent
+  when: nginx_ppa_added.changed
+
+# deb822_repository does not refresh the cache, and the Debian setup's
+# update honours cache_valid_time, so force one here when the PPA is new
+- name: Update apt cache for the new PPA.
+  apt:
+    update_cache: yes
   when: nginx_ppa_added.changed

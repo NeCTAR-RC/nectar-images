@@ -4,12 +4,17 @@
     state: present
 
 - name: Add x2go repository
-  apt_repository:
-    repo: "{{ item }}"
-    state: present
-  with_items: "{{ x2go_apt_repositories }}"
+  deb822_repository:
+    name: x2go-stable-ppa
+    types: [deb]
+    uris: https://ppa.launchpadcontent.net/x2go/stable/ubuntu
+    suites: "{{ ansible_facts['distribution_release'] }}"
+    components: [main]
+    signed_by: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xDE8A37E3797E53D6625FF9E1EA40B3B3C0B1202D
+    enabled: true
 
 - name: Install x2go packages
   apt:
     name: "{{ x2go_apt_packages }}"
     state: present
+    update_cache: true

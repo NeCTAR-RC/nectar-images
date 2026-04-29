@@ -1,11 +1,10 @@
 ---
 apt_mirror: http://au.archive.ubuntu.com/ubuntu/
-apt_repositories:
-  - "deb {{ apt_mirror }} {{ ansible_facts['distribution_release'] }} main restricted universe multiverse"
-  - "deb-src {{ apt_mirror }} {{ ansible_facts['distribution_release'] }} main restricted universe multiverse"
-  - "deb {{ apt_mirror }} {{ ansible_facts['distribution_release'] }}-updates main restricted universe multiverse"
-  - "deb-src {{ apt_mirror }} {{ ansible_facts['distribution_release'] }}-updates main restricted universe multiverse"
-  - "deb {{ apt_mirror }} {{ ansible_facts['distribution_release'] }}-backports main restricted universe multiverse"
-  - "deb-src {{ apt_mirror }} {{ ansible_facts['distribution_release'] }}-backports main restricted universe multiverse"
-  - "deb {{ apt_mirror }} {{ ansible_facts['distribution_release'] }}-security main restricted universe multiverse"
-  - "deb-src {{ apt_mirror }} {{ ansible_facts['distribution_release'] }}-security main restricted universe multiverse"
+apt_repo_types: [deb, deb-src]
+apt_repo_uris: "{{ apt_mirror }}"
+apt_repo_suites:
+  - "{{ ansible_facts['distribution_release'] }}"
+  - "{{ ansible_facts['distribution_release'] }}-updates"
+  - "{{ ansible_facts['distribution_release'] }}-backports"
+  - "{{ ansible_facts['distribution_release'] }}-security"
+apt_repo_components: [main, restricted, universe, multiverse]

@@ -8,22 +8,6 @@
   loop_control:
     loop_var: vars_item
 
-- name: Install Podman and role dependencies
-  ansible.builtin.apt:
-    name: "{{ podman_dependencies }}"
-    install_recommends: False
-
-- name: Add Podman apt repository key
-  ansible.builtin.get_url:
-    url: "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_{{ ansible_facts['distribution_version'] }}/Release.key"
-    dest: /usr/share/keyrings/devel_kubic_libcontainers-keyring.asc
-  when: podman_repository_key is defined
-
-- name: Configure upstream APT repository
-  apt_repository:
-    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/devel_kubic_libcontainers-keyring.asc] {{ podman_repository }}"
-  when: podman_repository is defined
-
 - name: Install Podman and friends
   ansible.builtin.apt:
     name: "{{ podman_packages }}"

@@ -5,8 +5,14 @@
     state: present
 
 - name: Add Apptainer PPA
-  ansible.builtin.apt_repository:
-    repo: "ppa:apptainer/ppa"
+  ansible.builtin.deb822_repository:
+    name: apptainer-ppa
+    types: [deb]
+    uris: https://ppa.launchpadcontent.net/apptainer/ppa/ubuntu
+    suites: "{{ ansible_facts['distribution_release'] }}"
+    components: [main]
+    signed_by: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xF6B0F5193D4F3301EF491FF0AFE36534FC6218AE
+    enabled: true
 
 - name: Install Apptainer
   ansible.builtin.apt:

@@ -8,7 +8,7 @@ puppet_repo:
   components: openvox8
   signed_by: https://apt.voxpupuli.org/openvox-keyring.gpg
 
-ansible_ppa: 'ppa:ansible/ansible'
+ansible_ppa_use: true
 
 packages:
   - libpng-dev
