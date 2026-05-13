@@ -24,23 +24,35 @@
     dest: "/tmp/guacamole-{{ guacamole_version }}.war"
     mode: '0644'
 
-- name: Download Jakarta EE migration tool
-  get_url:
-    url: "https://repo1.maven.org/maven2/org/apache/tomcat/jakartaee-migration/1.0.9/jakartaee-migration-1.0.9-shaded.jar"
-    dest: "/tmp/jakartaee-migration.jar"
-    mode: '0755'
+- name: Handle Jakarta EE Migration for Tomcat 10
+  block:
+    - name: Download Jakarta EE migration tool
+      get_url:
+        url: "https://repo1.maven.org/maven2/org/apache/tomcat/jakartaee-migration/1.0.9/jakartaee-migration-1.0.9-shaded.jar"
+        dest: "/tmp/jakartaee-migration.jar"
+        mode: '0755'
 
-- name: Migrate Guacamole WAR to Jakarta EE (Tomcat 10)
-  command:
-    cmd: >
-      java -jar /tmp/jakartaee-migration.jar
-      /tmp/guacamole-{{ guacamole_version }}.war
-      /tmp/guacamole-{{ guacamole_version }}-jakarta.war
-    creates: "/tmp/guacamole-{{ guacamole_version }}-jakarta.war"
+    - name: Migrate Guacamole WAR to Jakarta EE
+      command:
+        cmd: >
+          java -jar /tmp/jakartaee-migration.jar
+          /tmp/guacamole-{{ guacamole_version }}.war
+          /tmp/guacamole-{{ guacamole_version }}-jakarta.war
+        creates: "/tmp/guacamole-{{ guacamole_version }}-jakarta.war"
 
-- name: Deploy Guacamole Jakarta WAR as ROOT.war
+    - name: Use Jakarta WAR for deployment
+      set_fact:
+        guacamole_war_source: "/tmp/guacamole-{{ guacamole_version }}-jakarta.war"
+  when: guacamole_tomcat_package == 'tomcat10'
+
+- name: Use Standard WAR for Tomcat 9
+  set_fact:
+    guacamole_war_source: "/tmp/guacamole-{{ guacamole_version }}.war"
+  when: guacamole_tomcat_package != 'tomcat10'
+
+- name: Deploy Guacamole WAR as ROOT.war
   copy:
-    src: "/tmp/guacamole-{{ guacamole_version }}-jakarta.war"
+    src: "{{ guacamole_war_source }}"
     dest: "/var/lib/{{ guacamole_tomcat_package }}/webapps/ROOT.war"
     remote_src: yes
     mode: '0644'
