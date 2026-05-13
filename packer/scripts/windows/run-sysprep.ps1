@@ -12,7 +12,11 @@ $finish = @'
 # Final cleanup and shutdown after sysprep.
 
 Start-Sleep -Seconds 6
+
+# Remove vagrant user and clean up home directory
 Remove-LocalUser -Name "vagrant"
+Get-CimInstance -Class Win32_UserProfile | Where-Object { $_.LocalPath -like "*\vagrant" } | Remove-CimInstance
+
 Get-ChildItem -Path C:\Windows\Temp -Include *.* -File -Recurse | foreach { $_.Delete()}
 Set-Item WSMan:\localhost\Service\Auth\Basic -Value False
 Set-Item WSMan:\localhost\Service\AllowUnencrypted -Value False
