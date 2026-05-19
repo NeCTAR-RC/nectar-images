@@ -10,21 +10,33 @@
 # Jakarta EE migration for PAM plugin
 #
 
-- name: Migrate Guacamole PAM plugin to Jakarta EE
-  command:
-    cmd: >
-      java -jar /tmp/jakartaee-migration.jar
-      /tmp/guacamole-auth-pam-1.2.0.jar
-      /tmp/guacamole-auth-pam-1.2.0-jakarta.jar
-    creates: "/tmp/guacamole-auth-pam-1.2.0-jakarta.jar"
+- name: Handle Jakarta EE Migration for Tomcat 10
+  block:
+    - name: Migrate Guacamole PAM plugin to Jakarta EE
+      command:
+        cmd: >
+          java -jar /tmp/jakartaee-migration.jar
+          /tmp/guacamole-auth-pam-1.2.0.jar
+          /tmp/guacamole-auth-pam-1.2.0-jakarta.jar
+        creates: "/tmp/guacamole-auth-pam-1.2.0-jakarta.jar"
 
-- name: Verify migrated PAM plugin JAR
-  command:
-    cmd: unzip -tq /tmp/guacamole-auth-pam-1.2.0-jakarta.jar
+    - name: Verify migrated PAM plugin JAR
+      command:
+        cmd: unzip -tq /tmp/guacamole-auth-pam-1.2.0-jakarta.jar
 
-- name: Install Jakarta-migrated Guacamole PAM auth plugin
+    - name: Use Jakarta PAM plugin
+      set_fact:
+        guacamole_auth_pam_source: "/tmp/guacamole-auth-pam-1.2.0-jakarta.jar"
+  when: guacamole_tomcat_package == 'tomcat10'
+
+- name: Use Standard PAM plugin for Tomcat 9
+  set_fact:
+    guacamole_auth_pam_source: "/tmp/guacamole-auth-pam-1.2.0.jar"
+  when: guacamole_tomcat_package != 'tomcat10'
+
+- name: Install Guacamole PAM auth plugin
   copy:
-    src: "/tmp/guacamole-auth-pam-1.2.0-jakarta.jar"
+    src: "{{ guacamole_auth_pam_source }}"
     dest: "{{ guacamole_home }}/extensions/guacamole-auth-pam-1.2.0.jar"
     remote_src: yes
     mode: '0644'

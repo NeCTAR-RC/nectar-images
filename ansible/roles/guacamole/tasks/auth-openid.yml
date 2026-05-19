@@ -11,21 +11,33 @@
     dest: /tmp
     remote_src: yes
 
-- name: Migrate Guacamole OIDC plugin to Jakarta EE
-  command:
-    cmd: >
-      java -jar /tmp/jakartaee-migration.jar
-      /tmp/guacamole-auth-sso-{{ guacamole_version }}/openid/guacamole-auth-sso-openid-{{ guacamole_version }}.jar
-      /tmp/guacamole-auth-sso-openid-{{ guacamole_version }}-jakarta.jar
-    creates: "/tmp/guacamole-auth-sso-openid-{{ guacamole_version }}-jakarta.jar"
+- name: Handle Jakarta EE Migration for Tomcat 10
+  block:
+    - name: Migrate Guacamole OIDC plugin to Jakarta EE
+      command:
+        cmd: >
+          java -jar /tmp/jakartaee-migration.jar
+          /tmp/guacamole-auth-sso-{{ guacamole_version }}/openid/guacamole-auth-sso-openid-{{ guacamole_version }}.jar
+          /tmp/guacamole-auth-sso-openid-{{ guacamole_version }}-jakarta.jar
+        creates: "/tmp/guacamole-auth-sso-openid-{{ guacamole_version }}-jakarta.jar"
 
-- name: Verify migrated OIDC plugin JAR
-  command:
-    cmd: unzip -tq /tmp/guacamole-auth-sso-openid-{{ guacamole_version }}-jakarta.jar
+    - name: Verify migrated OIDC plugin JAR
+      command:
+        cmd: unzip -tq /tmp/guacamole-auth-sso-openid-{{ guacamole_version }}-jakarta.jar
 
-- name: Install Jakarta-migrated Guacamole OIDC plugin
+    - name: Use Jakarta OIDC plugin
+      set_fact:
+        guacamole_auth_openid_source: "/tmp/guacamole-auth-sso-openid-{{ guacamole_version }}-jakarta.jar"
+  when: guacamole_tomcat_package == 'tomcat10'
+
+- name: Use Standard OIDC plugin for Tomcat 9
+  set_fact:
+    guacamole_auth_openid_source: "/tmp/guacamole-auth-sso-{{ guacamole_version }}/openid/guacamole-auth-sso-openid-{{ guacamole_version }}.jar"
+  when: guacamole_tomcat_package != 'tomcat10'
+
+- name: Install Guacamole OIDC plugin
   copy:
-    src: "/tmp/guacamole-auth-sso-openid-{{ guacamole_version }}-jakarta.jar"
+    src: "{{ guacamole_auth_openid_source }}"
     dest: "/etc/guacamole/extensions/guacamole-auth-sso-openid-{{ guacamole_version }}.jar"
     remote_src: yes
     mode: '0644'

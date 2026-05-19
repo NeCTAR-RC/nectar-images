@@ -15,21 +15,33 @@
 # Jakarta EE migration for the MySQL JDBC plugin
 #
 
-- name: Migrate Guacamole JDBC MySQL plugin to Jakarta EE
-  command:
-    cmd: >
-      java -jar /tmp/jakartaee-migration.jar
-      /tmp/guacamole-auth-jdbc-{{ guacamole_version }}/mysql/guacamole-auth-jdbc-mysql-{{ guacamole_version }}.jar
-      /tmp/guacamole-auth-jdbc-mysql-{{ guacamole_version }}-jakarta.jar
-    creates: "/tmp/guacamole-auth-jdbc-mysql-{{ guacamole_version }}-jakarta.jar"
+- name: Handle Jakarta EE Migration for Tomcat 10
+  block:
+    - name: Migrate Guacamole JDBC MySQL plugin to Jakarta EE
+      command:
+        cmd: >
+          java -jar /tmp/jakartaee-migration.jar
+          /tmp/guacamole-auth-jdbc-{{ guacamole_version }}/mysql/guacamole-auth-jdbc-mysql-{{ guacamole_version }}.jar
+          /tmp/guacamole-auth-jdbc-mysql-{{ guacamole_version }}-jakarta.jar
+        creates: "/tmp/guacamole-auth-jdbc-mysql-{{ guacamole_version }}-jakarta.jar"
 
-- name: Verify migrated JDBC plugin JAR
-  command:
-    cmd: unzip -tq /tmp/guacamole-auth-jdbc-mysql-{{ guacamole_version }}-jakarta.jar
+    - name: Verify migrated JDBC plugin JAR
+      command:
+        cmd: unzip -tq /tmp/guacamole-auth-jdbc-mysql-{{ guacamole_version }}-jakarta.jar
 
-- name: Install Jakarta-migrated Guacamole JDBC MySQL plugin
+    - name: Use Jakarta JDBC MySQL plugin
+      set_fact:
+        guacamole_auth_jdbc_mysql_source: "/tmp/guacamole-auth-jdbc-mysql-{{ guacamole_version }}-jakarta.jar"
+  when: guacamole_tomcat_package == 'tomcat10'
+
+- name: Use Standard JDBC MySQL plugin for Tomcat 9
+  set_fact:
+    guacamole_auth_jdbc_mysql_source: "/tmp/guacamole-auth-jdbc-{{ guacamole_version }}/mysql/guacamole-auth-jdbc-mysql-{{ guacamole_version }}.jar"
+  when: guacamole_tomcat_package != 'tomcat10'
+
+- name: Install Guacamole JDBC MySQL plugin
   copy:
-    src: "/tmp/guacamole-auth-jdbc-mysql-{{ guacamole_version }}-jakarta.jar"
+    src: "{{ guacamole_auth_jdbc_mysql_source }}"
     dest: "/etc/guacamole/extensions/guacamole-auth-jdbc-mysql-{{ guacamole_version }}.jar"
     remote_src: yes
     mode: '0644'
