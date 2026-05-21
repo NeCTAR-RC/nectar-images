@@ -1,27 +1,35 @@
 # tasks file for r
 ---
-- name: repository | add public key
-  apt_key:
-    id: E298A3A825C0D65DFD57CBB651716619E084DAB9
-    keyserver: keyserver.ubuntu.com
+- name: repository | add CRAN apt repository
+  deb822_repository:
+    name: cran
+    types: deb
+    uris: "{{ r_cran_mirror }}/bin/linux/ubuntu"
+    suites: "{{ ansible_facts['distribution_release'] }}-cran40/"
+    signed_by: "{{ r_cran_mirror }}/bin/linux/ubuntu/marutter_pubkey.asc"
     state: present
+  notify: update apt cache
 
-- name: repository | add cran-r
-  apt_repository:
-    repo: "deb {{ r_repository }}"
+- name: repository | add r2u apt repository
+  deb822_repository:
+    name: cranapt
+    types: deb
+    uris: https://r2u.stat.illinois.edu/ubuntu
+    suites: "{{ ansible_facts['distribution_release'] }}"
+    components: main
+    architectures: amd64
+    signed_by: https://eddelbuettel.github.io/r2u/assets/dirk_eddelbuettel_key.asc
     state: present
-    update_cache: true
+  notify: update apt cache
 
-# Add r2u repo for deb packages for R modules. NOTE: c2d4u is no longer being updated
-- name: Download cranapt repository signing key
-  get_url:
-    url: https://eddelbuettel.github.io/r2u/assets/dirk_eddelbuettel_key.asc
-    dest: /usr/share/keyrings/cranapt-archive-keyring.asc
+# Pin r2u above the Ubuntu archive so r-cran-* binaries aren't shadowed by older
+# distro packages with quirky version strings (see r2u README "About Pinning").
+- name: repository | pin r2u priority
+  copy:
+    dest: /etc/apt/preferences.d/99cranapt
+    content: |
+      Package: *
+      Pin: release o=CRAN-Apt Project
+      Pin: release l=CRAN-Apt Packages
+      Pin-Priority: 700
     mode: '0644'
-
-- name: Add cranapt (r2u) apt repository
-  apt_repository:
-    repo: deb [arch=amd64 signed-by=/usr/share/keyrings/cranapt-archive-keyring.asc] https://r2u.stat.illinois.edu/ubuntu noble main
-    filename: cranapt
-    state: present
-    update_cache: yes

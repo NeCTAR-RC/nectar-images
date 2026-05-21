@@ -1,0 +1,23 @@
+# tasks file for r
+---
+- name: bspm | install python deps
+  apt:
+    name:
+      - python3-dbus
+      - python3-gi
+      - python3-apt
+    state: present
+
+- name: bspm | install bspm R package
+  apt:
+    name: r-cran-bspm
+    state: present
+
+- name: bspm | enable bspm in Rprofile.site
+  blockinfile:
+    path: /etc/R/Rprofile.site
+    create: true
+    mode: '0644'
+    block: |
+      suppressMessages(bspm::enable())
+      options(bspm.version.check = FALSE)

@@ -1,2 +1,5 @@
 # handlers file for r
 ---
+- name: update apt cache
+  apt:
+    update_cache: true
