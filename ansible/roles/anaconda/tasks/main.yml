@@ -73,6 +73,7 @@
     name: curl
     state: absent
     executable: "{{ anaconda_conda_bin }}"
+  failed_when: false
 
 - name: make system default python etc...
   become: yes
