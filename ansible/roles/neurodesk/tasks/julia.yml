@@ -1,9 +1,25 @@
 ---
-- name: Download and extract Julia tarball
+- name: Download Julia tarball
+  ansible.builtin.get_url:
+    url: "{{ neurodesk_julia_download_url }}"
+    dest: /tmp/julia.tar.gz
+    timeout: 60
+    mode: '0644'
+  register: julia_dl
+  retries: 5
+  delay: 10
+  until: julia_dl is succeeded
+
+- name: Extract Julia tarball
   ansible.builtin.unarchive:
-    src: "{{ neurodesk_julia_download_url }}"
+    src: /tmp/julia.tar.gz
     dest: /opt
     remote_src: true
+
+- name: Remove Julia tarball
+  ansible.builtin.file:
+    path: /tmp/julia.tar.gz
+    state: absent
 
 - name: Create a symbolic link
   ansible.builtin.file:
