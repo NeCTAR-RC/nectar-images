@@ -93,6 +93,10 @@ Vagrant.configure("2") do |config|
     c.vm.box = "cloud-image/ubuntu-22.04"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/jammy64"
+      override.vm.disk :disk, size: "30GB", primary: true
+    end
+    c.vm.provider :libvirt do |v|
+      v.machine_virtual_size = 30
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -316,16 +320,11 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "ansible/playbook-rstudio.yml"
       ansible.become = true
     end
-    #c.vm.provision "shell" do |shell|
-    #  shell.inline = "/usr/nectar/run_tests.sh"
-    #  shell.privileged = false
-    #  shell.env = { "NECTAR_TEST_BUILD": 1 }
-    #end
-    config.vm.network :forwarded_port, guest: 80, host: 8080, host_ip: '0.0.0.0'
-    config.vm.network :forwarded_port, guest: 443, host: 8443, host_ip: '0.0.0.0'
+    c.vm.network :forwarded_port, guest: 80, host: 8080, host_ip: '0.0.0.0'
+    c.vm.network :forwarded_port, guest: 443, host: 8443, host_ip: '0.0.0.0'
   end
 
-  # Octavia Amphora (Ubuntu 22.04 focal)
+  # Octavia Amphora (Ubuntu 22.04 jammy)
   config.vm.define "octavia-amphora" do |c|
     c.vm.box = "cloud-image/ubuntu-22.04"
     c.vm.provider "virtualbox" do |v, override|
@@ -348,6 +347,10 @@ Vagrant.configure("2") do |config|
     c.vm.box = "cloud-image/ubuntu-22.04"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/jammy64"
+      override.vm.disk :disk, size: "30GB", primary: true
+    end
+    c.vm.provider :libvirt do |v|
+      v.machine_virtual_size = 30
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -363,6 +366,10 @@ Vagrant.configure("2") do |config|
     c.vm.box = "cloud-image/ubuntu-24.04"
     c.vm.provider "virtualbox" do |v, override|
       override.vm.box = "ubuntu/noble64"
+      override.vm.disk :disk, size: "30GB", primary: true
+    end
+    c.vm.provider :libvirt do |v|
+      v.machine_virtual_size = 30
     end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -406,6 +413,12 @@ Vagrant.configure("2") do |config|
   # Windows Server 2022
   config.vm.define "windows-2022" do |c|
     c.vm.box = "peru/windows-server-2022-standard-x64-eval"
+    c.vm.provider "virtualbox" do |v, override|
+      override.vm.disk :disk, size: "30GB", primary: true
+    end
+    c.vm.provider :libvirt do |v|
+      v.machine_virtual_size = 30
+    end
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = GLOBAL_ANSIBLE_VARS
@@ -442,7 +455,7 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "ansible/playbook-bumblebee-scientific-toolbox.yml"
       ansible.become = true
     end
-    config.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
+    c.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
   end
 
   # Bumblebee Rocky 9
@@ -456,7 +469,7 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "ansible/playbook-bumblebee-desktop.yml"
       ansible.become = true
     end
-    config.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
+    c.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
   end
 
   # Bumblebee Ubuntu 22.04 LTS (Jammy)
@@ -470,7 +483,7 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "ansible/playbook-bumblebee-desktop.yml"
       ansible.become = true
     end
-    config.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
+    c.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
   end
 
   # Bumblebee Ubuntu 24.04 LTS (Noble)
@@ -484,7 +497,7 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "ansible/playbook-bumblebee-desktop.yml"
       ansible.become = true
     end
-    config.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
+    c.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
   end
 
   # Bumblebee Neurodesktop
@@ -503,7 +516,7 @@ Vagrant.configure("2") do |config|
       shell.inline = "cp -rT /etc/skel /home/vagrant || true"
       shell.privileged = false
     end
-  config.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
+  c.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
   end
 
   # Ubuntu 22.04 (jammy) - transcription desktop
@@ -520,12 +533,31 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "ansible/playbook-bumblebee-transcription.yml"
       ansible.become = true
     end
-    config.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
+    c.vm.network :forwarded_port, guest: 3389, host: 33389, host_ip: '0.0.0.0'
   end
 
+  # AI Ready Base (Ubuntu 22.04)
+  config.vm.define "aiready-base" do |c|
+    c.vm.box = "cloud-image/ubuntu-22.04"
+    c.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/jammy64"
+      override.vm.disk :disk, size: "50GB", primary: true
+    end
+    c.vm.provider :libvirt do |v|
+      v.machine_virtual_size = 50
+    end
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS.merge(
+        nectar_image_name: "AI Ready Base"
+      )
+      ansible.playbook = "ansible/playbook-aiready-base.yml"
+      ansible.become = true
+    end
+    c.vm.network :forwarded_port, guest: 80, host: 8080, host_ip: '0.0.0.0'
+    c.vm.network :forwarded_port, guest: 443, host: 8443, host_ip: '0.0.0.0'
+  end
 
-  #config.winrm.transport = :plaintext
-  #config.winrm.basic_auth_only = true
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
@@ -534,13 +566,13 @@ Vagrant.configure("2") do |config|
   config.vm.provider :libvirt do |v|
     v.memory = 4096
     v.cpus = 2
-    v.machine_virtual_size = 20  # 4GB disk
+    v.machine_virtual_size = 20  # 20GB default disk
     v.graphics_type = "spice"
   end
 
   config.vm.provider :virtualbox do |v|
     v.gui = false
-    v.memory = 2048
+    v.memory = 4096
     v.cpus = 2
     # Fix for ubuntu images hanging:
     #   https://bugs.launchpad.net/cloud-images/+bug/1829625
