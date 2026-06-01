@@ -6,12 +6,16 @@
       - python3-dbus
       - python3-gi
       - python3-apt
+      - make
     state: present
 
+# bspm is the bridge that drives apt from R, so it is not shipped as an
+# r-cran-* binary by r2u/cranapt. Install it from CRAN source, matching the
+# official r2u add_cranapt_noble.sh setup script.
 - name: bspm | install bspm R package
-  apt:
-    name: r-cran-bspm
-    state: present
+  command: Rscript -e 'install.packages("bspm")'
+  args:
+    creates: /usr/local/lib/R/site-library/bspm
 
 - name: bspm | enable bspm in Rprofile.site
   blockinfile:
