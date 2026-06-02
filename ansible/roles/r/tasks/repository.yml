@@ -8,7 +8,6 @@
     suites: "{{ ansible_facts['distribution_release'] }}-cran40/"
     signed_by: "{{ r_cran_mirror }}/bin/linux/ubuntu/marutter_pubkey.asc"
     state: present
-  notify: update apt cache
 
 - name: repository | add r2u apt repository
   deb822_repository:
@@ -20,16 +19,18 @@
     architectures: amd64
     signed_by: https://eddelbuettel.github.io/r2u/assets/dirk_eddelbuettel_key.asc
     state: present
-  notify: update apt cache
 
 # Pin r2u above the Ubuntu archive so r-cran-* binaries aren't shadowed by older
-# distro packages with quirky version strings (see r2u README "About Pinning").
+# distro packages with quirky version strings
 - name: repository | pin r2u priority
   copy:
     dest: /etc/apt/preferences.d/99cranapt
     content: |
       Package: *
       Pin: release o=CRAN-Apt Project
-      Pin: release l=CRAN-Apt Packages
       Pin-Priority: 700
     mode: '0644'
+
+- name: repository | refresh apt cache for newly added R repos
+  apt:
+    update_cache: true

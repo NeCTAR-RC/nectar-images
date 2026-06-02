@@ -1,5 +1,4 @@
 # handlers file for r
 ---
-- name: update apt cache
-  apt:
-    update_cache: true
+# The apt cache is now refreshed explicitly in repository.yml (an end-of-play
+# handler is too late for install.yml in the same role), so no handlers here.

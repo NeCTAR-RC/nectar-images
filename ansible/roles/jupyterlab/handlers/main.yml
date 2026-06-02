@@ -1,6 +1,12 @@
 ---
 - name: restart jupyter-lab
   become: yes
-  service:
-    name: jupyterlab
+  become_user: "{{ jupyter_user }}"
+  ansible.builtin.systemd:
+    name: jupyter-lab
     state: restarted
+    scope: user
+    daemon_reload: yes
+  environment:
+    XDG_RUNTIME_DIR: "/run/user/{{ ansible_facts.getent_passwd[jupyter_user][1] }}"
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_facts.getent_passwd[jupyter_user][1] }}/bus"
