@@ -25,3 +25,13 @@
     block: |
       suppressMessages(bspm::enable())
       options(bspm.version.check = FALSE)
+      options(bspm.sudo = TRUE)
+
+# Fail the build loudly if bspm isn't actually routing installs through APT:
+# install a known CRAN package and confirm it landed as an r-cran-* .deb.
+- name: bspm | verify install.packages routes through APT
+  shell: |
+    set -e
+    Rscript -e 'install.packages("jsonlite")'
+    dpkg -s r-cran-jsonlite
+  changed_when: false
