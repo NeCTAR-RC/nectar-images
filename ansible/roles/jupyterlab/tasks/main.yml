@@ -24,6 +24,16 @@
 - name: "Allow systemd lingering for user {{ jupyter_user }}"
   command: "loginctl enable-linger {{ jupyter_user }}"
 
+- name: "Look up account details for user {{ jupyter_user }}"
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ jupyter_user }}"
+
+- name: "Wait for the systemd user bus to come up (as {{ jupyter_user }})"
+  ansible.builtin.wait_for:
+    path: "/run/user/{{ ansible_facts.getent_passwd[jupyter_user][1] }}/bus"
+    timeout: 30
+
 - name: Install Jupyter Lab systemd service
   template:
     src: jupyter-lab.service.j2
@@ -45,12 +55,14 @@
   become_user: "{{ jupyter_user }}"
   when: nectar_test_build | default(False)
 
-- name: "Enable and start service (as {{ jupyter_user }})"
-  service:
+- name: "Enable service (as {{ jupyter_user }})"
+  ansible.builtin.systemd:
     name: jupyter-lab
     enabled: yes
-    state: restarted
     scope: user
     daemon_reload: yes
   become: yes
   become_user: "{{ jupyter_user }}"
+  environment:
+    XDG_RUNTIME_DIR: "/run/user/{{ ansible_facts.getent_passwd[jupyter_user][1] }}"
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_facts.getent_passwd[jupyter_user][1] }}/bus"
