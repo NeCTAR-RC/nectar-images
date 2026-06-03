@@ -6,4 +6,4 @@ source_image_name = "NeCTAR AI Ready Base"
 ssh_username      = "ubuntu"
 profile           = "aiready-tensorflow"
 profile_args      = ["nectar_image_name='AI Ready with TensorFlow'"]
-disk_size         = "50"
+disk_size         = "80"
