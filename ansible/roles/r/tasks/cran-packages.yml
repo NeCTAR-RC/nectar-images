@@ -1,0 +1,11 @@
+# tasks file for r
+---
+# Install R packages as pre-built r-cran-* binaries from the CRAN/r2u APT
+# repositories (added in repository.yml) instead of compiling each from source
+# with R-install-package. This avoids slow source builds and their system
+# toolchain requirements (e.g. cmake for s2/abseil).
+- name: cran-packages | install r-cran apt binaries
+  apt:
+    name: "{{ r_cran_packages }}"
+    state: present
+  when: r_cran_packages | length > 0

@@ -7,7 +7,6 @@ r_cran_mirror: https://mirror.aarnet.edu.au/pub/CRAN
 r_install_dev: true
 
 r_install:
-  - cmake
 #  - gdal
   - libhdf4-0-alt
   - hdf4-tools
@@ -28,106 +27,114 @@ r_install:
   - libsodium-dev      # required by sodium for cloudstoR
   - libfribidi-dev     #
   - libharfbuzz-dev    #
-  - libabsl-dev        # exactextractr,gstat
 
 
-r_packages:
-  - name: abind
-  - name: ade4
-  - name: adehabitatHR
-  - name: adehabitatLT
-  - name: adehabitatMA
-  - name: akima
-  - name: animation
-  - name: bit
-  - name: bitops
-  - name: brew
-  - name: caTools
-  - name: changepoint
-  - name: CircStats
-  - name: coda
-  - name: colorspace
-  - name: crawl
-  - name: deldir
-  - name: devtools
-  - name: dichromat
-  - name: digest
-  - name: dismo
-  - name: diveMove
-  - name: dplyr
-  - name: evaluate
-  - name: exactextractr
-  - name: ff
-  - name: FNN
-  - name: foreach
-  - name: formatR
-#  - name: gdalUtils  # not available for this version of R
-#  - name: GeoLight  # not available for this version of R
-  - name: geometry
-  - name: geosphere
-  - name: ggplot2
-  - name: gstat
-  - name: gtable
-  - name: highr
-  - name: htmltools
-  - name: httpuv
-  - name: httr
-  - name: intervals
-  - name: iterators
-  - name: jsonlite
-  - name: knitr
-  - name: labeling
-  - name: leaflet
-  - name: magic
-  - name: mapdata
-  - name: maps
-#  - name: maptools  # not available for this version of R
-  - name: markdown
-  - name: memoise
-  - name: mime
-  - name: misc3d
-  - name: munsell
-  - name: mvtnorm
-  - name: ncdf4
-  - name: plyr
-  - name: polyclip
-  - name: proto
-  - name: quantreg
-  - name: R6
-  - name: raster
-  - name: RColorBrewer
-  - name: Rcpp
-  - name: RCurl
-  - name: reshape2
-#  - name: rgdal  # not available for this version of R
-#  - name: rgeos  # not available for this version of R
-  - name: RJSONIO
-  - name: rmarkdown
-  - name: R.methodsS3
-  - name: RNetCDF
-  - name: R.oo
-  - name: roxygen2
-  - name: rstudioapi
-  - name: R.utils
-  - name: scales
-  - name: sf
-  - name: shiny
-  - name: sp
-  - name: spacetime
-  - name: SparseM
-  - name: stringr
-  - name: targets
-  - name: tarchetypes
-  - name: tensor
-  - name: testthat
-  - name: terra
-  - name: trip
-  - name: visNetwork
-  - name: whisker
-  - name: xtable
-  - name: xts
-  - name: yaml
-  - name: zoo
+# Installed as pre-built r-cran-* binaries from the CRAN/r2u APT repositories
+# (see the r role's repository.yml) rather than compiled from source. This is
+# faster and avoids source-build toolchain requirements (e.g. s2/abseil needing
+# cmake). Names map to CRAN packages lowercased and prefixed with r-cran-.
+r_cran_packages:
+  - r-cran-abind
+  - r-cran-ade4
+  - r-cran-adehabitathr
+  - r-cran-adehabitatlt
+  - r-cran-adehabitatma
+  - r-cran-akima
+  - r-cran-animation
+  - r-cran-bit
+  - r-cran-bitops
+  - r-cran-brew
+  - r-cran-catools
+  - r-cran-changepoint
+  - r-cran-circstats
+  - r-cran-cloudstor
+  - r-cran-coda
+  - r-cran-colorspace
+  - r-cran-crawl
+  - r-cran-deldir
+  - r-cran-devtools
+  - r-cran-dichromat
+  - r-cran-digest
+  - r-cran-dismo
+  - r-cran-divemove
+  - r-cran-dplyr
+  - r-cran-evaluate
+  - r-cran-exactextractr
+  - r-cran-ff
+  - r-cran-fnn
+  - r-cran-foreach
+  - r-cran-formatr
+  - r-cran-geometry
+  - r-cran-geosphere
+  - r-cran-ggplot2
+  - r-cran-gstat
+  - r-cran-gtable
+  - r-cran-highr
+  - r-cran-htmltools
+  - r-cran-httpuv
+  - r-cran-httr
+  - r-cran-intervals
+  - r-cran-iterators
+  - r-cran-jsonlite
+  - r-cran-knitr
+  - r-cran-labeling
+  - r-cran-leaflet
+  - r-cran-magic
+  - r-cran-mapdata
+  - r-cran-maps
+  - r-cran-markdown
+  - r-cran-memoise
+  - r-cran-mime
+  - r-cran-misc3d
+  - r-cran-munsell
+  - r-cran-mvtnorm
+  - r-cran-ncdf4
+  - r-cran-plyr
+  - r-cran-polyclip
+  - r-cran-proto
+  - r-cran-quantreg
+  - r-cran-r6
+  - r-cran-raster
+  - r-cran-rcolorbrewer
+  - r-cran-rcpp
+  - r-cran-rcurl
+  - r-cran-reshape2
+  - r-cran-rjsonio
+  - r-cran-rmarkdown
+  - r-cran-r.methodss3
+  - r-cran-rnetcdf
+  - r-cran-r.oo
+  - r-cran-roxygen2
+  - r-cran-rstudioapi
+  - r-cran-r.utils
+  - r-cran-scales
+  - r-cran-sf
+  - r-cran-shiny
+  - r-cran-sp
+  - r-cran-spacetime
+  - r-cran-sparsem
+  - r-cran-stringr
+  - r-cran-targets
+  - r-cran-tarchetypes
+  - r-cran-tensor
+  - r-cran-testthat
+  - r-cran-terra
+  - r-cran-trip
+  - r-cran-visnetwork
+  - r-cran-whisker
+  - r-cran-xtable
+  - r-cran-xts
+  - r-cran-yaml
+  - r-cran-zoo
+
+# The following were previously listed but have no r-cran-* APT binary because
+# they are retired/archived from CRAN. They are superseded by sf/terra. Re-add
+# to r_packages (source) if a deployment still needs them.
+#  - rgdal      # retired from CRAN Oct 2023, superseded by sf/terra
+#  - rgeos      # retired from CRAN Oct 2023, superseded by sf/terra
+#  - maptools   # retired from CRAN Oct 2023, superseded by sf/terra
+#  - gdalUtils  # archived on CRAN 2022, superseded by sf/terra/gdalUtilities
+#  - GeoLight   # archived on CRAN 2021
 
 #  - name: XML  # not available for 3.6.3
 #  - name: ncdf # Error: package 'ncdf' is not available (for R version 3.3.2)
