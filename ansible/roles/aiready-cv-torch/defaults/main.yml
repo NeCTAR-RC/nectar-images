@@ -23,7 +23,7 @@ cv_packages:
   - h5py
   - scipy
   - pandas
-  - pandas-profiling
+  - ydata-profiling
   # Visualization and plotting
   - matplotlib
   - seaborn
