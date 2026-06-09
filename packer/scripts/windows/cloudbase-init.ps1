@@ -50,14 +50,18 @@ metadata_services=cloudbaseinit.metadata.services.configdrive.ConfigDriveService
 # Config specifically for the cloudbase-init.conf file
 $confContent = @"
 log_file=cloudbase-init.log
-plugins=cloudbaseinit.plugins.windows.ntpclient.NTPClientPlugin,cloudbaseinit.plugins.common.sethostname.SetHostNamePlugin,cloudbaseinit.plugins.windows.createuser.CreateUserPlugin,cloudbaseinit.plugins.common.sshpublickeys.SetUserSSHPublicKeysPlugin,cloudbaseinit.plugins.common.userdata.UserDataPlugin,cloudbaseinit.plugins.common.setuserpassword.SetUserPasswordPlugin,cloudbaseinit.plugins.common.localscripts.LocalScriptsPlugin
+plugins=cloudbaseinit.plugins.windows.ntpclient.NTPClientPlugin,cloudbaseinit.plugins.windows.createuser.CreateUserPlugin,cloudbaseinit.plugins.common.sshpublickeys.SetUserSSHPublicKeysPlugin,cloudbaseinit.plugins.common.userdata.UserDataPlugin,cloudbaseinit.plugins.common.setuserpassword.SetUserPasswordPlugin,cloudbaseinit.plugins.common.localscripts.LocalScriptsPlugin
 "@
 
 # Config specifically for the cloudbase-init-unattend.conf file
+# SetHostNamePlugin runs here (not in the main config) so the rename is applied
+# during the specialize pass. With allow_reboot=false the change is left pending
+# and committed by the specialize->OOBE reboot that happens anyway, avoiding an
+# extra reboot. This requires the Nova instance name to match the desired hostname.
 $unattendContent = @"
 log_file=cloudbase-init-unattended.log
 allow_reboot=false
-plugins=cloudbaseinit.plugins.common.mtu.MTUPlugin,cloudbaseinit.plugins.windows.extendvolumes.ExtendVolumesPlugin
+plugins=cloudbaseinit.plugins.common.mtu.MTUPlugin,cloudbaseinit.plugins.windows.extendvolumes.ExtendVolumesPlugin,cloudbaseinit.plugins.common.sethostname.SetHostNamePlugin
 stop_service_on_exit=false
 "@
 
