@@ -5,18 +5,10 @@ $ErrorActionPreference = "Continue"
 
 function Custom-Log ($m) {
     $msg = "$(Get-Date -Format o): $m"
+    # Write-Host output is captured by cloudbase-init's fileexecutils logger
+    # (set to DEBUG) and written to the serial console at COM1,115200.
     Write-Host "$msg"
     $msg | Out-File -Append -FilePath "$env:ProgramData\Nectar\init.log"
-    # Log to instance console log via serial port if we can
-    try {
-        $port = new-Object System.IO.Ports.SerialPort COM1,9600,None,8,one
-        $port.open()
-        $port.WriteLine($msg)
-        $port.Close()
-    }
-    catch {
-        Write-Host "Can't log to console: $_"
-    }
 }
 
 Custom-Log "================================================"

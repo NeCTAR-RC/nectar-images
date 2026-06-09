@@ -38,7 +38,7 @@ mtools_path=C:\Program Files\Cloudbase Solutions\Cloudbase-Init\bin\
 verbose=false
 debug=false
 log_dir=C:\Program Files\Cloudbase Solutions\Cloudbase-Init\log\
-default_log_levels=comtypes=INFO,suds=INFO,iso8601=WARN,requests=WARN
+default_log_levels=comtypes=INFO,suds=INFO,iso8601=WARN,requests=WARN,cloudbaseinit.plugins.common.fileexecutils=DEBUG
 logging_serial_port_settings=COM1,115200,N,8
 mtu_use_dhcp_config=true
 ntp_use_dhcp_config=true
