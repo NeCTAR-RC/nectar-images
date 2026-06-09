@@ -13,7 +13,7 @@ dl_packages:
   - h5py
   - scipy
   - pandas
-  - pandas-profiling
+  - ydata-profiling
   - pillow
   # Visualization and plotting
   - matplotlib
