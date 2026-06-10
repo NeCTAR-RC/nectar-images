@@ -1,7 +1,7 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 # shellcheck disable=SC2086,SC2329
 
-NAME="NeCTAR Windows Server 2022 $(date --iso)"
+NAME="NeCTAR Microsoft Windows Server 2022 Datacenter x86_64 $(date --iso)"
 BUILD_DIR="builds/build_files/packer-windows-2022"
 
 PROPERTIES=""

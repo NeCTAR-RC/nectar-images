@@ -39,6 +39,7 @@ verbose=false
 debug=false
 log_dir=C:\Program Files\Cloudbase Solutions\Cloudbase-Init\log\
 default_log_levels=comtypes=INFO,suds=INFO,iso8601=WARN,requests=WARN,cloudbaseinit.plugins.common.fileexecutils=DEBUG
+netbios_host_name_compatibility=false
 logging_serial_port_settings=COM1,115200,N,8
 mtu_use_dhcp_config=true
 ntp_use_dhcp_config=true
@@ -75,5 +76,45 @@ Set-Content -Path $cloudbaseInitUnattendedConfigPath -Value ($commonContent+ "`n
 
 Write-Host "Cloudbase-Init service set to start using SetupComplete"
 & "${cloudbaseInitInstallDir}\bin\SetSetupComplete.cmd"
+
+# Boot scripts directory: provision.cmd runs every *.ps1 here on each boot.
+# Created here so the file provisioner has somewhere to upload the base scripts.
+Write-Host "Creating Nectar boot scripts directory ..."
+New-Item -ItemType Directory -Force -Path "C:\ProgramData\Nectar\scripts" | Out-Null
+
+# Shared helpers dot-sourced by the boot scripts. Log writes a timestamped line
+# to stdout (captured to the serial console by cloudbase-init's fileexecutils
+# logger) and appends to provision.log. Lives outside the scripts dir so the
+# runner doesn't execute it.
+Write-Host "Writing Nectar script library ..."
+$libPs1 = @'
+$ProgressPreference = 'SilentlyContinue'
+$ErrorActionPreference = "Continue"
+
+function Log ($m) {
+    $msg = "$(Get-Date -Format o): $m"
+    Write-Host $msg
+    $msg | Out-File -Append -FilePath "$env:ProgramData\Nectar\provision.log"
+}
+'@
+Set-Content -Path "C:\ProgramData\Nectar\lib.ps1" -Value $libPs1 -Encoding Ascii
+
+# LocalScript runner: cloudbase-init runs this every boot. It runs every *.ps1
+# in the scripts dir (in name order) and exits 1002 so the LocalScripts plugin
+# re-runs on the next boot. stdout is captured by the fileexecutils logger.
+Write-Host "Writing provision.cmd LocalScript ..."
+New-Item -ItemType Directory -Force -Path "$cloudbaseInitInstallDir\LocalScripts" | Out-Null
+$provisionCmd = @'
+@echo off
+set SCRIPTS=C:\ProgramData\Nectar\scripts
+if exist "%SCRIPTS%" (
+  for /f "delims=" %%f in ('dir /b /on "%SCRIPTS%\*.ps1" 2^>nul') do (
+    echo Running %%f
+    powershell.exe -ExecutionPolicy Unrestricted -File "%SCRIPTS%\%%f"
+  )
+)
+exit 1002
+'@
+Set-Content -Path "$cloudbaseInitInstallDir\LocalScripts\provision.cmd" -Value $provisionCmd -Encoding Ascii
 
 Write-Host "Cloudbase-Init installed successfully under user ${cloudbaseInitUser}"

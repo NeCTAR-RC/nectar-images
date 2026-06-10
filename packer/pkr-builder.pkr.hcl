@@ -79,20 +79,9 @@ build {
     max_retries       = 1
   }
 
-  provisioner "windows-restart" {
-    except = var.is_windows ? null : ["qemu.vm"]
-  }
-
   provisioner "file" {
-    source            = "${path.root}/scripts/windows/run-once.cmd"
-    destination       = "C:\\Program Files\\Cloudbase Solutions\\Cloudbase-Init\\LocalScripts\\"
-    except            = var.is_windows ? null : ["qemu.vm"]
-    max_retries       = 1
-  }
-
-  provisioner "file" {
-    source            = "${path.root}/scripts/windows/init.ps1"
-    destination       = "C:\\ProgramData\\Nectar\\"
+    source            = "${path.root}/scripts/windows/provision-scripts/"
+    destination       = "C:\\ProgramData\\Nectar\\scripts\\"
     except            = var.is_windows ? null : ["qemu.vm"]
     max_retries       = 1
   }
