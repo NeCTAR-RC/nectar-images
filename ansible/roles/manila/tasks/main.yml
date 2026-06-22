@@ -25,7 +25,7 @@
       - iptables
       - inetutils-ping
       - net-tools
-      - python
+      - python3
       - qemu-guest-agent
       - curl
     state: present
