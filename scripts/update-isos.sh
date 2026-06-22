@@ -36,220 +36,108 @@ git_diff() {
 
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 VARS_DIR="$BASE_DIR/../vars"
+MIRROR="http://mirror.aarnet.edu.au/pub"
+DEBIAN_ARCHIVE="https://cdimage.debian.org/mirror/cdimage/archive"
 
-# AlmaLinux 8
-distro=almalinux
-ver=8
-action "Checking $distro $ver"
-var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
-base_url="http://mirror.aarnet.edu.au/pub/almalinux/8/isos/x86_64"
-details=$(curl -s -L "$base_url/CHECKSUM" | grep -E 'SHA256.*boot.iso' | grep -v latest | sed -n 's/^SHA256 (\(.*\)) = \([[:alnum:]]\+\)$/\1 \2/p')
-IFS=" " read -ra details <<< "$details"
-iso_url="$base_url/${details[0]}"
-iso_checksum="sha256:${details[1]}"
-debug "url: $iso_url"
-debug "checksum: $iso_checksum"
-sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' $var_file
-sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' $var_file
-git_diff $var_file
+# Print the value of an HCL "key = "value"" assignment from a vars file.
+field() {  # key file
+    sed -n 's/^'"$1"' *= *"\(.*\)"/\1/p' "$2"
+}
 
-# AlmaLinux 9
-distro=almalinux
-ver=9
-action "Checking $distro $ver"
-var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
-base_url="http://mirror.aarnet.edu.au/pub/almalinux/9/isos/x86_64"
-output=$(curl -s -L "$base_url/CHECKSUM" | grep -E 'SHA256.*boot.iso' | grep -v latest | sed -n 's/^SHA256 (\(.*\)) = \([[:alnum:]]\+\)$/\1 \2/p')
-IFS=" " read -ra details <<< "$output"
-iso_url="$base_url/${details[0]}"
-iso_checksum="sha256:${details[1]}"
-debug "url: $iso_url"
-debug "checksum: $iso_checksum"
-sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' $var_file
-sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' $var_file
-git_diff $var_file
+# Parse "SHA256 (filename) = hash" lines (matching $1) into "filename hash".
+parse_sha256() {  # grep_pattern  (reads checksum content on stdin)
+    grep -E "$1" | sed -n 's/^SHA256 (\(.*\)) = \([[:alnum:]]\+\)$/\1 \2/p'
+}
 
-# AlmaLinux 10
-distro=almalinux
-ver=10
-action "Checking $distro $ver"
-var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
-base_url="http://mirror.aarnet.edu.au/pub/$distro/$ver/isos/x86_64"
-output=$(curl -s -L "$base_url/CHECKSUM" | grep -E 'SHA256.*boot.iso' | grep -v latest | sed -n 's/^SHA256 (\(.*\)) = \([[:alnum:]]\+\)$/\1 \2/p')
-IFS=" " read -ra details <<< "$output"
-iso_url="$base_url/${details[0]}"
-iso_checksum="sha256:${details[1]}"
-debug "url: $iso_url"
-debug "checksum: $iso_checksum"
-sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' $var_file
-sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' $var_file
-git_diff $var_file
+# True when $details holds both a filename and a hash, i.e. the lookup worked.
+# Lets callers skip versions whose ISO isn't on the mirror (archived/unreleased).
+resolved() {
+    if [[ ${#details[@]} -lt 2 ]]; then
+        msg "  could not resolve ISO from mirror, skipping"
+        return 1
+    fi
+}
 
-# CentOS Stream 9
-distro=centos-stream
-ver=9
-action "Checking $distro $ver"
-var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
-base_url="http://mirror.aarnet.edu.au/pub/centos-stream/9-stream/BaseOS/x86_64/iso"
-output=$(curl -s -L "$base_url/SHA256SUM" | grep -E 'SHA256.*boot.iso' | sed -n 's/^SHA256 (\(.*\)) = \([[:alnum:]]\+\)$/\1 \2/p')
-IFS=" " read -ra details <<< "$output"
-iso_url="$base_url/${details[0]}"
-iso_checksum="sha256:${details[1]}"
-debug "url: $iso_url"
-debug "checksum: $iso_checksum"
-sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' $var_file
-sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' $var_file
-git_diff $var_file
+# Print the iso-cd URL hosting a given Debian major release. The current stable
+# lives under .../current; older releases come from the archive, which keeps a
+# directory per point release (e.g. 11.11.0). Prints nothing if not found.
+debian_iso_dir() {  # major_ver
+    local ver=$1 current="$MIRROR/debian-cd/current/amd64/iso-cd" point
+    if curl -s -L "$current/SHA256SUMS" | grep -q "debian-$ver\."; then
+        printf '%s\n' "$current"
+        return
+    fi
+    # newest "<ver>.x.y" point release (the regex skips -live / unreleased dirs)
+    point=$(curl -s -L "$DEBIAN_ARCHIVE/" \
+        | sed -n 's#.*<a href="\('"$ver"'\.[0-9][0-9.]*\)/".*#\1#p' | sort -V | tail -n1)
+    [[ -n $point ]] && printf '%s\n' "$DEBIAN_ARCHIVE/$point/amd64/iso-cd"
+}
 
-# Debian 11
-# TODO(andy) It's complicated as the old release is from the debian archive
+# Resolve the latest ISO for an OS, setting $iso_url and $iso_checksum.
+# Returns non-zero (and explains) when the OS is unsupported or the lookup fails.
+resolve_iso() {  # os_name os_version os_arch
+    local name=$1 ver=$2 arch=$3 base_url checksum_file
+    case $name in
+        almalinux|rocky)  # boot.iso in CHECKSUM, ignoring the "latest" alias
+            base_url="$MIRROR/$name/$ver/isos/$arch"
+            IFS=" " read -ra details <<< "$(curl -s -L "$base_url/CHECKSUM" | parse_sha256 'SHA256.*boot.iso' | grep -v latest)"
+            resolved || return 1
+            iso_url="$base_url/${details[0]}"; iso_checksum="sha256:${details[1]}" ;;
+        centos-stream)  # filename contains "latest", so it is kept, not filtered
+            base_url="$MIRROR/centos-stream/$ver-stream/BaseOS/$arch/iso"
+            IFS=" " read -ra details <<< "$(curl -s -L "$base_url/SHA256SUM" | parse_sha256 'SHA256.*boot.iso')"
+            resolved || return 1
+            iso_url="$base_url/${details[0]}"; iso_checksum="sha256:${details[1]}" ;;
+        debian)  # "hash  filename"; older releases come from the archive
+            base_url=$(debian_iso_dir "$ver")
+            [[ -n $base_url ]] || { msg "  no ISO directory found, skipping"; return 1; }
+            IFS=" " read -ra details <<< "$(curl -s -L "$base_url/SHA256SUMS" | grep -E "debian-$ver\..*netinst")"
+            resolved || return 1
+            iso_url="$base_url/${details[1]}"; iso_checksum="sha256:${details[0]}" ;;
+        fedora)  # locate the CHECKSUM file from the release listing, then parse it
+            base_url="$MIRROR/fedora/linux/releases/$ver/Server/$arch/iso"
+            checksum_file=$(curl -s -L "$base_url" | grep CHECKSUM | sed -n 's#^.*<a href="\(Fedora-Server-'"$ver"'.*\)">Fedora-Server-'"$ver"'.*</a>.*$#\1#p')
+            IFS=" " read -ra details <<< "$(curl -s "$base_url/$checksum_file" | parse_sha256 'SHA256.*Fedora-Server-netinst')"
+            resolved || return 1
+            iso_url="$base_url/${details[0]}"; iso_checksum="sha256:${details[1]}" ;;
+        ubuntu)  # "hash *filename"
+            base_url="$MIRROR/ubuntu/releases/$ver"
+            IFS=" " read -ra details <<< "$(curl -s -L "$base_url/SHA256SUMS" | grep -E 'live-server')"
+            resolved || return 1
+            iso_url="$base_url/${details[1]#\*}"; iso_checksum="sha256:${details[0]}" ;;
+        *)
+            msg "  no ISO resolver for '$name', skipping"; return 1 ;;
+    esac
+}
 
-# Debian 13
-distro=debian
-ver=13
-action "Checking $distro $ver"
-var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
-base_url="http://mirror.aarnet.edu.au/pub/debian-cd/current/amd64/iso-cd"
-output=$(curl -s -L "$base_url/SHA256SUMS" | grep -E "$distro-$ver")
-IFS=" " read -ra details <<< "$output"
-iso_url="$base_url/${details[1]}"
-iso_checksum="sha256:${details[0]}"
-debug "url: $iso_url"
-debug "checksum: $iso_checksum"
-sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' $var_file
-sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' $var_file
-git_diff $var_file
+# Write $iso_url and $iso_checksum into $var_file and show the diff.
+write_vars() {
+    debug "url: $iso_url"
+    debug "checksum: $iso_checksum"
+    sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' "$var_file"
+    sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' "$var_file"
+    git_diff "$var_file"
+}
 
-# Fedora 42
-distro=fedora
-ver=42
-action "Checking $distro $ver"
-var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
-base_url="http://mirror.aarnet.edu.au/pub/fedora/linux/releases/$ver/Server/x86_64/iso"
-checksum_file=$(curl -s -L $base_url | grep CHECKSUM | sed -n 's#^.*<a href="\(Fedora-Server-'$ver'.*\)">Fedora-Server-'$ver'.*</a>.*$#\1#p')
-output=$(curl -s "$base_url/$checksum_file" | grep -E 'SHA256.*Fedora-Server-netinst' | sed -n 's/^SHA256 (\(.*\)) = \([[:alnum:]]\+\)$/\1 \2/p')
-IFS=" " read -ra details <<< "$output"
-iso_url="$base_url/${details[0]}"
-iso_checksum="sha256:${details[1]}"
-debug "url: $iso_url"
-debug "checksum: $iso_checksum"
-sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' $var_file
-sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' $var_file
-git_diff $var_file
+# Update every ISO-based vars file, keyed off the os_name/os_version/os_arch it
+# declares. Files without an iso_url build from a cloud image and are left alone.
+# Lookups are memoised so OSes shared by many variants are fetched only once.
+declare -A iso_cache
+for var_file in "$VARS_DIR"/*.pkrvars.hcl; do
+    grep -q '^iso_url' "$var_file" || continue
+    os_name=$(field os_name "$var_file")
+    os_version=$(field os_version "$var_file")
+    os_arch=$(field os_arch "$var_file")
+    action "Checking ${var_file##*/} ($os_name $os_version $os_arch)"
 
-# Fedora 43
-distro=fedora
-ver=43
-action "Checking $distro $ver"
-var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
-base_url="http://mirror.aarnet.edu.au/pub/fedora/linux/releases/$ver/Server/x86_64/iso"
-checksum_file=$(curl -s -L $base_url | grep CHECKSUM | sed -n 's#^.*<a href="\(Fedora-Server-'$ver'.*\)">Fedora-Server-'$ver'.*</a>.*$#\1#p')
-output=$(curl -s "$base_url/$checksum_file" | grep -E 'SHA256.*Fedora-Server-netinst' | sed -n 's/^SHA256 (\(.*\)) = \([[:alnum:]]\+\)$/\1 \2/p')
-IFS=" " read -ra details <<< "$output"
-iso_url="$base_url/${details[0]}"
-iso_checksum="sha256:${details[1]}"
-debug "url: $iso_url"
-debug "checksum: $iso_checksum"
-sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' $var_file
-sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' $var_file
-git_diff $var_file
-
-# Rocky 8
-distro=rocky
-ver=8
-action "Checking $distro $ver"
-var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
-base_url="http://mirror.aarnet.edu.au/pub/$distro/$ver/isos/x86_64"
-output=$(curl -s -L "$base_url/CHECKSUM" | grep -E 'SHA256.*boot.iso' | grep -v latest | sed -n 's/^SHA256 (\(.*\)) = \([[:alnum:]]\+\)$/\1 \2/p')
-IFS=" " read -ra details <<< "$output"
-iso_url="$base_url/${details[0]}"
-iso_checksum="sha256:${details[1]}"
-debug "url: $iso_url"
-debug "checksum: $iso_checksum"
-sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' $var_file
-sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' $var_file
-git_diff $var_file
-
-
-# Rocky 9
-distro=rocky
-ver=9
-action "Checking $distro $ver"
-var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
-base_url="http://mirror.aarnet.edu.au/pub/$distro/$ver/isos/x86_64"
-output=$(curl -s -L "$base_url/CHECKSUM" | grep -E 'SHA256.*boot.iso' | grep -v latest | sed -n 's/^SHA256 (\(.*\)) = \([[:alnum:]]\+\)$/\1 \2/p')
-IFS=" " read -ra details <<< "$output"
-iso_url="$base_url/${details[0]}"
-iso_checksum="sha256:${details[1]}"
-debug "url: $iso_url"
-debug "checksum: $iso_checksum"
-sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' $var_file
-sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' $var_file
-git_diff $var_file
-
-# Rocky 10
-distro=rocky
-ver=10
-action "Checking $distro $ver"
-var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
-base_url="http://mirror.aarnet.edu.au/pub/$distro/$ver/isos/x86_64"
-output=$(curl -s -L "$base_url/CHECKSUM" | grep -E 'SHA256.*boot.iso' | grep -v latest | sed -n 's/^SHA256 (\(.*\)) = \([[:alnum:]]\+\)$/\1 \2/p')
-IFS=" " read -ra details <<< "$output"
-iso_url="$base_url/${details[0]}"
-iso_checksum="sha256:${details[1]}"
-debug "url: $iso_url"
-debug "checksum: $iso_checksum"
-sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' $var_file
-sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' $var_file
-git_diff $var_file
-
-# Ubuntu 20.04
-distro=ubuntu
-ver=20.04
-action "Checking $distro $ver"
-var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
-base_url="http://mirror.aarnet.edu.au/pub/ubuntu/releases/$ver"
-output=$(curl -s -L "$base_url/SHA256SUMS" | grep -E 'live-server')
-IFS=" " read -ra details <<< "$output"
-filename="${details[1]#\*}"  # Strip * from start of filename
-iso_url="$base_url/$filename"
-iso_checksum="sha256:${details[0]}"
-debug "url: $iso_url"
-debug "checksum: $iso_checksum"
-sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' $var_file
-sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' $var_file
-git_diff $var_file
-
-# Ubuntu 22.04
-distro=ubuntu
-ver=22.04
-action "Checking $distro $ver"
-var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
-base_url="http://mirror.aarnet.edu.au/pub/ubuntu/releases/$ver"
-output=$(curl -s -L "$base_url/SHA256SUMS" | grep -E 'live-server')
-IFS=" " read -ra details <<< "$output"
-filename="${details[1]#\*}"  # Strip * from start of filename
-iso_url="$base_url/$filename"
-iso_checksum="sha256:${details[0]}"
-debug "url: $iso_url"
-debug "checksum: $iso_checksum"
-sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' $var_file
-sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' $var_file
-git_diff $var_file
-
-# Ubuntu 24.04
-distro=ubuntu
-ver=24.04
-action "Checking $distro $ver"
-var_file="$VARS_DIR/$distro-$ver.pkrvars.hcl"
-base_url="http://mirror.aarnet.edu.au/pub/ubuntu/releases/$ver"
-output=$(curl -s -L "$base_url/SHA256SUMS" | grep -E 'live-server')
-IFS=" " read -ra details <<< "$output"
-filename="${details[1]#\*}"  # Strip * from start of filename
-iso_url="$base_url/$filename"
-iso_checksum="sha256:${details[0]}"
-debug "url: $iso_url"
-debug "checksum: $iso_checksum"
-sed -i 's,\(iso_url\s\+=\).*$,\1 "'$iso_url'",g' $var_file
-sed -i 's,\(iso_checksum\s\+=\).*$,\1 "'$iso_checksum'",g' $var_file
-git_diff $var_file
+    key="$os_name $os_version $os_arch"
+    if [[ -n ${iso_cache[$key]:-} ]]; then
+        iso_url=${iso_cache[$key]%%|*}
+        iso_checksum=${iso_cache[$key]#*|}
+    elif resolve_iso "$os_name" "$os_version" "$os_arch"; then
+        iso_cache[$key]="$iso_url|$iso_checksum"
+    else
+        continue
+    fi
+    write_vars
+done
