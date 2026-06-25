@@ -40,7 +40,7 @@ fatal() {
     exit 1
 }
 
-for tool in openstack nc; do
+for tool in openstack nc qemu-img jq; do
     if ! hash $tool >/dev/null 2>&1; then
         fatal "You need '$tool' installed to use this script"
     fi
