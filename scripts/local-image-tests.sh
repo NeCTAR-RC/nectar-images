@@ -226,6 +226,10 @@ info "Found image ID: '$IMAGE_ID'"
 # Set extra properties from Ansible facts (see Ansible facts role)
 if [[ -d $FACT_DIR ]]; then
     find $FACT_DIR -type f -printf "%f\n" | while read -r FACT; do
+        if [[ "$FACT" == "nectar_name" ]]; then
+            warn "Skipping protected property nectar_name due to insufficient privileges"
+            continue
+        fi
         read -r VAL < $FACT_DIR/$FACT
         info "Setting property: $FACT='$VAL'"
         openstack image set --property $FACT=$"$VAL" $IMAGE_ID || true
