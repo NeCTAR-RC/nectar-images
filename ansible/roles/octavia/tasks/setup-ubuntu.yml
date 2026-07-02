@@ -95,6 +95,12 @@
 
 # rebind the ssh daemon to listen only on the management network interface
 # so we allow port 22 open for load balancing if required
+- name: Install dhcp hooks dir
+  ansible.builtin.file:
+    path: /etc/dhcp/dhclient-enter-hooks.d
+    state: directory
+    mode: 0755
+
 - name: Install rebind-ssh dhcp hook
   copy:
     src: rebind-ssh
@@ -105,7 +111,7 @@
   copy:
     src: lvs-masquerade.sh
     dest: /usr/local/bin/lvs-masquerade.sh
-    mode: 755
+    mode: 0755
 
 - name: Symlink for udp-masquerade.sh
   ansible.builtin.file:
