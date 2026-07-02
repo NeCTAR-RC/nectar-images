@@ -95,6 +95,12 @@
 
 # rebind the ssh daemon to listen only on the management network interface
 # so we allow port 22 open for load balancing if required
+- name: Install dhcp hooks dir
+  ansible.builtin.file:
+    path: /etc/dhcp/dhclient-enter-hooks.d
+    state: directory
+    mode: 0755
+
 - name: Install rebind-ssh dhcp hook
   copy:
     src: rebind-ssh
@@ -105,7 +111,7 @@
   copy:
     src: lvs-masquerade.sh
     dest: /usr/local/bin/lvs-masquerade.sh
-    mode: 755
+    mode: 0755
 
 - name: Symlink for udp-masquerade.sh
   ansible.builtin.file:
@@ -119,6 +125,33 @@
   copy:
     src: 55-octavia-socket.conf
     dest: /etc/rsyslog.d/55-octavia-socket.conf
+
+- name: Create rsyslog apparmor config directory
+  file:
+    path: /etc/apparmor.d/rsyslog.d
+    state: directory
+    mode: 0755
+
+- name: Allow rsyslog to create the octavia logging socket
+  copy:
+    src: apparmor-rsyslog-octavia
+    dest: /etc/apparmor.d/rsyslog.d/octavia
+
+- name: Check for rsyslog apparmor profile
+  stat:
+    path: /etc/apparmor.d/usr.sbin.rsyslogd
+  register: rsyslogd_apparmor_profile
+
+# Workaround for a known kernel bug with apparmor:
+# https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1373070
+# Apparmor cannot handle namespaces correctly and will drop the '/' prefix
+# from a file path, thus causing the process to not have access.
+- name: Add attach_disconnected flag to rsyslog apparmor profile
+  replace:
+    path: /etc/apparmor.d/usr.sbin.rsyslogd
+    regexp: 'profile rsyslogd /usr/sbin/rsyslogd \{'
+    replace: 'profile rsyslogd /usr/sbin/rsyslogd flags=(attach_disconnected) {'
+  when: rsyslogd_apparmor_profile.stat.exists
 
 - name: Install logrotate config
   copy:
