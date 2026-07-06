@@ -257,3 +257,11 @@ variable "test_build" {
   type    = bool
   default = false
 }
+
+# Keep the default cloud user (e.g. ubuntu) baked into the image instead of
+# deleting it in cleanup. Needed for appliance images like Trove, whose guest
+# user must exist at boot (before cloud-init) and at a stable UID.
+variable "keep_default_user" {
+  type    = bool
+  default = false
+}

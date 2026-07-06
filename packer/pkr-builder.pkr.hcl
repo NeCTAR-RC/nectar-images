@@ -103,6 +103,7 @@ build {
   }
 
   provisioner "shell" {
+    environment_vars  = ["KEEP_DEFAULT_USER=${var.keep_default_user}"]
     script            = "${path.root}/scripts/linux/cleanup.sh"
     except            = var.is_windows ? ["qemu.vm"] : null  # Linux only
   }
@@ -138,6 +139,7 @@ build {
   }
 
   provisioner "shell" {
+    environment_vars  = ["KEEP_DEFAULT_USER=${var.keep_default_user}"]
     execute_command   = "{{ .Vars }} sudo -S -E bash '{{ .Path }}'"
     script            = "${path.root}/scripts/linux/cleanup.sh"
     except            = var.is_windows ? ["qemu.vm"] : null  # Linux only
