@@ -1,2 +1,53 @@
 ---
-trove_generated_password: "{{ ansible_facts['fqdn'] | hash('md5') }}"
+# Trove guest image (containerised model, Victoria+).
+#
+# Design: this role is deliberately THIN. The volatile parts of the guest image
+# (the venv layout, the systemd units, the docker network plugin, the image
+# loader) are NOT reimplemented here -- they are driven directly from Trove's
+# own diskimage-builder element, which ships inside the Trove source tree we
+# rebase each release. This role only owns the small, low-churn "glue" that DIB
+# would otherwise provide (packages, docker, the guest user, cloud-init).
+
+# --- Guest agent source -----------------------------------------------------
+# The Trove checkout contains BOTH the guest-agent Python package (which we pip
+# install into the image) and the DIB elements we drive. A single copy serves
+# both.
+#
+#   git:   clone trove_git_repo @ trove_git_version on the target. Default.
+#   local: tar a checkout from the Ansible controller into the image instead.
+#          Needs trove_source_dir; useful for testing local changes.
+trove_source_mode: git
+
+# Git source (git mode).
+trove_git_repo: "https://github.com/NeCTAR-RC/trove"
+trove_git_version: "nectar/2026.1"
+
+# Path on the Ansible *controller* to the Trove checkout (local mode).
+# Override per-build with the TROVE_SRC_DIR env var.
+trove_source_dir: "{{ lookup('ansible.builtin.env', 'TROVE_SRC_DIR') | default('', true) }}"
+
+# Where the source lands in the image. Matches upstream's DIB layout so the
+# upstream element scripts (which hardcode /opt/guest-agent) work unchanged.
+trove_source_install_dir: /opt/guest-agent
+trove_elements_dir: "{{ trove_source_install_dir }}/integration/scripts/files/elements/guest-agent"
+
+# Controller-side scratch tarball used by local mode.
+trove_source_tarball: /tmp/nectar-trove-src.tar.gz
+
+# Upper-constraints used to pin the guest-agent venv for this release.
+trove_upper_constraints_url: "https://opendev.org/openstack/requirements/raw/branch/stable/2026.1/upper-constraints.txt"
+
+# The guest OS user that owns and runs the guest agent (upstream default).
+trove_guest_username: ubuntu
+
+# UID/GID for the guest user. Pinned to 1000 (Noble's convention) so it is
+# deterministic and, crucially, leaves 1001 free -- the guest agent creates its
+# `database` user there on first boot (trove's database_service_uid default).
+trove_guest_uid: 1000
+
+# --- Drift guardrail --------------------------------------------------------
+# sha256 of the guest-agent element directory this role was validated against.
+# Leave empty on first build: the role prints the computed value and warns.
+# Paste that value here to make any future upstream change to the element a
+# hard build failure that a human must review before the image ships.
+trove_elements_sha: "9d2409745286b48d1df08d3bdd2a300e957cd157dc460e199411f3036dd9023c"

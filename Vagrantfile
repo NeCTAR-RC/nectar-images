@@ -342,6 +342,26 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # Trove guest (Ubuntu 24.04 noble)
+  config.vm.define "trove" do |c|
+    c.vm.box = "cloud-image/ubuntu-24.04"
+    c.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/noble64"
+    end
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS.merge(
+        nectar_image_name: "Trove Guest",
+        # Local-mode source: the Trove checkout on the host running Vagrant.
+        # Override with TROVE_SRC_DIR; defaults to the sibling ../trove checkout.
+        trove_source_dir: ENV["TROVE_SRC_DIR"] || File.expand_path("../trove", __dir__)
+      )
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook-trove.yml"
+      ansible.become = true
+    end
+  end
+
   # Ubuntu 22.04 (jammy) Jenkins slave
   config.vm.define "jenkins-slave-ubuntu-22.04" do |c|
     c.vm.box = "cloud-image/ubuntu-22.04"

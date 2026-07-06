@@ -1,16 +1,215 @@
 ---
-# Vars
-- name: Include datastore-specific variables
-  include_vars: "{{ item }}"
-  with_first_found:
-    - "{{ datastore }}-{{ datastore_version }}.yml"
-    - "default.yml"
+# Trove guest image, containerised model (Victoria+).
+#
+# The database is NOT installed here -- it runs as a docker container that the
+# guest agent pulls at runtime. This image only needs: docker, the guest agent
+# (in a venv), the trove docker-network plugin, and the image-loader service.
+# cloud-init datasources (ConfigDrive, OpenStack) come from the `cloud-init`
+# role, and docker-ce from the `docker` role, both applied earlier in
+# playbook-trove.yml.
 
-# OS setup
-- include_tasks: "setup-{{ ansible_facts['distribution'] }}.yml"
+- name: Ensure we are building an Ubuntu guest
+  ansible.builtin.assert:
+    that:
+      - ansible_facts['distribution'] == 'Ubuntu'
+    fail_msg: "The trove role currently supports Ubuntu guests only."
 
-# Datastore setup
-- include_tasks: "setup-{{ datastore }}-{{ ansible_facts['distribution'] }}.yml"
+# git is owned glue: DIB's base image provides it, we don't. It's needed both
+# for the git-mode clone and so pbr can derive the guest-agent version from the
+# checkout during `pip install` (as upstream's DIB build does).
+- name: Install git
+  ansible.builtin.apt:
+    name: git
+    state: present
+    update_cache: true
 
-# Datastore version setup
-- include_tasks: "setup-{{ datastore }}-{{ datastore_version }}-{{ ansible_facts['distribution'] }}.yml"
+# ---------------------------------------------------------------------------
+# Deliver the Trove source (guest-agent code + the upstream DIB elements).
+# ---------------------------------------------------------------------------
+- name: Create the source install directory
+  ansible.builtin.file:
+    path: "{{ trove_source_install_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Clone the Trove source (git mode)
+  ansible.builtin.git:
+    repo: "{{ trove_git_repo }}"
+    version: "{{ trove_git_version }}"
+    dest: "{{ trove_source_install_dir }}"
+  when: trove_source_mode == 'git'
+
+- name: Create a source tarball on the controller (local mode)
+  ansible.builtin.command:
+    cmd: >-
+      tar czf {{ trove_source_tarball }}
+      --exclude=.tox --exclude=.pytest_cache --exclude=__pycache__
+      -C {{ trove_source_dir }} .
+  delegate_to: localhost
+  become: false
+  changed_when: true
+  when: trove_source_mode == 'local'
+  # .git is kept: pbr reads the guest-agent version from it during pip install.
+  # It's removed again after the install to keep the image small.
+
+- name: Copy the source tarball into the image (local mode)
+  ansible.builtin.copy:
+    src: "{{ trove_source_tarball }}"
+    dest: /tmp/nectar-trove-src.tar.gz
+    mode: "0644"
+  when: trove_source_mode == 'local'
+
+- name: Unpack the Trove source (local mode)
+  ansible.builtin.unarchive:
+    src: /tmp/nectar-trove-src.tar.gz
+    dest: "{{ trove_source_install_dir }}"
+    remote_src: true
+    # Extract as root, not the controller's uid, so git doesn't reject the
+    # checkout for "dubious ownership" when pbr reads it.
+    extra_opts:
+      - "--no-same-owner"
+  when: trove_source_mode == 'local'
+
+# ---------------------------------------------------------------------------
+# Drift guardrail: turn any upstream change to the guest-agent element into a
+# visible signal (a warning when unpinned, a hard failure once pinned).
+# ---------------------------------------------------------------------------
+- name: Checksum the upstream guest-agent element
+  ansible.builtin.shell:
+    cmd: >-
+      find {{ trove_elements_dir }} -type f -not -path '*/.git/*'
+      | LC_ALL=C sort | xargs sha256sum | sha256sum | awk '{print $1}'
+  register: trove_elements_checksum
+  changed_when: false
+
+- name: Warn when the guest-agent element checksum is unpinned
+  ansible.builtin.debug:
+    msg: >-
+      trove_elements_sha is unset. Computed value is
+      {{ trove_elements_checksum.stdout }} -- pin it in defaults/main.yml to
+      turn future upstream changes into a hard build failure.
+  when: trove_elements_sha | length == 0
+
+- name: Assert the guest-agent element matches the pinned checksum
+  ansible.builtin.assert:
+    that:
+      - trove_elements_checksum.stdout == trove_elements_sha
+    fail_msg: >-
+      The upstream guest-agent element changed (expected {{ trove_elements_sha }},
+      got {{ trove_elements_checksum.stdout }}). Review the diff under
+      {{ trove_elements_dir }}, update this role if needed, then re-pin
+      trove_elements_sha.
+  when: trove_elements_sha | length > 0
+
+# ---------------------------------------------------------------------------
+# Owned glue #1: packages. We consume upstream's package list rather than
+# maintaining our own copy, applying the Ubuntu pkg-map removals (e.g. it drops
+# ureadahead, which does not exist on Noble).
+# ---------------------------------------------------------------------------
+- name: Read the upstream package list and pkg-map
+  ansible.builtin.slurp:
+    src: "{{ item }}"
+  loop:
+    - "{{ trove_elements_dir }}/package-installs.yaml"
+    - "{{ trove_elements_dir }}/pkg-map"
+  register: trove_pkg_files
+
+- name: Compute the package set (upstream list minus Ubuntu pkg-map removals)
+  ansible.builtin.set_fact:
+    trove_packages: >-
+      {{ (trove_pkg_files.results[0].content | b64decode | from_yaml).keys()
+         | reject('equalto', 'guest-agent')
+         | difference(_trove_ubuntu_pkg_drops) | list }}
+  vars:
+    _trove_ubuntu_pkg_map: "{{ (trove_pkg_files.results[1].content | b64decode | from_json).distro.ubuntu | default({}) }}"
+    _trove_ubuntu_pkg_drops: "{{ _trove_ubuntu_pkg_map | dict2items | selectattr('value', 'equalto', '') | map(attribute='key') | list }}"
+  # NOTE: installs the amd64 set; per-arch qualifiers in package-installs.yaml
+  # and non-empty pkg-map renames (none for Ubuntu today) are not applied.
+
+- name: Install guest-agent build and runtime packages
+  ansible.builtin.apt:
+    name: "{{ trove_packages }}"
+    state: present
+    update_cache: true
+
+# ---------------------------------------------------------------------------
+# Owned glue #2: guest user, docker access, sudo, forwarding. These are the
+# essentials the DIB `ubuntu-guest` element provides that we still need.
+# ---------------------------------------------------------------------------
+# Pin the guest user to a fixed UID/GID so the layout is deterministic and 1001
+# stays free for the datastore user the guest agent creates at boot. The group
+# is created first so its GID is pinned too (not just the UID).
+- name: Ensure the guest user's primary group is pinned
+  ansible.builtin.group:
+    name: "{{ trove_guest_username }}"
+    gid: "{{ trove_guest_uid }}"
+
+- name: Ensure the guest user exists and can use docker
+  ansible.builtin.user:
+    name: "{{ trove_guest_username }}"
+    uid: "{{ trove_guest_uid }}"
+    group: "{{ trove_guest_username }}"
+    groups:
+      - sudo
+      - docker
+    append: true
+    shell: /bin/bash
+
+- name: Grant the guest user passwordless sudo
+  # guest-agent.service does `sudo chown -R ubuntu:root /etc/trove ...` on start.
+  ansible.builtin.copy:
+    dest: /etc/sudoers.d/60_trove_guest
+    content: "{{ trove_guest_username }} ALL=(ALL) NOPASSWD:ALL\n"
+    mode: "0440"
+    validate: "visudo -cf %s"
+
+- name: Enable IPv4 forwarding (parity with the ubuntu-guest element)
+  ansible.builtin.copy:
+    dest: /etc/sysctl.d/60-trove-ip-forward.conf
+    content: "net.ipv4.ip_forward=1\n"
+    mode: "0644"
+
+# ---------------------------------------------------------------------------
+# Drive upstream's own install element -- the part we deliberately do NOT
+# reimplement. It creates the venv, pip installs the guest agent under
+# upper-constraints, installs the systemd units (guest-agent, docker-hostnic,
+# trove-image-loader) and wires up the trove-docker-plugin.
+# ---------------------------------------------------------------------------
+- name: Fetch upper-constraints for the guest-agent venv
+  ansible.builtin.get_url:
+    url: "{{ trove_upper_constraints_url }}"
+    dest: /opt/upper-constraints.txt
+    mode: "0644"
+
+- name: Run the upstream guest-agent install element
+  ansible.builtin.command:
+    cmd: "bash {{ trove_elements_dir }}/install.d/guest-agent-source-install/31-guest-agent-install"
+    creates: /usr/local/bin/guest-agent
+  environment:
+    DEV_MODE: "false"
+    DIB_INIT_SYSTEM: systemd
+    GUEST_USERNAME: "{{ trove_guest_username }}"
+    SYNC_LOG_TO_CONTROLLER: "False"
+    # NOTE: do NOT set PBR_VERSION here -- it is global and would poison pbr for
+    # every source-built dependency (e.g. testresources), breaking the resolve.
+    # pbr reads the version from the checkout's .git instead (git is installed).
+
+- name: Drop the checkout's git history (only needed at build time for pbr)
+  ansible.builtin.file:
+    path: "{{ trove_source_install_dir }}/.git"
+    state: absent
+
+# ---------------------------------------------------------------------------
+# Enable the units the element installed. We resolve them directly instead of
+# using DIB's svc-map helper (on Ubuntu svc-map is an identity mapping here).
+# Units are enabled, not started -- they come up on first boot in the guest.
+# ---------------------------------------------------------------------------
+- name: Enable the Trove guest systemd units
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    enabled: true
+    daemon_reload: true
+  loop:
+    - guest-agent.service
+    - docker-hostnic.socket
+    - trove-image-loader.service

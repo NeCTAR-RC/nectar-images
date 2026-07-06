@@ -2,12 +2,17 @@
 - name: Create Nectar group
   group:
     name: nectar
+    # Optional pinned GID (default: auto-assigned, as before). The trove image
+    # sets this to keep GID 1001 free for the datastore user.
+    gid: "{{ nectar_gid | default(omit) }}"
     state: present
 
 - name: Create Nectar user
   user:
     name: nectar
     comment: "Nectar Admin"
+    # Optional pinned UID (default: auto-assigned, as before).
+    uid: "{{ nectar_uid | default(omit) }}"
     group: nectar
     home: /var/lib/nectar
     createhome: yes

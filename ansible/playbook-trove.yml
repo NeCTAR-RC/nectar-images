@@ -16,7 +16,12 @@
     - role: qemu-guest-agent
     - role: ssh
     - role: ntp
+    - role: docker
     - role: trove
+    # Pin nectar off 1001 so it stays free for trove's `database` user (the guest
+    # user is pinned to 1000 by the trove role above).
     - role: nectar-user
+      nectar_uid: 1002
+      nectar_gid: 1002
     - role: facts
     - role: cleanup

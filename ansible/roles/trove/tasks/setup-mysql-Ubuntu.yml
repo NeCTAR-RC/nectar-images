@@ -1,6 +1,0 @@
----
-- name: Set Trove image properties
-  set_fact:
-    nectar_image_property_datastore_name: MySQL
-    nectar_image_property_datastore_type: mysql
-    nectar_image_property_datastore_version: "{{ datastore_version }}"
