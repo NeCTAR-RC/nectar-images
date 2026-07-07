@@ -1,7 +1,7 @@
 . "$env:ProgramData\Nectar\lib.ps1"
 
 Log "Fetching Vendordata..."
-$vendorData = Invoke-WebRequest -Uri http://169.254.169.254/openstack/latest/vendor_data2.json -UseBasicParsing | ConvertFrom-Json
+$vendorData = Get-Metadata "http://169.254.169.254/openstack/latest/vendor_data2.json" | ConvertFrom-Json
 
 # This must be written in strict ASCII format with no headers ie not utf8bom
 Log "Applying NVIDIA VGPU license token..."
