@@ -2,7 +2,7 @@
 #
 # One image serves every datastore: the database runs as a docker container
 # pulled at runtime, so there are no longer per-datastore variants.
-build_name     = "trove-guest"
+build_name     = "trove"
 os_name        = "ubuntu"
 os_version     = "24.04"
 os_arch        = "x86_64"
