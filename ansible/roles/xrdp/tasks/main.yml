@@ -45,6 +45,9 @@
     - xrdp
     - xrdp-sesman
 
+# Protect running user sessions from sesman restarts (upgrades, OOM, crashes)
+- include_tasks: session-protection.yml
+
 # Fix for GNOME keyring
 - include_tasks: keyring.yml
 

@@ -1,0 +1,60 @@
+---
+# xrdp-sesman keeps its session list in memory only, so any restart of the
+# daemon permanently orphans every active user session (xrdp 0.9.x cannot
+# re-adopt a running session). Prevent the common restart triggers and make
+# sure an unavoidable restart doesn't take the sessions down with it.
+
+- name: Exclude xrdp packages from unattended upgrades
+  copy:
+    content: |
+      // Upgrading xrdp restarts xrdp-sesman, which permanently orphans all
+      // active desktop sessions. xrdp is upgraded via new image builds instead.
+      Unattended-Upgrade::Package-Blacklist {
+          "xrdp";
+          "xorgxrdp";
+      };
+    dest: /etc/apt/apt.conf.d/51unattended-upgrades-xrdp
+    mode: '0644'
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Create needrestart config directory
+  file:
+    path: /etc/needrestart/conf.d
+    state: directory
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Prevent needrestart from auto-restarting xrdp services
+  copy:
+    content: |
+      # Restarting xrdp-sesman permanently orphans all active desktop sessions.
+      $nrconf{override_rc}{qr(^xrdp)} = 0;
+    dest: /etc/needrestart/conf.d/xrdp.conf
+    mode: '0644'
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Exclude xrdp packages from dnf-automatic upgrades
+  ini_file:
+    path: /etc/dnf/automatic.conf
+    section: base
+    option: exclude
+    value: xrdp* xorgxrdp*
+  when: ansible_facts['os_family'] == 'RedHat'
+
+- name: Create xrdp-sesman systemd override directory
+  file:
+    path: /etc/systemd/system/xrdp-sesman.service.d
+    state: directory
+
+- name: Keep user sessions alive across xrdp-sesman stop/restart
+  copy:
+    content: |
+      [Service]
+      # Only kill the sesman daemon itself on stop/restart, never its session
+      # processes (Xorg, chansrv). Sessions are orphaned but keep running and
+      # can be rescued (x11vnc bridge), rather than losing the user's work.
+      KillMode=process
+      # Make the OOM killer prefer user applications over the session manager
+      OOMScoreAdjust=-500
+    dest: /etc/systemd/system/xrdp-sesman.service.d/override.conf
+    mode: '0644'
+  notify: reload systemd
