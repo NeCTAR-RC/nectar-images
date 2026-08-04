@@ -8,3 +8,7 @@
   service:
     name: xrdp-sesman
     state: restarted
+
+- name: reload systemd
+  systemd:
+    daemon_reload: yes

@@ -96,6 +96,25 @@ function Log ($m) {
     Write-Host $msg
     $msg | Out-File -Append -FilePath "$env:ProgramData\Nectar\provision.log"
 }
+
+# Fetch a metadata URL with retries. Returns the body as a string, or $null
+# on failure. A 404 is authoritative (key not set) and is never retried.
+function Get-Metadata ($Uri, $Retries = 3, $DelaySec = 5) {
+    for ($i = 1; $i -le $Retries; $i++) {
+        try {
+            $r = Invoke-WebRequest -Uri $Uri -UseBasicParsing -ErrorAction Stop
+            return $r.Content
+        } catch {
+            if ($_.Exception.Response -and [int]$_.Exception.Response.StatusCode -eq 404) {
+                Log "Metadata not found (404): $Uri"
+                return $null
+            }
+            Log "Metadata fetch failed (attempt $i/${Retries}): $($_.Exception.Message)"
+            if ($i -lt $Retries) { Start-Sleep -Seconds $DelaySec }
+        }
+    }
+    return $null
+}
 '@
 Set-Content -Path "C:\ProgramData\Nectar\lib.ps1" -Value $libPs1 -Encoding Ascii
 
