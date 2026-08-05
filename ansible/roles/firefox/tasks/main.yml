@@ -20,17 +20,37 @@
         state: absent
       when: firefox_snap_removal.changed
 
-    - name: Add Mozilla PPA for non-snap version of Firefox (stable)
+    - name: Create apt keyring directory
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    # Key fingerprint 35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3; the checksum
+    # fails the build loudly if the published key file ever changes
+    - name: Add Mozilla apt repository signing key
+      ansible.builtin.get_url:
+        url: https://packages.mozilla.org/apt/repo-signing-key.gpg
+        dest: /etc/apt/keyrings/packages.mozilla.org.asc
+        checksum: sha256:3ecc63922b7795eb23fdc449ff9396f9114cb3cf186d6f5b53ad4cc3ebfbb11f
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Add Mozilla apt repository for non-snap Firefox
       apt_repository:
-        repo: 'ppa:mozillateam/ppa'
+        repo: 'deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main'
+        filename: mozilla
 
     - name: Create apt preferences to pin the non-snap Firefox
       copy:
         dest: /etc/apt/preferences.d/mozilla
         content: |
           Package: *
-          Pin: release o=LP-PPA-mozillateam
-          Pin-Priority: 100
+          Pin: origin packages.mozilla.org
+          Pin-Priority: 1000
 
           Package: firefox
           Pin: version 1:1snap1*
