@@ -1,7 +1,7 @@
 ---
 - name: Install CVMFS release .deb package
   ansible.builtin.apt:
-    deb: https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest_all.deb
+    deb: https://cvmrepo.s3.cern.ch/cvmrepo/apt/cvmfs-release-latest_all.deb
 
 - name: Install CVMFS package
   ansible.builtin.apt:
