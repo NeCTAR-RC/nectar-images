@@ -1,0 +1,15 @@
+# Upstream Neurodesktop files vendored verbatim into this role.
+#
+# Paths are relative to the root of https://github.com/neurodesk/neurodesktop
+# at the commit pinned in ../../UPSTREAM_REF. Do not edit the vendored copies;
+# run scripts/neurodesk-vendor-upstream.sh to (re)generate them. Files that
+# need local modification live in ../config/ instead.
+config/itksnap/UserPreferences.xml
+config/jupyter/jupyter_notebook_config.py
+config/lmod/module.sh
+config/lxde/libfm.conf
+config/lxde/mimeapps.list
+config/lxde/pcmanfm.conf
+config/lxde/rc.xml
+config/test_neurodesktop.sh
+config/vscode/settings.json

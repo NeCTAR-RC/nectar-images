@@ -24,7 +24,7 @@
       dest: /usr/local/bin/start-notebook.d/
     - src: config/jupyter/before_notebook.sh
       dest: /usr/local/bin/before-notebook.d/
-    - src: config/jupyter/jupyter_notebook_config.py
+    - src: upstream/config/jupyter/jupyter_notebook_config.py
       dest: /etc/jupyter/jupyter_notebook_config.py
     - src: config/jupyter/jupyterlab_startup.sh
       dest: /opt/neurodesktop/jupyterlab_startup.sh

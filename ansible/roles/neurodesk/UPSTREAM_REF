@@ -1,0 +1,12 @@
+# Upstream Neurodesktop commit this role was last synced from.
+# https://github.com/neurodesk/neurodesktop
+#
+# To see what has changed upstream since this pin:
+#   scripts/neurodesk-upstream-diff.sh
+#
+# After syncing the role, update the ref below to the upstream release tag
+# or commit SHA you synced to.
+#
+# Current pin: upstream main as of 2025-07-15, the state reflected by our
+# "Updates for Neurodesktop Noble support" sync (d0b2dcc, 2025-07-17).
+46a571844d59a6018c83b17ed9402da1d585f950

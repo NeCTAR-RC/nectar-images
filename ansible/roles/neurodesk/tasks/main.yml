@@ -25,6 +25,8 @@
     - /etc/skel/.config/lxpanel/LXDE/panels
     - /etc/skel/.config/Code/User
 
+# Files under upstream/ are vendored verbatim from the Neurodesktop repo
+# (see files/upstream/MANIFEST); files under config/ are our local copies.
 - name: Copy config files
   ansible.builtin.copy:
     src: "{{ item.src }}"
@@ -33,36 +35,35 @@
   with_items:
     - src: config/lxde/background.png
       dest: /usr/share/lxde/wallpapers/desktop_wallpaper.png
-    - src: config/lxde/pcmanfm.conf
+    - src: upstream/config/lxde/pcmanfm.conf
       dest: /etc/xdg/pcmanfm/LXDE/pcmanfm.conf
     - src: config/lxde/lxterminal.conf
       dest: /usr/share/lxterminal/lxterminal.conf
     - src: config/lxde/panel
       dest: /etc/skel/.config/lxpanel/LXDE/panels/panel
-    - src: config/lxde/libfm.conf
+    - src: upstream/config/lxde/libfm.conf
       dest: /etc/skel/.config/libfm
-    - src: config/lxde/rc.xml
+    - src: upstream/config/lxde/rc.xml
       dest: /etc/xdg/openbox/LXDE/rc.xml
-    # bashrc - breaks lots of things, so Andy disabled
-    # - src: config/lxde/.bashrc
-    #   dest: /etc/skel/.bashrc
+    # upstream's config/lxde/.bashrc breaks lots of things, so deliberately
+    # not installed
     - src: config/neurodesktop.sh
       dest: /etc/profile.d/neurodesktop.sh
     # mineapps
-    - src: config/lxde/mimeapps.list
+    - src: upstream/config/lxde/mimeapps.list
       dest: /etc/skel/.config/mimeapps.list
     # misc
-    - src: config/test_neurodesktop.sh
+    - src: upstream/config/test_neurodesktop.sh
       dest: /usr/share/test_neurodesktop.sh
-    - src: config/itksnap
+    - src: upstream/config/itksnap
       dest: /etc/skel/.config/.itksnap.org
     # VSCode
-    - src: config/vscode/settings.json
+    - src: upstream/config/vscode/settings.json
       dest: /etc/skel/.config/Code/User/settings.json
 
 - name: Copy module system
   ansible.builtin.copy:
-    src: config/lmod/module.sh
+    src: upstream/config/lmod/module.sh
     dest: /usr/share/
     mode: "0755"
 
