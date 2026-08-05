@@ -1,34 +1,47 @@
 ---
-# https://julialang.org/downloads - latest LTS release
-neurodesk_julia_version: 1.10.10
-neurodesk_julia_major_version: "{{ neurodesk_julia_version | regex_replace('^([0-9])\\.([0-9]*).*', '\\1.\\2') }}"
-#neurodesk_julia_download_url: "https://julialang-s3.julialang.org/bin/linux/x64//{{ neurodesk_julia_major_version }}/julia-{{ neurodesk_julia_version }}-linux-x86_64.tar.gz"
-neurodesk_julia_download_url: "https://julialang-s3.julialang.org/bin/linux/x64/1.10/julia-1.10.10-linux-x86_64.tar.gz"
-
-# Mamba install of packages from these Docker files
-# https://github.com/neurodesk/neurodesktop/blob/main/Dockerfile#L200
-# https://github.com/jupyter/docker-stacks/blob/main/images/docker-stacks-foundation/Dockerfile#L122
-# https://github.com/jupyter/docker-stacks/blob/main/images/base-notebook/Dockerfile#L41
+# Python packages translated from the upstream Dockerfile pip section, at the
+# revision pinned in UPSTREAM_REF. Deliberately skipped from upstream:
+# notebook_intelligence, jupyterlab-slurm, jupyter-sshd-proxy and litellm
+# (AI-agent, in-container Slurm and sshd-over-Jupyter stacks not used on the
+# Nectar VDS).
 neurodesk_python_packages:
   - datalad
   - nipype
+  - niwrap
+  - nbdev
+  - nf-core
+  - snakemake
+  - pydra==1.0a9
+  - nipoppy
   - matplotlib
   - datalad-container
   - datalad-osf
   - osfclient
+  - watermark
   - ipyniivue
   - jupyter-server-proxy
-  - jupyterlmod==4.0.3
+  - jupyterlmod
   - jupyterlab-git
   - jupyterlab_rise
+  - jupyterlab-niivue==0.2.7
+  - jupyterlab_myst
+  - papermill
   - ipycanvas
   - jupyter-resource-usage
   - jupyter_scheduler
   - httpx
-  - ipywidgets
+  - ipywidgets==8.1.8
   - ipyvolume
   - jupyterlab_widgets
-  #  - jupyterhub-singleuser - only a metapackage for jupyterlab
+  - nbgitpuller
+  - xnat
+  - pytest
+  - bash_kernel
+  - packaging>=26.0
+  - requests>=2.34.2
+  - chardet<8
+  # Not needed in the upstream image (provided by its jupyter/base-notebook
+  # base image); we install the JupyterLab server stack ourselves
   - jupyterlab
   - jupyter-server
   - nbclassic
@@ -36,3 +49,6 @@ neurodesk_python_packages:
 
 neurodesk_conda_packages:
   - nb_conda_kernels
+
+# https://www.nf-test.com
+neurodesk_nftest_version: 0.9.5

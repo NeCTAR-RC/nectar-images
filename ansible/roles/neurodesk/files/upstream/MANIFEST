@@ -4,12 +4,14 @@
 # at the commit pinned in ../../UPSTREAM_REF. Do not edit the vendored copies;
 # run scripts/neurodesk-vendor-upstream.sh to (re)generate them. Files that
 # need local modification live in ../config/ instead.
+config/conda/conda-readme.md
 config/itksnap/UserPreferences.xml
-config/jupyter/jupyter_notebook_config.py
+config/jupyter/kernel_wrapper.sh
 config/lmod/module.sh
+config/lxde/75neurodesk-clipboard-sync
 config/lxde/libfm.conf
 config/lxde/mimeapps.list
 config/lxde/pcmanfm.conf
 config/lxde/rc.xml
-config/test_neurodesktop.sh
+config/lxde/update_office_mimeapps.py
 config/vscode/settings.json

@@ -1,70 +1,88 @@
-[ -z "$PS1" ] && return
+#!/bin/bash
 
-# This file is sourced once in jupyterlab_startup.sh and once in ~/.bashrc so we get the same environment variables in the jupyter and in the desktop environment
-if [[ -z "${NB_USER}" ]]; then
-    export NB_USER=${USER}
+# Neurodesktop environment variables, adapted for the Nectar VDS image from
+# upstream's config/jupyter/environment_variables.sh (see UPSTREAM_REF).
+# Upstream's container/HPC-only logic (Slurm mode selection, Ollama host,
+# Apptainer/macOS runtime detection, AI agent paths) is omitted.
+#
+# Sourced from /etc/profile.d/neurodesktop.sh (interactive shells) and from
+# /opt/neurodesktop/kernel_wrapper.sh (every Jupyter kernel spawn), so it
+# must stay safe to source non-interactively: exports always run,
+# informational messages are guarded below.
+
+if [ -z "$NEURODESKTOP_ENV_SOURCED" ]; then
+    export NEURODESKTOP_ENV_SOURCED=1
+
+    if [[ -z "${NB_USER}" ]]; then
+        export NB_USER=${USER}
+    fi
+    if [[ -z "${USER}" ]]; then
+        export USER=${NB_USER}
+    fi
 fi
 
-if [[ -z "${USER}" ]]; then
-    export USER=${NB_USER}
-fi
+# MODULEPATH and CVMFS detection run on every source so that new shells and
+# kernels pick up CVMFS if it was not mounted when the session started.
+export OFFLINE_MODULES=/neurodesktop-storage/containers/modules/
+export CVMFS_MODULES=/cvmfs/neurodesk.ardc.edu.au/neurodesk-modules/
 
-# Only setup MODULEPATH if a module system is installed
-if [ -f '/usr/share/module.sh' ]; then
-        if [ ! -d /cvmfs/neurodesk.ardc.edu.au/neurodesk-modules ]; then
-                MODULEPATH=/neurodesktop-storage/containers/modules/*
-                export MODULEPATH=`echo $MODULEPATH | sed 's/ /:/g'`
-                export CVMFS_DISABLE=true
+# MODULEPATH is built to match the transparent-singularity module layout:
+# each subdirectory of CVMFS_MODULES becomes its own MODULEPATH entry so
+# Lmod presents modules as <tool>/<version> rather than
+# <category>/<tool>/<version>.
+if [ -d "$CVMFS_MODULES" ]; then
+        cvmfs_expanded=`echo ${CVMFS_MODULES}* | sed 's/ /:/g'`
+        if [ -d "$OFFLINE_MODULES" ]; then
+                # Local container installations take priority over CVMFS
+                export MODULEPATH=${OFFLINE_MODULES}:${cvmfs_expanded}
         else
-                MODULEPATH=/cvmfs/neurodesk.ardc.edu.au/neurodesk-modules/*
-                export MODULEPATH=`echo $MODULEPATH | sed 's/ /:/g'`
+                export MODULEPATH=${cvmfs_expanded}
         fi
+        export CVMFS_DISABLE=false
+        unset cvmfs_expanded
+else
+        # CVMFS genuinely unavailable
+        export MODULEPATH=${OFFLINE_MODULES}
+        export CVMFS_DISABLE=true
+fi
 
-        echo 'Neuroimaging tools are accessible via the Neurodesktop Applications menu and running them through the menu will provide help and setup instructions. If you are familiar with the tools and you want to combine multiple tools in one script, you can run "ml av" to see which tools are available and then use "ml <tool>/<version>" to load them. '
+# Show informational messages in interactive terminals only, once per session
+if [ -z "$NEURODESKTOP_MSG_SHOWN" ] && [ -f '/usr/share/module.sh' ]; then
+        if [[ $- == *i* ]]; then
+                export NEURODESKTOP_MSG_SHOWN=1
+                if [ -d "${OFFLINE_MODULES}" ] && [ -d "${CVMFS_MODULES}" ]; then
+                        echo "Found local container installations in $OFFLINE_MODULES. Using installed containers with a higher priority over CVMFS."
+                fi
 
-        # check if $CVMFS_DISABLE is set to true
-        if [[ "$CVMFS_DISABLE" == "true" ]]; then
-                echo "CVMFS is disabled. Using local containers stored in $MODULEPATH"
-                if [ ! -d $MODULEPATH ]; then
-                        echo 'Neurodesk tools not yet downloaded. Choose tools to install from the Neurodesktop Application menu.'
+                echo 'Neuroimaging tools are accessible via the Neurodesktop Applications menu and running them through the menu will provide help and setup instructions. If you are familiar with the tools and you want to combine multiple tools in one script, you can run "ml av" to see which tools are available and then use "ml <tool>/<version>" to load them. '
+
+                if [[ "$CVMFS_DISABLE" == "true" ]]; then
+                        echo "CVMFS not available. Using local containers stored in ${OFFLINE_MODULES}"
+                        if [ ! -d "${OFFLINE_MODULES}" ]; then
+                                echo 'Neurodesk tools not yet downloaded. Choose tools to install from the Neurodesktop Application menu.'
+                        fi
                 fi
         fi
 fi
 
-# This also needs to be set in the Dockerfile, so it is available in a jupyter notebook
 export APPTAINER_BINDPATH=/data,/mnt,/neurodesktop-storage,/tmp,/cvmfs
-# This also needs to be set in the Dockerfile, so it is available in a jupyter notebook
+export APPTAINERENV_SUBJECTS_DIR=${HOME}/freesurfer-subjects-dir
+export MPLCONFIGDIR=${HOME}/.config/matplotlib-mpldir
 
-export APPTAINERENV_SUBJECTS_DIR=/home/${NB_USER}/freesurfer-subjects-dir
-export MPLCONFIGDIR=/home/${NB_USER}/.config/matplotlib-mpldir
+# Nextflow ecosystem (upstream sets these as Dockerfile ENV)
+export NF_NEURO_MODULES_DIR=/opt/nf-neuro/modules
+export NF_TEST_HOME=/opt/nf-test
 
-export PATH=$PATH:/home/${NB_USER}/.local/bin:/opt/conda/bin:/opt/conda/condabin
+case ":${PATH}:" in
+        *":${HOME}/.local/bin:"*) ;;
+        *) PATH="${PATH}:${HOME}/.local/bin" ;;
+esac
+case ":${PATH}:" in
+        *":/opt/conda/bin:"*) ;;
+        *) PATH="${PATH}:/opt/conda/bin:/opt/conda/condabin" ;;
+esac
+export PATH
 
-
-# THIS IS CURRENLTY IN THE DOCKERFILE, because the overlay solution might be more robust than the -w flag
-
-# workaround for docker on MacOS - this -w flag should only be done when needed, because it prevents apptainer overlay bind mounts from working if they do not yet exist inside the container
-# check if the user is running on MacOS with Apple Silicon through our CPU Frequency hack file /home/${NB_USER}/.local/cpuinfo_with_ARM_MHz_fix
-# # echo "[INFO] Checking if our CPU Frequency hack file is present to determine if we are running on MacOS with Apple Silicon to then set the -w workaround."
-# if [ -f ~/.local/cpuinfo_with_ARM_MHz_fix ]; then
-#         # echo "[INFO] Detected MacOS with Apple Silicon, setting -w workaround for singularity."
-#         export neurodesk_singularity_opts=" --overlay /tmp/apptainer_overlay "
-# fi
-# Test this in jupyter terminal, desktop terminal and a notebook:
-# !echo $neurodesk_singularity_opts
-# test if the workaround is still needed: ml fsl; fslmaths or
-# import lmod
-# await lmod.load('fsl/6.0.4')
-# await lmod.list()
-# !fslmaths
-
-# # this adds --nv to the singularity calls -> but only if a GPU is present
-# if [ "$(lspci | grep -i nvidia)" ]
-# then
-#         export neurodesk_singularity_opts="${neurodesk_singularity_opts} --nv "
-# fi
-# THIS IS CURRENTLY DISABLED BECAUSE IT CAUSES PROBLEMS ON UBUNTU 24.04 HOSTS WHERE THIS LEADS TO A GLIBC VERSION ERROR
-
-export PS1='\u@neurodesktop-$NEURODESKTOP_VERSION:\w$ '
-
-alias ll='ls -la'
+# Plain Linux VM: no writable-overlay workaround needed (upstream only sets
+# one for macOS Docker and rootless Apptainer runtimes)
+export neurodesk_singularity_opts=""

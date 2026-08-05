@@ -53,8 +53,11 @@
     - src: upstream/config/lxde/mimeapps.list
       dest: /etc/skel/.config/mimeapps.list
     # misc
-    - src: upstream/config/test_neurodesktop.sh
-      dest: /usr/share/test_neurodesktop.sh
+    - src: upstream/config/conda/conda-readme.md
+      dest: /etc/skel/conda-readme.md
+    # Unify X11 CLIPBOARD/PRIMARY selections in xrdp sessions (needs autocutsel)
+    - src: upstream/config/lxde/75neurodesk-clipboard-sync
+      dest: /etc/X11/Xsession.d/75neurodesk-clipboard-sync
     - src: upstream/config/itksnap
       dest: /etc/skel/.config/.itksnap.org
     # VSCode
@@ -66,6 +69,49 @@
     src: upstream/config/lmod/module.sh
     dest: /usr/share/
     mode: "0755"
+
+- name: Configure persistent bash history
+  ansible.builtin.blockinfile:
+    path: /etc/bash.bashrc
+    marker: "# {mark} NEURODESK PERSISTENT BASH HISTORY"
+    block: |
+      if [[ $- == *i* ]]; then
+          shopt -s histappend
+
+          if [ -d "${HOME}/neurodesktop-storage" ] && [ -w "${HOME}/neurodesktop-storage" ]; then
+              export HISTFILE="${HOME}/neurodesktop-storage/.bash_history"
+          else
+              export HISTFILE="${HISTFILE:-$HOME/.bash_history}"
+          fi
+
+          export HISTSIZE=100000
+          export HISTFILESIZE=200000
+          export HISTCONTROL=ignoredups:erasedups
+
+          # Persist history continuously so abrupt session closes do not lose commands
+          if [[ "${PROMPT_COMMAND:-}" != *"history -a"* ]]; then
+              if [ -n "${PROMPT_COMMAND:-}" ]; then
+                  export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}"
+              else
+                  export PROMPT_COMMAND="history -a; history -n"
+              fi
+          fi
+      fi
+
+- name: Create strace directory
+  ansible.builtin.file:
+    path: /opt/strace
+    state: directory
+    mode: "0755"
+
+- name: Install static strace for debugging inside containers
+  ansible.builtin.unarchive:
+    src: https://github.com/JuliaBinaryWrappers/strace_jll.jl/releases/download/strace-v6.7.0%2B1/strace.v6.7.0.x86_64-linux-gnu.tar.gz
+    dest: /opt/strace
+    remote_src: true
+    extra_opts:
+      - --strip-components=1
+    creates: /opt/strace/strace
 
 - name: Create storage directory
   ansible.builtin.file:
@@ -102,17 +148,11 @@
     regexp: "#user_allow_other"
     line: "user_allow_other"
 
-- name: Include globus
-  ansible.builtin.include_tasks: globus.yml
-
 - name: Include CVMFS
   ansible.builtin.include_tasks: cvmfs.yml
 
 - name: Include Apptainer
   ansible.builtin.include_tasks: apptainer.yml
-
-- name: Include Julia
-  ansible.builtin.include_tasks: julia.yml
 
 - name: Include Conda
   ansible.builtin.include_tasks: conda.yml
@@ -120,12 +160,11 @@
 - name: Include Jupyter
   ansible.builtin.include_tasks: jupyter.yml
 
+- name: Include Nextflow
+  ansible.builtin.include_tasks: nextflow.yml
+
+- name: Include TinyTeX
+  ansible.builtin.include_tasks: tinytex.yml
+
 - name: Include NeuroCommand
   ansible.builtin.include_tasks: neurocommand.yml
-
-- name: Clone NeuroDesk example-notebooks
-  ansible.builtin.git:
-    repo: https://github.com/neurodesk/example-notebooks
-    dest: /etc/skel/example-notebooks
-    version: main
-    depth: 1

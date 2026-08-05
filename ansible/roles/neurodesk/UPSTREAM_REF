@@ -5,8 +5,8 @@
 #   scripts/neurodesk-upstream-diff.sh
 #
 # After syncing the role, update the ref below to the upstream release tag
-# or commit SHA you synced to.
+# or commit SHA you synced to, then re-vendor files/upstream/ with:
+#   scripts/neurodesk-vendor-upstream.sh
 #
-# Current pin: upstream main as of 2025-07-15, the state reflected by our
-# "Updates for Neurodesktop Noble support" sync (d0b2dcc, 2025-07-17).
-46a571844d59a6018c83b17ed9402da1d585f950
+# Current pin: upstream release 2026-07-11.
+e9c548e9e847136997f8b3b52f1d6744665e79b6

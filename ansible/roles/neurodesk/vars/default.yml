@@ -2,79 +2,33 @@
 # Singularity bind mount list
 neurodesk_mountpoint_list_url: https://raw.githubusercontent.com/NeuroDesk/neurocontainers/master/recipes/globalMountPointList.txt
 
-# Install basic tools
+# Packages translated from the upstream Dockerfile apt sections ("base image
+# dependencies" and "Install Tools and Libs"), at the revision pinned in
+# UPSTREAM_REF. Container-only packages (Guacamole/Tomcat/VNC runtime and
+# build deps, the in-image Slurm stack) are excluded. Unlike upstream we keep
+# general compilers, which upstream purges from the container to save space.
 neurodesk_extra_packages:
-  - cryptsetup
-  - squashfs-tools
-  - lua-bit32
-  - lua-filesystem
-  - lua-json
-  - lua-lpeg
-  - lua-posix
-  - lua-term
-  - lua5.2
-  - lmod
-  - git
-  - aria2
-  - emacs
-  - gedit
-  - htop
-  - imagemagick
-  - less
-  - nano
-  - openssh-client
-  - rsync
-  - screen
-  - tree
-  - vim
-  - gcc
-  - graphviz
-  - libzstd1
-  - libgfortran5
-  - zlib1g-dev
-  - zip
-  - unzip
-  - iputils-ping
-  - sshfs
-  - build-essential
-  - uuid-dev
-  - libgpgme-dev
-  - squashfs-tools
-  - libseccomp-dev
-  - wget
-  - pkg-config
-  - git
-  - cryptsetup-bin
-  - lsb-release
-  - davfs2
-  - python3-setuptools
-  # Install base image dependencies
-  # https://github.com/neurodesk/neurodesktop/blob/main/Dockerfile#L13
-  - software-properties-common
-  - openjdk-21-jre
-  - build-essential
-  - libcairo2-dev
-  - libjpeg-turbo8-dev
-  - libpng-dev
-  - libtool-bin
-  - uuid-dev
-  - libpango1.0-dev
+  # Base image dependencies
   - acl
-  - wget
+  - apt-transport-https
+  - autocutsel
   - curl
+  - dbus-x11
   - dirmngr
   - gpg
   - gpg-agent
-  - apt-transport-https
-  # Install Tools and Libs
-  # https://github.com/neurodesk/neurodesktop/blob/main/Dockerfile#L121
+  - gvfs
+  - openjdk-21-jre-headless
+  - software-properties-common
+  - wget
+  - xz-utils
+  # Tools and libs
   - aria2
   - bc
   - davfs2
-  - debootstrap
   - dnsutils
-  - emacs
   - gedit
+  - gh
   - git
   - git-annex
   - gnome-keyring
@@ -84,10 +38,7 @@ neurodesk_extra_packages:
   - iputils-ping
   - less
   - libgfortran5
-  - libgpgme-dev
-  - libossp-uuid-dev
   - libpci3
-  - libreoffice
   - lmod
   - lua-bit32
   - lua-filesystem
@@ -99,17 +50,21 @@ neurodesk_extra_packages:
   - lxtask
   - man-db
   - nano
+  - nextcloud-desktop
   - nodejs
   - openssh-client
   - openssh-server
   - owncloud-client
   - pciutils
+  - python3-setuptools
   - qdirstat
+  - rclone
   - rsync
   - s3fs
   - screen
   - sshfs
   - tcllib
+  - tcsh
   - tk
   - tmux
   - tree
@@ -117,6 +72,14 @@ neurodesk_extra_packages:
   - unzip
   - vim
   - xdg-utils
-  - yarn
   - zip
-  - tcsh
+  # Kept for desktop users compiling their own code
+  - build-essential
+  - gcc
+  - pkg-config
+  # Kept for the CVMFS dependency chain (upstream apt-marks these manual)
+  - uuid-dev
+  # Kept from earlier syncs
+  - cryptsetup-bin
+  - lsb-release
+  - squashfs-tools

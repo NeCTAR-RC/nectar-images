@@ -1,0 +1,21 @@
+---
+# Targeted TinyTeX toolchain for notebook PDF export without pulling in the
+# larger Debian TeX Live package set (translated from the upstream Dockerfile)
+- name: Install TinyTeX and TeX packages for notebook PDF export
+  ansible.builtin.shell:
+    cmd: |
+      set -euo pipefail
+      curl -fsSL https://yihui.org/tinytex/install-bin-unix.sh | sh
+      mv "$HOME/.TinyTeX" /opt/TinyTeX
+      tlmgr_path="$(echo /opt/TinyTeX/bin/*/tlmgr)"
+      "$tlmgr_path" option sys_bin /usr/local/bin
+      "$tlmgr_path" path add
+      "$tlmgr_path" install \
+          tcolorbox parskip caption float geometry amsmath amsfonts latex \
+          upquote eurosym fontspec unicode-math fancyvrb grffile adjustbox \
+          hyperref titling tools booktabs enumitem ulem soul jknapltx rsfs \
+          graphics iftex xcolor pdfcol
+    creates: /opt/TinyTeX
+    executable: /bin/bash
+  environment:
+    HOME: /root

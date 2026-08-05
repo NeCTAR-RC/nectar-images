@@ -1,0 +1,41 @@
+---
+- name: Install Nextflow
+  ansible.builtin.shell:
+    cmd: |
+      set -euo pipefail
+      curl -fsSL https://get.nextflow.io | bash
+      install -m 0755 nextflow /usr/local/bin/nextflow
+      rm -f nextflow
+      rm -rf "$HOME/.nextflow"
+    chdir: /tmp
+    creates: /usr/local/bin/nextflow
+    executable: /bin/bash
+
+- name: Install nf-test
+  ansible.builtin.shell:
+    cmd: |
+      set -euo pipefail
+      wget -qO- https://get.nf-test.com | bash -s {{ neurodesk_nftest_version }}
+      test -f "$HOME/.nf-test/nf-test.jar"
+      mkdir -p /opt/nf-test
+      cp -a "$HOME/.nf-test/." /opt/nf-test/
+      rm -rf "$HOME/.nf-test" nf-test
+    chdir: /tmp
+    creates: /opt/nf-test/nf-test.jar
+    executable: /bin/bash
+
+- name: Create nf-test wrapper
+  ansible.builtin.copy:
+    dest: /usr/local/bin/nf-test
+    mode: "0755"
+    content: |
+      #!/usr/bin/env bash
+      set -euo pipefail
+      exec java -jar /opt/nf-test/nf-test.jar "$@"
+
+- name: Clone nf-neuro modules
+  ansible.builtin.git:
+    repo: https://github.com/nf-neuro/modules.git
+    dest: /opt/nf-neuro/modules
+    version: main
+    depth: 1

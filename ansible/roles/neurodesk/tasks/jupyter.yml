@@ -24,9 +24,31 @@
       dest: /usr/local/bin/start-notebook.d/
     - src: config/jupyter/before_notebook.sh
       dest: /usr/local/bin/before-notebook.d/
-    - src: upstream/config/jupyter/jupyter_notebook_config.py
+    # Local copy: upstream now generates this from a template plus its
+    # webapp-launcher config, which we do not use
+    - src: config/jupyter/jupyter_notebook_config.py
       dest: /etc/jupyter/jupyter_notebook_config.py
+    - src: config/jupyter/jupyter_server_config.py
+      dest: /etc/jupyter/jupyter_server_config.py
     - src: config/jupyter/jupyterlab_startup.sh
       dest: /opt/neurodesktop/jupyterlab_startup.sh
     - src: config/jupyter/environment_variables.sh
       dest: /opt/neurodesktop/environment_variables.sh
+    - src: upstream/config/jupyter/kernel_wrapper.sh
+      dest: /opt/neurodesktop/kernel_wrapper.sh
+
+- name: Install bash kernel spec
+  ansible.builtin.command: /opt/conda/bin/python -m bash_kernel.install --sys-prefix
+  args:
+    creates: /opt/conda/share/jupyter/kernels/bash/kernel.json
+
+- name: Disable JupyterLab announcements extension
+  ansible.builtin.command: /opt/conda/bin/jupyter labextension disable @jupyterlab/apputils-extension:announcements
+  changed_when: false
+
+- name: Wrap kernel specs to re-source the Neurodesk environment on kernel start
+  ansible.builtin.script: wrap-kernel-specs.py
+  args:
+    executable: /usr/bin/python3
+  register: neurodesk_wrap_kernels
+  changed_when: "'Wrapped kernel spec' in neurodesk_wrap_kernels.stdout"

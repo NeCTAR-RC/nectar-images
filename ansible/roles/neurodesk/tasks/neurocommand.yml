@@ -14,6 +14,23 @@
     - ./build.sh --lxde --edit
     - ./install.sh
 
+# Associate office documents with the neurocommand-generated (containerised)
+# LibreOffice menu entries; must run after install.sh has generated the
+# .desktop files. Replaces the apt libreoffice package upstream removed.
+- name: Associate office documents with Neurodesk LibreOffice menu entries
+  ansible.builtin.script: >
+    upstream/config/lxde/update_office_mimeapps.py
+    /etc/skel/.config/mimeapps.list
+    /usr/share/applications/neurodesk
+  args:
+    executable: python3
+  register: neurodesk_office_mimeapps
+  changed_when: "'Registered' in neurodesk_office_mimeapps.stdout"
+
+- name: Update desktop MIME database
+  ansible.builtin.command: update-desktop-database /usr/share/applications
+  changed_when: false
+
 - name: Prepare a container directory for users developing their own containers and testing them before release
   ansible.builtin.file:
     path: /neurocommand/local/containers

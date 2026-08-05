@@ -13,5 +13,8 @@
     name:
       - apptainer
       - apptainer-suid
+      # Rootless/unprivileged container support (upstream ships these)
+      - fuse-overlayfs
+      - squashfuse
     state: present
     update_cache: true
