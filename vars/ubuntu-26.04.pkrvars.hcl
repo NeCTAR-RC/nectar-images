@@ -1,8 +1,8 @@
-os_name        = "ubuntu"
-os_version     = "26.04"
-os_arch        = "x86_64"
-#iso_url        = "http://mirror.aarnet.edu.au/pub/ubuntu/releases/26.04/ubuntu-26.04-live-server-amd64.iso"
-iso_url        = "http://mirror.aarnet.edu.au/pub/ubuntu/releases/26.04/ubuntu-26.04-live-server-amd64.iso"
-iso_checksum   = "sha256:dec49008a71f6098d0bcfc822021f4d042d5f2db279e4d75bdd981304f1ca5d9"
-boot_command   = ["<wait>e<wait><down><down><down><end> net.ifnames=0 autoinstall ds=nocloud-net\\;s=http://{{.HTTPIP}}:{{.HTTPPort}}/ubuntu-26.04<wait><f10><wait>"]
-profile        = "standard"
+os_name         = "ubuntu"
+os_version      = "26.04"
+os_arch         = "x86_64"
+iso_url         = "https://cloud-images.ubuntu.com/releases/resolute/release/ubuntu-26.04-server-cloudimg-amd64.img"
+iso_checksum    = "file:https://cloud-images.ubuntu.com/releases/resolute/release/SHA256SUMS"
+qemu_disk_image = true
+cloud_init_dir  = "ubuntu-26.04"
+profile         = "standard"

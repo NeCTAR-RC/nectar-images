@@ -1,0 +1,2 @@
+instance-id: packer-ubuntu-26.04
+local-hostname: ubuntu-2604-packer

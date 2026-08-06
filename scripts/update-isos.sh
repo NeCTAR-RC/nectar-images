@@ -110,6 +110,25 @@ resolve_iso() {  # os_name os_version os_arch
     esac
 }
 
+# Resolve the latest cloud image for an OS (qemu_disk_image builds), setting
+# $iso_url and $iso_checksum. Only needed where release artifacts are fixed and
+# a new pin is required per release (e.g. Fedora). Ubuntu cloud builds instead
+# use the release/ pointer with a "file:" checksum, which Packer resolves from
+# upstream at build time, so they never need updating here.
+resolve_cloud_image() {  # os_name os_version os_arch
+    local name=$1 ver=$2 arch=$3 base_url checksum_file
+    case $name in
+        fedora)  # GA Cloud image; release artifacts never change once published
+            base_url="$MIRROR/fedora/linux/releases/$ver/Cloud/$arch/images"
+            checksum_file=$(curl -s -L "$base_url/" | sed -n 's#.*<a href="\(Fedora-Cloud-'"$ver"'[^"]*-CHECKSUM\)".*#\1#p' | sort -V | tail -n1)
+            IFS=" " read -ra details <<< "$(curl -s -L "$base_url/$checksum_file" | parse_sha256 'SHA256.*Cloud-Base-Generic.*qcow2')"
+            resolved || return 1
+            iso_url="$base_url/${details[0]}"; iso_checksum="sha256:${details[1]}" ;;
+        *)
+            msg "  no cloud image resolver for '$name', skipping"; return 1 ;;
+    esac
+}
+
 # Write $iso_url and $iso_checksum into $var_file and show the diff.
 write_vars() {
     debug "url: $iso_url"
@@ -119,24 +138,30 @@ write_vars() {
     git_diff "$var_file"
 }
 
-# Update every ISO-based vars file, keyed off the os_name/os_version/os_arch it
-# declares. Files without an iso_url, or that build from a cloud image
-# (qemu_disk_image), are left alone. Lookups are memoised so OSes shared by
-# many variants are fetched only once.
+# Update every vars file with an iso_url, keyed off the os_name/os_version/
+# os_arch it declares. qemu_disk_image builds resolve a cloud image; the rest
+# resolve an installer ISO. Lookups are memoised so OSes shared by many
+# variants are fetched only once.
 declare -A iso_cache
 for var_file in "$VARS_DIR"/*.pkrvars.hcl; do
     grep -q '^iso_url' "$var_file" || continue
-    grep -q '^qemu_disk_image' "$var_file" && continue  # cloud-image build, not an ISO
+    # "file:" checksums are resolved from upstream at build time - nothing to pin
+    grep -q '^iso_checksum\s*=\s*"file:' "$var_file" && continue
     os_name=$(field os_name "$var_file")
     os_version=$(field os_version "$var_file")
     os_arch=$(field os_arch "$var_file")
     action "Checking ${var_file##*/} ($os_name $os_version $os_arch)"
 
+    resolver=resolve_iso
     key="$os_name $os_version $os_arch"
+    if grep -q '^qemu_disk_image' "$var_file"; then
+        resolver=resolve_cloud_image
+        key="cloud $key"
+    fi
     if [[ -n ${iso_cache[$key]:-} ]]; then
         iso_url=${iso_cache[$key]%%|*}
         iso_checksum=${iso_cache[$key]#*|}
-    elif resolve_iso "$os_name" "$os_version" "$os_arch"; then
+    elif $resolver "$os_name" "$os_version" "$os_arch"; then
         iso_cache[$key]="$iso_url|$iso_checksum"
     else
         continue

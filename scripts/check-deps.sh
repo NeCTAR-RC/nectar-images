@@ -77,7 +77,7 @@ for tool in openstack nc; do
     if hash $tool >/dev/null 2>&1; then
         success "$tool found."
     else
-        fatal "$tool found."
+        error "$tool not found."
     fi
 done
 
