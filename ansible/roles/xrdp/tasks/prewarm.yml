@@ -1,0 +1,48 @@
+---
+# The first GLX client makes Xorg load the swrast/llvmpipe software renderer,
+# which drags the ~140MB libLLVM off disk while the X server is still
+# single-threaded initialising - on a cold page cache (Ceph-backed boot
+# volume) that blocks every session client for ~8 seconds at connect time.
+# Read the session stack into the page cache at boot instead, at idle IO
+# priority, well before a user can connect. Globs cover both Debian and
+# RedHat library paths; missing paths are ignored.
+
+- name: Install xrdp-prewarm service
+  copy:
+    content: |
+      [Unit]
+      Description=Preload desktop session libraries into page cache
+      After=local-fs.target
+
+      [Service]
+      Type=simple
+      Nice=19
+      IOSchedulingClass=idle
+      ExecStart=/bin/sh -c "cat \
+        /usr/lib/x86_64-linux-gnu/libLLVM*.so* \
+        /usr/lib64/libLLVM*.so* \
+        /usr/lib/x86_64-linux-gnu/dri/*.so \
+        /usr/lib64/dri/*.so \
+        /usr/lib/xorg/Xorg \
+        /usr/libexec/Xorg \
+        /usr/lib/xorg/modules/extensions/*.so \
+        /usr/lib64/xorg/modules/extensions/*.so \
+        /usr/sbin/xrdp-chansrv \
+        /usr/bin/xfwm4 \
+        /usr/bin/xfce4-session \
+        /usr/bin/xfsettingsd \
+        /usr/bin/xfdesktop \
+        /usr/bin/xfce4-panel \
+        /usr/bin/Thunar \
+        > /dev/null 2>&1; exit 0"
+
+      [Install]
+      WantedBy=multi-user.target
+    dest: /etc/systemd/system/xrdp-prewarm.service
+    mode: '0644'
+  notify: reload systemd
+
+- name: Enable xrdp-prewarm service
+  service:
+    name: xrdp-prewarm
+    enabled: yes

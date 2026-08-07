@@ -48,6 +48,9 @@
 # Protect running user sessions from sesman restarts (upgrades, OOM, crashes)
 - include_tasks: session-protection.yml
 
+# Preload session libraries at boot to speed up the first connection
+- include_tasks: prewarm.yml
+
 # Fix for GNOME keyring
 - include_tasks: keyring.yml
 
