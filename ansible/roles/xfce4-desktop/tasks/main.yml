@@ -84,6 +84,7 @@
   with_items:
     - xfce4-power-manager.xml
     - xfce4-screensaver.xml
+    - xfwm4.xml
 
 - name: copy xfce4 default config templates
   template:

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<channel name="xfwm4" version="1.0">
+  <property name="general" type="empty">
+    <!-- Compositing over RDP is pure overhead and delays session startup:
+         xfwm4 can spend ~20s contending to become the compositing manager
+         on xorgxrdp before the desktop becomes usable -->
+    <property name="use_compositing" type="bool" value="false"/>
+  </property>
+</channel>
