@@ -4,6 +4,7 @@ common_packages:
   - openjdk-21-jre-headless
   - rake
   - puppet-lint
+  - puppet-strings
   - git
   - bundler
   - python3-dev
