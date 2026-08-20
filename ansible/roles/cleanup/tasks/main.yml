@@ -21,6 +21,13 @@
     - 'rm -f /var/lib/systemd/random-seed'  # force a new random seed to be generated
   when: nectar_test_build is not defined
 
+# Contains 'dns = none' which stops NetworkManager updating resolv.conf,
+# so a stale copy from the build can leave instances with no nameservers
+- name: Remove cloud-init generated NetworkManager config
+  file:
+    name: /etc/NetworkManager/conf.d/99-cloud-init.conf
+    state: absent
+
 - name: Include OS-specific cleanup tasks
   include_tasks: "{{ tasks_item }}"
   with_first_found:
