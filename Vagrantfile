@@ -606,7 +606,7 @@ Vagrant.configure("2") do |config|
     v.memory = 4096
     v.cpus = 2
     v.machine_virtual_size = 20  # 20GB default disk
-    v.graphics_type = "spice"
+    v.graphics_type = "none"  # terminal only, and spice isn't supported by all QEMU builds
   end
 
   config.vm.provider :virtualbox do |v|
