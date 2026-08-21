@@ -4,11 +4,9 @@
 puppet_repo:
   name: openvox8
   uris: https://apt.voxpupuli.org
-  suites: ubuntu24.04
+  suites: ubuntu26.04
   components: openvox8
   signed_by: https://apt.voxpupuli.org/openvox-keyring.gpg
-
-ansible_ppa: 'ppa:ansible/ansible'
 
 packages:
   - libpng-dev

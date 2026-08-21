@@ -30,6 +30,12 @@
     update_cache: true
   with_items: "{{ apt_repositories }}"
 
+# Required by the deb822_repository module
+- name: Install python3-debian
+  apt:
+    name: python3-debian
+    state: present
+
 - name: Perform a full upgrade
   apt:
     upgrade: dist

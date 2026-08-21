@@ -400,6 +400,25 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # Ubuntu 26.04 (resolute) Jenkins slave
+  config.vm.define "jenkins-slave-ubuntu-26.04" do |c|
+    c.vm.box = "cloud-image/ubuntu-26.04"
+    c.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/resolute64"
+      override.vm.disk :disk, size: "30GB", primary: true
+    end
+    c.vm.provider :libvirt do |v|
+      v.machine_virtual_size = 30
+    end
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook-jenkins-slave.yml"
+      ansible.become = true
+    end
+  end
+
   # Undercloud Ubuntu 22.04 (jammy)
   config.vm.define "undercloud-ubuntu-22.04" do |c|
     c.vm.box = "cloud-image/ubuntu-22.04"

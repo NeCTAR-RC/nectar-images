@@ -5,12 +5,12 @@ vagrant_plugins:
   - vagrant-libvirt
 
 vagrant_packages:
-  - qemu
+  - qemu-system-x86
   - libvirt-daemon-system
   - libvirt-clients
   - ebtables
   - dnsmasq-base
-  - libxslt-dev
+  - libxslt1-dev
   - libxml2-dev
   - libvirt-dev
   - zlib1g-dev

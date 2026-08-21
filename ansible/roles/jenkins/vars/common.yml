@@ -30,7 +30,7 @@ common_packages:
   - git-review
   - dh-apache2
   - openstack-pkg-tools
-  - puppet-agent
+  - openvox-agent
   - python3-setuptools
   - curl
   - genisoimage

@@ -1,7 +1,12 @@
 ---
 openstack_version: yoga
 
-puppet_repo: "deb http://apt.puppetlabs.com jammy puppet7"
+puppet_repo:
+  name: openvox8
+  uris: https://apt.voxpupuli.org
+  suites: ubuntu22.04
+  components: openvox8
+  signed_by: https://apt.voxpupuli.org/openvox-keyring.gpg
 
 ansible_ppa: 'ppa:ansible/ansible'
 
@@ -32,6 +37,9 @@ packages:
 
 selenium: True
 
+# puppetlabs_spec_helper drags in the real puppet gem (via puppetlabs-syntax),
+# whose executables collide with openvox's. Install openvox last with force so
+# its binstubs win instead of gem hanging on an overwrite prompt.
 gem_packages:
-  - { name: puppet }
   - { name: puppetlabs_spec_helper }
+  - { name: openvox, force: true }

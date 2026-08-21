@@ -13,44 +13,34 @@
     - /etc/apt/apt.conf.d/10periodic
     - /etc/apt/apt.conf.d/20auto-upgrades
 
-- name: Add Nectar archive keys
-  apt_key:
-    id: ABC968C25CDB0CDD6254F46A129CF4A68FA8FC77
-    url: http://download.rc.nectar.org.au/nectar-archive-key-2016.gpg
-    state: present
-
 - name: Add Nectar repositories
-  apt_repository:
-    repo: "{{ item }}"
-    update_cache: yes
-  with_items:
-    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_facts['distribution_release'] }} main"
-    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_facts['distribution_release'] }}-{{ openstack_version }} main"
-    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_facts['distribution_release'] }}-{{ openstack_version }}-testing main"
+  deb822_repository:
+    name: nectar
+    uris: http://download.rc.nectar.org.au/nectar-ubuntu
+    suites:
+      - "{{ ansible_facts['distribution_release'] }}"
+      - "{{ ansible_facts['distribution_release'] }}-{{ openstack_version }}"
+      - "{{ ansible_facts['distribution_release'] }}-{{ openstack_version }}-testing"
+    components: main
+    signed_by: http://download.rc.nectar.org.au/nectar-archive-key-2016.gpg
   when: openstack_version is defined
 
-- name: Add Puppet Key
-  apt_key:
-    keyserver: keyserver.ubuntu.com
-    id: D6811ED3ADEEB8441AF5AA8F4528B6CD9E61EF26
-
-- name: Add Puppet Repo
-  apt_repository:
-    repo: "{{ puppet_repo }}"
-    update_cache: yes
+- name: Add Puppet repository
+  deb822_repository:
+    name: "{{ puppet_repo.name }}"
+    uris: "{{ puppet_repo.uris }}"
+    suites: "{{ puppet_repo.suites }}"
+    components: "{{ puppet_repo.components }}"
+    signed_by: "{{ puppet_repo.signed_by }}"
   when: puppet_repo is defined
 
-- name: Add NodeJS repo key
-  apt_key:
-    url: http://deb.nodesource.com/gpgkey/nodesource.gpg.key
-    state: present
-  when: nodejs_repo is defined
-
-- name: Add NodeJS repo
-  apt_repository:
-    repo: "deb https://deb.nodesource.com/{{ nodejs_repo }} nodistro main"
-    update_cache: yes
-    filename: nodejs
+- name: Add NodeJS repository
+  deb822_repository:
+    name: nodejs
+    uris: "https://deb.nodesource.com/{{ nodejs_repo }}"
+    suites: nodistro
+    components: main
+    signed_by: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
   when: nodejs_repo is defined
 
 - name: Perform an apt-update
@@ -93,6 +83,7 @@
   gem:
     name: "{{ item.name }}"
     version: "{{ item.version | default(omit) }}"
+    force: "{{ item.force | default(omit) }}"
     state: present
     user_install: no
   with_items: "{{ gem_packages }}"
