@@ -20,7 +20,6 @@
     group: root
     mode: 0755
 
-# Yes, bionic, even for focal
 - name: install | download deb
   get_url:
     url: "{{ rstudio_package_url }}"
