@@ -449,6 +449,21 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # Undercloud Ubuntu 26.04 (resolute)
+  config.vm.define "undercloud-ubuntu-26.04" do |c|
+    c.vm.box = "cloud-image/ubuntu-26.04"
+    c.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "ubuntu/resolute64"
+    end
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook-undercloud.yml"
+      ansible.become = true
+    end
+  end
+
   # Windows Server 2022
   config.vm.define "windows-2022" do |c|
     c.vm.box = "peru/windows-server-2022-standard-x64-eval"
