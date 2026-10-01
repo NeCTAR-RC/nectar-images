@@ -17,12 +17,12 @@
 - name: Add Nectar apt repositories
   deb822_repository:
     name: nectar
-    uris: http://download.rc.nectar.org.au/nectar-ubuntu
+    uris: https://download.rc.nectar.org.au/nectar-ubuntu
     suites:
       - "{{ ansible_facts['distribution_release'] }}"
       - "{{ ansible_facts['distribution_release'] }}-{{ openstack_version }}"
     components: main
-    signed_by: http://download.rc.nectar.org.au/nectar-archive-key-2016.gpg
+    signed_by: https://download.rc.nectar.org.au/nectar-archive-key-2016.gpg
   when:
     - openstack_version is defined
     - ansible_facts['distribution_major_version'] == '22'
