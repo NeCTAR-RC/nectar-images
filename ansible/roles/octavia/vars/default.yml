@@ -1,2 +1,5 @@
 ---
-octavia_openstack_version: epoxy
+# OpenStack release version, used for the Nectar apt repository pockets
+octavia_openstack_version: '2025.1'
+# OpenStack release codename, used for the Ubuntu Cloud Archive pocket
+octavia_openstack_codename: epoxy

@@ -7,13 +7,14 @@
     id: 391A9AA2147192839E9DB0315EDB1B62EC4926EA
     keyserver: keyserver.ubuntu.com
 
+# The cloud archive is skipped when the release ships natively in the base OS
 - name: Add Ubuntu cloud archive repository
   apt_repository:
-    repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_facts['distribution_release'] }}-updates/{{ octavia_openstack_version }} main"
+    repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_facts['distribution_release'] }}-updates/{{ octavia_openstack_codename }} main"
     update_cache: true
   when:
-    - not (ansible_facts['distribution_release'] == 'jammy' and octavia_openstack_version == 'yoga')
-    - not (ansible_facts['distribution_release'] == 'noble' and octavia_openstack_version == 'caracal')
+    - not (ansible_facts['distribution_release'] == 'jammy' and octavia_openstack_codename == 'yoga')
+    - not (ansible_facts['distribution_release'] == 'noble' and octavia_openstack_codename == 'caracal')
 
 - name: Add Nectar archive keys
   apt_key:
@@ -21,6 +22,7 @@
     url: http://download.rc.nectar.org.au/nectar-archive-key-2016.gpg
     state: present
 
+# Nectar pockets are named by release version (e.g. noble-2025.1), not codename
 - name: Add Nectar repositories
   apt_repository:
     repo: "{{ item }}"
