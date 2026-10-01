@@ -14,20 +14,22 @@
     - /var/log/murano
     - /var/log/murano-agent
 
-- name: Add Nectar archive keys
-  apt_key:
-    id: ABC968C25CDB0CDD6254F46A129CF4A68FA8FC77
-    url: http://download.rc.nectar.org.au/nectar-archive-key-2016.gpg
-    state: present
-  when: ansible_facts['distribution_major_version'] == '22'
-
 - name: Add Nectar apt repositories
-  apt_repository:
-    repo: "{{ item }}"
-    update_cache: yes
-  with_items:
-    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_facts['distribution_release'] }} main"
-    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_facts['distribution_release'] }}-{{ openstack_version }} main"
+  deb822_repository:
+    name: nectar
+    uris: http://download.rc.nectar.org.au/nectar-ubuntu
+    suites:
+      - "{{ ansible_facts['distribution_release'] }}"
+      - "{{ ansible_facts['distribution_release'] }}-{{ openstack_version }}"
+    components: main
+    signed_by: http://download.rc.nectar.org.au/nectar-archive-key-2016.gpg
+  when:
+    - openstack_version is defined
+    - ansible_facts['distribution_major_version'] == '22'
+
+- name: Update apt cache
+  apt:
+    update_cache: true
   when:
     - openstack_version is defined
     - ansible_facts['distribution_major_version'] == '22'
@@ -51,12 +53,16 @@
   when: execution_plan_queue_py.stat.exists and ansible_facts['distribution_major_version'] == '22'
 
 - name: Remove Nectar apt repositories
-  apt_repository:
-    repo: "{{ item }}"
+  deb822_repository:
+    name: nectar
     state: absent
-  with_items:
-    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_facts['distribution_release'] }} main"
-    - "deb http://download.rc.nectar.org.au/nectar-ubuntu {{ ansible_facts['distribution_release'] }}-{{ openstack_version }} main"
+  when:
+    - openstack_version is defined
+    - ansible_facts['distribution_major_version'] == '22'
+
+- name: Update apt cache after removing Nectar repositories
+  apt:
+    update_cache: true
   when:
     - openstack_version is defined
     - ansible_facts['distribution_major_version'] == '22'
