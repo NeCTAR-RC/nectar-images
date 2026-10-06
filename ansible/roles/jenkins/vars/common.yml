@@ -1,7 +1,7 @@
 ---
-# Jenkins now needs OpenJDK 21
+# Jenkins agents run on OpenJDK 25
 common_packages:
-  - openjdk-21-jre-headless
+  - openjdk-25-jre-headless
   - rake
   - puppet-lint
   - puppet-strings
