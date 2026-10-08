@@ -22,10 +22,26 @@
     chdir: "/tmp/guacamole-server-{{ guacamole_version }}"
     creates: "{{ guacamole_install_prefix }}/sbin/guacd"
   with_items:
-    - "./configure --prefix={{ guacamole_install_prefix }} --with-systemd-dir=/etc/systemd/system"
+    # guacamole-server builds with -Werror, and newer FreeRDP 3 headers mark
+    # APIs it still uses as deprecated, so keep those as warnings only
+    - "./configure --prefix={{ guacamole_install_prefix }} --with-systemd-dir=/etc/systemd/system CFLAGS='-g -O2 -Wno-error=deprecated-declarations'"
     - "make -j {{ ansible_facts['processor_vcpus'] }}"
     - make install
     - ldconfig
+
+- name: Exclude FreeRDP packages from unattended upgrades
+  copy:
+    content: |
+      // guacd is built from source against the FreeRDP/WinPR libraries present
+      // at image build time, and breaks when they are upgraded underneath it.
+      // FreeRDP is upgraded via new image builds instead.
+      Unattended-Upgrade::Package-Blacklist {
+          "freerdp";
+          "libfreerdp";
+          "libwinpr";
+      };
+    dest: /etc/apt/apt.conf.d/51unattended-upgrades-freerdp
+    mode: '0644'
 
 - name: Create guacd group
   group:
