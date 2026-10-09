@@ -16,6 +16,16 @@
     copy: no
     dest: /tmp
 
+# guacd 1.6.0 calls gdi_init() too early and segfaults with FreeRDP >= 3.31.0
+- name: Patch Guacamole server for FreeRDP 3.31 and later
+  patch:
+    src: server/GUACAMOLE-2328-gdi-init-post-connect.patch
+    basedir: "/tmp/guacamole-server-{{ guacamole_version }}"
+    strip: 1
+    # pre-commit strips trailing whitespace from the patch's context lines
+    ignore_whitespace: true
+  when: guacamole_version is version('1.6.0', '==')
+
 - name: Build Guacamole server
   shell: "{{ item }}"
   args:
