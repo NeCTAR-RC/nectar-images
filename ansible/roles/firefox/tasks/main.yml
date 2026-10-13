@@ -40,9 +40,14 @@
         mode: '0644'
 
     - name: Add Mozilla apt repository for non-snap Firefox
-      apt_repository:
-        repo: 'deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main'
-        filename: mozilla
+      ansible.builtin.deb822_repository:
+        name: mozilla
+        types: [deb]
+        uris: https://packages.mozilla.org/apt
+        suites: [mozilla]
+        components: [main]
+        signed_by: /etc/apt/keyrings/packages.mozilla.org.asc
+        enabled: true
 
     - name: Create apt preferences to pin the non-snap Firefox
       copy:
