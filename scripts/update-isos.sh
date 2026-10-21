@@ -78,16 +78,6 @@ debian_iso_dir() {  # major_ver
 resolve_iso() {  # os_name os_version os_arch
     local name=$1 ver=$2 arch=$3 base_url checksum_file
     case $name in
-        almalinux|rocky)  # boot.iso in CHECKSUM, ignoring the "latest" alias
-            base_url="$MIRROR/$name/$ver/isos/$arch"
-            IFS=" " read -ra details <<< "$(curl -s -L "$base_url/CHECKSUM" | parse_sha256 'SHA256.*boot.iso' | grep -v latest)"
-            resolved || return 1
-            iso_url="$base_url/${details[0]}"; iso_checksum="sha256:${details[1]}" ;;
-        centos-stream)  # filename contains "latest", so it is kept, not filtered
-            base_url="$MIRROR/centos-stream/$ver-stream/BaseOS/$arch/iso"
-            IFS=" " read -ra details <<< "$(curl -s -L "$base_url/SHA256SUM" | parse_sha256 'SHA256.*boot.iso')"
-            resolved || return 1
-            iso_url="$base_url/${details[0]}"; iso_checksum="sha256:${details[1]}" ;;
         debian)  # "hash  filename"; older releases come from the archive
             base_url=$(debian_iso_dir "$ver")
             [[ -n $base_url ]] || { msg "  no ISO directory found, skipping"; return 1; }
@@ -146,6 +136,7 @@ declare -A iso_cache
 for var_file in "$VARS_DIR"/*.pkrvars.hcl; do
     grep -q '^iso_url' "$var_file" || continue
     # "file:" checksums are resolved from upstream at build time - nothing to pin
+    # (e.g. Ubuntu cloud images, the AlmaLinux/Rocky/CentOS Stream "latest" ISOs)
     grep -q '^iso_checksum\s*=\s*"file:' "$var_file" && continue
     os_name=$(field os_name "$var_file")
     os_version=$(field os_version "$var_file")
