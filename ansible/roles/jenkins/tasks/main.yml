@@ -89,6 +89,15 @@
   with_items: "{{ gem_packages }}"
   when: gem_packages is defined
 
+- name: Install npm packages
+  community.general.npm:
+    name: "{{ item.name }}"
+    version: "{{ item.version | default(omit) }}"
+    global: yes
+    state: present
+  with_items: "{{ npm_packages }}"
+  when: npm_packages is defined
+
 - name: Perform a full upgrade
   apt:
     upgrade: dist
