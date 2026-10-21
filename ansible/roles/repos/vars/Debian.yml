@@ -1,12 +1,19 @@
 ---
 apt_mirror: http://ftp.au.debian.org/debian
-apt_repo_types: [deb, deb-src]
-apt_repo_uris:
-  - "{{ apt_mirror }}"
-  - http://security.debian.org/debian-security
-apt_repo_suites:
-  - "{{ ansible_facts['distribution_release'] }}"
-  - "{{ ansible_facts['distribution_release'] }}-updates"
-  - "{{ ansible_facts['distribution_release'] }}-backports"
-  - "{{ ansible_facts['distribution_release'] }}-security"
-apt_repo_components: [main]
+# deb822 pairs every URI with every suite, so the security archive needs its
+# own source: it only carries the -security suite.
+apt_repos:
+  - name: debian
+    types: [deb, deb-src]
+    uris: "{{ apt_mirror }}"
+    suites:
+      - "{{ ansible_facts['distribution_release'] }}"
+      - "{{ ansible_facts['distribution_release'] }}-updates"
+      - "{{ ansible_facts['distribution_release'] }}-backports"
+    components: [main]
+  - name: debian-security
+    types: [deb, deb-src]
+    uris: http://security.debian.org/debian-security
+    suites:
+      - "{{ ansible_facts['distribution_release'] }}-security"
+    components: [main]

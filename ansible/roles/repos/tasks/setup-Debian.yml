@@ -32,12 +32,15 @@
 
 - name: Set up apt repos
   deb822_repository:
-    name: "{{ ansible_facts['distribution']|lower }}"
-    types: "{{ apt_repo_types }}"
-    uris: "{{ apt_repo_uris }}"
-    suites: "{{ apt_repo_suites }}"
-    components: "{{ apt_repo_components }}"
+    name: "{{ item.name }}"
+    types: "{{ item.types }}"
+    uris: "{{ item.uris }}"
+    suites: "{{ item.suites }}"
+    components: "{{ item.components }}"
     enabled: true
+  loop: "{{ apt_repos }}"
+  loop_control:
+    label: "{{ item.name }}"
 
 # Update cache in a separate step so we can set a long lock timeout
 # in case the VM is running unattended updates

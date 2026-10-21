@@ -1,10 +1,12 @@
 ---
 apt_mirror: http://au.archive.ubuntu.com/ubuntu/
-apt_repo_types: [deb, deb-src]
-apt_repo_uris: "{{ apt_mirror }}"
-apt_repo_suites:
-  - "{{ ansible_facts['distribution_release'] }}"
-  - "{{ ansible_facts['distribution_release'] }}-updates"
-  - "{{ ansible_facts['distribution_release'] }}-backports"
-  - "{{ ansible_facts['distribution_release'] }}-security"
-apt_repo_components: [main, restricted, universe, multiverse]
+apt_repos:
+  - name: ubuntu
+    types: [deb, deb-src]
+    uris: "{{ apt_mirror }}"
+    suites:
+      - "{{ ansible_facts['distribution_release'] }}"
+      - "{{ ansible_facts['distribution_release'] }}-updates"
+      - "{{ ansible_facts['distribution_release'] }}-backports"
+      - "{{ ansible_facts['distribution_release'] }}-security"
+    components: [main, restricted, universe, multiverse]
