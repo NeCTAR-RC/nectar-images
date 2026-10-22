@@ -109,3 +109,6 @@
 
 - name: Install ansible
   include_tasks: ansible.yml
+
+- name: Install uv
+  include_tasks: uv.yml

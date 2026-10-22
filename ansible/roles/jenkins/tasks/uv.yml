@@ -1,0 +1,18 @@
+---
+# Installed from PyPI into its own venv (like Hivemind) so it works on every
+# release, including those where the system pip is externally managed.
+- name: Install uv
+  pip:
+    virtualenv: /opt/uv
+    name: uv
+
+- name: Create symbolic links for uv venv
+  file:
+    src: "/opt/uv/bin/{{ item }}"
+    dest: "/usr/local/bin/{{ item }}"
+    owner: root
+    group: root
+    state: link
+  with_items:
+    - uv
+    - uvx
