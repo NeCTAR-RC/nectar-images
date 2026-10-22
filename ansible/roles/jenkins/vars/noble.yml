@@ -33,6 +33,10 @@ packages:
   - qemu-system-x86
   - pre-commit
   - nodejs
+  # For the {name}-puppet-strings jobs, which run on noble. Not installed on
+  # jammy: Ubuntu's puppet-strings there depends on the full puppet 5.5
+  # package, whose puppet.service collides with openvox-agent's.
+  - puppet-strings
 
 selenium: False
 
