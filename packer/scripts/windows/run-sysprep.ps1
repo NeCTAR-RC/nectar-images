@@ -37,8 +37,11 @@ Write-Host 'Running Sysprep...'
 $unattendedXmlPath = "c:\Program Files\Cloudbase Solutions\Cloudbase-Init\conf\Unattend.xml"
 c:\windows\system32\sysprep\Sysprep /generalize /oobe /quit /unattend:"$unattendedXmlPath"
 
-# Give sysprep time to finish
-Start-Sleep -Seconds 120
+# Wait for sysprep to reseal the image; a fixed sleep is no longer long enough
+$stateKey = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\State'
+while ((Get-ItemProperty $stateKey).ImageState -ne 'IMAGE_STATE_GENERALIZE_RESEAL_TO_OOBE') {
+    Start-Sleep -Seconds 10
+}
 
 # Spawn final cleanup script
 Start-Process -FilePath "powershell" -ArgumentList "c:\windows\finish.ps1"
