@@ -41,7 +41,7 @@ gem_packages:
   - { name: puppetlabs_spec_helper }
   - { name: openvox, force: true }
 
-nodejs_repo: node_24.x
+nodejs_repo: node_26.x
 
 npm_packages:
   - { name: pnpm }
