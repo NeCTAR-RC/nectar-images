@@ -1,0 +1,7 @@
+---
+# The Packer Ansible plugin's generated WinRM inventory sets
+# ansible_shell_type=powershell, which ansible-core 2.21 and later rejects:
+# the winrm connection plugin requires cmd. Playbook host_vars outrank the
+# inventory host line, and only apply to this host, so tasks delegated to
+# localhost keep their own shell.
+ansible_shell_type: cmd

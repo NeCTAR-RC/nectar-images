@@ -26,12 +26,13 @@ locals {
 
   ansible_user = var.is_windows ? var.winrm_username : var.ssh_username
 
-  # Base extra args. The Packer Ansible plugin's WinRM inventory sets
-  # ansible_shell_type=powershell, which breaks the winrm connection in
-  # ansible-core 2.21 and later, where it must be cmd.
+  # Windows hosts get their own inventory name so ansible/host_vars/windows.yml
+  # can override the WinRM settings in the plugin's generated inventory.
+  ansible_host_alias = var.is_windows ? "windows" : "default"
+
+  # Base extra args
   _ansible_extra_arguments = var.is_windows ? ([
     "-e", "ansible_winrm_scheme=http",
-    "-e", "ansible_shell_type=cmd",
     "-e", "image_build_dir=${local.output_directory}",
   ]) : ([
     "-e", "image_build_dir=${local.output_directory}",
@@ -62,6 +63,7 @@ build {
   provisioner "ansible" {
     ansible_env_vars  = ["ANSIBLE_CONFIG=${path.cwd}/ansible/ansible.cfg"]
     extra_arguments   = local.ansible_extra_arguments
+    host_alias        = local.ansible_host_alias
     user              = local.ansible_user
     playbook_file     = local.playbook_file
     use_proxy         = "false"
@@ -136,6 +138,7 @@ build {
   provisioner "ansible" {
     ansible_env_vars  = ["ANSIBLE_CONFIG=${path.cwd}/ansible/ansible.cfg"]
     extra_arguments   = local.ansible_extra_arguments
+    host_alias        = local.ansible_host_alias
     user              = local.ansible_user
     playbook_file     = local.playbook_file
     use_proxy         = "false"
