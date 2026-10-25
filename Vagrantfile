@@ -253,46 +253,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Fedora 41
-  config.vm.define "fedora-41" do |c|
-    c.vm.box = "fedora/41-cloud-base"
-    c.vm.provision "shell" do |shell|
-      shell.inline = "sudo dnf install -y python3-libdnf5"  # https://github.com/ansible/ansible/issues/84206
-    end
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-standard.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
-  # Fedora 42
-  config.vm.define "fedora-42" do |c|
-    c.vm.box = "fedora/42-cloud-base"
-    c.vm.provision "shell" do |shell|
-      shell.inline = "sudo dnf install -y python3-libdnf5"  # https://github.com/ansible/ansible/issues/84206
-    end
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-standard.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
   # JupyterLab
   config.vm.define "jupyterlab" do |c|
     c.vm.box = "cloud-image/ubuntu-22.04"
