@@ -151,23 +151,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Rocky Linux 8
-  config.vm.define "rocky-8" do |c|
-    c.vm.box = "rockylinux/8"
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-standard.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
   # Rocky Linux 9
   config.vm.define "rocky-9" do |c|
     c.vm.box = "rockylinux/9"
@@ -188,23 +171,6 @@ Vagrant.configure("2") do |config|
   # Rocky Linux 10
   config.vm.define "rocky-10" do |c|
     c.vm.box = "rockylinux/10"
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/playbook-standard.yml"
-      ansible.become = true
-    end
-    c.vm.provision "shell" do |shell|
-      shell.inline = "/usr/nectar/run_tests.sh"
-      shell.privileged = false
-      shell.env = { "NECTAR_TEST_BUILD": 1 }
-    end
-  end
-
-  # Alma Linux 8
-  config.vm.define "almalinux-8" do |c|
-    c.vm.box = "almalinux/8"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = GLOBAL_ANSIBLE_VARS
