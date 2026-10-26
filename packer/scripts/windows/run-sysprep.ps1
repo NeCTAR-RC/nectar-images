@@ -35,13 +35,58 @@ $finish | Out-File c:\windows\finish.ps1
 
 Write-Host 'Running Sysprep...'
 $unattendedXmlPath = "c:\Program Files\Cloudbase Solutions\Cloudbase-Init\conf\Unattend.xml"
-c:\windows\system32\sysprep\Sysprep /generalize /oobe /quit /unattend:"$unattendedXmlPath"
+$sysprep = Start-Process -FilePath 'c:\windows\system32\sysprep\Sysprep.exe' `
+    -ArgumentList '/generalize', '/oobe', '/quit', "/unattend:`"$unattendedXmlPath`"" -PassThru
 
-# Wait for sysprep to reseal the image; a fixed sleep is no longer long enough
+# Wait for sysprep to reseal the image. Sysprep returns before the generalize
+# pass completes, so poll the Setup State key until Windows reports the reseal.
+# The wait is bounded: if Sysprep fails it either exits early without
+# resealing or sits on an error dialog forever, and the old unbounded loop
+# turned that into a build that never finished. On timeout, dump the sysprep
+# logs to the packer output and fail the build.
 $stateKey = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\State'
-while ((Get-ItemProperty $stateKey).ImageState -ne 'IMAGE_STATE_GENERALIZE_RESEAL_TO_OOBE') {
+$targetState = 'IMAGE_STATE_GENERALIZE_RESEAL_TO_OOBE'
+$timeoutMinutes = 30
+$deadline = (Get-Date).AddMinutes($timeoutMinutes)
+$resealed = $false
+$polls = 0
+while ((Get-Date) -lt $deadline) {
+    $imageState = (Get-ItemProperty $stateKey).ImageState
+    if ($imageState -eq $targetState) {
+        $resealed = $true
+        break
+    }
+    if ($sysprep.HasExited) {
+        # Sysprep exited without reaching the reseal state. Give the registry
+        # a moment to catch up and check once more before calling it a failure.
+        Start-Sleep -Seconds 10
+        $imageState = (Get-ItemProperty $stateKey).ImageState
+        $resealed = ($imageState -eq $targetState)
+        break
+    }
+    if (($polls % 6) -eq 0) {
+        Write-Host "Waiting for Sysprep to reseal the image (ImageState=$imageState)..."
+    }
+    $polls++
     Start-Sleep -Seconds 10
 }
+
+if (-not $resealed) {
+    $imageState = (Get-ItemProperty $stateKey).ImageState
+    $exitCode = if ($sysprep.HasExited) { $sysprep.ExitCode } else { 'still running' }
+    Write-Host "ERROR: Sysprep did not reseal the image after up to $timeoutMinutes minutes (ImageState=$imageState, Sysprep exit code: $exitCode)"
+    foreach ($log in 'setuperr.log', 'setupact.log') {
+        $path = "C:\Windows\System32\Sysprep\Panther\$log"
+        Write-Host "===== $path (last 100 lines) ====="
+        if (Test-Path $path) {
+            Get-Content $path -Tail 100
+        } else {
+            Write-Host '(file not found)'
+        }
+    }
+    exit 1
+}
+Write-Host "Sysprep finished (ImageState=$imageState)"
 
 # Spawn final cleanup script
 Start-Process -FilePath "powershell" -ArgumentList "c:\windows\finish.ps1"
