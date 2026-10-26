@@ -35,8 +35,15 @@ $finish | Out-File c:\windows\finish.ps1
 
 Write-Host 'Running Sysprep...'
 $unattendedXmlPath = "c:\Program Files\Cloudbase Solutions\Cloudbase-Init\conf\Unattend.xml"
-$sysprep = Start-Process -FilePath 'c:\windows\system32\sysprep\Sysprep.exe' `
-    -ArgumentList '/generalize', '/oobe', '/quit', "/unattend:`"$unattendedXmlPath`"" -PassThru
+# Invoke Sysprep natively rather than via Start-Process -ArgumentList. With
+# Start-Process the quotes land inside the /unattend: token and Sysprep's own
+# parser splits the path at the spaces ("Malformed command line detected; no
+# dash or slash present in option"), then sits on its error dialog. PowerShell
+# quotes the whole argument when invoking natively, which Sysprep accepts.
+# Sysprep is a GUI program, so this call returns straight away.
+c:\windows\system32\sysprep\Sysprep /generalize /oobe /quit /unattend:"$unattendedXmlPath"
+Start-Sleep -Seconds 5
+$sysprep = Get-Process -Name sysprep -ErrorAction SilentlyContinue | Select-Object -First 1
 
 # Wait for sysprep to reseal the image. Sysprep returns before the generalize
 # pass completes, so poll the Setup State key until Windows reports the reseal.
@@ -56,7 +63,7 @@ while ((Get-Date) -lt $deadline) {
         $resealed = $true
         break
     }
-    if ($sysprep.HasExited) {
+    if ($sysprep -and $sysprep.HasExited) {
         # Sysprep exited without reaching the reseal state. Give the registry
         # a moment to catch up and check once more before calling it a failure.
         Start-Sleep -Seconds 10
@@ -73,8 +80,13 @@ while ((Get-Date) -lt $deadline) {
 
 if (-not $resealed) {
     $imageState = (Get-ItemProperty $stateKey).ImageState
-    $exitCode = if ($sysprep.HasExited) { $sysprep.ExitCode } else { 'still running' }
+    $exitCode = if (-not $sysprep) { 'process not found' } elseif ($sysprep.HasExited) { $sysprep.ExitCode } else { 'still running' }
     Write-Host "ERROR: Sysprep did not reseal the image after up to $timeoutMinutes minutes (ImageState=$imageState, Sysprep exit code: $exitCode)"
+    # A failed Sysprep stays up on its error dialog and blocks any further
+    # Sysprep run, including packer's provisioner retry, so stop it.
+    if ($sysprep -and -not $sysprep.HasExited) {
+        Stop-Process -Id $sysprep.Id -Force -ErrorAction SilentlyContinue
+    }
     foreach ($log in 'setuperr.log', 'setupact.log') {
         $path = "C:\Windows\System32\Sysprep\Panther\$log"
         Write-Host "===== $path (last 100 lines) ====="
