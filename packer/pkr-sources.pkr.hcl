@@ -47,8 +47,10 @@ locals {
 
   security_groups = var.security_group != null ? [var.security_group] : null
 
+  # On Windows, start the packer-finish task registered by run-sysprep.ps1,
+  # which removes the build user and WinRM, then shuts down.
   shutdown_command = var.shutdown_command == null ? (
-    var.is_windows ? "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"" : "shutdown -P now"
+    var.is_windows ? "schtasks /run /tn packer-finish" : "shutdown -P now"
   ) : var.shutdown_command
 
 

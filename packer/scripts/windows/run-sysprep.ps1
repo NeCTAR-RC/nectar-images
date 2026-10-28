@@ -4,6 +4,8 @@
 $finish = @'
 # Final cleanup and shutdown after sysprep.
 
+Unregister-ScheduledTask -TaskName 'packer-finish' -Confirm:$false
+
 Start-Sleep -Seconds 6
 
 # Remove vagrant user and clean up home directory
@@ -72,5 +74,7 @@ if ($imageState -ne $targetState) {
 }
 Write-Host "Sysprep finished (ImageState=$imageState)"
 
-# Spawn final cleanup script
-Start-Process -FilePath "powershell" -ArgumentList "c:\windows\finish.ps1"
+# Register finish.ps1 as a SYSTEM task; packer's shutdown_command starts it, so
+# packer can still reach WinRM when it sends the command.
+$action = New-ScheduledTaskAction -Execute 'powershell' -Argument '-NoProfile -ExecutionPolicy Bypass -File C:\Windows\finish.ps1'
+Register-ScheduledTask -TaskName 'packer-finish' -Action $action -User 'SYSTEM' -RunLevel Highest -Force | Out-Null
