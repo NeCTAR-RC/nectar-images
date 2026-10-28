@@ -33,6 +33,13 @@ shutdown /s /t 5 /f /d p:4:1 /c "packer shutdown"
 '@
 $finish | Out-File c:\windows\finish.ps1
 
+# Edge gets registered as an Appx package for a single user during the build
+# but is not provisioned for all users, which makes sysprep /generalize fail
+# validation ("installed for a user, but not provisioned for all users",
+# 0x80073cf2). Remove the per-user registration; Edge itself stays installed.
+Write-Host 'Removing per-user Microsoft Edge Appx registration (blocks sysprep generalize)...'
+Get-AppxPackage -AllUsers Microsoft.MicrosoftEdge* | Remove-AppxPackage -AllUsers
+
 Write-Host 'Running Sysprep...'
 $unattendedXmlPath = "c:\Program Files\Cloudbase Solutions\Cloudbase-Init\conf\Unattend.xml"
 # Invoke Sysprep natively rather than via Start-Process -ArgumentList. With
