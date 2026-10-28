@@ -1,10 +1,3 @@
-# Disable winrm at next boot
-#Set-Service WinRM -StartupType Disabled -PassThru
-#Write-host "Disabling WinRM..."
-#Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\WinRM" -Name "Start" -Value 4
-#$result = Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\WinRM" -Name "Start"
-#Write-host $result
-
 # Write a script to run async after sysprep, as packer is often unable
 # to shutdown the computer, and the build user cannot be deleted until
 # after the last packer command has been sent. Also, WinRM must now be removed.
@@ -49,51 +42,23 @@ $unattendedXmlPath = "c:\Program Files\Cloudbase Solutions\Cloudbase-Init\conf\U
 # quotes the whole argument when invoking natively, which Sysprep accepts.
 # Sysprep is a GUI program, so this call returns straight away.
 c:\windows\system32\sysprep\Sysprep /generalize /oobe /quit /unattend:"$unattendedXmlPath"
-Start-Sleep -Seconds 5
-$sysprep = Get-Process -Name sysprep -ErrorAction SilentlyContinue | Select-Object -First 1
 
-# Wait for sysprep to reseal the image. Sysprep returns before the generalize
-# pass completes, so poll the Setup State key until Windows reports the reseal.
-# The wait is bounded: if Sysprep fails it either exits early without
-# resealing or sits on an error dialog forever, and the old unbounded loop
-# turned that into a build that never finished. On timeout, dump the sysprep
-# logs to the packer output and fail the build.
+# Poll the Setup State key until Windows reports the reseal. A successful run
+# takes a minute or two. A failed Sysprep never gets there: it sits on its
+# error dialog instead, so cap the wait, then dump the Sysprep logs to the
+# packer output and fail the build.
 $stateKey = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\State'
 $targetState = 'IMAGE_STATE_GENERALIZE_RESEAL_TO_OOBE'
-$timeoutMinutes = 30
+$timeoutMinutes = 10
 $deadline = (Get-Date).AddMinutes($timeoutMinutes)
-$resealed = $false
-$polls = 0
-while ((Get-Date) -lt $deadline) {
-    $imageState = (Get-ItemProperty $stateKey).ImageState
-    if ($imageState -eq $targetState) {
-        $resealed = $true
-        break
-    }
-    if ($sysprep -and $sysprep.HasExited) {
-        # Sysprep exited without reaching the reseal state. Give the registry
-        # a moment to catch up and check once more before calling it a failure.
-        Start-Sleep -Seconds 10
-        $imageState = (Get-ItemProperty $stateKey).ImageState
-        $resealed = ($imageState -eq $targetState)
-        break
-    }
-    if (($polls % 6) -eq 0) {
-        Write-Host "Waiting for Sysprep to reseal the image (ImageState=$imageState)..."
-    }
-    $polls++
+Write-Host "Waiting up to $timeoutMinutes minutes for Sysprep to reseal the image..."
+do {
     Start-Sleep -Seconds 10
-}
-
-if (-not $resealed) {
     $imageState = (Get-ItemProperty $stateKey).ImageState
-    $exitCode = if (-not $sysprep) { 'process not found' } elseif ($sysprep.HasExited) { $sysprep.ExitCode } else { 'still running' }
-    Write-Host "ERROR: Sysprep did not reseal the image after up to $timeoutMinutes minutes (ImageState=$imageState, Sysprep exit code: $exitCode)"
-    # A failed Sysprep stays up on its error dialog and blocks any further
-    # Sysprep run, including packer's provisioner retry, so stop it.
-    if ($sysprep -and -not $sysprep.HasExited) {
-        Stop-Process -Id $sysprep.Id -Force -ErrorAction SilentlyContinue
-    }
+} until ($imageState -eq $targetState -or (Get-Date) -ge $deadline)
+
+if ($imageState -ne $targetState) {
+    Write-Host "ERROR: Sysprep did not reseal the image within $timeoutMinutes minutes (ImageState=$imageState)"
     foreach ($log in 'setuperr.log', 'setupact.log') {
         $path = "C:\Windows\System32\Sysprep\Panther\$log"
         Write-Host "===== $path (last 100 lines) ====="

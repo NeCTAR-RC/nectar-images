@@ -104,7 +104,6 @@ build {
       "${path.root}/scripts/windows/run-sysprep.ps1"
     ]
     except            = var.is_windows ? null : ["qemu.vm"]  # Windows
-    max_retries       = 1
   }
 
   provisioner "shell" {
