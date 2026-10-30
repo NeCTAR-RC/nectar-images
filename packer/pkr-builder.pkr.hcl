@@ -101,7 +101,7 @@ build {
     scripts = [
       "${path.root}/scripts/windows/cleanup.ps1",
       "${path.root}/scripts/windows/optimize.ps1",
-      "${path.root}/scripts/windows/run-sysprep.ps1"
+      "${path.root}/scripts/windows/prepare-sysprep.ps1"
     ]
     except            = var.is_windows ? null : ["qemu.vm"]  # Windows
   }

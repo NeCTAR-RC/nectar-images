@@ -47,10 +47,12 @@ locals {
 
   security_groups = var.security_group != null ? [var.security_group] : null
 
-  # On Windows, start the packer-finish task registered by run-sysprep.ps1,
-  # which removes the build user and WinRM, then shuts down.
+  # On Windows, run Sysprep (C:\Windows\packer-sysprep.ps1, written by
+  # prepare-sysprep.ps1), which generalizes the image and powers it off.
+  # WinRM cannot open a new shell after generalize, so this must be the last
+  # thing packer sends.
   shutdown_command = var.shutdown_command == null ? (
-    var.is_windows ? "schtasks /run /tn packer-finish" : "shutdown -P now"
+    var.is_windows ? "powershell -NoProfile -ExecutionPolicy Bypass -File C:\\Windows\\packer-sysprep.ps1" : "shutdown -P now"
   ) : var.shutdown_command
 
 
