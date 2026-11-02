@@ -405,6 +405,7 @@ Vagrant.configure("2") do |config|
       ansible.config_file = "ansible/ansible.cfg"
       ansible.playbook = "ansible/playbook-windows.yml"
     end
+    c.vm.provision "login-shell", type: "shell", run: "never"
   end
 
   # Bumblebee Guacamole Server
@@ -540,6 +541,12 @@ Vagrant.configure("2") do |config|
 
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  # Some boxes (e.g. cloud-image/*) create vagrant with /bin/sh. Give it
+  # bash to match the users our images create, so profile.d scripts behave
+  # as they do on real instances. Runs before each machine's provisioners.
+  config.vm.provision "login-shell", type: "shell",
+    inline: "usermod -s /bin/bash vagrant"
 
   config.vm.disk :disk, size: "20GB", primary: true
 
