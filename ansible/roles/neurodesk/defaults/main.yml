@@ -1,43 +1,43 @@
 ---
 # Python packages translated from the upstream Dockerfile pip section, at the
 # revision pinned in UPSTREAM_REF. Deliberately skipped from upstream:
-# notebook_intelligence, jupyterlab-slurm, jupyter-sshd-proxy and litellm
-# (AI-agent, in-container Slurm and sshd-over-Jupyter stacks not used on the
-# Nectar VDS).
+# the AI-agent, collaboration, ASTRA, in-container Slurm and sshd-over-Jupyter
+# stacks, which are not used on the Nectar VDS.
 neurodesk_python_packages:
   - datalad
   - nipype
   - niwrap
   - nbdev
   - nf-core
-  - snakemake
-  - pydra==1.0a9
+  - pydra==1.0a11
   - nipoppy
   - matplotlib
   - datalad-container
   - datalad-osf
   - osfclient
   - watermark
-  - ipyniivue
-  - jupyter-server-proxy
+  - ipyniivue==2.4.4
+  - jupyter-server-proxy==4.5.0
   - jupyterlmod
   - jupyterlab-git
   - jupyterlab_rise
   - jupyterlab-niivue==0.2.7
-  - jupyterlab_myst
+  - jupyterlab_myst==2.7.0
   - papermill
   - ipycanvas
   - jupyter-resource-usage
   - jupyter_scheduler
   - httpx
-  - ipywidgets==8.1.8
+  - anywidget==0.11.0
+  - ipykernel==6.31.0
+  - ipywidgets==8.1.9
   - ipyvolume
-  - jupyterlab_widgets
+  - jupyterlab_widgets==3.0.17
   - nbgitpuller
   - xnat
   - pytest
   - bash_kernel
-  - packaging>=26.0
+  - uv==0.12.17
   - requests>=2.34.2
   - chardet<8
   # Not needed in the upstream image (provided by its jupyter/base-notebook
@@ -46,6 +46,10 @@ neurodesk_python_packages:
   - jupyter-server
   - nbclassic
   - notebook
+
+# Installed as an isolated uv tool: snakemake needs packaging<26, which
+# conflicts with conda
+neurodesk_snakemake_version: 9.27.0
 
 neurodesk_conda_packages:
   - nb_conda_kernels

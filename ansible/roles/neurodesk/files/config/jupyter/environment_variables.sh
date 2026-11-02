@@ -21,6 +21,8 @@ if [ -z "$NEURODESKTOP_ENV_SOURCED" ]; then
     fi
 fi
 
+export LMOD_AVAIL_EXTENSIONS="${LMOD_AVAIL_EXTENSIONS:-no}"
+
 # MODULEPATH and CVMFS detection run on every source so that new shells and
 # kernels pick up CVMFS if it was not mounted when the session started.
 export OFFLINE_MODULES=/neurodesktop-storage/containers/modules/
@@ -54,7 +56,7 @@ if [ -z "$NEURODESKTOP_MSG_SHOWN" ] && [ -f '/usr/share/module.sh' ]; then
                         echo "Found local container installations in $OFFLINE_MODULES. Using installed containers with a higher priority over CVMFS."
                 fi
 
-                echo 'Neuroimaging tools are accessible via the Neurodesktop Applications menu and running them through the menu will provide help and setup instructions. If you are familiar with the tools and you want to combine multiple tools in one script, you can run "ml av" to see which tools are available and then use "ml <tool>/<version>" to load them. '
+                echo 'Neuroimaging tools are accessible via the Neurodesktop Applications menu and running them through the menu will provide help and setup instructions. If you are familiar with the tools and you want to combine multiple tools in one script, you can run "ml av" to see which tools are available and then use "ml <tool>/<version>" to load them. You can use "ml help <tool>" to get a detailed description of the module. If you don'"'"'t know where a certain binary is available, you can use "ml keyword <binary>" to find which module contains it. '
 
                 if [[ "$CVMFS_DISABLE" == "true" ]]; then
                         echo "CVMFS not available. Using local containers stored in ${OFFLINE_MODULES}"
@@ -66,12 +68,33 @@ if [ -z "$NEURODESKTOP_MSG_SHOWN" ] && [ -f '/usr/share/module.sh' ]; then
 fi
 
 export APPTAINER_BINDPATH=/data,/mnt,/neurodesktop-storage,/tmp,/cvmfs
+
+# Avoid Apptainer's passwd lookup for the home dir (upstream issue #804)
+if [ -n "${HOME:-}" ] && [ -d "${HOME}" ] && [ -z "${APPTAINER_HOME:-}" ]; then
+        export APPTAINER_HOME="${HOME}"
+fi
+
 export APPTAINERENV_SUBJECTS_DIR=${HOME}/freesurfer-subjects-dir
 export MPLCONFIGDIR=${HOME}/.config/matplotlib-mpldir
 
 # Nextflow ecosystem (upstream sets these as Dockerfile ENV)
 export NF_NEURO_MODULES_DIR=/opt/nf-neuro/modules
 export NF_TEST_HOME=/opt/nf-test
+
+path_deduplicate() {
+        local entry deduplicated_path=""
+        local -a path_entries
+        IFS=: read -r -a path_entries <<< "${PATH}"
+        for entry in "${path_entries[@]}"; do
+                [ -n "${entry}" ] || continue
+                if [[ ":${deduplicated_path}:" != *":${entry}:"* ]]; then
+                        deduplicated_path="${deduplicated_path}${deduplicated_path:+:}${entry}"
+                fi
+        done
+        PATH="${deduplicated_path}"
+}
+
+path_deduplicate
 
 case ":${PATH}:" in
         *":${HOME}/.local/bin:"*) ;;
@@ -86,3 +109,13 @@ export PATH
 # Plain Linux VM: no writable-overlay workaround needed (upstream only sets
 # one for macOS Docker and rootless Apptainer runtimes)
 export neurodesk_singularity_opts=""
+
+# Enable Apptainer NVIDIA binds when the proprietary driver is loaded
+configure_apptainer_nv() {
+        local driver_version_file="${1:-/proc/driver/nvidia/version}"
+
+        if [ -f "${driver_version_file}" ] && [ -z "${APPTAINER_NV+x}" ]; then
+                export APPTAINER_NV=1
+        fi
+}
+configure_apptainer_nv

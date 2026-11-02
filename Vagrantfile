@@ -481,14 +481,14 @@ Vagrant.configure("2") do |config|
   end
 
   # Bumblebee Neurodesktop
-  config.vm.define "bumblebee-neurodesk" do |c|
+  config.vm.define "bumblebee-neurodesktop" do |c|
     c.vm.box = "cloud-image/ubuntu-24.04"
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = GLOBAL_ANSIBLE_VARS.merge(
         nectar_image_name: "Neurodesktop"
       )
-      ansible.playbook = "ansible/playbook-bumblebee-neurodesk.yml"
+      ansible.playbook = "ansible/playbook-bumblebee-neurodesktop.yml"
       ansible.become = true
       ansible.verbose = true
     end

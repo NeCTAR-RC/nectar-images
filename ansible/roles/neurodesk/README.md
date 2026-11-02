@@ -20,7 +20,11 @@ home-seeding model) are deliberately not replicated here.
   - `neurodesktop.sh`: our profile.d entry point (no upstream equivalent)
   - `lxde/lxterminal.conf`, `lxde/panel`, `lxde/background.png`: local
     desktop tweaks
-  - `jupyter/*.sh`: locally adapted startup scripts
+  - `jupyter/environment_variables.sh`: locally adapted environment setup
+- Upstream's container startup hooks (`start_notebook.sh`,
+  `before_notebook.sh`, `jupyterlab_startup.sh`) are not used: there is no
+  docker-stacks launcher on the VM, and their work is done at image build
+  time or by `/etc/skel` and `profile.d`.
 - `files/cvmfs/`, `files/setup-cvmfs.*`, `files/neurocommand-update.*`:
   our own VM/systemd arrangement of upstream's CVMFS and neurocommand
   setup.
