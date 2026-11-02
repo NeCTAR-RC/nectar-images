@@ -261,8 +261,10 @@ fi
 
 instance_name="test_${NAME}"
 action "Creating instance '$instance_name'..."
-debug "openstack server create --image $IMAGE_ID --flavor $OS_FLAVOR $BOOT_FROM_VOLUME --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME --wait '$NAME'"
-INSTANCE_ID=$(openstack server create -f value -c id --image $IMAGE_ID --flavor $OS_FLAVOR $BOOT_FROM_VOLUME --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME --wait "$NAME" | xargs echo)  # xargs because of leading newline
+# No --wait: on ERROR it exits without the ID, so we couldn't report the
+# fault or clean up. The ACTIVE poll below does the waiting instead.
+debug "openstack server create --image $IMAGE_ID --flavor $OS_FLAVOR $BOOT_FROM_VOLUME --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME '$NAME'"
+INSTANCE_ID=$(openstack server create -f value -c id --image $IMAGE_ID --flavor $OS_FLAVOR $BOOT_FROM_VOLUME --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME "$NAME" | xargs echo)  # xargs because of leading newline
 
 if [[ -z $INSTANCE_ID ]]; then
     fatal "Instance ID not found!"
@@ -283,7 +285,7 @@ info "Waiting for instance to become ACTIVE..."
 while [[ $attempt -le $attempts ]]; do
     STATUS=$(openstack server show -f value -c status $INSTANCE_ID)
     if [[ "$STATUS" = "ERROR" ]]; then
-        fatal "Instance entered ERROR state!"
+        fatal "Instance entered ERROR state: $(openstack server show -f value -c fault $INSTANCE_ID)"
     fi
     if [[ "$STATUS" = "ACTIVE" ]]; then
         info "Instance became ACTIVE after $((sleeptime*attempt))s"
