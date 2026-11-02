@@ -408,20 +408,6 @@ Vagrant.configure("2") do |config|
     c.vm.provision "login-shell", type: "shell", run: "never"
   end
 
-  # Bumblebee Guacamole Server
-  config.vm.define "bumblebee-guacamole" do |c|
-    c.vm.box = "cloud-image/ubuntu-22.04"
-    c.vm.provider "virtualbox" do |v, override|
-      override.vm.box = "ubuntu/jammy64"
-    end
-    c.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
-      ansible.playbook = "ansible/playbook-bumblebee-guacamole.yml"
-      ansible.become = true
-    end
-  end
-
   # Bumblebee Scientific Toolbox
   config.vm.define "bumblebee-scientific-toolbox" do |c|
     c.vm.box = "cloud-image/ubuntu-22.04"
