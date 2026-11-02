@@ -1,10 +1,19 @@
 ---
+- name: Download CVMFS release .deb package
+  ansible.builtin.get_url:
+    url: "https://cvmrepo.s3.cern.ch/cvmrepo/apt/pool/{{ ansible_facts['distribution_release'] }}-prod/main/common/cvmfs-release_{{ cvmfs_release_version }}_all.deb"
+    dest: /tmp/cvmfs-release_all.deb
+    checksum: "sha256:{{ cvmfs_release_sha256 }}"
+    mode: "0644"
+
 - name: Install CVMFS release .deb package
   ansible.builtin.apt:
-    deb: https://cvmrepo.s3.cern.ch/cvmrepo/apt/cvmfs-release-latest_all.deb
+    deb: /tmp/cvmfs-release_all.deb
 
-- name: Install CVMFS package
+- name: Install CVMFS packages
   ansible.builtin.apt:
-    name: cvmfs
-    state: latest
+    name:
+      - "cvmfs={{ cvmfs_version }}"
+      - "cvmfs-fuse3={{ cvmfs_version }}"
+      - "cvmfs-libs={{ cvmfs_version }}"
     update_cache: yes

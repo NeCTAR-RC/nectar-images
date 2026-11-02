@@ -8,5 +8,5 @@
 # or commit SHA you synced to, then re-vendor files/upstream/ with:
 #   scripts/neurodesk-vendor-upstream.sh
 #
-# Current pin: upstream release 2026-07-11.
-e9c548e9e847136997f8b3b52f1d6744665e79b6
+# Current pin: upstream release 2026-09-23.
+c2a08ac9d7a23dce50ff4402d3983bd03a3541dc

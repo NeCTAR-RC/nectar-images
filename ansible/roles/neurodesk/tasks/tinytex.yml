@@ -5,11 +5,14 @@
   ansible.builtin.shell:
     cmd: |
       set -euo pipefail
-      curl -fsSL https://yihui.org/tinytex/install-bin-unix.sh | sh
+      curl -fsSL --retry 5 --retry-all-errors --retry-delay 5 --connect-timeout 20 --max-time 300 \
+          https://raw.githubusercontent.com/rstudio/tinytex/master/tools/install-bin-unix.sh \
+          -o /tmp/install-bin-unix.sh && bash /tmp/install-bin-unix.sh
       mv "$HOME/.TinyTeX" /opt/TinyTeX
       tlmgr_path="$(echo /opt/TinyTeX/bin/*/tlmgr)"
       "$tlmgr_path" option sys_bin /usr/local/bin
       "$tlmgr_path" path add
+      "$tlmgr_path" update --self
       "$tlmgr_path" install \
           tcolorbox parskip caption float geometry amsmath amsfonts latex \
           upquote eurosym fontspec unicode-math fancyvrb grffile adjustbox \

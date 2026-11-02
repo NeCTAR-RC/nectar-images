@@ -22,5 +22,8 @@
       # Rootless/unprivileged container support (upstream ships these)
       - fuse-overlayfs
       - squashfuse
+      # proot runtime libs for unprivileged apptainer build
+      - libtalloc2
+      - libprotobuf-c1
     state: present
     update_cache: true

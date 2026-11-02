@@ -1,0 +1,6 @@
+---
+# Pinned to match upstream Neurodesktop; update the release version and
+# sha256 together
+cvmfs_version: 2.14.1+ubuntu24.04
+cvmfs_release_version: "4.9"
+cvmfs_release_sha256: 88f4bb658c2c85e77aec39181f61dea8ab641b3481a0db2b00f453beabb05395
