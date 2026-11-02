@@ -8,6 +8,5 @@
     loop_var: vars_item
 
 - include_tasks: etc_hosts.yml
-- include_tasks: remove_floppy.yml
 - include_tasks: disable_apport.yml
 - include_tasks: packages.yml

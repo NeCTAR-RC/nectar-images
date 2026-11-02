@@ -5,4 +5,4 @@
 
 - name: Print all available env vars
   ansible.builtin.debug:
-    var: ansible_env
+    var: ansible_facts['env']
