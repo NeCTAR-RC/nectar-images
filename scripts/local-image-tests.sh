@@ -65,6 +65,8 @@ help_text() {
 : "${OS_SECGROUP:=image-build}"
 : "${OS_FLAVOR:=m3.small}"
 : "${OS_KEYNAME:=jenkins-image-testing}"
+: "${ACTIVE_TIMEOUT:=300}"
+: "${ACTIVE_TIMEOUT_BFV:=1800}"
 
 NAME=
 IMAGE_FILE=
@@ -75,7 +77,6 @@ USER_ACCOUNT=
 
 # Globals
 INSTANCE_ID=
-VOLUME_ID=
 IMAGE_ID=
 
 # Args
@@ -196,12 +197,6 @@ delete_instance() {
         debug "openstack server delete $INSTANCE_ID"
         openstack server delete $INSTANCE_ID
         INSTANCE_ID=
-        if [[ -n "$VOLUME_ID" ]]; then
-            action "Deleting volume: '$VOLUME_ID'..."
-            debug "openstack volume delete $VOLUME_ID"
-            openstack volume delete $VOLUME_ID
-            VOLUME_ID=
-        fi
     else
         warn "Not deleting instance $INSTANCE_ID..."
     fi
@@ -256,7 +251,7 @@ info "Disk image size is $DISK_SIZE GiB"
 BOOT_FROM_VOLUME=""
 if [ "$DISK_SIZE" -gt "$FLAVOR_DISK_SIZE" ]; then
     info "Using boot from volume"
-    BOOT_FROM_VOLUME="--boot-from-volume $DISK_SIZE"
+    BOOT_FROM_VOLUME="--boot-from-volume $DISK_SIZE --delete-on-termination"
 fi
 
 instance_name="test_${NAME}"
@@ -272,16 +267,16 @@ else
     info "Found instance ID: '$INSTANCE_ID'"
 fi
 
-if [[ -n "$BOOT_FROM_VOLUME" ]]; then
-    VOLUME_ID=$(openstack server show "$INSTANCE_ID" -f json | jq -r '.volumes_attached[].id')
-fi
-
 set +e
 
+active_timeout=$ACTIVE_TIMEOUT
+if [[ -n "$BOOT_FROM_VOLUME" ]]; then
+    active_timeout=$ACTIVE_TIMEOUT_BFV
+fi
 sleeptime=10
-attempts=30
+attempts=$((active_timeout / sleeptime))
 attempt=1
-info "Waiting for instance to become ACTIVE..."
+info "Waiting up to $((active_timeout / 60)) mins for instance to become ACTIVE..."
 while [[ $attempt -le $attempts ]]; do
     STATUS=$(openstack server show -f value -c status $INSTANCE_ID)
     if [[ "$STATUS" = "ERROR" ]]; then
@@ -292,9 +287,9 @@ while [[ $attempt -le $attempts ]]; do
         break
     fi
     if [[ $attempt -eq $attempts ]]; then
-        fatal "Instance failed to become ACTIVE after 5 mins ($STATUS)"
+        fatal "Instance failed to become ACTIVE after $((active_timeout / 60)) mins ($STATUS)"
     fi
-    sleep 10
+    sleep $sleeptime
     debug "Instance status is: $STATUS ($attempt/$attempts)"
     attempt=$((attempt+1))
 done
