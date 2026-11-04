@@ -20,7 +20,7 @@
   register: anaconda_pip_exists
 
 - name: Install PyTorch (GPU version)
-  shell: "{{ anaconda_link_dir }}/bin/pip install torch=={{ pytorch_version }} --index-url https://download.pytorch.org/whl/cu{{ cuda_version | replace('.', '') }}"
+  shell: "{{ anaconda_link_dir }}/bin/pip install --no-cache-dir torch=={{ pytorch_version }} --index-url https://download.pytorch.org/whl/cu{{ cuda_version | replace('.', '') }}"
   when:
     - anaconda_pip_exists.stat.exists
     - cuda_enabled | bool

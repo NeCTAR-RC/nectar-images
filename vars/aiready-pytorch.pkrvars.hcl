@@ -6,4 +6,4 @@ source_image_name = "NeCTAR AI Ready Base"
 ssh_username      = "ubuntu"
 profile           = "aiready-pytorch"
 profile_args      = ["nectar_image_name='AI Ready with PyTorch'"]
-disk_size         = "50"
+disk_size         = "80"
