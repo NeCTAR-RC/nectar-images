@@ -153,7 +153,7 @@ variable "iso_url" {
 
 variable "memory" {
   type    = number
-  default = 4096
+  default = 8192
 }
 
 variable "output_directory" {
