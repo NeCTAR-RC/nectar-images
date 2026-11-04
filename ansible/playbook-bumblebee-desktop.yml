@@ -12,8 +12,6 @@
     - default-user
     - repos
     - xfce4-desktop
-    - xrdp
-    - openstack-clients
     - bumblebee-common
     - testing
     - nectar-user

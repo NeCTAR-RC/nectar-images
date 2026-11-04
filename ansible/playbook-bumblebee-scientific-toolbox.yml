@@ -13,7 +13,6 @@
     - default-user
     - repos
     - xfce4-desktop
-    - xrdp
     - bumblebee-common
 #    - pgadmin
     - anaconda
