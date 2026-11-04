@@ -6,4 +6,4 @@ source_image_name = "NeCTAR AI Ready Base"
 ssh_username      = "ubuntu"
 profile           = "aiready-llms"
 profile_args      = ["nectar_image_name='AI Ready with GenAI and LLMs'"]
-disk_size         = "50"
+disk_size         = "80"
