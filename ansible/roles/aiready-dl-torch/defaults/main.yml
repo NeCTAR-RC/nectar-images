@@ -1,8 +1,8 @@
 ---
 # Default variables for the deep learning role
 python_version: "3.11"
-pytorch_version: "2.5.0"
-cuda_version: "12.4" # Adjust based on your GPU/NVIDIA driver compatibility
+pytorch_version: "2.14.1"
+cuda_version: "13.0" # Match nvidia_cuda_versions in the nvidia-vgpu role
 cuda_enabled: true # Set to true if CUDA is required
 
 dl_packages:
