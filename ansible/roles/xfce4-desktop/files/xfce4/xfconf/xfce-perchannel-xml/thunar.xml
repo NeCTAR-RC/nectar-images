@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<channel name="thunar" version="1.0">
+  <!-- Default toolbar with the Reload button enabled -->
+  <property name="last-toolbar-item-order" type="string" value="0,1,2,3,15,4,5,6,7,8,9,10,11,12,13,14,16,17"/>
+  <property name="last-toolbar-visible-buttons" type="string" value="0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0"/>
+</channel>
