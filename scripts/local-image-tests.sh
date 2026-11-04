@@ -249,17 +249,20 @@ info "Disk image size is $DISK_SIZE GiB"
 
 # If the size is > flavor disk, we need to boot from volume
 BOOT_FROM_VOLUME=""
+BOOT_SOURCE="--image $IMAGE_ID"
 if [ "$DISK_SIZE" -gt "$FLAVOR_DISK_SIZE" ]; then
     info "Using boot from volume"
-    BOOT_FROM_VOLUME="--boot-from-volume $DISK_SIZE --delete-on-termination"
+    BOOT_FROM_VOLUME=1
+    # --block-device rather than --boot-from-volume, as older OSC lacks --delete-on-termination
+    BOOT_SOURCE="--block-device source_type=image,uuid=$IMAGE_ID,destination_type=volume,volume_size=$DISK_SIZE,delete_on_termination=true,boot_index=0"
 fi
 
 instance_name="test_${NAME}"
 action "Creating instance '$instance_name'..."
 # No --wait: on ERROR it exits without the ID, so we couldn't report the
 # fault or clean up. The ACTIVE poll below does the waiting instead.
-debug "openstack server create --image $IMAGE_ID --flavor $OS_FLAVOR $BOOT_FROM_VOLUME --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME '$NAME'"
-INSTANCE_ID=$(openstack server create -f value -c id --image $IMAGE_ID --flavor $OS_FLAVOR $BOOT_FROM_VOLUME --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME "$NAME" | xargs echo)  # xargs because of leading newline
+debug "openstack server create $BOOT_SOURCE --flavor $OS_FLAVOR --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME '$NAME'"
+INSTANCE_ID=$(openstack server create -f value -c id $BOOT_SOURCE --flavor $OS_FLAVOR --availability-zone $OS_AVAILABILITY_ZONE --security-group $OS_SECGROUP --key-name $OS_KEYNAME "$NAME" | xargs echo)  # xargs because of leading newline
 
 if [[ -z $INSTANCE_ID ]]; then
     fatal "Instance ID not found!"
