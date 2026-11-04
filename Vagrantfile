@@ -74,7 +74,7 @@ Vagrant.configure("2") do |config|
     c.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = GLOBAL_ANSIBLE_VARS.merge(
-        murano_image_type: "Docker",
+        murano_image_type: "docker",
         nectar_image_name: "Ubuntu 22.04 LTS (Jammy) amd64 (with Docker)"
       )
       ansible.config_file = "ansible/ansible.cfg"
