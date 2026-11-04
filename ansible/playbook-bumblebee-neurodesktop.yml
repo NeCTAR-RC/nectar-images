@@ -17,7 +17,7 @@
     - vscode
     - xrdp
     - openstack-clients
-    - desktop-common
+    - bumblebee-common
     - testing
     - nectar-user
     - facts

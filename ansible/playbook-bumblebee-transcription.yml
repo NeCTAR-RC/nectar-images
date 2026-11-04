@@ -15,7 +15,7 @@
     - xfce4-desktop
     - xrdp
     - openstack-clients
-    - desktop-common
+    - bumblebee-common
     - transcription
     - nectar-user
     - facts

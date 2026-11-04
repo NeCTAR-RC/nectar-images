@@ -14,7 +14,7 @@
     - xfce4-desktop
     - xrdp
     - openstack-clients
-    - desktop-common
+    - bumblebee-common
     - testing
     - nectar-user
     - facts

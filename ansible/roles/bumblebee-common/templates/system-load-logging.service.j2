@@ -1,0 +1,11 @@
+[Unit]
+Description=Log system load to the console as JSON
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/system_load_json.py
+StandardOutput=file:{{ system_load_console_file }}
+SyslogLevel=err
+LogLevelMax=notice
+Nice=19
+IOSchedulingClass=idle
