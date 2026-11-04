@@ -83,6 +83,7 @@
     dest: '/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/{{ item }}'
   with_items:
     - xfce4-power-manager.xml
+    - thunar.xml
     - xfce4-screensaver.xml
     - xfwm4.xml
 
