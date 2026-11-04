@@ -1,0 +1,24 @@
+---
+firefox_homepage: https://ardc.edu.au
+
+# https://mozilla.github.io/policy-templates/
+firefox_policies:
+  Homepage:
+    URL: "{{ firefox_homepage }}"
+    StartPage: homepage
+  OverrideFirstRunPage: ""
+  OverridePostUpdatePage: ""
+  DontCheckDefaultBrowser: true
+  UserMessaging:
+    SkipOnboarding: true
+    ExtensionRecommendations: false
+    FeatureRecommendations: false
+    MoreFromMozilla: false
+    Locked: false
+  Preferences:
+    browser.aboutwelcome.enabled:
+      Value: false
+      Status: default
+    general.smoothScroll:
+      Value: false
+      Status: default

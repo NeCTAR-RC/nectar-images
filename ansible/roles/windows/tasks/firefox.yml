@@ -9,3 +9,13 @@
     path: 'C:\Windows\Temp\firefox.msi'
     state: present
     arguments: '/quiet'
+
+- name: Create Firefox distribution directory
+  ansible.windows.win_file:
+    path: '{{ firefox_install_dir }}\distribution'
+    state: directory
+
+- name: Install Firefox enterprise policies
+  ansible.windows.win_copy:
+    dest: '{{ firefox_install_dir }}\distribution\policies.json'
+    content: "{{ {'policies': firefox_policies} | to_nice_json }}\n"

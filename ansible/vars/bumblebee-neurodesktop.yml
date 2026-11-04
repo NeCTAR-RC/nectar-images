@@ -7,11 +7,7 @@ locale: en_AU.UTF-8
 image_properties:
   hw_qemu_guest_agent: 'yes'
 
-firefox_prefs:
-  browser.aboutwelcome.enabled: 'true'
-  browser.startup.homepage: '"https://www.neurodesk.org"'
-  browser.startup.firstrunSkipsHomepage: 'true'
-  startup.homepage_welcome_url: '"https://www.neurodesk.org"'
+firefox_homepage: https://www.neurodesk.org
 
 # Settings from the base image that Neurodesk uses
 # https://github.com/jupyter/docker-stacks/blob/main/images/docker-stacks-foundation/Dockerfile#L122

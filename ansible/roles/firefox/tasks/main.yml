@@ -77,14 +77,20 @@
 
   when: ansible_facts['distribution'] == 'Ubuntu'
 
-- name: Set Firefox system-wide preferences
-  ansible.builtin.lineinfile:
-    path: /etc/firefox/syspref.js
-    regexp: '^pref\("{{ item.key }}",.*'
-    line: 'pref("{{ item.key }}", {{ item.value }});'
-    create: yes
+- name: Create Firefox policies directory
+  ansible.builtin.file:
+    path: /etc/firefox/policies
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  when: firefox_policies | length > 0
+
+- name: Install Firefox enterprise policies
+  ansible.builtin.copy:
+    dest: /etc/firefox/policies/policies.json
+    content: "{{ {'policies': firefox_policies} | to_nice_json }}\n"
+    owner: root
+    group: root
     mode: '0644'
-  with_dict: "{{ firefox_prefs }}"
-  when:
-    - firefox_prefs is defined
-    - firefox_prefs | length > 0
+  when: firefox_policies | length > 0
