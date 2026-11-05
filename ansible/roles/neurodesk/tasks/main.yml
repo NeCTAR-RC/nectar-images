@@ -64,6 +64,24 @@
     - src: upstream/config/vscode/settings.json
       dest: /etc/skel/.config/Code/User/settings.json
 
+# Set on top of the vendored upstream pcmanfm.conf
+- name: Set PCManFM desktop label font
+  community.general.ini_file:
+    path: /etc/xdg/pcmanfm/LXDE/pcmanfm.conf
+    section: desktop
+    option: desktop_font
+    value: Sans 8.6
+    no_extra_spaces: true
+
+- name: Set LXDE GTK font
+  community.general.ini_file:
+    path: /etc/xdg/lxsession/LXDE/desktop.conf
+    section: GTK
+    option: sGtk/FontName
+    value: Sans 8.6
+    no_extra_spaces: true
+    create: false
+
 - name: Copy module system
   ansible.builtin.copy:
     src: upstream/config/lmod/module.sh
