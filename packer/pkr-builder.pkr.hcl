@@ -159,21 +159,25 @@ build {
 
     post-processor "shell-local" {
       inline_shebang = "/bin/bash"
-      inline = [
+      inline = concat([
         "set -eo pipefail",
         "echo 'Cleaning up any left-over volumes...'",
         "openstack volume list --status available -f value -c ID -c Name | awk '/packer_/ {print $1}' | xargs -r openstack volume delete",
         "IMAGE_ID=$(jq -r '.builds[-1].artifact_id' ${local.output_directory}/manifest.json)",
-        # Write the raw image sparsely (dd conv=sparse skips zero blocks) so
-        # the on-disk file is roughly the used data, not the full disk_size.
         "echo 'Downloading image...'",
+      ], local.use_volume ? [
+        # Volume builds: Cinder already uploaded a compressed qcow2
+        "openstack image save --file ${local.output_directory}/image.qcow2 $IMAGE_ID",
+      ] : [
+        # Nova snapshots are uncompressed: download sparsely, then compress
         "openstack image save --file /dev/stdout $IMAGE_ID | dd of=${local.output_directory}/image bs=4M conv=sparse",
         "echo 'Converting image...'",
         "qemu-img convert -c -O qcow2 ${local.output_directory}/image ${local.output_directory}/image.qcow2",
         "rm ${local.output_directory}/image",
+      ], [
         "echo 'Cleaning up old image...'",
         "openstack image delete $IMAGE_ID"
-      ]
+      ])
     }
     post-processor "artifice" {
       files = [

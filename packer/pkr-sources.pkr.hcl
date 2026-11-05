@@ -122,6 +122,8 @@ source "openstack" "vm" {
   ssh_username            = var.ssh_username
   use_blockstorage_volume = local.use_volume
   volume_size             = local.volume_size
+  # Cinder converts and compresses on upload, so no local shrink is needed
+  image_disk_format       = local.use_volume ? "qcow2" : null
   source_image_filter {
     filters {
       name       = var.source_image_name
