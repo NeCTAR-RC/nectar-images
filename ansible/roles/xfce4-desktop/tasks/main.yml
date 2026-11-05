@@ -95,6 +95,24 @@
     - xfce4-desktop.xml
     - xsettings.xml
 
+- name: create Thunar dirs
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /etc/xdg/Thunar
+    - /usr/share/Thunar/sendto
+
+- name: Install Thunar custom actions
+  copy:
+    src: files/Thunar/uca.xml
+    dest: /etc/xdg/Thunar/uca.xml
+
+- name: Install Thunar "Send To" download entry
+  copy:
+    src: files/Thunar/sendto/vds-download.desktop
+    dest: /usr/share/Thunar/sendto/vds-download.desktop
+
 - name: Disable lightdm on startup
   service:
     name: lightdm

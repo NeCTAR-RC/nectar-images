@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Download to my computer
+Icon=document-save
+Exec=/usr/local/bin/vds-download %F
