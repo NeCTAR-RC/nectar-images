@@ -1,0 +1,24 @@
+---
+- name: Install system load logging script
+  copy:
+    src: system_load_json.py
+    dest: /usr/local/sbin/system_load_json.py
+    mode: '0755'
+
+- name: Install system load logging service
+  template:
+    src: system-load-logging.service.j2
+    dest: /etc/systemd/system/system-load-logging.service
+    mode: '0644'
+
+- name: Install system load logging timer
+  copy:
+    src: system-load-logging.timer
+    dest: /etc/systemd/system/system-load-logging.timer
+    mode: '0644'
+
+- name: Enable system load logging timer
+  systemd:
+    name: system-load-logging.timer
+    enabled: yes
+    daemon_reload: yes

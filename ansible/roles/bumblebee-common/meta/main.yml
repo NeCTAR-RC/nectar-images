@@ -1,0 +1,5 @@
+---
+dependencies:
+  - role: xrdp
+  - role: openstack-clients
+  - role: desktop-common

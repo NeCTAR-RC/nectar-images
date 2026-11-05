@@ -5,6 +5,7 @@
 
   vars_files:
     - vars/main.yml
+    - vars/bumblebee-desktop.yml
     - vars/bumblebee-neurodesktop.yml
 
   roles:
@@ -15,9 +16,7 @@
     - cvmfs
     - neurodesk
     - vscode
-    - xrdp
-    - openstack-clients
-    - desktop-common
+    - bumblebee-common
     - testing
     - nectar-user
     - facts

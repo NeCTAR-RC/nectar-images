@@ -13,10 +13,9 @@
     - default-user
     - repos
     - xfce4-desktop
-    - xrdp
-    - openstack-clients
-    - desktop-common
+    - bumblebee-common
     - transcription
+    - testing
     - nectar-user
     - facts
     - cleanup
