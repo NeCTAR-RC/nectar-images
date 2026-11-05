@@ -29,7 +29,7 @@ xfce_remove_packages:
   - xscreensaver
   - xscreensaver-data
 
-xfce_theme: Greybird
+xfce_theme: Adwaita
 xfce_icon_theme: elementary-xfce-darker
 xfce_cursor_theme: DMZ-White
 xfce_font: Noto Sans 9

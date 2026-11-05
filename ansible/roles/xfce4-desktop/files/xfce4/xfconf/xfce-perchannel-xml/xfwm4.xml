@@ -6,5 +6,6 @@
          xfwm4 can spend ~20s contending to become the compositing manager
          on xorgxrdp before the desktop becomes usable -->
     <property name="use_compositing" type="bool" value="false"/>
+    <property name="theme" type="string" value="Default"/>
   </property>
 </channel>
