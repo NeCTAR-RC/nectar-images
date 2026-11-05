@@ -1,0 +1,70 @@
+#!/bin/sh
+# Send files to the user's browser via the Guacamole drive's Download folder.
+# Needs guacd 1.6.0-nectar.2 or later on the gateways.
+
+set -u
+
+download_dir="${HOME}/thinclient_drives/GUACFS/Download"
+title="Download to my computer"
+
+notify() {
+    if command -v notify-send >/dev/null 2>&1; then
+        notify-send --icon=document-save "${title}" "$1"
+    else
+        echo "${title}: $1" >&2
+    fi
+}
+
+if [ "$#" -eq 0 ]; then
+    echo "usage: $(basename -- "$0") FILE-OR-FOLDER..." >&2
+    exit 2
+fi
+
+if [ ! -d "${download_dir}" ]; then
+    notify "Drive not connected. Reconnect and try again."
+    exit 1
+fi
+
+notify "Sending to your browser..."
+
+failed=""
+
+for path in "$@"; do
+    name=$(basename -- "${path}")
+
+    if [ -d "${path}" ]; then
+        if ! command -v zip >/dev/null 2>&1; then
+            failed="${failed}
+${name} (zip is not installed)"
+            continue
+        fi
+        tmp=$(mktemp -d) || { failed="${failed}
+${name}"; continue; }
+        if (cd "$(dirname -- "${path}")" && zip -qr "${tmp}/${name}.zip" "./${name}") \
+                && cp -- "${tmp}/${name}.zip" "${download_dir}/${name}.zip"; then
+            :
+        else
+            failed="${failed}
+${name}"
+        fi
+        rm -rf -- "${tmp}"
+
+    elif [ -f "${path}" ]; then
+        if [ ! -s "${path}" ]; then
+            failed="${failed}
+${name} (empty file)"
+        elif ! cp -- "${path}" "${download_dir}/${name}"; then
+            failed="${failed}
+${name}"
+        fi
+
+    else
+        failed="${failed}
+${name} (not a file or folder)"
+    fi
+done
+
+if [ -n "${failed}" ]; then
+    notify "Could not send:${failed}"
+    exit 1
+fi

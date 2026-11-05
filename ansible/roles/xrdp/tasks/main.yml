@@ -59,3 +59,15 @@
 
 - include_tasks: pipewire.yml
   when: pipewire_modules_dir is defined
+
+# Used by the Thunar "Download to my computer" actions
+- name: Install zip for folder downloads
+  package:
+    name: zip
+    state: present
+
+- name: Install the vds-download helper
+  copy:
+    src: vds-download
+    dest: /usr/local/bin/vds-download
+    mode: '0755'
