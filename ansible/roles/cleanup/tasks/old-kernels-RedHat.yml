@@ -1,0 +1,13 @@
+---
+# The build upgrades the kernel without rebooting, so the old kernel is
+# still running and protected from removal by default.
+- name: Find superseded kernel packages
+  ansible.builtin.command: dnf -q repoquery --installed --installonly --latest-limit=-1
+  register: cleanup_old_kernel_packages
+  changed_when: false
+
+- name: Remove superseded kernels
+  ansible.builtin.command: >-
+    dnf -y remove --setopt=protect_running_kernel=False
+    {{ cleanup_old_kernel_packages.stdout_lines | select | join(' ') }}
+  when: cleanup_old_kernel_packages.stdout_lines | select | list | length > 0

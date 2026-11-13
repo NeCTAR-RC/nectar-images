@@ -1,0 +1,25 @@
+---
+# The build upgrades the kernel without rebooting, and apt never autoremoves
+# the running kernel, so purge everything belonging to older kernels.
+- name: Gather installed packages
+  ansible.builtin.package_facts:
+    manager: apt
+
+- name: Find installed kernel versions
+  ansible.builtin.set_fact:
+    cleanup_kernel_versions: >-
+      {{ ansible_facts.packages.keys()
+         | select('match', '^linux-image-[0-9]')
+         | map('regex_search', '^linux-image-([0-9]+\.[0-9]+\.[0-9]+(-[0-9]+)?(\+[a-z0-9.~]+)?)', '\1')
+         | map('first') | unique | community.general.version_sort }}
+
+- name: Purge superseded kernels
+  ansible.builtin.apt:
+    name: >-
+      {{ ansible_facts.packages.keys()
+         | select('match', '^linux-')
+         | select('search', '-(' ~ (cleanup_kernel_versions[:-1] | map('regex_escape') | join('|')) ~ ')(-|$)')
+         | list }}
+    state: absent
+    purge: true
+  when: cleanup_kernel_versions | length > 1
