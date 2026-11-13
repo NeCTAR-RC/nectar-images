@@ -28,6 +28,15 @@
     name: /etc/NetworkManager/conf.d/99-cloud-init.conf
     state: absent
 
+- name: Remove superseded kernels
+  include_tasks: "{{ tasks_item }}"
+  with_first_found:
+    - files:
+      - "old-kernels-{{ ansible_facts['os_family'] }}.yml"
+      skip: true
+  loop_control:
+    loop_var: tasks_item
+
 - name: Include OS-specific cleanup tasks
   include_tasks: "{{ tasks_item }}"
   with_first_found:
