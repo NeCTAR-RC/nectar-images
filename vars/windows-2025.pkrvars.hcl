@@ -1,0 +1,12 @@
+os_name                = "windows"
+os_version             = "2025"
+os_arch                = "x86_64"
+is_windows             = true
+iso_url                = "builds/build_files/SW_DVD9_Win_Server_STD_CORE_2025_24H2.13_64Bit_English_DC_STD_MLF_X24-19152.ISO"
+iso_checksum           = "sha256:4437632f24b053a5f89033c5e0e4e13e71e6bd7e1ce36a1c7542481d3c250197"
+disk_size              = 30
+profile                = "windows"
+qemu_efi_boot          = true
+boot_command           = ["<wait5><enter><wait5><enter><wait5><enter><wait5><enter>"]
+qemu_efi_firmware_vars = "/usr/share/OVMF/OVMF_VARS_4M.fd"
+qemu_efi_firmware_code = "/usr/share/OVMF/OVMF_CODE_4M.fd"

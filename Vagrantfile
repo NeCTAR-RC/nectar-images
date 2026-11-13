@@ -408,6 +408,18 @@ Vagrant.configure("2") do |config|
     c.vm.provision "login-shell", type: "shell", run: "never"
   end
 
+  # Windows Server 2025
+  config.vm.define "windows-2025" do |c|
+    c.vm.box = "gusztavvargadr/windows-server-2025-standard"
+    c.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.extra_vars = GLOBAL_ANSIBLE_VARS
+      ansible.config_file = "ansible/ansible.cfg"
+      ansible.playbook = "ansible/playbook-windows.yml"
+    end
+    c.vm.provision "login-shell", type: "shell", run: "never"
+  end
+
   # Bumblebee Scientific Toolbox
   config.vm.define "bumblebee-scientific-toolbox" do |c|
     c.vm.box = "cloud-image/ubuntu-22.04"

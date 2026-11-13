@@ -3,5 +3,5 @@ nectar_default_image_name: "{{ ansible_facts['distribution'] }} {{ ansible_facts
 
 facts_architecture: "{{ ansible_facts['architecture2'] }}"
 facts_os_distro: "{{ ansible_facts['os_family']|lower }}"
-facts_os_version: "2022"
+facts_os_version: "{{ ansible_facts['distribution'] | regex_search('[0-9]{4}') }}"
 facts_nectar_name: "{{ nectar_name }}"

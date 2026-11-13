@@ -1,8 +1,9 @@
 #!/bin/bash -ex
 # shellcheck disable=SC2086,SC2329
 
-NAME="NeCTAR Microsoft Windows Server 2022 Datacenter x86_64 $(date --iso)"
-BUILD_DIR="builds/build_files/packer-windows-2022"
+VERSION="${1:-2022}"
+NAME="NeCTAR Microsoft Windows Server ${VERSION} Datacenter x86_64 $(date --iso)"
+BUILD_DIR="builds/build_files/packer-windows-${VERSION}"
 
 PROPERTIES=""
 # Loop through and apply facts as image properties
