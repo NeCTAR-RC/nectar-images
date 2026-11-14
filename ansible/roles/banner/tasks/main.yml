@@ -10,7 +10,21 @@
     src: banner.j2
     dest: /etc/motd
     force: yes
-  when: ansible_facts['distribution'] != 'Ubuntu'
+  when:
+    - ansible_facts['distribution'] != 'Ubuntu'
+    - ansible_facts['os_family'] != 'Windows'
+
+- name: Set banner file (Windows)
+  ansible.windows.win_template:
+    src: banner.j2
+    dest: C:\ProgramData\Nectar\motd.txt
+  when: ansible_facts['os_family'] == 'Windows'
+
+- name: Show banner on interactive SSH logins (Windows)
+  ansible.windows.win_copy:
+    src: profile.ps1
+    dest: C:\Windows\System32\WindowsPowerShell\v1.0\profile.ps1
+  when: ansible_facts['os_family'] == 'Windows'
 
 - name: Set banner file (Ubuntu)
   template:

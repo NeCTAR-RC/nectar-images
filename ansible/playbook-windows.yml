@@ -9,5 +9,6 @@
   roles:
     - role: windows
     - role: image-name
+    - role: banner
     - role: default-user
     - role: facts
