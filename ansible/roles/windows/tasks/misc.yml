@@ -6,3 +6,31 @@
   ansible.windows.win_service:
     name: AudioSrv
     start_mode: auto
+
+# Arc Setup's tray wizard is noise for most users; anyone who wants Arc
+# can re-add it or install the agent. 2022: optional feature, 2025: capability.
+- name: Remove Azure Arc Setup
+  ansible.windows.win_shell: |
+    $changed = $false
+    Get-WindowsCapability -Online -Name 'AzureArcSetup~~~~*' |
+        Where-Object State -eq 'Installed' | ForEach-Object {
+            Remove-WindowsCapability -Online -Name $_.Name | Out-Null
+            $changed = $true
+        }
+    try {
+        $feature = Get-WindowsOptionalFeature -Online -FeatureName AzureArcSetup -ErrorAction Stop
+    } catch {
+        $feature = $null
+    }
+    if ($feature.State -eq 'Enabled') {
+        Disable-WindowsOptionalFeature -Online -FeatureName AzureArcSetup -NoRestart | Out-Null
+        $changed = $true
+    }
+    $changed
+  register: arc_setup
+  changed_when: arc_setup.stdout | trim == 'True'
+
+# Pending removal blocks later capability installs (e.g. OpenSSH)
+- name: Reboot to finish removing Azure Arc Setup
+  ansible.windows.win_reboot:
+  when: arc_setup is changed
