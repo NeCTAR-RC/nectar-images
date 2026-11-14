@@ -1,45 +1,38 @@
 ---
-- name: Show file extensions
+# HKCU here would be the build user, which is deleted on first boot. New
+# profiles (Administrator's included) are copied from the Default profile.
+- name: Apply per-user settings to the Default profile
   ansible.windows.win_regedit:
-    key: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
-    value: HideFileExt
-    data: 0
-    datatype: dword
-
-- name: Show hidden files
-  ansible.windows.win_regedit:
-    key: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
-    value: Hidden
-    data: 1
-    datatype: dword
-
-- name: Launch explorer to the PC not the user
-  ansible.windows.win_regedit:
-    key: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
-    value: LaunchTo
-    data: 1
-    datatype: dword
-
-- name: Show full path in address bar
-  ansible.windows.win_regedit:
-    key: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
-    value: FullPathAddress
-    data: 1
-    datatype: dword
-
-- name: Disable notification popups
-  ansible.windows.win_regedit:
-    key: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
-    value: EnableBalloonTips
-    data: 0
-    datatype: dword
-
-- name: Disable error reporting UI
-  ansible.windows.win_regedit:
-    key: 'HKCU:\Software\Microsoft\Windows\Windows Error Reporting'
-    value: DontShowUI
-    data: 0
-    datatype: dword
+    hive: 'C:\Users\Default\NTUSER.DAT'
+    key: 'HKLM:\ANSIBLE\{{ item.key }}'
+    value: '{{ item.value }}'
+    data: '{{ item.data }}'
+    datatype: '{{ item.type }}'
+  loop_control:
+    label: '{{ item.key }}\{{ item.value }}'
+  loop:
+    # Explorer
+    - {key: 'Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: HideFileExt, data: 0, type: dword}
+    - {key: 'Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: Hidden, data: 1, type: dword}
+    - {key: 'Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: LaunchTo, data: 1, type: dword}
+    - {key: 'Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: FullPathAddress, data: 1, type: dword}
+    - {key: 'Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: EnableBalloonTips, data: 0, type: dword}
+    - {key: 'Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: WebView, data: 0, type: dword}
+    - {key: 'Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: ListviewShadow, data: 0, type: dword}
+    - {key: 'Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: ListviewWatermark, data: 0, type: dword}
+    - {key: 'Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: TaskbarAnimations, data: 0, type: dword}
+    - {key: 'Software\Microsoft\Windows\Windows Error Reporting', value: DontShowUI, data: 1, type: dword}
+    # Visual effects: custom (3), as ClearType stays on
+    - {key: 'Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects', value: VisualFXSetting, data: 3, type: dword}
+    - {key: 'Software\Microsoft\Windows\CurrentVersion\ThemeManager', value: ThemeActive, data: 1, type: dword}
+    - {key: 'Control Panel\Desktop\WindowMetrics', value: MinAnimate, data: '0', type: string}
+    - {key: 'Control Panel\Desktop', value: DragFullWindows, data: '0', type: string}
+    - {key: 'Control Panel\Desktop', value: UserPreferencesMask, data: '90120180', type: binary}
+    # ClearType
+    - {key: 'Control Panel\Desktop', value: FontSmoothing, data: '2', type: string}
+    - {key: 'Control Panel\Desktop', value: FontSmoothingType, data: 2, type: dword}
+    - {key: 'Control Panel\Desktop', value: FontSmoothingGamma, data: 1200, type: dword}
+    - {key: 'Control Panel\Desktop', value: FontSmoothingOrientation, data: 1, type: dword}
 
 - name: Disable prompting for shutdown reason
   ansible.windows.win_regedit:
@@ -47,76 +40,6 @@
     value: ShutdownReasonOn
     data: 0
     datatype: dword
-
-- name: Set visual effects to best performance
-  ansible.windows.win_regedit:
-    key: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects'
-    value: VisualFXSetting
-    data: 2
-    datatype: dword
-
-- name: Keep visual styles on windows and buttons
-  ansible.windows.win_regedit:
-    key: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\ThemeManager'
-    value: ThemeActive
-    data: 1
-    datatype: dword
-
-- name: Disable common tasks in folders
-  ansible.windows.win_regedit:
-    key: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
-    value: WebView
-    data: 0
-    datatype: dword
-
-- name: Disable drop shadows for icon labels
-  ansible.windows.win_regedit:
-    key: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
-    value: ListviewShadow
-    data: 0
-    datatype: dword
-
-- name: Disable background image for folders
-  ansible.windows.win_regedit:
-    key: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
-    value: ListviewWatermark
-    data: 0
-    datatype: dword
-
-- name: Disable taskbar button animations
-  ansible.windows.win_regedit:
-    key: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
-    value: TaskbarAnimations
-    data: 0
-    datatype: dword
-
-- name: Disable window minimize/maximize animations
-  ansible.windows.win_regedit:
-    key: 'HKCU:\Control Panel\Desktop\WindowMetrics'
-    value: MinAnimate
-    data: '0'
-    datatype: string
-
-- name: Disable showing window contents while dragging
-  ansible.windows.win_regedit:
-    key: 'HKCU:\Control Panel\Desktop'
-    value: DragFullWindows
-    data: '0'
-    datatype: string
-
-#- name: Disable font smoothing
-#  ansible.windows.win_regedit:
-#    key: 'HKCU:\Control Panel\Desktop'
-#    value: FontSmoothing
-#    data: '0'
-#    datatype: string
-
-- name: Set user preferences mask for performance
-  ansible.windows.win_regedit:
-    key: 'HKCU:\Control Panel\Desktop'
-    value: UserPreferencesMask
-    data: '90120180'
-    datatype: binary
 
 - name: Disable the "Allow your PC to be discoverable" message
   ansible.windows.win_regedit:
