@@ -300,7 +300,7 @@ fi
 
 # Windows and Linux have different test commands
 if [[ "$NAME" =~ (W|w)indows ]]; then
-    test_command='C:\ProgramData\Nectar\run_tests.cmd'
+    test_command='C:\ProgramData\Nectar\run_tests.ps1'
 else
     test_command='/bin/bash /usr/nectar/run_tests.sh'
 fi

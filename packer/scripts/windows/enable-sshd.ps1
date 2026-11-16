@@ -106,6 +106,9 @@ Start-Service sshd
 Set-Service -Name sshd -StartupType 'Automatic'
 Set-Service -Name ssh-agent -StartupType 'Automatic'
 
+New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -PropertyType String -Force `
+    -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe"
+
 # Don't rely on the capability's rule; instances run on the Public profile
 if (!(Get-NetFirewallRule -Name 'sshd-nectar' -ErrorAction SilentlyContinue)) {
     New-NetFirewallRule -Name 'sshd-nectar' -DisplayName 'OpenSSH Server (sshd)' -Direction Inbound -Protocol TCP -LocalPort 22 -Action Allow -Profile Any

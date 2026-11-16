@@ -354,7 +354,7 @@ while [[ $attempt -le $attempts ]]; do
 done
 
 if [[ "$NAME" =~ indows ]]; then
-    TEST_CMD='C:\ProgramData\Nectar\run_tests.cmd'
+    TEST_CMD='C:\ProgramData\Nectar\run_tests.ps1'
 else
     TEST_CMD='/bin/bash /usr/nectar/run_tests.sh'
 fi
