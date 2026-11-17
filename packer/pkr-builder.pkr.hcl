@@ -55,6 +55,14 @@ build {
     except            = var.is_windows ? null : ["qemu.vm"]  # Windows
   }
 
+  # Out-of-band fixes Windows Update doesn't offer
+  provisioner "powershell" {
+    elevated_user     = var.winrm_username
+    elevated_password = var.winrm_password
+    script            = "${path.root}/scripts/windows/install-oob-updates.ps1"
+    except            = var.is_windows ? null : ["qemu.vm"]  # Windows
+  }
+
   provisioner "windows-restart" {
     except            = var.is_windows ? null : ["qemu.vm"]  # Windows
   }
