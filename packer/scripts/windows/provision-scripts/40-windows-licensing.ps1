@@ -19,18 +19,25 @@ if ($ActivationStatus.LicenseStatus -eq 1) {
     Log "Windows not yet activated. Current status is: $LicenseResult"
 
     Log "Fetching Vendordata..."
-    $vendorData = Get-Metadata "http://169.254.169.254/openstack/latest/vendor_data2.json" | ConvertFrom-Json
+    $vendorData = Get-Metadata "http://169.254.169.254/openstack/latest/vendor_data2.json"
+    if (-not $vendorData) {
+        Log "ERROR: Could not fetch vendordata"
+        exit 0
+    }
 
-    $productKey = $vendorData.nectar.windows_product_key.product_key
+    $productKey = ($vendorData | ConvertFrom-Json).nectar.windows_product_key.product_key
     if ([string]::IsNullOrEmpty($productKey)) {
-        Log "ERROR: Product key not found in metadata!"
+        # Normal at sites that license Windows themselves
+        Log "No product key in vendordata for this site and Windows version"
     } else {
-        $trunc = $productKey.SubString(0,5)
-        Log "Activating with product key: $trunc"
+        $productKey = $productKey.Trim()
+        # Last 5 characters, matching the Partial Product Key in slmgr /dlv
+        $partial = $productKey.Substring($productKey.Length - 5)
+        Log "Activating with product key ending: $partial"
         # slmgr /ipk echoes the full product key on success, so capture its output
         # and redact the key before logging it.
         $ipkOutput = (& C:\Windows\System32\cscript.exe //nologo C:\Windows\System32\slmgr.vbs /ipk $productKey 2>&1) -join ' '
-        Log "slmgr /ipk (exit $LASTEXITCODE): $($ipkOutput -replace [regex]::Escape($productKey), "$trunc-*****")"
+        Log "slmgr /ipk (exit $LASTEXITCODE): $($ipkOutput -replace [regex]::Escape($productKey), "*****-$partial")"
         $atoOutput = (& C:\Windows\System32\cscript.exe //nologo C:\Windows\System32\slmgr.vbs /ato 2>&1) -join ' '
         Log "slmgr /ato (exit $LASTEXITCODE): $atoOutput"
     }

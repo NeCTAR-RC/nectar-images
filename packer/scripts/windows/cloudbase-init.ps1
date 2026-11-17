@@ -1,10 +1,17 @@
 $ErrorActionPreference = "Stop"
+# The progress bar makes Invoke-WebRequest very slow on Windows PowerShell
+$ProgressPreference = "SilentlyContinue"
 $resourcesDir = $env:TEMP
 
+# Pinned: fileexecutils.py is patched below, so upgrade deliberately
 Write-Host "Downloading Cloudbase-Init..."
-$cloudbaseInitMsiUrl = "https://www.cloudbase.it/downloads/CloudbaseInitSetup_Stable_x64.msi"
+$cloudbaseInitMsiUrl = "https://github.com/cloudbase/cloudbase-init/releases/download/1.1.8/CloudbaseInitSetup_1_1_8_x64.msi"
+$cloudbaseInitMsiSha256 = "0e7fa42e0cbc0ce7657f85730b0c6cc7afc4087a3639df0ff51a721a0be19bd5"
 $cloudbaseInitMsiPath = "$resourcesDir\CloudbaseInit.msi"
 Invoke-WebRequest $cloudbaseInitMsiUrl -OutFile $cloudbaseInitMsiPath
+if ((Get-FileHash $cloudbaseInitMsiPath -Algorithm SHA256).Hash -ne $cloudbaseInitMsiSha256) {
+    throw "Cloudbase-Init MSI checksum mismatch: $cloudbaseInitMsiUrl"
+}
 
 Write-Host "Installing Cloudbase-Init..."
 $cloudbaseInitInstallDir = Join-Path $ENV:ProgramFiles "Cloudbase Solutions\Cloudbase-Init"
@@ -25,6 +32,18 @@ $p = Start-Process -Wait -PassThru -FilePath msiexec -ArgumentList $msiexecArgum
 if ($p.ExitCode -ne 0) {
     Write-Host "Failed to install cloudbase-init"
     throw "Installing $cloudbaseInitMsiPath failed. Log: $cloudbaseInitMsiLog"
+}
+
+# cloudbase-init logs script output as raw bytes, escaping the newlines on the
+# console. Decode it so each line shows on its own. Cosmetic, so only warn if
+# a new cloudbase-init release changes the code.
+$fileExecUtils = "$cloudbaseInitInstallDir\Python\Lib\site-packages\cloudbaseinit\plugins\common\fileexecutils.py"
+$src = Get-Content -Raw -ErrorAction SilentlyContinue $fileExecUtils
+$patched = "$src".Replace("'User_data stdout:\n%s', out)", "'User_data stdout:\n%s', out.decode(errors='replace'))").Replace("'User_data stderr:\n%s', err)", "'User_data stderr:\n%s', err.decode(errors='replace'))")
+if ($src -and $patched -ne $src) {
+    Set-Content -Path $fileExecUtils -Value $patched -Encoding Ascii -NoNewline
+} else {
+    Write-Host "WARNING: could not patch $fileExecUtils; script output will stay escaped"
 }
 
 # The cloudbase-init config is mostly duplicated, so common lines are here
