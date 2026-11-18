@@ -116,6 +116,17 @@
           fi
       fi
 
+# LXTerminal and other desktop terminals start non-login shells, which do
+# not read /etc/profile.d. bash.bashrc covers both login and non-login.
+- name: Load Neurodesk environment in interactive non-login shells
+  ansible.builtin.blockinfile:
+    path: /etc/bash.bashrc
+    marker: "# {mark} NEURODESK MODULE ENVIRONMENT"
+    block: |
+      if [[ $- == *i* ]] && [ -f /etc/profile.d/neurodesktop.sh ]; then
+          . /etc/profile.d/neurodesktop.sh
+      fi
+
 - name: Create strace directory
   ansible.builtin.file:
     path: /opt/strace
